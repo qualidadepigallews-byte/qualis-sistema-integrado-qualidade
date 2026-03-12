@@ -62,7 +62,9 @@
 
     body{ min-height:100vh; }
 
-    button,input,textarea{ font-family:'Inter',sans-serif; }
+    button,input,textarea{
+      font-family:'Inter',sans-serif;
+    }
 
     .app{
       display:flex;
@@ -70,7 +72,7 @@
     }
 
     .sidebar{
-      width:290px;
+      width:300px;
       background:linear-gradient(180deg,var(--sidebar) 0%,var(--sidebar-2) 100%);
       color:#fff;
       padding:22px 18px;
@@ -253,6 +255,43 @@
       margin:0 0 22px;
       color:var(--muted);
       font-size:14px;
+    }
+
+    .subnav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-bottom:18px;
+    }
+
+    .subnav-btn{
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      padding:11px 14px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+      transition:.2s ease;
+    }
+
+    .subnav-btn:hover{
+      transform:translateY(-2px);
+    }
+
+    .subnav-btn.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .subpage{
+      display:none;
+    }
+
+    .subpage.active{
+      display:block;
     }
 
     .panel{
@@ -836,24 +875,20 @@
       <div class="menu">
         <button class="menu-btn" data-page="vendas" onclick="openPage('vendas', this)">📊 Vendas</button>
         <button class="menu-btn" data-page="posvendas" onclick="openPage('posvendas', this)">🔧 Pós-Vendas</button>
-        <button class="menu-btn" data-page="hot-alerts" onclick="openPage('hot-alerts', this)">🚨 Hot Alerts</button>
-        <button class="menu-btn" data-page="treinamentos" onclick="openPage('treinamentos', this)">🎓 Treinamentos</button>
-        <button class="menu-btn" data-page="scorecard" onclick="openPage('scorecard', this)">📈 Scorecard</button>
-        <button class="menu-btn" data-page="racs" onclick="openPage('racs', this)">🧾 RACs</button>
-        <button class="menu-btn" data-page="auditoria" onclick="openPage('auditoria', this)">✅ Auditoria</button>
       </div>
 
       <div class="menu-group-title">Complementares</div>
       <div class="menu">
         <button class="menu-btn" data-page="grow" onclick="openPage('grow', this)">📂 Grow Customer Care</button>
-        <button class="menu-btn" data-page="comite" onclick="openPage('comite', this)">🗂 Comitê</button>
       </div>
 
       <div class="menu-group-title">Ferramentas</div>
       <div class="menu">
-        <button class="menu-btn" data-page="ferramentas" onclick="openPage('ferramentas', this)">🛠 Ferramentas</button>
-        <button class="menu-btn" data-page="agenda" onclick="openPage('agenda', this)">📅 Agenda</button>
         <button class="menu-btn" data-page="chat" onclick="openPage('chat', this)">💬 Chat</button>
+      </div>
+
+      <div class="menu-group-title">Configurações</div>
+      <div class="menu">
         <button class="menu-btn" data-page="configuracoes" onclick="openPage('configuracoes', this)">⚙ Configurações</button>
       </div>
 
@@ -875,6 +910,7 @@
         </div>
       </div>
 
+      <!-- INICIO -->
       <section id="inicio" class="page active">
         <div class="banner-wrap">
           <div class="banner active">
@@ -907,6 +943,26 @@
           </div>
 
           <div class="summary-card">
+            <h4>Detratores hoje</h4>
+            <div class="value red">03</div>
+            <div class="sub">Clientes críticos do dia</div>
+          </div>
+
+          <div class="summary-card">
+            <h4>Pesquisas respondidas</h4>
+            <div class="value blue">27</div>
+            <div class="sub">Total consolidado hoje</div>
+          </div>
+
+          <div class="summary-card">
+            <h4>Conversão do mês</h4>
+            <div class="value orange">15%</div>
+            <div class="sub">Base x respostas</div>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary-card">
             <h4>Treinamentos pendentes</h4>
             <div class="value orange">19</div>
             <div class="sub">Equipe com regularização necessária</div>
@@ -923,6 +979,12 @@
             <div class="value red">04</div>
             <div class="sub">Processos aguardando análise</div>
           </div>
+
+          <div class="summary-card">
+            <h4>Planos de ação</h4>
+            <div class="value red">06</div>
+            <div class="sub">Ações pendentes de conclusão</div>
+          </div>
         </div>
 
         <div class="triple-grid">
@@ -937,12 +999,12 @@
           </div>
 
           <div class="panel">
-            <h3 style="margin:0 0 12px;">RACs e auditorias</h3>
+            <h3 style="margin:0 0 12px;">RACs, auditorias e alertas</h3>
             <div class="list">
               <div class="list-item"><span>RACs aguardando retorno</span><span>07</span></div>
               <div class="list-item"><span>Auditorias quinzenais pendentes</span><span>04</span></div>
               <div class="list-item"><span>Planos de ação pendentes</span><span>06</span></div>
-              <div class="list-item"><span>Não conformidades críticas</span><span>03</span></div>
+              <div class="list-item"><span>Hot Alerts críticos</span><span>03</span></div>
             </div>
           </div>
 
@@ -950,116 +1012,211 @@
             <h3 style="margin:0 0 12px;">Atalhos rápidos</h3>
             <div class="quick-links">
               <div class="quick-link" onclick="openPage('vendas', findMenuButton('vendas'))">
-                <strong>Painel CX Vendas</strong>
-                <small>Acesse NPS, promotores e conversão.</small>
+                <strong>Vendas</strong>
+                <small>Acesse painel, hot alerts, treinamentos, scorecard, RACs e auditoria.</small>
               </div>
               <div class="quick-link" onclick="openPage('posvendas', findMenuButton('posvendas'))">
-                <strong>Painel CX Pós-Vendas</strong>
-                <small>Acompanhe indicadores por marca.</small>
+                <strong>Pós-Vendas</strong>
+                <small>Acompanhe indicadores e gestão operacional.</small>
               </div>
               <div class="quick-link" onclick="openPage('grow', findMenuButton('grow'))">
                 <strong>Grow Customer Care</strong>
                 <small>Cole os casos e acompanhe a fila.</small>
               </div>
-              <div class="quick-link" onclick="openPage('treinamentos', findMenuButton('treinamentos'))">
-                <strong>Treinamentos</strong>
-                <small>Verifique a regularização da equipe.</small>
+              <div class="quick-link" onclick="openPage('configuracoes', findMenuButton('configuracoes'))">
+                <strong>Configurações</strong>
+                <small>Controle parâmetros e preferências do sistema.</small>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- VENDAS -->
       <section id="vendas" class="page">
         <h1 class="page-title">Vendas</h1>
-        <p class="page-subtitle">Painel CX Vendas separado por marca.</p>
+        <p class="page-subtitle">Gestão da operação de vendas com módulos internos.</p>
 
-        <div class="brand-panels">
-          <div class="brand-panel">
-            <div class="brand-header peugeot">Painel CX Vendas • Peugeot</div>
+        <div class="subnav">
+          <button class="subnav-btn active" onclick="openSubpage('vendas', 'vendas-painel', this)">Painel</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-hot-alerts', this)">Hot Alerts</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-treinamentos', this)">Treinamentos</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-scorecard', this)">Scorecard</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-racs', this)">RACs</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-auditoria', this)">Auditoria</button>
+        </div>
 
-            <div class="nps-hero">
-              <h3>NPS Peugeot</h3>
-              <div class="nps-value" id="npsVendasPeugeotValue">82</div>
-              <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85</span></div>
+        <div id="vendas-painel" class="subpage active">
+          <div class="brand-panels">
+            <div class="brand-panel">
+              <div class="brand-header peugeot">Painel CX Vendas • Peugeot</div>
+
+              <div class="nps-hero">
+                <h3>NPS Peugeot</h3>
+                <div class="nps-value" id="npsVendasPeugeotValue">82</div>
+                <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85</span></div>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card"><h4>Promotores</h4><p>45</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p>12</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p>5</p></div>
+                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>62</p></div>
+                <div class="metric-card"><h4>Base de clientes</h4><p>410</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
+              </div>
             </div>
 
-            <div class="metric-grid">
-              <div class="metric-card"><h4>Promotores</h4><p>45</p></div>
-              <div class="metric-card"><h4>Neutros</h4><p>12</p></div>
-              <div class="metric-card"><h4>Detratores</h4><p>5</p></div>
-              <div class="metric-card"><h4>Pesquisas respondidas</h4><p>62</p></div>
-              <div class="metric-card"><h4>Base de clientes</h4><p>410</p></div>
-              <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
+            <div class="brand-panel">
+              <div class="brand-header citroen">Painel CX Vendas • Citroën</div>
+
+              <div class="nps-hero">
+                <h3>NPS Citroën</h3>
+                <div class="nps-value" id="npsVendasCitroenValue">76</div>
+                <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85</span></div>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card"><h4>Promotores</h4><p>28</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p>9</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p>7</p></div>
+                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>44</p></div>
+                <div class="metric-card"><h4>Base de clientes</h4><p>295</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p>14%</p></div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="brand-panel">
-            <div class="brand-header citroen">Painel CX Vendas • Citroën</div>
+        <div id="vendas-hot-alerts" class="subpage">
+          <div class="module-placeholder">
+            <h3>Hot Alerts • Vendas</h3>
+            <p>Área reservada para tratativas de clientes críticos na operação de vendas.</p>
+          </div>
+        </div>
 
-            <div class="nps-hero">
-              <h3>NPS Citroën</h3>
-              <div class="nps-value" id="npsVendasCitroenValue">76</div>
-              <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85</span></div>
-            </div>
+        <div id="vendas-treinamentos" class="subpage">
+          <div class="module-placeholder">
+            <h3>Treinamentos • Vendas</h3>
+            <p>Área reservada para controle e pendências de treinamentos da equipe de vendas.</p>
+          </div>
+        </div>
 
-            <div class="metric-grid">
-              <div class="metric-card"><h4>Promotores</h4><p>28</p></div>
-              <div class="metric-card"><h4>Neutros</h4><p>9</p></div>
-              <div class="metric-card"><h4>Detratores</h4><p>7</p></div>
-              <div class="metric-card"><h4>Pesquisas respondidas</h4><p>44</p></div>
-              <div class="metric-card"><h4>Base de clientes</h4><p>295</p></div>
-              <div class="metric-card"><h4>Conversão</h4><p>14%</p></div>
-            </div>
+        <div id="vendas-scorecard" class="subpage">
+          <div class="module-placeholder">
+            <h3>Scorecard • Vendas</h3>
+            <p>Área reservada para indicadores e comparativos do scorecard da operação de vendas.</p>
+          </div>
+        </div>
+
+        <div id="vendas-racs" class="subpage">
+          <div class="module-placeholder">
+            <h3>RACs • Vendas</h3>
+            <p>Área reservada para monitoramento dos RACs de vendas.</p>
+          </div>
+        </div>
+
+        <div id="vendas-auditoria" class="subpage">
+          <div class="module-placeholder">
+            <h3>Auditoria • Vendas</h3>
+            <p>Área reservada para checklists, conformidade e plano de ação da operação de vendas.</p>
           </div>
         </div>
       </section>
 
+      <!-- POS-VENDAS -->
       <section id="posvendas" class="page">
         <h1 class="page-title">Pós-Vendas</h1>
-        <p class="page-subtitle">Painel CX Pós-Vendas separado por marca.</p>
+        <p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
 
-        <div class="brand-panels">
-          <div class="brand-panel">
-            <div class="brand-header peugeot">Painel CX Pós-Vendas • Peugeot</div>
+        <div class="subnav">
+          <button class="subnav-btn active" onclick="openSubpage('posvendas', 'posvendas-painel', this)">Painel</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-hot-alerts', this)">Hot Alerts</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-treinamentos', this)">Treinamentos</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-scorecard', this)">Scorecard</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-racs', this)">RACs</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-auditoria', this)">Auditoria</button>
+        </div>
 
-            <div class="nps-hero">
-              <h3>NPS Peugeot</h3>
-              <div class="nps-value" id="npsPosPeugeotValue">91</div>
-              <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85</span></div>
+        <div id="posvendas-painel" class="subpage active">
+          <div class="brand-panels">
+            <div class="brand-panel">
+              <div class="brand-header peugeot">Painel CX Pós-Vendas • Peugeot</div>
+
+              <div class="nps-hero">
+                <h3>NPS Peugeot</h3>
+                <div class="nps-value" id="npsPosPeugeotValue">91</div>
+                <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85</span></div>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card"><h4>Promotores</h4><p>58</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p>10</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p>3</p></div>
+                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>71</p></div>
+                <div class="metric-card"><h4>Base de clientes</h4><p>455</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p>16%</p></div>
+              </div>
             </div>
 
-            <div class="metric-grid">
-              <div class="metric-card"><h4>Promotores</h4><p>58</p></div>
-              <div class="metric-card"><h4>Neutros</h4><p>10</p></div>
-              <div class="metric-card"><h4>Detratores</h4><p>3</p></div>
-              <div class="metric-card"><h4>Pesquisas respondidas</h4><p>71</p></div>
-              <div class="metric-card"><h4>Base de clientes</h4><p>455</p></div>
-              <div class="metric-card"><h4>Conversão</h4><p>16%</p></div>
+            <div class="brand-panel">
+              <div class="brand-header citroen">Painel CX Pós-Vendas • Citroën</div>
+
+              <div class="nps-hero">
+                <h3>NPS Citroën</h3>
+                <div class="nps-value" id="npsPosCitroenValue">79</div>
+                <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85</span></div>
+              </div>
+
+              <div class="metric-grid">
+                <div class="metric-card"><h4>Promotores</h4><p>33</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p>11</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p>6</p></div>
+                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>50</p></div>
+                <div class="metric-card"><h4>Base de clientes</h4><p>320</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="brand-panel">
-            <div class="brand-header citroen">Painel CX Pós-Vendas • Citroën</div>
+        <div id="posvendas-hot-alerts" class="subpage">
+          <div class="module-placeholder">
+            <h3>Hot Alerts • Pós-Vendas</h3>
+            <p>Área reservada para tratativas de clientes críticos na operação de pós-vendas.</p>
+          </div>
+        </div>
 
-            <div class="nps-hero">
-              <h3>NPS Citroën</h3>
-              <div class="nps-value" id="npsPosCitroenValue">79</div>
-              <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85</span></div>
-            </div>
+        <div id="posvendas-treinamentos" class="subpage">
+          <div class="module-placeholder">
+            <h3>Treinamentos • Pós-Vendas</h3>
+            <p>Área reservada para controle e pendências de treinamentos da equipe de pós-vendas.</p>
+          </div>
+        </div>
 
-            <div class="metric-grid">
-              <div class="metric-card"><h4>Promotores</h4><p>33</p></div>
-              <div class="metric-card"><h4>Neutros</h4><p>11</p></div>
-              <div class="metric-card"><h4>Detratores</h4><p>6</p></div>
-              <div class="metric-card"><h4>Pesquisas respondidas</h4><p>50</p></div>
-              <div class="metric-card"><h4>Base de clientes</h4><p>320</p></div>
-              <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
-            </div>
+        <div id="posvendas-scorecard" class="subpage">
+          <div class="module-placeholder">
+            <h3>Scorecard • Pós-Vendas</h3>
+            <p>Área reservada para indicadores e comparativos do scorecard da operação de pós-vendas.</p>
+          </div>
+        </div>
+
+        <div id="posvendas-racs" class="subpage">
+          <div class="module-placeholder">
+            <h3>RACs • Pós-Vendas</h3>
+            <p>Área reservada para monitoramento dos RACs de pós-vendas.</p>
+          </div>
+        </div>
+
+        <div id="posvendas-auditoria" class="subpage">
+          <div class="module-placeholder">
+            <h3>Auditoria • Pós-Vendas</h3>
+            <p>Área reservada para checklists, conformidade e plano de ação da operação de pós-vendas.</p>
           </div>
         </div>
       </section>
 
+      <!-- GROW -->
       <section id="grow" class="page">
         <h1 class="page-title">Grow Customer Care</h1>
         <p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
@@ -1121,62 +1278,7 @@
         </div>
       </section>
 
-      <section id="hot-alerts" class="page">
-        <div class="module-placeholder">
-          <h3>Hot Alerts</h3>
-          <p>Área reservada para gestão dos clientes detratores e neutros, com tratativas, prazos, comentários e monitoramento de resposta.</p>
-        </div>
-      </section>
-
-      <section id="treinamentos" class="page">
-        <div class="module-placeholder">
-          <h3>Treinamentos</h3>
-          <p>Área reservada para pendências, cronograma da sala, disparo de e-mails, status por colaborador e acompanhamento da conformidade.</p>
-        </div>
-      </section>
-
-      <section id="scorecard" class="page">
-        <div class="module-placeholder">
-          <h3>Scorecard</h3>
-          <p>Área reservada para indicadores mensais, comparativo com mês anterior, evolução, quedas e acionamento gerencial.</p>
-        </div>
-      </section>
-
-      <section id="racs" class="page">
-        <div class="module-placeholder">
-          <h3>RACs</h3>
-          <p>Área reservada para acompanhamento de RACs, pendências, histórico e visual executivo da operação.</p>
-        </div>
-      </section>
-
-      <section id="auditoria" class="page">
-        <div class="module-placeholder">
-          <h3>Auditoria</h3>
-          <p>Área reservada para checklist de vendas e pós-vendas, registros quinzenais, conformidade, não conformidades e plano de ação.</p>
-        </div>
-      </section>
-
-      <section id="comite" class="page">
-        <div class="module-placeholder">
-          <h3>Comitê</h3>
-          <p>Área reservada para registros de comitê, acompanhamentos e decisões da operação.</p>
-        </div>
-      </section>
-
-      <section id="ferramentas" class="page">
-        <div class="module-placeholder">
-          <h3>Ferramentas</h3>
-          <p>Área reservada para centralizar os sistemas externos usados no dia a dia da operação.</p>
-        </div>
-      </section>
-
-      <section id="agenda" class="page">
-        <div class="module-placeholder">
-          <h3>Agenda</h3>
-          <p>Área reservada para calendário operacional, compromissos, treinamentos, rotinas e acompanhamento do time.</p>
-        </div>
-      </section>
-
+      <!-- CHAT -->
       <section id="chat" class="page">
         <div class="module-placeholder">
           <h3>Chat</h3>
@@ -1184,6 +1286,7 @@
         </div>
       </section>
 
+      <!-- CONFIG -->
       <section id="configuracoes" class="page">
         <div class="module-placeholder">
           <h3>Configurações</h3>
@@ -1196,17 +1299,9 @@
   <script>
     const pageTitles = {
       inicio: ["Início", "Resumo executivo e operacional da qualidade."],
-      vendas: ["Vendas", "Painel CX Vendas separado por marca."],
-      posvendas: ["Pós-Vendas", "Painel CX Pós-Vendas separado por marca."],
+      vendas: ["Vendas", "Gestão da operação de vendas com módulos internos."],
+      posvendas: ["Pós-Vendas", "Gestão da operação de pós-vendas com módulos internos."],
       grow: ["Grow Customer Care", "Controle operacional dos casos copiados do portal Grow."],
-      "hot-alerts": ["Hot Alerts", "Gestão das tratativas críticas de clientes."],
-      treinamentos: ["Treinamentos", "Pendências, cronograma e acompanhamento da equipe."],
-      scorecard: ["Scorecard", "Indicadores mensais e comparativos da operação."],
-      racs: ["RACs", "Acompanhamento de RACs e pendências da operação."],
-      auditoria: ["Auditoria", "Checklists, conformidade e plano de ação."],
-      comite: ["Comitê", "Registros e acompanhamentos de comitê."],
-      ferramentas: ["Ferramentas", "Central de sistemas externos da operação."],
-      agenda: ["Agenda", "Compromissos e calendário operacional."],
       chat: ["Chat", "Comunicação interna do portal."],
       configuracoes: ["Configurações", "Ajustes, permissões e parâmetros do QUALIS."]
     };
@@ -1228,6 +1323,18 @@
 
     function findMenuButton(pageId){
       return document.querySelector(`.menu-btn[data-page="${pageId}"]`);
+    }
+
+    function openSubpage(sectionId, subpageId, btn){
+      const section = document.getElementById(sectionId);
+      if(!section) return;
+
+      section.querySelectorAll('.subpage').forEach(sub => sub.classList.remove('active'));
+      const target = section.querySelector(`#${subpageId}`);
+      if(target) target.classList.add('active');
+
+      section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
+      if(btn) btn.classList.add('active');
     }
 
     function toggleTheme() {
@@ -1262,7 +1369,6 @@
     function showBanner(index){
       const banners = document.querySelectorAll('.banner');
       const dots = document.querySelectorAll('.dot');
-
       if(!banners.length) return;
 
       banners.forEach(b => b.classList.remove('active'));
@@ -1564,6 +1670,28 @@ NNE - NORDESTE`;
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
+    }
+
+    let currentBanner = 0;
+
+    function showBanner(index){
+      const banners = document.querySelectorAll('.banner');
+      const dots = document.querySelectorAll('.dot');
+      if(!banners.length) return;
+
+      banners.forEach(b => b.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+
+      banners[index].classList.add('active');
+      if(dots[index]) dots[index].classList.add('active');
+      currentBanner = index;
+    }
+
+    function rotateBanners(){
+      const banners = document.querySelectorAll('.banner');
+      if(!banners.length) return;
+      currentBanner = (currentBanner + 1) % banners.length;
+      showBanner(currentBanner);
     }
 
     window.onload = function() {
