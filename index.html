@@ -17,7 +17,7 @@
       --warning:#f59e0b;
       --danger:#ef4444;
       --border:#dbe5f0;
-      --shadow:0 10px 30px rgba(31, 79, 163, 0.10);
+      --shadow:0 10px 30px rgba(31,79,163,.10);
     }
 
     body.dark{
@@ -32,24 +32,28 @@
       --warning:#f59e0b;
       --danger:#f87171;
       --border:#223453;
-      --shadow:0 16px 40px rgba(0,0,0,0.35);
+      --shadow:0 16px 40px rgba(0,0,0,.35);
     }
 
-    *{ box-sizing:border-box; }
-    html, body{
+    *{box-sizing:border-box}
+
+    html,body{
       margin:0;
       padding:0;
-      font-family:Arial, Helvetica, sans-serif;
+      font-family:Arial,Helvetica,sans-serif;
       background:var(--bg);
       color:var(--text);
       transition:.25s ease;
     }
 
-    .app{ display:flex; min-height:100vh; }
+    .app{
+      display:flex;
+      min-height:100vh;
+    }
 
     .sidebar{
       width:280px;
-      background:linear-gradient(180deg, #12336b 0%, #1b4589 100%);
+      background:linear-gradient(180deg,#12336b 0%,#1b4589 100%);
       color:#fff;
       padding:22px 18px;
       display:flex;
@@ -59,44 +63,56 @@
     }
 
     body.dark .sidebar{
-      background:linear-gradient(180deg, #0c1730 0%, #122448 100%);
+      background:linear-gradient(180deg,#0c1730 0%,#122448 100%);
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      padding:8px 6px 18px 6px;
-      border-bottom:1px solid rgba(255,255,255,0.14);
+      padding:8px 6px 18px;
+      border-bottom:1px solid rgba(255,255,255,.14);
     }
 
     .brand-mark{
       width:44px;
       height:44px;
       border-radius:14px;
-      background:conic-gradient(from 210deg, #2563eb, #22c55e, #f59e0b, #ec4899, #2563eb);
+      background:conic-gradient(from 210deg,#2563eb,#22c55e,#f59e0b,#ec4899,#2563eb);
     }
 
-    .brand h1{ margin:0; font-size:28px; }
-    .brand p{ margin:4px 0 0 0; font-size:11px; opacity:.82; }
+    .brand h1{
+      margin:0;
+      font-size:28px;
+      line-height:1;
+    }
+
+    .brand p{
+      margin:4px 0 0;
+      font-size:11px;
+      opacity:.82;
+    }
 
     .menu-group-title{
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.12em;
-      opacity:.70;
+      opacity:.7;
       margin:8px 10px 2px;
     }
 
-    .menu, .submenu{
+    .menu,.submenu{
       display:flex;
       flex-direction:column;
       gap:6px;
     }
 
-    .submenu{ margin-left:12px; gap:4px; }
+    .submenu{
+      margin-left:12px;
+      gap:4px;
+    }
 
-    .menu a, .submenu a{
+    .menu a,.submenu a{
       display:block;
       padding:12px 14px;
       border-radius:14px;
@@ -113,7 +129,7 @@
     }
 
     .menu a.active{
-      background:linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+      background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
       border:1px solid rgba(255,255,255,.12);
     }
 
@@ -125,10 +141,21 @@
       padding:14px;
     }
 
-    .sidebar-footer .user{ font-size:15px; font-weight:800; }
-    .sidebar-footer .role{ font-size:12px; opacity:.82; margin-top:4px; }
+    .sidebar-footer .user{
+      font-size:15px;
+      font-weight:800;
+    }
 
-    .content{ flex:1; padding:24px; }
+    .sidebar-footer .role{
+      font-size:12px;
+      opacity:.82;
+      margin-top:4px;
+    }
+
+    .content{
+      flex:1;
+      padding:24px;
+    }
 
     .topbar{
       display:flex;
@@ -138,8 +165,16 @@
       margin-bottom:22px;
     }
 
-    .welcome h2{ margin:0; font-size:30px; }
-    .welcome p{ margin:6px 0 0 0; color:var(--muted); font-size:14px; }
+    .welcome h2{
+      margin:0;
+      font-size:30px;
+    }
+
+    .welcome p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
 
     .top-actions{
       display:flex;
@@ -161,7 +196,7 @@
 
     .theme-toggle{
       border:0;
-      background:linear-gradient(135deg, var(--primary), var(--accent));
+      background:linear-gradient(135deg,var(--primary),var(--accent));
       color:#fff;
       padding:12px 16px;
       border-radius:14px;
@@ -169,18 +204,6 @@
       font-weight:800;
       box-shadow:var(--shadow);
     }
-
-    .section{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:20px;
-      margin-bottom:18px;
-    }
-
-    .section h3{ margin:0 0 6px 0; font-size:24px; }
-    .section-subtitle{ margin:0 0 16px 0; font-size:13px; color:var(--muted); }
 
     .hero{
       display:grid;
@@ -191,8 +214,8 @@
 
     .hero-card{
       background:
-        radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 30%),
-        radial-gradient(circle at left bottom, rgba(124,58,237,.10), transparent 35%),
+        radial-gradient(circle at top right,rgba(59,130,246,.12),transparent 30%),
+        radial-gradient(circle at left bottom,rgba(124,58,237,.10),transparent 35%),
         var(--surface);
       border:1px solid var(--border);
       border-radius:24px;
@@ -200,10 +223,14 @@
       padding:22px;
     }
 
-    .hero-card h3{ margin:0; font-size:26px; }
+    .hero-card h3{
+      margin:0;
+      font-size:26px;
+    }
+
     .hero-card p{
       color:var(--muted);
-      margin:8px 0 18px 0;
+      margin:8px 0 18px;
       line-height:1.5;
       font-size:14px;
     }
@@ -238,13 +265,45 @@
       box-shadow:var(--shadow);
     }
 
-    .mini h4{ margin:0 0 10px 0; font-size:18px; }
-    .mini-value{ font-size:28px; font-weight:900; margin-bottom:6px; }
-    .mini small{ color:var(--muted); font-size:13px; }
+    .mini h4{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    .mini-value{
+      font-size:28px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mini small{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .section{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    .section h3{
+      margin:0 0 6px;
+      font-size:24px;
+    }
+
+    .section-subtitle{
+      margin:0 0 16px;
+      font-size:13px;
+      color:var(--muted);
+    }
 
     .grid-kpis{
       display:grid;
-      grid-template-columns:repeat(4,1fr);
+      grid-template-columns:repeat(6,1fr);
       gap:16px;
       margin-bottom:18px;
     }
@@ -271,26 +330,26 @@
     }
 
     .kpi-card h4{
-      margin:0 0 8px 0;
-      font-size:14px;
+      margin:0 0 8px;
+      font-size:13px;
       color:var(--muted);
     }
 
     .kpi-card .value{
-      font-size:38px;
+      font-size:34px;
       font-weight:900;
       margin-bottom:6px;
     }
 
     .kpi-card .sub{
-      font-size:13px;
+      font-size:12px;
       color:var(--muted);
     }
 
-    .primary-text{ color:var(--primary); }
-    .success-text{ color:var(--success); }
-    .warning-text{ color:var(--warning); }
-    .danger-text{ color:var(--danger); }
+    .primary-text{color:var(--primary)}
+    .success-text{color:var(--success)}
+    .warning-text{color:var(--warning)}
+    .danger-text{color:var(--danger)}
 
     .panel-grid{
       display:grid;
@@ -303,7 +362,7 @@
       height:320px;
       border-radius:18px;
       background:
-        linear-gradient(180deg, rgba(59,130,246,.06), rgba(124,58,237,.02)),
+        linear-gradient(180deg,rgba(59,130,246,.06),rgba(124,58,237,.02)),
         var(--surface-2);
       border:1px solid var(--border);
       padding:20px;
@@ -329,7 +388,7 @@
     }
 
     .mini-panel h4{
-      margin:0 0 10px 0;
+      margin:0 0 10px;
       font-size:16px;
     }
 
@@ -339,13 +398,13 @@
       margin-bottom:6px;
     }
 
-    .ranking-list{
+    .list{
       display:flex;
       flex-direction:column;
       gap:10px;
     }
 
-    .ranking-row{
+    .list-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -367,23 +426,23 @@
       white-space:nowrap;
     }
 
-    .badge.green{ background:var(--success); }
-    .badge.yellow{ background:var(--warning); }
-    .badge.red{ background:var(--danger); }
-    .badge.blue{ background:var(--primary); }
+    .badge.green{background:var(--success)}
+    .badge.yellow{background:var(--warning)}
+    .badge.red{background:var(--danger)}
+    .badge.blue{background:var(--primary)}
 
-    @media (max-width: 1200px){
-      .grid-kpis{ grid-template-columns:repeat(2,1fr); }
-      .hero, .panel-grid{ grid-template-columns:1fr; }
+    @media (max-width: 1350px){
+      .grid-kpis{grid-template-columns:repeat(3,1fr)}
+      .hero,.panel-grid{grid-template-columns:1fr}
     }
 
     @media (max-width: 900px){
-      .app{ flex-direction:column; }
-      .sidebar{ width:100%; }
-      .content{ padding:16px; }
-      .topbar{ flex-direction:column; align-items:flex-start; }
-      .search{ min-width:100%; }
-      .grid-kpis{ grid-template-columns:1fr; }
+      .app{flex-direction:column}
+      .sidebar{width:100%}
+      .content{padding:16px}
+      .topbar{flex-direction:column;align-items:flex-start}
+      .search{min-width:100%}
+      .grid-kpis{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -408,6 +467,7 @@
         <a href="#">Vendas</a>
         <div class="submenu">
           <a href="#">Painel CX Vendas</a>
+          <a href="#">Base de Clientes</a>
           <a href="#">Hot Alerts</a>
           <a href="#">Treinamento</a>
           <a href="#">Scorecard</a>
@@ -418,13 +478,14 @@
         <a href="#">Pós-Vendas</a>
         <div class="submenu">
           <a href="#">Painel CX Pós-Vendas</a>
+          <a href="#">Base de Clientes</a>
+          <a href="#">ISC Consultor</a>
           <a href="#">Hot Alerts</a>
           <a href="#">Treinamento</a>
           <a href="#">Scorecard</a>
           <a href="#">RACs</a>
           <a href="#">Auditoria</a>
           <a href="#">Grow Customer Care</a>
-          <a href="#">Comitê</a>
         </div>
       </nav>
 
@@ -489,32 +550,44 @@
       <section class="section">
         <h3>Painel CX Vendas</h3>
         <p class="section-subtitle">
-          Visão executiva do desempenho de Vendas com foco em NPS, distribuição de notas e leitura gerencial por consultor.
+          Meta padrão do NPS de Vendas: <strong>90%</strong>. Leitura executiva com base de clientes, taxa de resposta e radar de risco.
         </p>
 
         <div class="grid-kpis">
           <div class="kpi-card">
             <h4>NPS Vendas</h4>
-            <div class="value primary-text">82,0%</div>
-            <div class="sub">Meta mensal atingida</div>
+            <div class="value primary-text">90,0%</div>
+            <div class="sub">Meta de referência</div>
           </div>
 
           <div class="kpi-card">
             <h4>Promotores</h4>
             <div class="value success-text">42</div>
-            <div class="sub">Notas 9–10 no período</div>
+            <div class="sub">Notas 9–10</div>
           </div>
 
           <div class="kpi-card">
             <h4>Neutros</h4>
             <div class="value warning-text">8</div>
-            <div class="sub">Notas 7–8 no período</div>
+            <div class="sub">Notas 7–8</div>
           </div>
 
           <div class="kpi-card">
             <h4>Detratores</h4>
             <div class="value danger-text">4</div>
-            <div class="sub">Notas 1–6 no período</div>
+            <div class="sub">Notas 1–6</div>
+          </div>
+
+          <div class="kpi-card">
+            <h4>Base de Clientes</h4>
+            <div class="value primary-text">310</div>
+            <div class="sub">Base total do período</div>
+          </div>
+
+          <div class="kpi-card">
+            <h4>Taxa de Resposta</h4>
+            <div class="value success-text">18%</div>
+            <div class="sub">Pesquisas respondidas</div>
           </div>
         </div>
 
@@ -525,13 +598,13 @@
                 fill="none"
                 stroke="#3b82f6"
                 stroke-width="4"
-                points="20,210 120,180 220,190 320,150 420,140 520,95 620,78"
+                points="20,210 120,190 220,175 320,165 420,138 520,112 620,86"
               />
               <polyline
                 fill="none"
                 stroke="#8b5cf6"
                 stroke-width="4"
-                points="20,230 120,205 220,175 320,168 420,148 520,125 620,110"
+                points="20,230 120,210 220,198 320,184 420,170 520,148 620,126"
               />
             </svg>
           </div>
@@ -539,23 +612,41 @@
           <div class="side-stack">
             <div class="mini-panel">
               <h4>Resumo por marca</h4>
-              <div class="ranking-list">
-                <div class="ranking-row">
-                  <span>Citroën</span>
-                  <span class="badge blue">79,5%</span>
-                </div>
-                <div class="ranking-row">
+              <div class="list">
+                <div class="list-row">
                   <span>Peugeot</span>
-                  <span class="badge green">84,2%</span>
+                  <span class="badge green">92,4%</span>
+                </div>
+                <div class="list-row">
+                  <span>Citroën</span>
+                  <span class="badge blue">87,9%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-panel">
+              <h4>Radar de Risco — Vendas</h4>
+              <div class="list">
+                <div class="list-row">
+                  <span>Meta</span>
+                  <span class="badge blue">90%</span>
+                </div>
+                <div class="list-row">
+                  <span>Faltam promotoras</span>
+                  <span class="badge yellow">7</span>
+                </div>
+                <div class="list-row">
+                  <span>Detratores a reverter</span>
+                  <span class="badge red">3</span>
                 </div>
               </div>
             </div>
 
             <div class="mini-panel">
               <h4>Status executivo</h4>
-              <div class="big success-text">Meta atingida</div>
+              <div class="big success-text">Atenção monitorada</div>
               <small style="color:var(--muted);">
-                O desempenho consolidado do período está dentro da meta, com maior contribuição da Peugeot.
+                A operação de Vendas deve manter conversão e proteção dos neutros para sustentar o objetivo mensal.
               </small>
             </div>
           </div>
@@ -563,27 +654,133 @@
       </section>
 
       <section class="section">
-        <h3>Ranking de Consultores</h3>
+        <h3>Painel CX Pós-Vendas</h3>
         <p class="section-subtitle">
-          Leitura executiva dos consultores com melhor contribuição no resultado de Vendas.
+          Meta padrão do NPS de Pós-Vendas: <strong>82%</strong>. Painel separado de Vendas, com base de clientes, taxa de resposta e leitura do ISC Consultor.
         </p>
 
-        <div class="ranking-list">
-          <div class="ranking-row">
-            <span>1. Junina</span>
-            <span class="badge green">Puxando p/ cima</span>
+        <div class="grid-kpis">
+          <div class="kpi-card">
+            <h4>NPS Pós-Vendas</h4>
+            <div class="value primary-text">82,0%</div>
+            <div class="sub">Meta de referência</div>
           </div>
-          <div class="ranking-row">
-            <span>2. Camila</span>
-            <span class="badge green">Puxando p/ cima</span>
+
+          <div class="kpi-card">
+            <h4>Promotores</h4>
+            <div class="value success-text">58</div>
+            <div class="sub">Notas 9–10</div>
           </div>
-          <div class="ranking-row">
-            <span>3. João</span>
-            <span class="badge yellow">Neutro</span>
+
+          <div class="kpi-card">
+            <h4>Neutros</h4>
+            <div class="value warning-text">11</div>
+            <div class="sub">Notas 7–8</div>
           </div>
-          <div class="ranking-row">
-            <span>4. Pedro</span>
-            <span class="badge red">Puxando p/ baixo</span>
+
+          <div class="kpi-card">
+            <h4>Detratores</h4>
+            <div class="value danger-text">6</div>
+            <div class="sub">Notas 1–6</div>
+          </div>
+
+          <div class="kpi-card">
+            <h4>Base de Clientes</h4>
+            <div class="value primary-text">420</div>
+            <div class="sub">Base total do período</div>
+          </div>
+
+          <div class="kpi-card">
+            <h4>Taxa de Resposta</h4>
+            <div class="value success-text">22%</div>
+            <div class="sub">Pesquisas respondidas</div>
+          </div>
+        </div>
+
+        <div class="panel-grid">
+          <div class="chart-box">
+            <svg class="chart-svg" viewBox="0 0 700 280" preserveAspectRatio="none">
+              <polyline
+                fill="none"
+                stroke="#10b981"
+                stroke-width="4"
+                points="20,220 120,180 220,170 320,145 420,132 520,102 620,92"
+              />
+              <polyline
+                fill="none"
+                stroke="#f59e0b"
+                stroke-width="4"
+                points="20,240 120,220 220,205 320,190 420,176 520,162 620,154"
+              />
+            </svg>
+          </div>
+
+          <div class="side-stack">
+            <div class="mini-panel">
+              <h4>Resumo por marca</h4>
+              <div class="list">
+                <div class="list-row">
+                  <span>Peugeot</span>
+                  <span class="badge green">84,1%</span>
+                </div>
+                <div class="list-row">
+                  <span>Citroën</span>
+                  <span class="badge blue">80,3%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-panel">
+              <h4>Radar de Risco — Pós-Vendas</h4>
+              <div class="list">
+                <div class="list-row">
+                  <span>Meta</span>
+                  <span class="badge blue">82%</span>
+                </div>
+                <div class="list-row">
+                  <span>Faltam promotoras</span>
+                  <span class="badge yellow">5</span>
+                </div>
+                <div class="list-row">
+                  <span>Detratores a reverter</span>
+                  <span class="badge red">2</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-panel">
+              <h4>Status executivo</h4>
+              <div class="big warning-text">Acompanhar de perto</div>
+              <small style="color:var(--muted);">
+                Pós-Vendas requer ação em detratores e estabilização da taxa de resposta para proteção do resultado.
+              </small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>ISC Consultor — Pós-Vendas</h3>
+        <p class="section-subtitle">
+          Módulo exclusivo do Pós-Vendas, com leitura executiva do desempenho dos consultores.
+        </p>
+
+        <div class="list">
+          <div class="list-row">
+            <span>1. Camila — Puxando p/ cima</span>
+            <span class="badge green">94%</span>
+          </div>
+          <div class="list-row">
+            <span>2. Junina — Puxando p/ cima</span>
+            <span class="badge green">91%</span>
+          </div>
+          <div class="list-row">
+            <span>3. João — Neutro</span>
+            <span class="badge yellow">83%</span>
+          </div>
+          <div class="list-row">
+            <span>4. Pedro — Puxando p/ baixo</span>
+            <span class="badge red">74%</span>
           </div>
         </div>
       </section>
@@ -593,12 +790,15 @@
   <script>
     function toggleTheme() {
       document.body.classList.toggle('dark');
-      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      localStorage.setItem(
+        'qualis-theme',
+        document.body.classList.contains('dark') ? 'dark' : 'light'
+      );
     }
 
     (function initTheme(){
       const saved = localStorage.getItem('qualis-theme');
-      if(saved === 'dark') document.body.classList.add('dark');
+      if (saved === 'dark') document.body.classList.add('dark');
     })();
   </script>
 </body>
