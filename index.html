@@ -50,21 +50,14 @@
     }
 
     *{ box-sizing:border-box; }
-
     html,body{
       margin:0;
       padding:0;
       font-family:'Inter',sans-serif;
       background:var(--bg);
       color:var(--text);
-      transition:background .25s ease,color .25s ease;
     }
-
-    body{ min-height:100vh; }
-
-    button,input,textarea{
-      font-family:'Inter',sans-serif;
-    }
+    button,input,textarea,select{ font-family:'Inter',sans-serif; }
 
     .app{
       display:flex;
@@ -146,10 +139,7 @@
       transition:.2s ease;
     }
 
-    .menu-btn:hover{
-      background:rgba(255,255,255,.10);
-    }
-
+    .menu-btn:hover{ background:rgba(255,255,255,.10); }
     .menu-btn.active{
       background:linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
       border:1px solid rgba(255,255,255,.10);
@@ -163,16 +153,8 @@
       padding:14px;
     }
 
-    .sidebar-footer .user{
-      font-size:15px;
-      font-weight:800;
-    }
-
-    .sidebar-footer .role{
-      font-size:12px;
-      opacity:.82;
-      margin-top:4px;
-    }
+    .sidebar-footer .user{ font-size:15px; font-weight:800; }
+    .sidebar-footer .role{ font-size:12px; opacity:.82; margin-top:4px; }
 
     .main{
       flex:1;
@@ -230,19 +212,8 @@
       box-shadow:var(--shadow);
     }
 
-    .page{
-      display:none;
-      animation:fadeIn .22s ease;
-    }
-
-    .page.active{
-      display:block;
-    }
-
-    @keyframes fadeIn{
-      from{opacity:.35;transform:translateY(10px);}
-      to{opacity:1;transform:translateY(0);}
-    }
+    .page{ display:none; }
+    .page.active{ display:block; }
 
     .page-title{
       margin:0 0 8px;
@@ -273,11 +244,6 @@
       font-weight:800;
       cursor:pointer;
       box-shadow:var(--shadow);
-      transition:.2s ease;
-    }
-
-    .subnav-btn:hover{
-      transform:translateY(-2px);
     }
 
     .subnav-btn.active{
@@ -286,13 +252,8 @@
       border-color:transparent;
     }
 
-    .subpage{
-      display:none;
-    }
-
-    .subpage.active{
-      display:block;
-    }
+    .subpage{ display:none; }
+    .subpage.active{ display:block; }
 
     .panel{
       background:var(--surface);
@@ -302,84 +263,7 @@
       box-shadow:var(--shadow);
     }
 
-    .hero{
-      display:grid;
-      grid-template-columns:1.45fr .95fr;
-      gap:18px;
-      margin-bottom:18px;
-    }
-
-    .hero-main{
-      background:
-        radial-gradient(circle at top right, rgba(49,95,195,.14), transparent 32%),
-        radial-gradient(circle at bottom left, rgba(124,58,237,.11), transparent 36%),
-        var(--surface);
-    }
-
-    .hero-main h3{
-      margin:0;
-      font-size:30px;
-      letter-spacing:-0.02em;
-    }
-
-    .hero-main p{
-      margin:10px 0 18px;
-      color:var(--muted);
-      line-height:1.65;
-      font-size:14px;
-    }
-
-    .hero-tags{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-    }
-
-    .tag{
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background:var(--surface-2);
-      color:var(--primary);
-      font-size:12px;
-      font-weight:800;
-    }
-
-    .side-stack{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-
-    .mini-card{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:24px;
-      padding:20px;
-      box-shadow:var(--shadow);
-    }
-
-    .mini-card h4{
-      margin:0 0 10px;
-      font-size:16px;
-    }
-
-    .mini-value{
-      font-size:34px;
-      font-weight:900;
-      margin-bottom:6px;
-    }
-
-    .mini-card small{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .banner-wrap{
-      position:relative;
-      margin-bottom:18px;
-    }
-
+    .banner-wrap{ margin-bottom:18px; }
     .banner{
       display:none;
       background:linear-gradient(135deg,var(--primary),var(--primary-2));
@@ -391,11 +275,7 @@
       position:relative;
       overflow:hidden;
     }
-
-    .banner.active{
-      display:block;
-    }
-
+    .banner.active{ display:block; }
     .banner::after{
       content:"";
       position:absolute;
@@ -406,25 +286,22 @@
       background:rgba(255,255,255,.10);
       border-radius:50%;
     }
-
     .banner h3{
       margin:0;
       font-size:30px;
       font-weight:900;
       letter-spacing:-0.03em;
-      max-width:600px;
       position:relative;
       z-index:1;
     }
-
     .banner p{
       margin:12px 0 0;
-      max-width:720px;
       line-height:1.6;
       font-size:14px;
       opacity:.95;
       position:relative;
       z-index:1;
+      max-width:760px;
     }
 
     .banner-dots{
@@ -433,7 +310,6 @@
       margin-top:12px;
       justify-content:flex-end;
     }
-
     .dot{
       width:10px;
       height:10px;
@@ -442,10 +318,7 @@
       border:0;
       cursor:pointer;
     }
-
-    .dot.active{
-      background:#fff;
-    }
+    .dot.active{ background:#fff; }
 
     .summary-grid{
       display:grid;
@@ -523,9 +396,7 @@
       font-size:14px;
     }
 
-    .list-item span:last-child{
-      font-weight:800;
-    }
+    .list-item span:last-child{ font-weight:800; }
 
     .quick-links{
       display:grid;
@@ -539,12 +410,6 @@
       border-radius:18px;
       padding:16px;
       cursor:pointer;
-      transition:.2s ease;
-    }
-
-    .quick-link:hover{
-      transform:translateY(-3px);
-      box-shadow:var(--shadow);
     }
 
     .quick-link strong{
@@ -581,14 +446,8 @@
       font-size:15px;
       margin-bottom:16px;
     }
-
-    .brand-header.peugeot{
-      background:linear-gradient(90deg,#214ea8,#315ec2);
-    }
-
-    .brand-header.citroen{
-      background:linear-gradient(90deg,#7c3aed,#8f49f2);
-    }
+    .brand-header.peugeot{ background:linear-gradient(90deg,#214ea8,#315ec2); }
+    .brand-header.citroen{ background:linear-gradient(90deg,#7c3aed,#8f49f2); }
 
     .nps-hero{
       background:var(--surface-2);
@@ -615,13 +474,11 @@
       margin:8px 0 10px;
       letter-spacing:-0.05em;
     }
-
     .nps-meta{
       color:var(--muted);
       font-size:18px;
       font-weight:700;
     }
-
     .nps-green{ color:var(--success); }
     .nps-red{ color:var(--danger); }
 
@@ -637,12 +494,6 @@
       border-radius:18px;
       text-align:center;
       padding:18px 14px;
-      transition:.2s ease;
-    }
-
-    .metric-card:hover{
-      transform:translateY(-3px);
-      box-shadow:var(--shadow);
     }
 
     .metric-card h4{
@@ -799,10 +650,6 @@
       top:0;
     }
 
-    tr:hover td{
-      background:rgba(33,84,180,.04);
-    }
-
     .chip{
       display:inline-block;
       padding:7px 10px;
@@ -812,7 +659,6 @@
       color:#fff;
       white-space:nowrap;
     }
-
     .chip.blue{background:var(--primary);}
     .chip.purple{background:var(--citroen);}
     .chip.green{background:var(--success);}
@@ -825,10 +671,51 @@
       color:var(--muted);
     }
 
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:14px;
+      margin-bottom:16px;
+    }
+
+    .field{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .field label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:8px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .field input{
+      width:100%;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      border-radius:12px;
+      padding:10px 12px;
+      outline:none;
+    }
+
+    .save-row{
+      display:flex;
+      gap:12px;
+      justify-content:flex-end;
+      margin-top:8px;
+    }
+
     @media (max-width: 1380px){
       .summary-grid{ grid-template-columns:repeat(2,1fr); }
       .triple-grid{ grid-template-columns:1fr; }
-      .brand-panels, .grow-inputs{ grid-template-columns:1fr; }
+      .brand-panels, .grow-inputs, .form-grid{ grid-template-columns:1fr; }
     }
 
     @media (max-width: 1024px){
@@ -844,13 +731,7 @@
         align-items:flex-start;
       }
       .search{ min-width:100%; }
-      .hero,
-      .summary-grid,
-      .metric-grid,
-      .grow-summary,
-      .quick-links{
-        grid-template-columns:1fr;
-      }
+      .summary-grid, .metric-grid, .grow-summary, .quick-links{ grid-template-columns:1fr; }
       .nps-value{ font-size:66px; }
     }
   </style>
@@ -889,7 +770,7 @@
 
       <div class="menu-group-title">Configurações</div>
       <div class="menu">
-        <button class="menu-btn" data-page="configuracoes" onclick="openPage('configuracoes', this)">⚙ Configurações</button>
+        <button class="menu-btn" data-page="configuracoes" onclick="openPage('configuracoes', this)">⚙️ Configurações</button>
       </div>
 
       <div class="sidebar-footer">
@@ -910,24 +791,20 @@
         </div>
       </div>
 
-      <!-- INICIO -->
       <section id="inicio" class="page active">
         <div class="banner-wrap">
           <div class="banner active">
             <h3>Bem-vinda ao QUALIS</h3>
             <p>Seu sistema integrado de qualidade, experiência do cliente e operação. Aqui você acompanha resultados, pendências, treinamentos, RACs, auditorias e alertas em um só lugar.</p>
           </div>
-
           <div class="banner">
             <h3>Resumo do dia da operação</h3>
             <p>Verifique rapidamente quantas promotoras entraram hoje, status dos treinamentos, planos de ação em aberto e os principais alertas que exigem atenção imediata.</p>
           </div>
-
           <div class="banner">
             <h3>Gestão centralizada para a diretoria</h3>
             <p>O QUALIS consolida vendas, pós-vendas, grow, auditorias e acompanhamento operacional em uma experiência única, elegante e executiva.</p>
           </div>
-
           <div class="banner-dots">
             <button class="dot active" onclick="showBanner(0)"></button>
             <button class="dot" onclick="showBanner(1)"></button>
@@ -938,25 +815,22 @@
         <div class="summary-grid">
           <div class="summary-card">
             <h4>Promotoras hoje</h4>
-            <div class="value green">12</div>
+            <div class="value green" id="homePromotorasHoje">12</div>
             <div class="sub">Entradas registradas no dia</div>
           </div>
-
           <div class="summary-card">
             <h4>Detratores hoje</h4>
-            <div class="value red">03</div>
+            <div class="value red" id="homeDetratoresHoje">3</div>
             <div class="sub">Clientes críticos do dia</div>
           </div>
-
           <div class="summary-card">
             <h4>Pesquisas respondidas</h4>
-            <div class="value blue">27</div>
+            <div class="value blue" id="homePesquisasRespondidas">27</div>
             <div class="sub">Total consolidado hoje</div>
           </div>
-
           <div class="summary-card">
             <h4>Conversão do mês</h4>
-            <div class="value orange">15%</div>
+            <div class="value orange" id="homeConversaoMes">15%</div>
             <div class="sub">Base x respostas</div>
           </div>
         </div>
@@ -964,47 +838,44 @@
         <div class="summary-grid">
           <div class="summary-card">
             <h4>Treinamentos pendentes</h4>
-            <div class="value orange">19</div>
+            <div class="value orange" id="homeTreinamentosPendentes">19</div>
             <div class="sub">Equipe com regularização necessária</div>
           </div>
-
           <div class="summary-card">
-            <h4>RACs em aberto</h4>
-            <div class="value blue">07</div>
+            <h4>RACs pendentes</h4>
+            <div class="value blue" id="homeRacsPendentes">7</div>
             <div class="sub">Demandas em acompanhamento</div>
           </div>
-
           <div class="summary-card">
             <h4>Auditorias pendentes</h4>
-            <div class="value red">04</div>
+            <div class="value red" id="homeAuditoriasPendentes">4</div>
             <div class="sub">Processos aguardando análise</div>
           </div>
-
           <div class="summary-card">
-            <h4>Planos de ação</h4>
-            <div class="value red">06</div>
-            <div class="sub">Ações pendentes de conclusão</div>
+            <h4>Planos de ação pendentes</h4>
+            <div class="value red" id="homePlanosPendentes">6</div>
+            <div class="sub">Ações em aberto</div>
           </div>
         </div>
 
         <div class="triple-grid">
           <div class="panel">
-            <h3 style="margin:0 0 12px;">Treinamento da equipe</h3>
+            <h3 style="margin:0 0 12px;">Alertas críticos</h3>
             <div class="list">
-              <div class="list-item"><span>Treinamentos pendentes</span><span>19</span></div>
-              <div class="list-item"><span>Colaboradores em cronograma</span><span>08</span></div>
-              <div class="list-item"><span>Concluídos na semana</span><span>14</span></div>
-              <div class="list-item"><span>Resumo da sala amanhã</span><span>17h</span></div>
+              <div class="list-item"><span>Hot Alerts críticos</span><span id="homeHotAlertsCriticos">3</span></div>
+              <div class="list-item"><span>RACs críticos</span><span id="homeRacsCriticos">2</span></div>
+              <div class="list-item"><span>Auditorias urgentes</span><span id="homeAuditoriasUrgentes">1</span></div>
+              <div class="list-item"><span>Planos críticos</span><span id="homePlanosCriticos">2</span></div>
             </div>
           </div>
 
           <div class="panel">
-            <h3 style="margin:0 0 12px;">RACs, auditorias e alertas</h3>
+            <h3 style="margin:0 0 12px;">Treinamento da equipe</h3>
             <div class="list">
-              <div class="list-item"><span>RACs aguardando retorno</span><span>07</span></div>
-              <div class="list-item"><span>Auditorias quinzenais pendentes</span><span>04</span></div>
-              <div class="list-item"><span>Planos de ação pendentes</span><span>06</span></div>
-              <div class="list-item"><span>Hot Alerts críticos</span><span>03</span></div>
+              <div class="list-item"><span>Pendentes</span><span id="homeTreinPendentes2">19</span></div>
+              <div class="list-item"><span>Em cronograma</span><span id="homeTreinCronograma">8</span></div>
+              <div class="list-item"><span>Concluídos na semana</span><span id="homeTreinConcluidosSemana">14</span></div>
+              <div class="list-item"><span>Resumo da sala amanhã</span><span>17h</span></div>
             </div>
           </div>
 
@@ -1013,26 +884,25 @@
             <div class="quick-links">
               <div class="quick-link" onclick="openPage('vendas', findMenuButton('vendas'))">
                 <strong>Vendas</strong>
-                <small>Acesse painel, hot alerts, treinamentos, scorecard, RACs e auditoria.</small>
+                <small>Painel, Hot Alerts, Treinamentos, Scorecard, RACs e Auditoria.</small>
               </div>
               <div class="quick-link" onclick="openPage('posvendas', findMenuButton('posvendas'))">
                 <strong>Pós-Vendas</strong>
-                <small>Acompanhe indicadores e gestão operacional.</small>
+                <small>Painel, Hot Alerts, Treinamentos, Scorecard, RACs e Auditoria.</small>
               </div>
               <div class="quick-link" onclick="openPage('grow', findMenuButton('grow'))">
                 <strong>Grow Customer Care</strong>
-                <small>Cole os casos e acompanhe a fila.</small>
+                <small>Cole e acompanhe os casos operacionais.</small>
               </div>
               <div class="quick-link" onclick="openPage('configuracoes', findMenuButton('configuracoes'))">
-                <strong>Configurações</strong>
-                <small>Controle parâmetros e preferências do sistema.</small>
+                <strong>Banco de Dados</strong>
+                <small>Edite os números reais do sistema.</small>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- VENDAS -->
       <section id="vendas" class="page">
         <h1 class="page-title">Vendas</h1>
         <p class="page-subtitle">Gestão da operação de vendas com módulos internos.</p>
@@ -1050,81 +920,47 @@
           <div class="brand-panels">
             <div class="brand-panel">
               <div class="brand-header peugeot">Painel CX Vendas • Peugeot</div>
-
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
                 <div class="nps-value" id="npsVendasPeugeotValue">82</div>
                 <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85</span></div>
               </div>
-
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p>45</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p>12</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p>5</p></div>
-                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>62</p></div>
-                <div class="metric-card"><h4>Base de clientes</h4><p>410</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
+                <div class="metric-card"><h4>Promotores</h4><p id="vendasPeugeotPromotores">45</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p id="vendasPeugeotNeutros">12</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p id="vendasPeugeotDetratores">5</p></div>
+                <div class="metric-card"><h4>Pesquisas</h4><p id="vendasPeugeotPesquisas">62</p></div>
+                <div class="metric-card"><h4>Base</h4><p id="vendasPeugeotBase">410</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p id="vendasPeugeotConversao">15%</p></div>
               </div>
             </div>
 
             <div class="brand-panel">
               <div class="brand-header citroen">Painel CX Vendas • Citroën</div>
-
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
                 <div class="nps-value" id="npsVendasCitroenValue">76</div>
                 <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85</span></div>
               </div>
-
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p>28</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p>9</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p>7</p></div>
-                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>44</p></div>
-                <div class="metric-card"><h4>Base de clientes</h4><p>295</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p>14%</p></div>
+                <div class="metric-card"><h4>Promotores</h4><p id="vendasCitroenPromotores">28</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p id="vendasCitroenNeutros">9</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p id="vendasCitroenDetratores">7</p></div>
+                <div class="metric-card"><h4>Pesquisas</h4><p id="vendasCitroenPesquisas">44</p></div>
+                <div class="metric-card"><h4>Base</h4><p id="vendasCitroenBase">295</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p id="vendasCitroenConversao">14%</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="vendas-hot-alerts" class="subpage">
-          <div class="module-placeholder">
-            <h3>Hot Alerts • Vendas</h3>
-            <p>Área reservada para tratativas de clientes críticos na operação de vendas.</p>
-          </div>
-        </div>
-
-        <div id="vendas-treinamentos" class="subpage">
-          <div class="module-placeholder">
-            <h3>Treinamentos • Vendas</h3>
-            <p>Área reservada para controle e pendências de treinamentos da equipe de vendas.</p>
-          </div>
-        </div>
-
-        <div id="vendas-scorecard" class="subpage">
-          <div class="module-placeholder">
-            <h3>Scorecard • Vendas</h3>
-            <p>Área reservada para indicadores e comparativos do scorecard da operação de vendas.</p>
-          </div>
-        </div>
-
-        <div id="vendas-racs" class="subpage">
-          <div class="module-placeholder">
-            <h3>RACs • Vendas</h3>
-            <p>Área reservada para monitoramento dos RACs de vendas.</p>
-          </div>
-        </div>
-
-        <div id="vendas-auditoria" class="subpage">
-          <div class="module-placeholder">
-            <h3>Auditoria • Vendas</h3>
-            <p>Área reservada para checklists, conformidade e plano de ação da operação de vendas.</p>
-          </div>
-        </div>
+        <div id="vendas-hot-alerts" class="subpage"><div class="module-placeholder"><h3>Hot Alerts • Vendas</h3><p>Área reservada para tratativas de clientes críticos na operação de vendas.</p></div></div>
+        <div id="vendas-treinamentos" class="subpage"><div class="module-placeholder"><h3>Treinamentos • Vendas</h3><p>Área reservada para controle e pendências de treinamentos da equipe de vendas.</p></div></div>
+        <div id="vendas-scorecard" class="subpage"><div class="module-placeholder"><h3>Scorecard • Vendas</h3><p>Área reservada para indicadores e comparativos do scorecard da operação de vendas.</p></div></div>
+        <div id="vendas-racs" class="subpage"><div class="module-placeholder"><h3>RACs • Vendas</h3><p>Área reservada para monitoramento dos RACs de vendas.</p></div></div>
+        <div id="vendas-auditoria" class="subpage"><div class="module-placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para checklists, conformidade e plano de ação da operação de vendas.</p></div></div>
       </section>
 
-      <!-- POS-VENDAS -->
       <section id="posvendas" class="page">
         <h1 class="page-title">Pós-Vendas</h1>
         <p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
@@ -1142,81 +978,47 @@
           <div class="brand-panels">
             <div class="brand-panel">
               <div class="brand-header peugeot">Painel CX Pós-Vendas • Peugeot</div>
-
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
                 <div class="nps-value" id="npsPosPeugeotValue">91</div>
                 <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85</span></div>
               </div>
-
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p>58</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p>10</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p>3</p></div>
-                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>71</p></div>
-                <div class="metric-card"><h4>Base de clientes</h4><p>455</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p>16%</p></div>
+                <div class="metric-card"><h4>Promotores</h4><p id="posPeugeotPromotores">58</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p id="posPeugeotNeutros">10</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p id="posPeugeotDetratores">3</p></div>
+                <div class="metric-card"><h4>Pesquisas</h4><p id="posPeugeotPesquisas">71</p></div>
+                <div class="metric-card"><h4>Base</h4><p id="posPeugeotBase">455</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p id="posPeugeotConversao">16%</p></div>
               </div>
             </div>
 
             <div class="brand-panel">
               <div class="brand-header citroen">Painel CX Pós-Vendas • Citroën</div>
-
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
                 <div class="nps-value" id="npsPosCitroenValue">79</div>
                 <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85</span></div>
               </div>
-
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p>33</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p>11</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p>6</p></div>
-                <div class="metric-card"><h4>Pesquisas respondidas</h4><p>50</p></div>
-                <div class="metric-card"><h4>Base de clientes</h4><p>320</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p>15%</p></div>
+                <div class="metric-card"><h4>Promotores</h4><p id="posCitroenPromotores">33</p></div>
+                <div class="metric-card"><h4>Neutros</h4><p id="posCitroenNeutros">11</p></div>
+                <div class="metric-card"><h4>Detratores</h4><p id="posCitroenDetratores">6</p></div>
+                <div class="metric-card"><h4>Pesquisas</h4><p id="posCitroenPesquisas">50</p></div>
+                <div class="metric-card"><h4>Base</h4><p id="posCitroenBase">320</p></div>
+                <div class="metric-card"><h4>Conversão</h4><p id="posCitroenConversao">15%</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="posvendas-hot-alerts" class="subpage">
-          <div class="module-placeholder">
-            <h3>Hot Alerts • Pós-Vendas</h3>
-            <p>Área reservada para tratativas de clientes críticos na operação de pós-vendas.</p>
-          </div>
-        </div>
-
-        <div id="posvendas-treinamentos" class="subpage">
-          <div class="module-placeholder">
-            <h3>Treinamentos • Pós-Vendas</h3>
-            <p>Área reservada para controle e pendências de treinamentos da equipe de pós-vendas.</p>
-          </div>
-        </div>
-
-        <div id="posvendas-scorecard" class="subpage">
-          <div class="module-placeholder">
-            <h3>Scorecard • Pós-Vendas</h3>
-            <p>Área reservada para indicadores e comparativos do scorecard da operação de pós-vendas.</p>
-          </div>
-        </div>
-
-        <div id="posvendas-racs" class="subpage">
-          <div class="module-placeholder">
-            <h3>RACs • Pós-Vendas</h3>
-            <p>Área reservada para monitoramento dos RACs de pós-vendas.</p>
-          </div>
-        </div>
-
-        <div id="posvendas-auditoria" class="subpage">
-          <div class="module-placeholder">
-            <h3>Auditoria • Pós-Vendas</h3>
-            <p>Área reservada para checklists, conformidade e plano de ação da operação de pós-vendas.</p>
-          </div>
-        </div>
+        <div id="posvendas-hot-alerts" class="subpage"><div class="module-placeholder"><h3>Hot Alerts • Pós-Vendas</h3><p>Área reservada para tratativas de clientes críticos na operação de pós-vendas.</p></div></div>
+        <div id="posvendas-treinamentos" class="subpage"><div class="module-placeholder"><h3>Treinamentos • Pós-Vendas</h3><p>Área reservada para controle e pendências de treinamentos da equipe de pós-vendas.</p></div></div>
+        <div id="posvendas-scorecard" class="subpage"><div class="module-placeholder"><h3>Scorecard • Pós-Vendas</h3><p>Área reservada para indicadores e comparativos do scorecard da operação de pós-vendas.</p></div></div>
+        <div id="posvendas-racs" class="subpage"><div class="module-placeholder"><h3>RACs • Pós-Vendas</h3><p>Área reservada para monitoramento dos RACs de pós-vendas.</p></div></div>
+        <div id="posvendas-auditoria" class="subpage"><div class="module-placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Área reservada para checklists, conformidade e plano de ação da operação de pós-vendas.</p></div></div>
       </section>
 
-      <!-- GROW -->
       <section id="grow" class="page">
         <h1 class="page-title">Grow Customer Care</h1>
         <p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
@@ -1270,15 +1072,12 @@
               </tr>
             </thead>
             <tbody id="growTableBody">
-              <tr>
-                <td colspan="13" class="empty">Nenhum caso analisado ainda.</td>
-              </tr>
+              <tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- CHAT -->
       <section id="chat" class="page">
         <div class="module-placeholder">
           <h3>Chat</h3>
@@ -1286,11 +1085,109 @@
         </div>
       </section>
 
-      <!-- CONFIG -->
       <section id="configuracoes" class="page">
-        <div class="module-placeholder">
-          <h3>Configurações</h3>
-          <p>Área reservada para permissões, parâmetros do sistema, objetivos, controles administrativos e preferências visuais.</p>
+        <h1 class="page-title">Configurações</h1>
+        <p class="page-subtitle">Área administrativa do sistema.</p>
+
+        <div class="subnav">
+          <button class="subnav-btn active" onclick="openSubpage('configuracoes', 'config-db', this)">Banco de Dados</button>
+          <button class="subnav-btn" onclick="openSubpage('configuracoes', 'config-users', this)">Usuários</button>
+          <button class="subnav-btn" onclick="openSubpage('configuracoes', 'config-prefs', this)">Preferências</button>
+        </div>
+
+        <div id="config-db" class="subpage active">
+          <div class="panel">
+            <h3 style="margin:0 0 14px;">Banco de Dados</h3>
+            <p class="page-subtitle">Edite aqui os números reais que alimentam o portal.</p>
+
+            <div class="form-grid">
+              <div class="field"><label>Promotoras hoje</label><input id="cfg_homePromotorasHoje" type="number" value="12"></div>
+              <div class="field"><label>Detratores hoje</label><input id="cfg_homeDetratoresHoje" type="number" value="3"></div>
+              <div class="field"><label>Pesquisas respondidas</label><input id="cfg_homePesquisasRespondidas" type="number" value="27"></div>
+
+              <div class="field"><label>Conversão do mês (%)</label><input id="cfg_homeConversaoMes" type="text" value="15%"></div>
+              <div class="field"><label>Treinamentos pendentes</label><input id="cfg_homeTreinamentosPendentes" type="number" value="19"></div>
+              <div class="field"><label>RACs pendentes</label><input id="cfg_homeRacsPendentes" type="number" value="7"></div>
+
+              <div class="field"><label>Auditorias pendentes</label><input id="cfg_homeAuditoriasPendentes" type="number" value="4"></div>
+              <div class="field"><label>Planos de ação pendentes</label><input id="cfg_homePlanosPendentes" type="number" value="6"></div>
+              <div class="field"><label>Hot Alerts críticos</label><input id="cfg_homeHotAlertsCriticos" type="number" value="3"></div>
+
+              <div class="field"><label>RACs críticos</label><input id="cfg_homeRacsCriticos" type="number" value="2"></div>
+              <div class="field"><label>Auditorias urgentes</label><input id="cfg_homeAuditoriasUrgentes" type="number" value="1"></div>
+              <div class="field"><label>Planos críticos</label><input id="cfg_homePlanosCriticos" type="number" value="2"></div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field"><label>Treinamentos em cronograma</label><input id="cfg_homeTreinCronograma" type="number" value="8"></div>
+              <div class="field"><label>Treinamentos concluídos semana</label><input id="cfg_homeTreinConcluidosSemana" type="number" value="14"></div>
+              <div class="field"><label>Treinamentos pendentes (resumo)</label><input id="cfg_homeTreinPendentes2" type="number" value="19"></div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field"><label>NPS Vendas Peugeot</label><input id="cfg_npsVendasPeugeotValue" type="number" value="82"></div>
+              <div class="field"><label>Meta Vendas Peugeot</label><input id="cfg_npsVendasPeugeotMeta" type="number" value="85"></div>
+              <div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_vendasPeugeotPromotores" type="number" value="45"></div>
+
+              <div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_vendasPeugeotNeutros" type="number" value="12"></div>
+              <div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_vendasPeugeotDetratores" type="number" value="5"></div>
+              <div class="field"><label>Pesquisas Vendas Peugeot</label><input id="cfg_vendasPeugeotPesquisas" type="number" value="62"></div>
+
+              <div class="field"><label>Base Vendas Peugeot</label><input id="cfg_vendasPeugeotBase" type="number" value="410"></div>
+              <div class="field"><label>Conversão Vendas Peugeot</label><input id="cfg_vendasPeugeotConversao" type="text" value="15%"></div>
+              <div class="field"><label>NPS Vendas Citroën</label><input id="cfg_npsVendasCitroenValue" type="number" value="76"></div>
+
+              <div class="field"><label>Meta Vendas Citroën</label><input id="cfg_npsVendasCitroenMeta" type="number" value="85"></div>
+              <div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_vendasCitroenPromotores" type="number" value="28"></div>
+              <div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_vendasCitroenNeutros" type="number" value="9"></div>
+
+              <div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_vendasCitroenDetratores" type="number" value="7"></div>
+              <div class="field"><label>Pesquisas Vendas Citroën</label><input id="cfg_vendasCitroenPesquisas" type="number" value="44"></div>
+              <div class="field"><label>Base Vendas Citroën</label><input id="cfg_vendasCitroenBase" type="number" value="295"></div>
+
+              <div class="field"><label>Conversão Vendas Citroën</label><input id="cfg_vendasCitroenConversao" type="text" value="14%"></div>
+              <div class="field"><label>NPS Pós Peugeot</label><input id="cfg_npsPosPeugeotValue" type="number" value="91"></div>
+              <div class="field"><label>Meta Pós Peugeot</label><input id="cfg_npsPosPeugeotMeta" type="number" value="85"></div>
+
+              <div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_posPeugeotPromotores" type="number" value="58"></div>
+              <div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_posPeugeotNeutros" type="number" value="10"></div>
+              <div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_posPeugeotDetratores" type="number" value="3"></div>
+
+              <div class="field"><label>Pesquisas Pós Peugeot</label><input id="cfg_posPeugeotPesquisas" type="number" value="71"></div>
+              <div class="field"><label>Base Pós Peugeot</label><input id="cfg_posPeugeotBase" type="number" value="455"></div>
+              <div class="field"><label>Conversão Pós Peugeot</label><input id="cfg_posPeugeotConversao" type="text" value="16%"></div>
+
+              <div class="field"><label>NPS Pós Citroën</label><input id="cfg_npsPosCitroenValue" type="number" value="79"></div>
+              <div class="field"><label>Meta Pós Citroën</label><input id="cfg_npsPosCitroenMeta" type="number" value="85"></div>
+              <div class="field"><label>Promotores Pós Citroën</label><input id="cfg_posCitroenPromotores" type="number" value="33"></div>
+
+              <div class="field"><label>Neutros Pós Citroën</label><input id="cfg_posCitroenNeutros" type="number" value="11"></div>
+              <div class="field"><label>Detratores Pós Citroën</label><input id="cfg_posCitroenDetratores" type="number" value="6"></div>
+              <div class="field"><label>Pesquisas Pós Citroën</label><input id="cfg_posCitroenPesquisas" type="number" value="50"></div>
+
+              <div class="field"><label>Base Pós Citroën</label><input id="cfg_posCitroenBase" type="number" value="320"></div>
+              <div class="field"><label>Conversão Pós Citroën</label><input id="cfg_posCitroenConversao" type="text" value="15%"></div>
+            </div>
+
+            <div class="save-row">
+              <button class="btn secondary" onclick="resetDatabase()">Restaurar padrão</button>
+              <button class="btn primary" onclick="saveDatabase()">Salvar números</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="config-users" class="subpage">
+          <div class="module-placeholder">
+            <h3>Usuários</h3>
+            <p>Kamilly = super admin. Letícia e Laís = usuárias operacionais. Área reservada para permissões e controle de acesso.</p>
+          </div>
+        </div>
+
+        <div id="config-prefs" class="subpage">
+          <div class="module-placeholder">
+            <h3>Preferências</h3>
+            <p>Área reservada para objetivos, parâmetros visuais, banners e comportamentos do sistema.</p>
+          </div>
         </div>
       </section>
     </main>
@@ -1303,21 +1200,74 @@
       posvendas: ["Pós-Vendas", "Gestão da operação de pós-vendas com módulos internos."],
       grow: ["Grow Customer Care", "Controle operacional dos casos copiados do portal Grow."],
       chat: ["Chat", "Comunicação interna do portal."],
-      configuracoes: ["Configurações", "Ajustes, permissões e parâmetros do QUALIS."]
+      configuracoes: ["Configurações", "Área administrativa do sistema."]
+    };
+
+    const DEFAULT_DB = {
+      homePromotorasHoje: "12",
+      homeDetratoresHoje: "3",
+      homePesquisasRespondidas: "27",
+      homeConversaoMes: "15%",
+      homeTreinamentosPendentes: "19",
+      homeRacsPendentes: "7",
+      homeAuditoriasPendentes: "4",
+      homePlanosPendentes: "6",
+      homeHotAlertsCriticos: "3",
+      homeRacsCriticos: "2",
+      homeAuditoriasUrgentes: "1",
+      homePlanosCriticos: "2",
+      homeTreinPendentes2: "19",
+      homeTreinCronograma: "8",
+      homeTreinConcluidosSemana: "14",
+
+      npsVendasPeugeotValue: "82",
+      npsVendasPeugeotMeta: "85",
+      vendasPeugeotPromotores: "45",
+      vendasPeugeotNeutros: "12",
+      vendasPeugeotDetratores: "5",
+      vendasPeugeotPesquisas: "62",
+      vendasPeugeotBase: "410",
+      vendasPeugeotConversao: "15%",
+
+      npsVendasCitroenValue: "76",
+      npsVendasCitroenMeta: "85",
+      vendasCitroenPromotores: "28",
+      vendasCitroenNeutros: "9",
+      vendasCitroenDetratores: "7",
+      vendasCitroenPesquisas: "44",
+      vendasCitroenBase: "295",
+      vendasCitroenConversao: "14%",
+
+      npsPosPeugeotValue: "91",
+      npsPosPeugeotMeta: "85",
+      posPeugeotPromotores: "58",
+      posPeugeotNeutros: "10",
+      posPeugeotDetratores: "3",
+      posPeugeotPesquisas: "71",
+      posPeugeotBase: "455",
+      posPeugeotConversao: "16%",
+
+      npsPosCitroenValue: "79",
+      npsPosCitroenMeta: "85",
+      posCitroenPromotores: "33",
+      posCitroenNeutros: "11",
+      posCitroenDetratores: "6",
+      posCitroenPesquisas: "50",
+      posCitroenBase: "320",
+      posCitroenConversao: "15%"
     };
 
     function openPage(id, btn){
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
       const target = document.getElementById(id);
-      if(target) target.classList.add('active');
+      if (target) target.classList.add('active');
 
       document.querySelectorAll('.menu-btn').forEach(item => item.classList.remove('active'));
-      if(btn) btn.classList.add('active');
+      if (btn) btn.classList.add('active');
 
       const meta = pageTitles[id] || ["QUALIS", ""];
       document.getElementById('topTitle').innerText = meta[0];
       document.getElementById('topSubtitle').innerText = meta[1];
-
       window.scrollTo({top:0, behavior:'smooth'});
     }
 
@@ -1327,14 +1277,14 @@
 
     function openSubpage(sectionId, subpageId, btn){
       const section = document.getElementById(sectionId);
-      if(!section) return;
+      if (!section) return;
 
       section.querySelectorAll('.subpage').forEach(sub => sub.classList.remove('active'));
       const target = section.querySelector(`#${subpageId}`);
-      if(target) target.classList.add('active');
+      if (target) target.classList.add('active');
 
       section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
-      if(btn) btn.classList.add('active');
+      if (btn) btn.classList.add('active');
     }
 
     function toggleTheme() {
@@ -1356,12 +1306,8 @@
       const meta = parseFloat(String(metaEl.innerText).replace(',', '.'));
 
       valueEl.classList.remove('nps-green','nps-red');
-
-      if(value >= meta){
-        valueEl.classList.add('nps-green');
-      } else {
-        valueEl.classList.add('nps-red');
-      }
+      if (value >= meta) valueEl.classList.add('nps-green');
+      else valueEl.classList.add('nps-red');
     }
 
     let currentBanner = 0;
@@ -1375,7 +1321,7 @@
       dots.forEach(d => d.classList.remove('active'));
 
       banners[index].classList.add('active');
-      if(dots[index]) dots[index].classList.add('active');
+      if (dots[index]) dots[index].classList.add('active');
       currentBanner = index;
     }
 
@@ -1384,6 +1330,58 @@
       if(!banners.length) return;
       currentBanner = (currentBanner + 1) % banners.length;
       showBanner(currentBanner);
+    }
+
+    function loadDatabase(){
+      const raw = localStorage.getItem('qualis-db');
+      if(!raw) return {...DEFAULT_DB};
+      try {
+        return {...DEFAULT_DB, ...JSON.parse(raw)};
+      } catch {
+        return {...DEFAULT_DB};
+      }
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if (el) el.innerText = value;
+    }
+
+    function fillConfigForm(db){
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        if (input) input.value = db[key] ?? "";
+      });
+    }
+
+    function applyDatabaseToUI(db){
+      Object.keys(DEFAULT_DB).forEach(key => {
+        setText(key, db[key]);
+      });
+
+      applyNPSColor("npsVendasPeugeotValue", "npsVendasPeugeotMeta");
+      applyNPSColor("npsVendasCitroenValue", "npsVendasCitroenMeta");
+      applyNPSColor("npsPosPeugeotValue", "npsPosPeugeotMeta");
+      applyNPSColor("npsPosCitroenValue", "npsPosCitroenMeta");
+    }
+
+    function saveDatabase(){
+      const db = {};
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        db[key] = input ? input.value : DEFAULT_DB[key];
+      });
+      localStorage.setItem('qualis-db', JSON.stringify(db));
+      applyDatabaseToUI(db);
+      alert('Números salvos com sucesso.');
+    }
+
+    function resetDatabase(){
+      localStorage.removeItem('qualis-db');
+      const db = {...DEFAULT_DB};
+      fillConfigForm(db);
+      applyDatabaseToUI(db);
+      alert('Banco de dados restaurado para o padrão.');
     }
 
     function loadGrowExamplePeugeot() {
@@ -1409,30 +1407,6 @@ Compensação/Cortesia
 THICIANE ARAUJO CHAVES
 Urgente
 ROSITA BUONAFINA
-NNE - NORDESTE
-
-16314586
-Aberto
-11/03/2026 11:51
-Reclame aqui
-Peças
-Falta Peças/ Peça em Backorder
-8ADUEFCBXTG522442
-Eduardo Albuquerque Castelo Branco
-Normal
-NADILA RODRIGUES LOBO
-NNE - NORDESTE
-
-16318567
-Aberto
-12/03/2026 09:55
-Telefone
-Veículo Reserva
-Veículo na concessionária
-8ADUWNFX2PG566381
-JAYSON JESUS SOUZA DE OLIVEIRA .
-Normal
-Pâmela Souza Lopes
 NNE - NORDESTE`;
       processGrowData();
     }
@@ -1448,18 +1422,6 @@ Baixa Detração
 EMILIO CAVALCANTE
 Urgente
 Pâmela Souza Lopes
-NNE - NORDESTE
-
-16317001
-Aberto
-10/02/2026 14:35
-Telefone
-Veículo Reserva
-Veículo na concessionária
-9V7ABCDEFGA009999
-MARIA DO SOCORRO
-Alto
-Letícia Martins
 NNE - NORDESTE`;
       processGrowData();
     }
@@ -1488,25 +1450,11 @@ NNE - NORDESTE`;
       if (!raw) return [];
 
       const ignored = new Set([
-        "número do item",
-        "número do caso",
-        "classificado em ordem crescente",
-        "status",
-        "data/hora de abertura",
-        "canal de entrada",
-        "motivo de contato 1",
-        "motivo de contato 2",
-        "chassi completo",
-        "conta nome",
-        "prioridade",
-        "responsável_nome",
-        "regional description",
-        "caoss grow customer care peugeot",
-        "casos grow customer care peugeot",
-        "casos grow customer care citroën",
-        "casos grow customer care citroen",
-        "sort",
-        "ação"
+        "número do item","número do caso","classificado em ordem crescente","status",
+        "data/hora de abertura","canal de entrada","motivo de contato 1","motivo de contato 2",
+        "chassi completo","conta nome","prioridade","responsável_nome","regional description",
+        "caoss grow customer care peugeot","casos grow customer care peugeot",
+        "casos grow customer care citroën","casos grow customer care citroen","sort","ação"
       ]);
 
       const lines = raw
@@ -1538,7 +1486,6 @@ NNE - NORDESTE`;
         }
 
         const start = i;
-
         const caso = lines[i++] || "";
         const status = lines[i++] || "";
         const data = lines[i++] || "";
@@ -1557,19 +1504,8 @@ NNE - NORDESTE`;
         }
 
         records.push({
-          marca,
-          caso,
-          status,
-          data,
-          canal,
-          motivo1,
-          motivo2,
-          chassi,
-          cliente,
-          prioridade,
-          responsavel,
-          regional,
-          aging: calcAging(data)
+          marca, caso, status, data, canal, motivo1, motivo2, chassi, cliente,
+          prioridade, responsavel, regional, aging: calcAging(data)
         });
       }
 
@@ -1579,17 +1515,14 @@ NNE - NORDESTE`;
     function calcAging(dataStr) {
       const match = String(dataStr || "").match(/(\d{2})\/(\d{2})\/(\d{4})/);
       if (!match) return 0;
-
       const [, dd, mm, yyyy] = match;
       const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
       const now = new Date();
-
       return Math.max(0, Math.floor((now - d) / (1000 * 60 * 60 * 24)));
     }
 
     function renderGrowTable(records) {
       const tbody = document.getElementById("growTableBody");
-
       if (!records.length) {
         tbody.innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso válido encontrado.</td></tr>';
         return;
@@ -1683,7 +1616,7 @@ NNE - NORDESTE`;
       dots.forEach(d => d.classList.remove('active'));
 
       banners[index].classList.add('active');
-      if(dots[index]) dots[index].classList.add('active');
+      if (dots[index]) dots[index].classList.add('active');
       currentBanner = index;
     }
 
@@ -1695,10 +1628,9 @@ NNE - NORDESTE`;
     }
 
     window.onload = function() {
-      applyNPSColor("npsVendasPeugeotValue", "npsVendasPeugeotMeta");
-      applyNPSColor("npsVendasCitroenValue", "npsVendasCitroenMeta");
-      applyNPSColor("npsPosPeugeotValue", "npsPosPeugeotMeta");
-      applyNPSColor("npsPosCitroenValue", "npsPosCitroenMeta");
+      const db = loadDatabase();
+      fillConfigForm(db);
+      applyDatabaseToUI(db);
       setInterval(rotateBanners, 5000);
     };
   </script>
