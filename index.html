@@ -38,6 +38,7 @@
     }
 
     *{ box-sizing:border-box; }
+
     html, body{
       margin:0;
       padding:0;
@@ -47,7 +48,10 @@
       transition:.25s ease;
     }
 
-    .app{ display:flex; min-height:100vh; }
+    .app{
+      display:flex;
+      min-height:100vh;
+    }
 
     .sidebar{
       width:280px;
@@ -96,7 +100,10 @@
       gap:6px;
     }
 
-    .submenu{ margin-left:12px; gap:4px; }
+    .submenu{
+      margin-left:12px;
+      gap:4px;
+    }
 
     .menu a, .submenu a{
       display:block;
@@ -127,10 +134,21 @@
       padding:14px;
     }
 
-    .sidebar-footer .user{ font-size:15px; font-weight:800; }
-    .sidebar-footer .role{ font-size:12px; opacity:.82; margin-top:4px; }
+    .sidebar-footer .user{
+      font-size:15px;
+      font-weight:800;
+    }
 
-    .content{ flex:1; padding:24px; }
+    .sidebar-footer .role{
+      font-size:12px;
+      opacity:.82;
+      margin-top:4px;
+    }
+
+    .content{
+      flex:1;
+      padding:24px;
+    }
 
     .topbar{
       display:flex;
@@ -140,8 +158,16 @@
       margin-bottom:22px;
     }
 
-    .welcome h2{ margin:0; font-size:30px; }
-    .welcome p{ margin:6px 0 0 0; color:var(--muted); font-size:14px; }
+    .welcome h2{
+      margin:0;
+      font-size:30px;
+    }
+
+    .welcome p{
+      margin:6px 0 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
 
     .top-actions{
       display:flex;
@@ -181,8 +207,16 @@
       margin-bottom:18px;
     }
 
-    .section h3{ margin:0 0 6px 0; font-size:24px; }
-    .section-subtitle{ margin:0 0 16px 0; font-size:13px; color:var(--muted); }
+    .section h3{
+      margin:0 0 6px 0;
+      font-size:24px;
+    }
+
+    .section-subtitle{
+      margin:0 0 16px 0;
+      font-size:13px;
+      color:var(--muted);
+    }
 
     .hero{
       display:grid;
@@ -202,10 +236,24 @@
       padding:22px;
     }
 
-    .hero-card h3{ margin:0; font-size:26px; }
-    .hero-card p{ color:var(--muted); margin:8px 0 18px 0; line-height:1.5; font-size:14px; }
+    .hero-card h3{
+      margin:0;
+      font-size:26px;
+    }
 
-    .hero-tags{ display:flex; flex-wrap:wrap; gap:10px; }
+    .hero-card p{
+      color:var(--muted);
+      margin:8px 0 18px 0;
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
     .tag{
       padding:10px 14px;
       border-radius:999px;
@@ -216,7 +264,11 @@
       color:var(--primary);
     }
 
-    .hero-side{ display:flex; flex-direction:column; gap:14px; }
+    .hero-side{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
 
     .mini{
       background:var(--surface);
@@ -226,9 +278,21 @@
       box-shadow:var(--shadow);
     }
 
-    .mini h4{ margin:0 0 10px 0; font-size:18px; }
-    .mini-value{ font-size:28px; font-weight:900; margin-bottom:6px; }
-    .mini small{ color:var(--muted); font-size:13px; }
+    .mini h4{
+      margin:0 0 10px 0;
+      font-size:18px;
+    }
+
+    .mini-value{
+      font-size:28px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mini small{
+      color:var(--muted);
+      font-size:13px;
+    }
 
     .grid-kpis{
       display:grid;
@@ -258,9 +322,22 @@
       background:rgba(59,130,246,.10);
     }
 
-    .kpi-card h4{ margin:0 0 8px 0; font-size:14px; color:var(--muted); }
-    .kpi-card .value{ font-size:38px; font-weight:900; margin-bottom:6px; }
-    .kpi-card .sub{ font-size:13px; color:var(--muted); }
+    .kpi-card h4{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .kpi-card .value{
+      font-size:38px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .kpi-card .sub{
+      font-size:13px;
+      color:var(--muted);
+    }
 
     .primary-text{ color:var(--primary); }
     .success-text{ color:var(--success); }
@@ -384,7 +461,9 @@
       letter-spacing:.04em;
     }
 
-    tr:hover td{ background:rgba(59,130,246,.04); }
+    tr:hover td{
+      background:rgba(59,130,246,.04);
+    }
 
     .chip{
       display:inline-block;
@@ -559,7 +638,7 @@
       <section class="section">
         <h3>Grow Customer Care</h3>
         <p class="section-subtitle">
-          Cole separadamente os casos da Peugeot e da Citroën. O resultado exibido abaixo pode continuar no formato atual.
+          Cole separadamente os casos da Peugeot e da Citroën. O resultado exibido abaixo permanece no formato operacional atual.
         </p>
 
         <div class="dual-inputs">
@@ -592,7 +671,7 @@
         </div>
 
         <div class="footer-note">
-          Fluxo alinhado com a operação real: como cada marca está em um login diferente no Grow, o sistema recebe Peugeot e Citroën separadamente.
+          Fluxo alinhado com a operação real: como cada marca entra por um login diferente no Grow, o sistema trata Peugeot e Citroën separadamente.
         </div>
       </section>
 
@@ -676,6 +755,18 @@ Falta Peças/ Peça em Backorder
 Eduardo Albuquerque Castelo Branco
 Normal
 NADILA RODRIGUES LOBO
+NNE - NORDESTE
+
+16318567
+Aberto
+12/03/2026 09:55
+Telefone
+Veículo Reserva
+Veículo na concessionária
+8ADUWNFX2PG566381
+JAYSON JESUS SOUZA DE OLIVEIRA .
+Normal
+Pâmela Souza Lopes
 NNE - NORDESTE`;
       processGrowData();
     }
@@ -730,52 +821,74 @@ NNE - NORDESTE`;
     function parseBlockRecords(raw, marca) {
       if (!raw) return [];
 
+      const ignored = new Set([
+        "número do item",
+        "número do caso",
+        "classificado em ordem crescente",
+        "status",
+        "data/hora de abertura",
+        "canal de entrada",
+        "motivo de contato 1",
+        "motivo de contato 2",
+        "chassi completo",
+        "conta nome",
+        "prioridade",
+        "responsável_nome",
+        "regional description",
+        "caoss grow customer care peugeot",
+        "casos grow customer care peugeot",
+        "casos grow customer care citroën",
+        "casos grow customer care citroen",
+        "sort",
+        "ação"
+      ]);
+
       const lines = raw
-        .split(/\n+/)
+        .split(/\n/)
         .map(x => x.trim())
-        .filter(x => x && !/^sort$/i.test(x) && !/^ação$/i.test(x));
+        .filter(x => x && !ignored.has(x.toLowerCase()));
 
       const records = [];
-      const filtered = lines.filter(x => {
-        const lower = x.toLowerCase();
-        return ![
-          "número do item",
-          "número do caso",
-          "classificado em ordem crescente",
-          "status",
-          "data/hora de abertura",
-          "canal de entrada",
-          "motivo de contato 1",
-          "motivo de contato 2",
-          "chassi completo",
-          "conta nome",
-          "prioridade",
-          "responsável_nome",
-          "regional description",
-          "caoss grow customer care peugeot",
-          "casos grow customer care peugeot",
-          "casos grow customer care citroën",
-          "casos grow customer care citroen"
-        ].includes(lower);
-      });
 
-      for (let i = 0; i < filtered.length; i += 11) {
-        const chunk = filtered.slice(i, i + 11);
-        if (chunk.length < 11) continue;
+      function isCaseNumber(value) {
+        return /^\d{7,9}$/.test(String(value || "").trim());
+      }
 
-        const [
-          caso,
-          status,
-          data,
-          canal,
-          motivo1,
-          motivo2,
-          chassi,
-          cliente,
-          prioridade,
-          responsavel,
-          regional
-        ] = chunk;
+      function isStatus(value) {
+        const v = String(value || "").trim().toLowerCase();
+        return v === "aberto" || v === "fechado" || v === "encerrado";
+      }
+
+      function isDateTime(value) {
+        return /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(value || "").trim());
+      }
+
+      let i = 0;
+
+      while (i < lines.length) {
+        if (!isCaseNumber(lines[i])) {
+          i++;
+          continue;
+        }
+
+        const start = i;
+
+        const caso = lines[i++] || "";
+        const status = lines[i++] || "";
+        const data = lines[i++] || "";
+        const canal = lines[i++] || "";
+        const motivo1 = lines[i++] || "";
+        const motivo2 = lines[i++] || "";
+        const chassi = lines[i++] || "";
+        const cliente = lines[i++] || "";
+        const prioridade = lines[i++] || "";
+        const responsavel = lines[i++] || "";
+        const regional = lines[i++] || "";
+
+        if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
+          i = start + 1;
+          continue;
+        }
 
         records.push({
           marca,
