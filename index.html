@@ -4,43 +4,48 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QUALIS — Sistema Integrado de Qualidade</title>
+
   <style>
     :root{
       --bg:#f4f7fb;
+      --bg-secondary:#eaf0f8;
       --surface:#ffffff;
       --surface-2:#f8fbff;
       --text:#18253a;
       --muted:#6e7d96;
       --primary:#1f4fa3;
       --accent:#7c3aed;
-      --success:#14b87a;
+      --success:#16a34a;
       --warning:#f59e0b;
-      --danger:#ef4444;
+      --danger:#dc2626;
       --border:#dbe5f0;
-      --shadow:0 10px 30px rgba(31,79,163,.10);
+      --shadow:0 10px 30px rgba(31, 79, 163, 0.10);
     }
 
     body.dark{
       --bg:#09111f;
+      --bg-secondary:#0f1a2d;
       --surface:#101c31;
       --surface-2:#15233b;
       --text:#edf4ff;
       --muted:#9db0cf;
       --primary:#60a5fa;
       --accent:#8b5cf6;
-      --success:#10b981;
+      --success:#22c55e;
       --warning:#f59e0b;
       --danger:#f87171;
       --border:#223453;
-      --shadow:0 16px 40px rgba(0,0,0,.35);
+      --shadow:0 16px 40px rgba(0,0,0,0.35);
     }
 
-    *{box-sizing:border-box}
+    *{
+      box-sizing:border-box;
+    }
 
-    html,body{
+    html, body{
       margin:0;
       padding:0;
-      font-family:Arial,Helvetica,sans-serif;
+      font-family:Arial, Helvetica, sans-serif;
       background:var(--bg);
       color:var(--text);
       transition:.25s ease;
@@ -53,7 +58,7 @@
 
     .sidebar{
       width:280px;
-      background:linear-gradient(180deg,#12336b 0%,#1b4589 100%);
+      background:linear-gradient(180deg, #12336b 0%, #1b4589 100%);
       color:#fff;
       padding:22px 18px;
       display:flex;
@@ -63,32 +68,31 @@
     }
 
     body.dark .sidebar{
-      background:linear-gradient(180deg,#0c1730 0%,#122448 100%);
+      background:linear-gradient(180deg, #0c1730 0%, #122448 100%);
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      padding:8px 6px 18px;
-      border-bottom:1px solid rgba(255,255,255,.14);
+      padding:8px 6px 18px 6px;
+      border-bottom:1px solid rgba(255,255,255,0.14);
     }
 
     .brand-mark{
       width:44px;
       height:44px;
       border-radius:14px;
-      background:conic-gradient(from 210deg,#2563eb,#22c55e,#f59e0b,#ec4899,#2563eb);
+      background:conic-gradient(from 210deg, #2563eb, #22c55e, #f59e0b, #ec4899, #2563eb);
     }
 
     .brand h1{
       margin:0;
       font-size:28px;
-      line-height:1;
     }
 
     .brand p{
-      margin:4px 0 0;
+      margin:4px 0 0 0;
       font-size:11px;
       opacity:.82;
     }
@@ -97,11 +101,11 @@
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.12em;
-      opacity:.7;
+      opacity:.70;
       margin:8px 10px 2px;
     }
 
-    .menu,.submenu{
+    .menu, .submenu{
       display:flex;
       flex-direction:column;
       gap:6px;
@@ -112,7 +116,7 @@
       gap:4px;
     }
 
-    .menu a,.submenu a{
+    .menu a, .submenu a{
       display:block;
       padding:12px 14px;
       border-radius:14px;
@@ -129,7 +133,7 @@
     }
 
     .menu a.active{
-      background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
+      background:linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
       border:1px solid rgba(255,255,255,.12);
     }
 
@@ -171,7 +175,7 @@
     }
 
     .welcome p{
-      margin:6px 0 0;
+      margin:6px 0 0 0;
       color:var(--muted);
       font-size:14px;
     }
@@ -196,7 +200,7 @@
 
     .theme-toggle{
       border:0;
-      background:linear-gradient(135deg,var(--primary),var(--accent));
+      background:linear-gradient(135deg, var(--primary), var(--accent));
       color:#fff;
       padding:12px 16px;
       border-radius:14px;
@@ -214,8 +218,8 @@
 
     .hero-card{
       background:
-        radial-gradient(circle at top right,rgba(59,130,246,.12),transparent 30%),
-        radial-gradient(circle at left bottom,rgba(124,58,237,.10),transparent 35%),
+        radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 30%),
+        radial-gradient(circle at left bottom, rgba(124,58,237,.10), transparent 35%),
         var(--surface);
       border:1px solid var(--border);
       border-radius:24px;
@@ -230,7 +234,7 @@
 
     .hero-card p{
       color:var(--muted);
-      margin:8px 0 18px;
+      margin:8px 0 18px 0;
       line-height:1.5;
       font-size:14px;
     }
@@ -266,7 +270,7 @@
     }
 
     .mini h4{
-      margin:0 0 10px;
+      margin:0 0 10px 0;
       font-size:18px;
     }
 
@@ -281,29 +285,9 @@
       font-size:13px;
     }
 
-    .section{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:24px;
-      box-shadow:var(--shadow);
-      padding:20px;
-      margin-bottom:18px;
-    }
-
-    .section h3{
-      margin:0 0 6px;
-      font-size:24px;
-    }
-
-    .section-subtitle{
-      margin:0 0 16px;
-      font-size:13px;
-      color:var(--muted);
-    }
-
     .grid-kpis{
       display:grid;
-      grid-template-columns:repeat(6,1fr);
+      grid-template-columns:repeat(4,1fr);
       gap:16px;
       margin-bottom:18px;
     }
@@ -330,93 +314,240 @@
     }
 
     .kpi-card h4{
-      margin:0 0 8px;
-      font-size:13px;
+      margin:0 0 8px 0;
+      font-size:14px;
       color:var(--muted);
     }
 
     .kpi-card .value{
-      font-size:34px;
+      font-size:38px;
       font-weight:900;
       margin-bottom:6px;
     }
 
     .kpi-card .sub{
-      font-size:12px;
+      font-size:13px;
       color:var(--muted);
     }
 
-    .primary-text{color:var(--primary)}
-    .success-text{color:var(--success)}
-    .warning-text{color:var(--warning)}
-    .danger-text{color:var(--danger)}
+    .primary-text{ color:var(--primary); }
+    .success-text{ color:var(--success); }
+    .warning-text{ color:var(--warning); }
+    .danger-text{ color:var(--danger); }
 
-    .panel-grid{
-      display:grid;
-      grid-template-columns:1.3fr .7fr;
-      gap:18px;
+    .section{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    .section h3{
+      margin:0 0 6px 0;
+      font-size:24px;
+    }
+
+    .section-subtitle{
+      margin:0 0 16px 0;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .cx-dashboard{
       margin-top:10px;
     }
 
-    .chart-box{
-      height:320px;
-      border-radius:18px;
-      background:
-        linear-gradient(180deg,rgba(59,130,246,.06),rgba(124,58,237,.02)),
-        var(--surface-2);
+    .nps-hero{
+      background:var(--surface);
       border:1px solid var(--border);
-      padding:20px;
-      overflow:hidden;
+      border-radius:24px;
+      padding:40px;
+      text-align:center;
+      box-shadow:var(--shadow);
+      margin-bottom:24px;
     }
 
-    .chart-svg{
+    .nps-hero h2{
+      font-size:18px;
+      color:var(--muted);
+      margin:0 0 10px 0;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .nps-value{
+      font-size:90px;
+      font-weight:900;
+      line-height:1;
+    }
+
+    .nps-meta{
+      font-size:18px;
+      color:var(--muted);
+      margin-top:10px;
+      font-weight:700;
+    }
+
+    .nps-green{
+      color:var(--success);
+    }
+
+    .nps-red{
+      color:var(--danger);
+    }
+
+    .cx-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .cx-card{
+      background:var(--surface-2);
+      padding:25px;
+      border-radius:18px;
+      text-align:center;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+    }
+
+    .cx-card h3{
+      font-size:14px;
+      color:var(--muted);
+      margin:0 0 8px 0;
+    }
+
+    .cx-card p{
+      font-size:30px;
+      font-weight:800;
+      color:var(--text);
+      margin:0;
+    }
+
+    .dual-inputs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .input-card{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+    }
+
+    .input-card h4{
+      margin:0 0 10px 0;
+      font-size:16px;
+    }
+
+    .paste-box{
       width:100%;
-      height:100%;
+      min-height:240px;
+      resize:vertical;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      border-radius:18px;
+      padding:16px;
+      font-size:13px;
+      line-height:1.5;
+      outline:none;
+      margin-bottom:12px;
     }
 
-    .side-stack{
+    .button-row{
       display:flex;
-      flex-direction:column;
-      gap:14px;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:6px;
     }
 
-    .mini-panel{
+    .btn{
+      border:0;
+      border-radius:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      color:#fff;
+    }
+
+    .btn.secondary{
+      background:var(--surface);
+      border:1px solid var(--border);
+      color:var(--text);
+    }
+
+    .grow-summary{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .summary-card{
       background:var(--surface-2);
       border:1px solid var(--border);
       border-radius:18px;
       padding:16px;
     }
 
-    .mini-panel h4{
-      margin:0 0 10px;
-      font-size:16px;
+    .summary-card .label{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:700;
     }
 
-    .mini-panel .big{
-      font-size:30px;
+    .summary-card .big{
+      font-size:32px;
       font-weight:900;
-      margin-bottom:6px;
     }
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .list-row{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 14px;
-      border-radius:14px;
-      background:var(--surface-2);
+    .table-wrap{
+      overflow:auto;
       border:1px solid var(--border);
-      font-size:14px;
+      border-radius:18px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
     }
 
-    .badge{
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1200px;
+    }
+
+    th, td{
+      text-align:left;
+      padding:14px 12px;
+      border-bottom:1px solid var(--border);
+      font-size:13px;
+      vertical-align:top;
+    }
+
+    th{
+      background:var(--surface-2);
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    tr:hover td{
+      background:rgba(59,130,246,.04);
+    }
+
+    .chip{
       display:inline-block;
       padding:7px 10px;
       border-radius:999px;
@@ -426,23 +557,41 @@
       white-space:nowrap;
     }
 
-    .badge.green{background:var(--success)}
-    .badge.yellow{background:var(--warning)}
-    .badge.red{background:var(--danger)}
-    .badge.blue{background:var(--primary)}
+    .chip.green{ background:var(--success); }
+    .chip.yellow{ background:var(--warning); }
+    .chip.red{ background:var(--danger); }
+    .chip.blue{ background:var(--primary); }
 
-    @media (max-width: 1350px){
-      .grid-kpis{grid-template-columns:repeat(3,1fr)}
-      .hero,.panel-grid{grid-template-columns:1fr}
+    .footer-note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .empty{
+      text-align:center;
+      padding:26px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    @media (max-width: 1200px){
+      .grid-kpis{ grid-template-columns:repeat(2,1fr); }
+      .hero, .dual-inputs{ grid-template-columns:1fr; }
+      .cx-grid{ grid-template-columns:repeat(2,1fr); }
     }
 
     @media (max-width: 900px){
-      .app{flex-direction:column}
-      .sidebar{width:100%}
-      .content{padding:16px}
-      .topbar{flex-direction:column;align-items:flex-start}
-      .search{min-width:100%}
-      .grid-kpis{grid-template-columns:1fr}
+      .app{ flex-direction:column; }
+      .sidebar{ width:100%; }
+      .content{ padding:16px; }
+      .topbar{ flex-direction:column; align-items:flex-start; }
+      .search{ min-width:100%; }
+      .grid-kpis{ grid-template-columns:1fr; }
+      .grow-summary{ grid-template-columns:1fr; }
+      .cx-grid{ grid-template-columns:1fr; }
+      .nps-value{ font-size:68px; }
     }
   </style>
 </head>
@@ -467,7 +616,6 @@
         <a href="#">Vendas</a>
         <div class="submenu">
           <a href="#">Painel CX Vendas</a>
-          <a href="#">Base de Clientes</a>
           <a href="#">Hot Alerts</a>
           <a href="#">Treinamento</a>
           <a href="#">Scorecard</a>
@@ -478,14 +626,13 @@
         <a href="#">Pós-Vendas</a>
         <div class="submenu">
           <a href="#">Painel CX Pós-Vendas</a>
-          <a href="#">Base de Clientes</a>
-          <a href="#">ISC Consultor</a>
           <a href="#">Hot Alerts</a>
           <a href="#">Treinamento</a>
           <a href="#">Scorecard</a>
           <a href="#">RACs</a>
           <a href="#">Auditoria</a>
           <a href="#">Grow Customer Care</a>
+          <a href="#">Comitê</a>
         </div>
       </nav>
 
@@ -547,241 +694,148 @@
         </div>
       </section>
 
-      <section class="section">
-        <h3>Painel CX Vendas</h3>
-        <p class="section-subtitle">
-          Meta padrão do NPS de Vendas: <strong>90%</strong>. Leitura executiva com base de clientes, taxa de resposta e radar de risco.
-        </p>
-
-        <div class="grid-kpis">
-          <div class="kpi-card">
-            <h4>NPS Vendas</h4>
-            <div class="value primary-text">90,0%</div>
-            <div class="sub">Meta de referência</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Promotores</h4>
-            <div class="value success-text">42</div>
-            <div class="sub">Notas 9–10</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Neutros</h4>
-            <div class="value warning-text">8</div>
-            <div class="sub">Notas 7–8</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Detratores</h4>
-            <div class="value danger-text">4</div>
-            <div class="sub">Notas 1–6</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Base de Clientes</h4>
-            <div class="value primary-text">310</div>
-            <div class="sub">Base total do período</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Taxa de Resposta</h4>
-            <div class="value success-text">18%</div>
-            <div class="sub">Pesquisas respondidas</div>
-          </div>
+      <section class="grid-kpis">
+        <div class="kpi-card">
+          <h4>NPS Vendas</h4>
+          <div class="value primary-text">82</div>
+          <div class="sub">Meta mensal atingida</div>
         </div>
 
-        <div class="panel-grid">
-          <div class="chart-box">
-            <svg class="chart-svg" viewBox="0 0 700 280" preserveAspectRatio="none">
-              <polyline
-                fill="none"
-                stroke="#3b82f6"
-                stroke-width="4"
-                points="20,210 120,190 220,175 320,165 420,138 520,112 620,86"
-              />
-              <polyline
-                fill="none"
-                stroke="#8b5cf6"
-                stroke-width="4"
-                points="20,230 120,210 220,198 320,184 420,170 520,148 620,126"
-              />
-            </svg>
+        <div class="kpi-card">
+          <h4>NPS Pós-Vendas</h4>
+          <div class="value success-text">91</div>
+          <div class="sub">Evolução positiva no trimestre</div>
+        </div>
+
+        <div class="kpi-card">
+          <h4>Treinamentos Pendentes</h4>
+          <div class="value warning-text">19</div>
+          <div class="sub">Aguardando regularização</div>
+        </div>
+
+        <div class="kpi-card">
+          <h4>Hot Alerts</h4>
+          <div class="value danger-text">07</div>
+          <div class="sub">Demandam ação imediata</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h3>Painel CX</h3>
+        <p class="section-subtitle">
+          Visão executiva do indicador principal com meta, composição das notas e indicadores operacionais.
+        </p>
+
+        <div class="cx-dashboard">
+          <div class="nps-hero">
+            <h2>NPS CX</h2>
+            <div class="nps-value" id="npsValue">82</div>
+            <div class="nps-meta">Meta: <span id="npsMeta">85</span></div>
           </div>
 
-          <div class="side-stack">
-            <div class="mini-panel">
-              <h4>Resumo por marca</h4>
-              <div class="list">
-                <div class="list-row">
-                  <span>Peugeot</span>
-                  <span class="badge green">92,4%</span>
-                </div>
-                <div class="list-row">
-                  <span>Citroën</span>
-                  <span class="badge blue">87,9%</span>
-                </div>
-              </div>
+          <div class="cx-grid">
+            <div class="cx-card">
+              <h3>Promotores</h3>
+              <p id="promotores">45</p>
             </div>
 
-            <div class="mini-panel">
-              <h4>Radar de Risco — Vendas</h4>
-              <div class="list">
-                <div class="list-row">
-                  <span>Meta</span>
-                  <span class="badge blue">90%</span>
-                </div>
-                <div class="list-row">
-                  <span>Faltam promotoras</span>
-                  <span class="badge yellow">7</span>
-                </div>
-                <div class="list-row">
-                  <span>Detratores a reverter</span>
-                  <span class="badge red">3</span>
-                </div>
-              </div>
+            <div class="cx-card">
+              <h3>Neutros</h3>
+              <p id="neutros">12</p>
             </div>
 
-            <div class="mini-panel">
-              <h4>Status executivo</h4>
-              <div class="big success-text">Atenção monitorada</div>
-              <small style="color:var(--muted);">
-                A operação de Vendas deve manter conversão e proteção dos neutros para sustentar o objetivo mensal.
-              </small>
+            <div class="cx-card">
+              <h3>Detratores</h3>
+              <p id="detratores">5</p>
+            </div>
+
+            <div class="cx-card">
+              <h3>Pesquisas Respondidas</h3>
+              <p id="pesquisas">62</p>
+            </div>
+
+            <div class="cx-card">
+              <h3>Base de Clientes</h3>
+              <p id="baseClientes">410</p>
+            </div>
+
+            <div class="cx-card">
+              <h3>Taxa de Conversão</h3>
+              <p id="taxaConversao">15%</p>
             </div>
           </div>
         </div>
       </section>
 
       <section class="section">
-        <h3>Painel CX Pós-Vendas</h3>
+        <h3>Grow Customer Care</h3>
         <p class="section-subtitle">
-          Meta padrão do NPS de Pós-Vendas: <strong>82%</strong>. Painel separado de Vendas, com base de clientes, taxa de resposta e leitura do ISC Consultor.
+          Cole separadamente os casos da Peugeot e da Citroën. O resultado exibido abaixo permanece no formato operacional atual.
         </p>
 
-        <div class="grid-kpis">
-          <div class="kpi-card">
-            <h4>NPS Pós-Vendas</h4>
-            <div class="value primary-text">82,0%</div>
-            <div class="sub">Meta de referência</div>
+        <div class="dual-inputs">
+          <div class="input-card">
+            <h4>CASOS GROW CUSTOMER CARE PEUGEOT</h4>
+            <textarea id="growPeugeot" class="paste-box" placeholder="Cole aqui os casos da Peugeot..."></textarea>
+            <div class="button-row">
+              <button class="btn primary" onclick="processGrowData()">Analisar casos</button>
+              <button class="btn secondary" onclick="loadGrowExamplePeugeot()">Exemplo Peugeot</button>
+            </div>
           </div>
 
-          <div class="kpi-card">
-            <h4>Promotores</h4>
-            <div class="value success-text">58</div>
-            <div class="sub">Notas 9–10</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Neutros</h4>
-            <div class="value warning-text">11</div>
-            <div class="sub">Notas 7–8</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Detratores</h4>
-            <div class="value danger-text">6</div>
-            <div class="sub">Notas 1–6</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Base de Clientes</h4>
-            <div class="value primary-text">420</div>
-            <div class="sub">Base total do período</div>
-          </div>
-
-          <div class="kpi-card">
-            <h4>Taxa de Resposta</h4>
-            <div class="value success-text">22%</div>
-            <div class="sub">Pesquisas respondidas</div>
+          <div class="input-card">
+            <h4>CASOS GROW CUSTOMER CARE CITROËN</h4>
+            <textarea id="growCitroen" class="paste-box" placeholder="Cole aqui os casos da Citroën..."></textarea>
+            <div class="button-row">
+              <button class="btn secondary" onclick="loadGrowExampleCitroen()">Exemplo Citroën</button>
+              <button class="btn secondary" onclick="clearGrowData()">Limpar tudo</button>
+            </div>
           </div>
         </div>
 
-        <div class="panel-grid">
-          <div class="chart-box">
-            <svg class="chart-svg" viewBox="0 0 700 280" preserveAspectRatio="none">
-              <polyline
-                fill="none"
-                stroke="#10b981"
-                stroke-width="4"
-                points="20,220 120,180 220,170 320,145 420,132 520,102 620,92"
-              />
-              <polyline
-                fill="none"
-                stroke="#f59e0b"
-                stroke-width="4"
-                points="20,240 120,220 220,205 320,190 420,176 520,162 620,154"
-              />
-            </svg>
-          </div>
+        <div class="grow-summary">
+          <div class="summary-card"><div class="label">Total de casos</div><div class="big" id="totalCases">0</div></div>
+          <div class="summary-card"><div class="label">Casos abertos</div><div class="big" id="openCases">0</div></div>
+          <div class="summary-card"><div class="label">Casos +30 dias</div><div class="big" id="over30Cases">0</div></div>
+          <div class="summary-card"><div class="label">Veículo reserva</div><div class="big" id="reserveCases">0</div></div>
+          <div class="summary-card"><div class="label">Peugeot</div><div class="big" id="peugeotCases">0</div></div>
+          <div class="summary-card"><div class="label">Citroën</div><div class="big" id="citroenCases">0</div></div>
+        </div>
 
-          <div class="side-stack">
-            <div class="mini-panel">
-              <h4>Resumo por marca</h4>
-              <div class="list">
-                <div class="list-row">
-                  <span>Peugeot</span>
-                  <span class="badge green">84,1%</span>
-                </div>
-                <div class="list-row">
-                  <span>Citroën</span>
-                  <span class="badge blue">80,3%</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mini-panel">
-              <h4>Radar de Risco — Pós-Vendas</h4>
-              <div class="list">
-                <div class="list-row">
-                  <span>Meta</span>
-                  <span class="badge blue">82%</span>
-                </div>
-                <div class="list-row">
-                  <span>Faltam promotoras</span>
-                  <span class="badge yellow">5</span>
-                </div>
-                <div class="list-row">
-                  <span>Detratores a reverter</span>
-                  <span class="badge red">2</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="mini-panel">
-              <h4>Status executivo</h4>
-              <div class="big warning-text">Acompanhar de perto</div>
-              <small style="color:var(--muted);">
-                Pós-Vendas requer ação em detratores e estabilização da taxa de resposta para proteção do resultado.
-              </small>
-            </div>
-          </div>
+        <div class="footer-note">
+          Fluxo alinhado com a operação real: como cada marca entra por um login diferente no Grow, o sistema trata Peugeot e Citroën separadamente.
         </div>
       </section>
 
       <section class="section">
-        <h3>ISC Consultor — Pós-Vendas</h3>
-        <p class="section-subtitle">
-          Módulo exclusivo do Pós-Vendas, com leitura executiva do desempenho dos consultores.
-        </p>
+        <h3>Casos importados</h3>
+        <p class="section-subtitle">Visualização operacional dos casos lidos a partir do copiar e colar.</p>
 
-        <div class="list">
-          <div class="list-row">
-            <span>1. Camila — Puxando p/ cima</span>
-            <span class="badge green">94%</span>
-          </div>
-          <div class="list-row">
-            <span>2. Junina — Puxando p/ cima</span>
-            <span class="badge green">91%</span>
-          </div>
-          <div class="list-row">
-            <span>3. João — Neutro</span>
-            <span class="badge yellow">83%</span>
-          </div>
-          <div class="list-row">
-            <span>4. Pedro — Puxando p/ baixo</span>
-            <span class="badge red">74%</span>
-          </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Caso</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Canal</th>
+                <th>Motivo 1</th>
+                <th>Motivo 2</th>
+                <th>Chassi</th>
+                <th>Cliente</th>
+                <th>Prioridade</th>
+                <th>Responsável</th>
+                <th>Regional</th>
+                <th>Aging</th>
+              </tr>
+            </thead>
+            <tbody id="growTableBody">
+              <tr>
+                <td colspan="13" class="empty">Nenhum caso analisado ainda.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </main>
@@ -790,16 +844,317 @@
   <script>
     function toggleTheme() {
       document.body.classList.toggle('dark');
-      localStorage.setItem(
-        'qualis-theme',
-        document.body.classList.contains('dark') ? 'dark' : 'light'
-      );
+      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     }
 
     (function initTheme(){
       const saved = localStorage.getItem('qualis-theme');
-      if (saved === 'dark') document.body.classList.add('dark');
+      if(saved === 'dark') document.body.classList.add('dark');
     })();
+
+    function aplicarCorNPS() {
+      const nps = parseFloat(document.getElementById("npsValue").innerText);
+      const meta = parseFloat(document.getElementById("npsMeta").innerText);
+      const el = document.getElementById("npsValue");
+
+      el.classList.remove("nps-green", "nps-red");
+
+      if (nps >= meta) {
+        el.classList.add("nps-green");
+      } else {
+        el.classList.add("nps-red");
+      }
+    }
+
+    function loadGrowExamplePeugeot() {
+      document.getElementById("growPeugeot").value = `15725953
+Aberto
+05/11/2025 15:15
+Telefone
+Veículo Reserva
+Veículo na concessionária
+8ADUAFCA1SG576844
+THICIANE ARAUJO CHAVES
+Urgente
+Pâmela Souza Lopes
+NNE - NORDESTE
+
+16064678
+Aberto
+26/01/2026 10:14
+Diretoria
+Tratativa Comercial
+Compsensação/Cortesia
+8ADUAFCA1SG576844
+THICIANE ARAUJO CHAVES
+Urgente
+ROSITA BUONAFINA
+NNE - NORDESTE
+
+16314586
+Aberto
+11/03/2026 11:51
+Reclame aqui
+Peças
+Falta Peças/ Peça em Backorder
+8ADUEFCBXTG522442
+Eduardo Albuquerque Castelo Branco
+Normal
+NADILA RODRIGUES LOBO
+NNE - NORDESTE
+
+16318567
+Aberto
+12/03/2026 09:55
+Telefone
+Veículo Reserva
+Veículo na concessionária
+8ADUWNFX2PG566381
+JAYSON JESUS SOUZA DE OLIVEIRA .
+Normal
+Pâmela Souza Lopes
+NNE - NORDESTE`;
+      processGrowData();
+    }
+
+    function loadGrowExampleCitroen() {
+      document.getElementById("growCitroen").value = `16316483
+Aberto
+11/03/2026 09:10
+WhatsApp
+Campanha Recall
+Baixa Detração
+9V7VBBHXGLA001448
+EMILIO CAVALCANTE
+Urgente
+Pâmela Souza Lopes
+NNE - NORDESTE
+
+16317001
+Aberto
+10/02/2026 14:35
+Telefone
+Veículo Reserva
+Veículo na concessionária
+9V7ABCDEFGA009999
+MARIA DO SOCORRO
+Alto
+Letícia Martins
+NNE - NORDESTE`;
+      processGrowData();
+    }
+
+    function clearGrowData() {
+      document.getElementById("growPeugeot").value = "";
+      document.getElementById("growCitroen").value = "";
+      document.getElementById("growTableBody").innerHTML =
+        '<tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>';
+      updateSummary({ total:0, open:0, over30:0, reserve:0, peu:0, cit:0 });
+    }
+
+    function processGrowData() {
+      const peuRaw = document.getElementById("growPeugeot").value.trim();
+      const citRaw = document.getElementById("growCitroen").value.trim();
+
+      const peuRecords = parseBlockRecords(peuRaw, "Peugeot");
+      const citRecords = parseBlockRecords(citRaw, "Citroën");
+
+      const records = [...peuRecords, ...citRecords];
+      renderGrowTable(records);
+      calculateGrowSummary(records);
+    }
+
+    function parseBlockRecords(raw, marca) {
+      if (!raw) return [];
+
+      const ignored = new Set([
+        "número do item",
+        "número do caso",
+        "classificado em ordem crescente",
+        "status",
+        "data/hora de abertura",
+        "canal de entrada",
+        "motivo de contato 1",
+        "motivo de contato 2",
+        "chassi completo",
+        "conta nome",
+        "prioridade",
+        "responsável_nome",
+        "regional description",
+        "caoss grow customer care peugeot",
+        "casos grow customer care peugeot",
+        "casos grow customer care citroën",
+        "casos grow customer care citroen",
+        "sort",
+        "ação"
+      ]);
+
+      const lines = raw
+        .split(/\n/)
+        .map(x => x.trim())
+        .filter(x => x && !ignored.has(x.toLowerCase()));
+
+      const records = [];
+
+      function isCaseNumber(value) {
+        return /^\d{7,9}$/.test(String(value || "").trim());
+      }
+
+      function isStatus(value) {
+        const v = String(value || "").trim().toLowerCase();
+        return v === "aberto" || v === "fechado" || v === "encerrado";
+      }
+
+      function isDateTime(value) {
+        return /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(value || "").trim());
+      }
+
+      let i = 0;
+
+      while (i < lines.length) {
+        if (!isCaseNumber(lines[i])) {
+          i++;
+          continue;
+        }
+
+        const start = i;
+
+        const caso = lines[i++] || "";
+        const status = lines[i++] || "";
+        const data = lines[i++] || "";
+        const canal = lines[i++] || "";
+        const motivo1 = lines[i++] || "";
+        const motivo2 = lines[i++] || "";
+        const chassi = lines[i++] || "";
+        const cliente = lines[i++] || "";
+        const prioridade = lines[i++] || "";
+        const responsavel = lines[i++] || "";
+        const regional = lines[i++] || "";
+
+        if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
+          i = start + 1;
+          continue;
+        }
+
+        records.push({
+          marca,
+          caso,
+          status,
+          data,
+          canal,
+          motivo1,
+          motivo2,
+          chassi,
+          cliente,
+          prioridade,
+          responsavel,
+          regional,
+          aging: calcAging(data)
+        });
+      }
+
+      return records;
+    }
+
+    function calcAging(dataStr) {
+      const match = String(dataStr || "").match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if (!match) return 0;
+
+      const [, dd, mm, yyyy] = match;
+      const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+      const now = new Date();
+
+      return Math.max(0, Math.floor((now - d) / (1000 * 60 * 60 * 24)));
+    }
+
+    function renderGrowTable(records) {
+      const tbody = document.getElementById("growTableBody");
+
+      if (!records.length) {
+        tbody.innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso válido encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = records.map(item => `
+        <tr>
+          <td>${brandChip(item.marca)}</td>
+          <td>${escapeHtml(item.caso)}</td>
+          <td>${statusChip(item.status)}</td>
+          <td>${escapeHtml(item.data)}</td>
+          <td>${escapeHtml(item.canal)}</td>
+          <td>${escapeHtml(item.motivo1)}</td>
+          <td>${escapeHtml(item.motivo2)}</td>
+          <td>${escapeHtml(item.chassi)}</td>
+          <td>${escapeHtml(item.cliente)}</td>
+          <td>${priorityChip(item.prioridade)}</td>
+          <td>${escapeHtml(item.responsavel)}</td>
+          <td>${escapeHtml(item.regional)}</td>
+          <td>${agingChip(item.aging)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function calculateGrowSummary(records) {
+      const total = records.length;
+      const open = records.filter(r => String(r.status).toLowerCase().includes("aberto")).length;
+      const over30 = records.filter(r => Number(r.aging) > 30).length;
+      const reserve = records.filter(r =>
+        String(r.motivo1).toLowerCase().includes("veículo reserva") ||
+        String(r.motivo2).toLowerCase().includes("veículo")
+      ).length;
+      const peu = records.filter(r => r.marca === "Peugeot").length;
+      const cit = records.filter(r => r.marca === "Citroën").length;
+
+      updateSummary({ total, open, over30, reserve, peu, cit });
+    }
+
+    function updateSummary(obj) {
+      document.getElementById("totalCases").textContent = obj.total;
+      document.getElementById("openCases").textContent = obj.open;
+      document.getElementById("over30Cases").textContent = obj.over30;
+      document.getElementById("reserveCases").textContent = obj.reserve;
+      document.getElementById("peugeotCases").textContent = obj.peu;
+      document.getElementById("citroenCases").textContent = obj.cit;
+    }
+
+    function brandChip(marca) {
+      if (marca === "Peugeot") return '<span class="chip blue">Peugeot</span>';
+      if (marca === "Citroën") return '<span class="chip green">Citroën</span>';
+      return '<span class="chip yellow">Não identificado</span>';
+    }
+
+    function statusChip(status) {
+      const s = String(status || "").toLowerCase();
+      if (s.includes("aberto")) return '<span class="chip red">Aberto</span>';
+      if (s.includes("fechado") || s.includes("encerrado")) return '<span class="chip green">Fechado</span>';
+      return `<span class="chip yellow">${escapeHtml(status || "-")}</span>`;
+    }
+
+    function priorityChip(value) {
+      const s = String(value || "").toLowerCase();
+      if (s.includes("urgente")) return '<span class="chip red">Urgente</span>';
+      if (s.includes("alto")) return '<span class="chip yellow">Alto</span>';
+      if (s.includes("média") || s.includes("media")) return '<span class="chip blue">Média</span>';
+      return `<span class="chip green">${escapeHtml(value || "-")}</span>`;
+    }
+
+    function agingChip(aging) {
+      const a = Number(aging) || 0;
+      if (a > 30) return `<span class="chip red">${a} dias</span>`;
+      if (a >= 15) return `<span class="chip yellow">${a} dias</span>`;
+      return `<span class="chip green">${a} dias</span>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    window.onload = function() {
+      aplicarCorNPS();
+    };
   </script>
 </body>
 </html>
