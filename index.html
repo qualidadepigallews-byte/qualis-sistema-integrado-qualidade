@@ -29,8 +29,8 @@
       --surface-2:#15233b;
       --text:#edf4ff;
       --muted:#9db0cf;
-      --primary:#3b82f6;
-      --primary-2:#60a5fa;
+      --primary:#60a5fa;
+      --primary-2:#93c5fd;
       --accent:#8b5cf6;
       --success:#10b981;
       --warning:#f59e0b;
@@ -39,23 +39,18 @@
       --shadow:0 16px 40px rgba(0,0,0,0.35);
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{ box-sizing:border-box; }
 
     html, body{
       margin:0;
       padding:0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family:Arial, Helvetica, sans-serif;
       background:var(--bg);
       color:var(--text);
       transition:background .25s ease, color .25s ease;
     }
 
-    a{
-      text-decoration:none;
-      color:inherit;
-    }
+    a{ text-decoration:none; color:inherit; }
 
     .app{
       display:flex;
@@ -97,7 +92,6 @@
       margin:0;
       font-size:28px;
       line-height:1;
-      letter-spacing:0.5px;
     }
 
     .brand p{
@@ -131,9 +125,7 @@
       transition:.2s ease;
     }
 
-    .menu a:hover{
-      background:rgba(255,255,255,0.10);
-    }
+    .menu a:hover{ background:rgba(255,255,255,0.10); }
 
     .menu a.active{
       background:linear-gradient(90deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
@@ -226,35 +218,45 @@
       box-shadow:var(--shadow);
     }
 
-    .hero{
-      display:grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap:18px;
-      margin-bottom:18px;
-    }
-
-    .hero-card,
-    .panel,
-    .kpi-card{
+    .section{
       background:var(--surface);
       border:1px solid var(--border);
       border-radius:24px;
       box-shadow:var(--shadow);
+      padding:20px;
+      margin-bottom:18px;
+    }
+
+    .section h3{
+      margin:0 0 6px 0;
+      font-size:24px;
+    }
+
+    .section-subtitle{
+      margin:0 0 16px 0;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
     }
 
     .hero-card{
-      padding:22px;
       background:
         radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 30%),
         radial-gradient(circle at left bottom, rgba(124,58,237,.10), transparent 35%),
         var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:22px;
     }
 
-    .hero-card h3{
-      margin:0;
-      font-size:26px;
-    }
-
+    .hero-card h3{ margin:0; font-size:26px; }
     .hero-card p{
       color:var(--muted);
       margin:8px 0 18px 0;
@@ -279,34 +281,33 @@
     }
 
     .hero-side{
-      padding:22px;
       display:flex;
       flex-direction:column;
       gap:14px;
     }
 
-    .hero-side h4{
-      margin:0;
-      font-size:20px;
-    }
-
-    .hero-side .mini{
-      background:var(--surface-2);
+    .mini{
+      background:var(--surface);
       border:1px solid var(--border);
-      border-radius:18px;
-      padding:14px;
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
     }
 
-    .mini-title{
-      font-size:12px;
-      color:var(--muted);
-      margin-bottom:8px;
-      font-weight:700;
+    .mini h4{
+      margin:0 0 10px 0;
+      font-size:18px;
     }
 
     .mini-value{
       font-size:28px;
       font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .mini small{
+      color:var(--muted);
+      font-size:13px;
     }
 
     .grid-kpis{
@@ -317,6 +318,10 @@
     }
 
     .kpi-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
       padding:18px;
       position:relative;
       overflow:hidden;
@@ -350,181 +355,163 @@
       color:var(--muted);
     }
 
-    .kpi-card.success .value{ color:var(--success); }
-    .kpi-card.warning .value{ color:var(--warning); }
-    .kpi-card.danger .value{ color:var(--danger); }
-    .kpi-card.primary .value{ color:var(--primary); }
+    .primary-text{ color:var(--primary); }
+    .success-text{ color:var(--success); }
+    .warning-text{ color:var(--warning); }
+    .danger-text{ color:var(--danger); }
 
-    .main-grid{
+    .grow-layout{
       display:grid;
-      grid-template-columns: 1.5fr 1fr;
+      grid-template-columns: 1.1fr .9fr;
       gap:18px;
       margin-bottom:18px;
     }
 
-    .panel{
-      padding:20px;
-    }
-
-    .panel h3{
-      margin:0 0 6px 0;
-      font-size:22px;
-    }
-
-    .panel-subtitle{
-      margin:0 0 18px 0;
-      font-size:13px;
-      color:var(--muted);
-    }
-
-    .chart-box{
-      height:280px;
-      border-radius:18px;
-      background:
-        linear-gradient(180deg, rgba(59,130,246,.06), rgba(124,58,237,.02)),
-        var(--surface-2);
-      border:1px solid var(--border);
-      padding:20px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .chart-svg{
+    .paste-box{
       width:100%;
-      height:100%;
+      min-height:220px;
+      resize:vertical;
+      border:1px solid var(--border);
+      background:var(--surface-2);
+      color:var(--text);
+      border-radius:18px;
+      padding:16px;
+      font-size:13px;
+      line-height:1.5;
+      outline:none;
     }
 
-    .updates{
+    .button-row{
       display:flex;
-      flex-direction:column;
       gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
     }
 
-    .update-item{
-      padding:14px;
-      border-radius:16px;
-      background:var(--surface-2);
-      border:1px solid var(--border);
-    }
-
-    .update-item strong{
-      display:block;
-      margin-bottom:4px;
-      font-size:14px;
-    }
-
-    .update-item span{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-
-    .secondary-grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:18px;
-      margin-bottom:18px;
-    }
-
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .list-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      padding:12px 14px;
+    .btn{
+      border:0;
       border-radius:14px;
-      background:var(--surface-2);
-      border:1px solid var(--border);
-      font-size:14px;
+      padding:12px 16px;
+      cursor:pointer;
+      font-weight:800;
+      box-shadow:var(--shadow);
     }
 
-    .badge{
-      padding:7px 10px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:800;
+    .btn.primary{
+      background:linear-gradient(135deg, var(--primary), var(--accent));
       color:#fff;
     }
 
-    .badge.green{ background:var(--success); }
-    .badge.yellow{ background:var(--warning); }
-    .badge.red{ background:var(--danger); }
-    .badge.blue{ background:var(--primary); }
-
-    .footer-panels{
-      display:grid;
-      grid-template-columns: 1.1fr 1fr 1fr;
-      gap:18px;
+    .btn.secondary{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      color:var(--text);
     }
 
-    .module-links{
+    .grow-summary{
       display:grid;
       grid-template-columns: repeat(2, 1fr);
       gap:12px;
     }
 
-    .module-link{
-      padding:16px;
-      border-radius:18px;
+    .summary-card{
       background:var(--surface-2);
       border:1px solid var(--border);
-      font-weight:800;
-      color:var(--text);
+      border-radius:18px;
+      padding:16px;
     }
 
-    .module-link small{
-      display:block;
-      margin-top:6px;
+    .summary-card .label{
       font-size:12px;
       color:var(--muted);
-      font-weight:600;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .summary-card .big{
+      font-size:32px;
+      font-weight:900;
+    }
+
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:var(--surface);
+      box-shadow:var(--shadow);
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:980px;
+    }
+
+    th, td{
+      text-align:left;
+      padding:14px 12px;
+      border-bottom:1px solid var(--border);
+      font-size:13px;
+      vertical-align:top;
+    }
+
+    th{
+      background:var(--surface-2);
+      color:var(--muted);
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    tr:hover td{
+      background:rgba(59,130,246,.04);
+    }
+
+    .chip{
+      display:inline-block;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      color:#fff;
+      white-space:nowrap;
+    }
+
+    .chip.green{ background:var(--success); }
+    .chip.yellow{ background:var(--warning); }
+    .chip.red{ background:var(--danger); }
+    .chip.blue{ background:var(--primary); }
+
+    .footer-note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .empty{
+      text-align:center;
+      padding:26px;
+      color:var(--muted);
+      font-size:13px;
     }
 
     @media (max-width: 1200px){
       .grid-kpis{ grid-template-columns: repeat(2,1fr); }
-      .hero,
-      .main-grid,
-      .secondary-grid,
-      .footer-panels{
-        grid-template-columns:1fr;
-      }
+      .hero, .grow-layout{ grid-template-columns:1fr; }
     }
 
     @media (max-width: 900px){
-      .app{
-        flex-direction:column;
-      }
-
-      .sidebar{
-        width:100%;
-      }
-
-      .content{
-        padding:16px;
-      }
-
+      .app{ flex-direction:column; }
+      .sidebar{ width:100%; }
+      .content{ padding:16px; }
       .topbar{
         flex-direction:column;
         align-items:flex-start;
       }
-
-      .search{
-        min-width:100%;
-      }
-
-      .grid-kpis{
-        grid-template-columns:1fr;
-      }
-
-      .module-links{
-        grid-template-columns:1fr;
-      }
+      .search{ min-width:100%; }
+      .grid-kpis{ grid-template-columns:1fr; }
+      .grow-summary{ grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -613,176 +600,130 @@
         </div>
 
         <div class="hero-side">
-          <h4>Resumo do dia</h4>
-
           <div class="mini">
-            <div class="mini-title">Próxima rotina</div>
+            <h4>Próxima rotina</h4>
             <div class="mini-value">15:00</div>
-            <div class="panel-subtitle">Envio automático do relatório executivo</div>
+            <small>Envio automático do relatório executivo</small>
           </div>
 
           <div class="mini">
-            <div class="mini-title">Pendências críticas</div>
-            <div class="mini-value" style="color:var(--danger);">12</div>
-            <div class="panel-subtitle">Hot Alerts, treinamentos e auditorias</div>
+            <h4>Pendências críticas</h4>
+            <div class="mini-value danger-text">12</div>
+            <small>Hot Alerts, treinamentos e auditorias</small>
           </div>
         </div>
       </section>
 
       <section class="grid-kpis">
-        <div class="kpi-card primary">
+        <div class="kpi-card">
           <h4>NPS Vendas</h4>
-          <div class="value">82</div>
+          <div class="value primary-text">82</div>
           <div class="sub">Meta mensal atingida</div>
         </div>
 
-        <div class="kpi-card success">
+        <div class="kpi-card">
           <h4>NPS Pós-Vendas</h4>
-          <div class="value">91</div>
+          <div class="value success-text">91</div>
           <div class="sub">Evolução positiva no trimestre</div>
         </div>
 
-        <div class="kpi-card warning">
+        <div class="kpi-card">
           <h4>Treinamentos Pendentes</h4>
-          <div class="value">19</div>
+          <div class="value warning-text">19</div>
           <div class="sub">Aguardando regularização</div>
         </div>
 
-        <div class="kpi-card danger">
+        <div class="kpi-card">
           <h4>Hot Alerts</h4>
-          <div class="value">07</div>
+          <div class="value danger-text">07</div>
           <div class="sub">Demandam ação imediata</div>
         </div>
       </section>
 
-      <section class="main-grid">
-        <div class="panel">
-          <h3>Evolução de NPS</h3>
-          <p class="panel-subtitle">Comparativo consolidado entre meses e operação.</p>
+      <section class="section">
+        <h3>Grow Customer Care</h3>
+        <p class="section-subtitle">
+          Cole abaixo a tabela copiada do portal Grow. O QUALIS interpreta os dados e organiza os casos automaticamente.
+        </p>
 
-          <div class="chart-box">
-            <svg class="chart-svg" viewBox="0 0 700 260" preserveAspectRatio="none">
-              <polyline
-                fill="none"
-                stroke="#3b82f6"
-                stroke-width="4"
-                points="20,190 100,160 180,175 260,135 340,120 420,98 500,110 580,72 660,50"
-              />
-              <polyline
-                fill="none"
-                stroke="#8b5cf6"
-                stroke-width="4"
-                points="20,210 100,185 180,160 260,148 340,138 420,122 500,108 580,94 660,82"
-              />
-            </svg>
-          </div>
-        </div>
+        <div class="grow-layout">
+          <div>
+            <textarea id="growInput" class="paste-box" placeholder="Cole aqui a tabela copiada do portal Grow...&#10;&#10;Exemplo:&#10;16316483    Aberto    11/03/2026    WhatsApp    Campanha Recall    Baixa Detração    9V7VBBHXGLA001448    EMILIO CAVALCANTE"></textarea>
 
-        <div class="panel">
-          <h3>Últimas atualizações</h3>
-          <p class="panel-subtitle">Movimentos mais recentes do sistema.</p>
-
-          <div class="updates">
-            <div class="update-item">
-              <strong>Hot Alert atualizado</strong>
-              <span>Cliente João Silva recebeu tratativa e aguarda retorno.</span>
+            <div class="button-row">
+              <button class="btn primary" onclick="processGrowData()">Analisar casos</button>
+              <button class="btn secondary" onclick="loadGrowExample()">Carregar exemplo</button>
+              <button class="btn secondary" onclick="clearGrowData()">Limpar</button>
             </div>
 
-            <div class="update-item">
-              <strong>Treinamentos processados</strong>
-              <span>19 colaboradores com pendências foram consolidados no lote atual.</span>
-            </div>
-
-            <div class="update-item">
-              <strong>Auditoria quinzenal registrada</strong>
-              <span>Checklist de Pós-Vendas importado com novas não conformidades.</span>
-            </div>
-
-            <div class="update-item">
-              <strong>Scorecard comparado</strong>
-              <span>Indicadores com queda foram enviados para análise gerencial.</span>
+            <div class="footer-note">
+              Fluxo pensado para o processo real: a Letícia copia tudo de uma vez do portal e cola aqui.
+              Depois o sistema separa Peugeot e Citroën, calcula aging e organiza a fila.
             </div>
           </div>
-        </div>
-      </section>
 
-      <section class="secondary-grid">
-        <div class="panel">
-          <h3>Grow Customer Care</h3>
-          <p class="panel-subtitle">Casos em acompanhamento por marca.</p>
-          <div class="list">
-            <div class="list-row"><span>Peugeot — casos abertos</span><span class="badge blue">23</span></div>
-            <div class="list-row"><span>Citroën — casos abertos</span><span class="badge blue">17</span></div>
-            <div class="list-row"><span>Peugeot — +30 dias</span><span class="badge yellow">04</span></div>
-            <div class="list-row"><span>Citroën — +30 dias</span><span class="badge red">06</span></div>
-          </div>
-        </div>
+          <div class="grow-summary">
+            <div class="summary-card">
+              <div class="label">Total de casos</div>
+              <div class="big" id="totalCases">0</div>
+            </div>
 
-        <div class="panel">
-          <h3>Auditorias</h3>
-          <p class="panel-subtitle">Monitoramento de conformidade quinzenal.</p>
-          <div class="list">
-            <div class="list-row"><span>Vendas — score atual</span><span class="badge green">91%</span></div>
-            <div class="list-row"><span>Pós-Vendas — score atual</span><span class="badge yellow">84%</span></div>
-            <div class="list-row"><span>Não conformidades abertas</span><span class="badge red">12</span></div>
-            <div class="list-row"><span>Próxima auditoria</span><span class="badge blue">15 dias</span></div>
-          </div>
-        </div>
+            <div class="summary-card">
+              <div class="label">Casos abertos</div>
+              <div class="big" id="openCases">0</div>
+            </div>
 
-        <div class="panel">
-          <h3>Consultores</h3>
-          <p class="panel-subtitle">ISC e leitura de performance.</p>
-          <div class="list">
-            <div class="list-row"><span>Puxando para cima</span><span class="badge green">06</span></div>
-            <div class="list-row"><span>Neutros</span><span class="badge yellow">03</span></div>
-            <div class="list-row"><span>Puxando para baixo</span><span class="badge red">02</span></div>
-            <div class="list-row"><span>Sem pesquisa</span><span class="badge blue">01</span></div>
+            <div class="summary-card">
+              <div class="label">Casos +30 dias</div>
+              <div class="big" id="over30Cases">0</div>
+            </div>
+
+            <div class="summary-card">
+              <div class="label">Veículo reserva</div>
+              <div class="big" id="reserveCases">0</div>
+            </div>
+
+            <div class="summary-card">
+              <div class="label">Peugeot</div>
+              <div class="big" id="peugeotCases">0</div>
+            </div>
+
+            <div class="summary-card">
+              <div class="label">Citroën</div>
+              <div class="big" id="citroenCases">0</div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="footer-panels">
-        <div class="panel">
-          <h3>Acesso rápido aos módulos</h3>
-          <p class="panel-subtitle">Atalhos para as áreas mais usadas da operação.</p>
-          <div class="module-links">
-            <div class="module-link">Painel CX<small>Vendas e Pós-Vendas</small></div>
-            <div class="module-link">Hot Alerts<small>Fila crítica e tratativas</small></div>
-            <div class="module-link">Treinamentos<small>Cronograma e disparos</small></div>
-            <div class="module-link">Auditorias<small>Checklists e plano de ação</small></div>
-            <div class="module-link">Grow Customer Care<small>Casos, aging e motivos</small></div>
-            <div class="module-link">Ferramentas<small>Sistemas externos e acessos</small></div>
-          </div>
-        </div>
+      <section class="section">
+        <h3>Casos importados</h3>
+        <p class="section-subtitle">
+          Visualização operacional dos casos lidos a partir do copiar e colar.
+        </p>
 
-        <div class="panel">
-          <h3>Notificações</h3>
-          <p class="panel-subtitle">Central de avisos importantes.</p>
-          <div class="list">
-            <div class="list-row"><span>Laís solicitou alteração de meta</span><span class="badge yellow">Nova</span></div>
-            <div class="list-row"><span>Relatório de vendas enviado</span><span class="badge green">Concluído</span></div>
-            <div class="list-row"><span>Resumo da sala agendado</span><span class="badge blue">17h</span></div>
-            <div class="list-row"><span>Scorecard com queda</span><span class="badge red">Atenção</span></div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <h3>Chat interno</h3>
-          <p class="panel-subtitle">Comunicação centralizada no portal.</p>
-          <div class="updates">
-            <div class="update-item">
-              <strong>@Letícia</strong>
-              <span>Atualiza por favor os casos novos do Grow antes do fechamento.</span>
-            </div>
-            <div class="update-item">
-              <strong>@Laís</strong>
-              <span>Consegue validar a amostra de pesquisas de amanhã?</span>
-            </div>
-            <div class="update-item">
-              <strong>Sistema</strong>
-              <span>O chat em tempo real será integrado nas próximas versões.</span>
-            </div>
-          </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Marca</th>
+                <th>Caso</th>
+                <th>Status</th>
+                <th>Data</th>
+                <th>Canal</th>
+                <th>Motivo 1</th>
+                <th>Motivo 2</th>
+                <th>Chassi</th>
+                <th>Cliente</th>
+                <th>Aging</th>
+              </tr>
+            </thead>
+            <tbody id="growTableBody">
+              <tr>
+                <td colspan="10" class="empty">Nenhum caso analisado ainda.</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </main>
@@ -791,7 +732,10 @@
   <script>
     function toggleTheme() {
       document.body.classList.toggle('dark');
-      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      localStorage.setItem(
+        'qualis-theme',
+        document.body.classList.contains('dark') ? 'dark' : 'light'
+      );
     }
 
     (function initTheme(){
@@ -800,6 +744,181 @@
         document.body.classList.add('dark');
       }
     })();
+
+    function loadGrowExample() {
+      const example = [
+        "16316483\tAberto\t11/03/2026\tWhatsApp\tCampanha Recall\tBaixa Detração\t9V7VBBHXGLA001448\tEMILIO CAVALCANTE",
+        "16315552\tAberto\t10/02/2026\tOther\tProblemas com o Produto\tInformações\t935CPFCA5TB526453\tCALIANE SILVA BEZERRA",
+        "16313764\tAberto\t09/02/2026\tOther\tProblemas com o Produto\tInformações\t935CPFCA7SB552552\tFRANCISCA DELBA SOARES",
+        "16313189\tFechado\t04/03/2026\tE-mail\tProblemas com o Produto\tInformações\t935CDNFXDRB511603\tPÉRICLES MANICA",
+        "16311556\tAberto\t08/03/2026\tTelefone\tVeículo Reserva\tVeículo na concessionária\t935CEFC2CRB530366\tJAQUELINE NASCIMENTO",
+        "16307568\tAberto\t01/02/2026\tProcon\tInformações Técnicas\tMotor, Embreagem\t935CPFCA8SB548669\tELISABETE SILVA"
+      ].join("\n");
+
+      document.getElementById("growInput").value = example;
+      processGrowData();
+    }
+
+    function clearGrowData() {
+      document.getElementById("growInput").value = "";
+      document.getElementById("growTableBody").innerHTML =
+        '<tr><td colspan="10" class="empty">Nenhum caso analisado ainda.</td></tr>';
+
+      updateSummary({
+        total: 0,
+        open: 0,
+        over30: 0,
+        reserve: 0,
+        peu: 0,
+        cit: 0
+      });
+    }
+
+    function processGrowData() {
+      const raw = document.getElementById("growInput").value.trim();
+      if (!raw) {
+        clearGrowData();
+        return;
+      }
+
+      const lines = raw.split(/\n+/).filter(Boolean);
+      const records = [];
+
+      for (const line of lines) {
+        let cols = line.split("\t").map(x => x.trim()).filter(Boolean);
+
+        if (cols.length < 8) {
+          cols = line.split(/\s{2,}/).map(x => x.trim()).filter(Boolean);
+        }
+
+        if (cols.length < 8) continue;
+
+        const [
+          caso,
+          status,
+          data,
+          canal,
+          motivo1,
+          motivo2,
+          chassi,
+          ...resto
+        ] = cols;
+
+        const cliente = resto.join(" ").trim();
+        const marca = detectBrand(chassi);
+        const aging = calcAging(data);
+
+        records.push({
+          marca,
+          caso,
+          status,
+          data,
+          canal,
+          motivo1,
+          motivo2,
+          chassi,
+          cliente,
+          aging
+        });
+      }
+
+      renderGrowTable(records);
+      calculateGrowSummary(records);
+    }
+
+    function detectBrand(chassi) {
+      const c = String(chassi || "").toUpperCase();
+
+      if (c.startsWith("VF3") || c.startsWith("935")) return "Peugeot";
+      if (c.startsWith("VF7") || c.startsWith("9V7")) return "Citroën";
+      return "Não identificado";
+    }
+
+    function calcAging(dataStr) {
+      const match = String(dataStr || "").match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if (!match) return 0;
+
+      const [, dd, mm, yyyy] = match;
+      const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+      const now = new Date();
+      const diff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+
+      return diff >= 0 ? diff : 0;
+    }
+
+    function renderGrowTable(records) {
+      const tbody = document.getElementById("growTableBody");
+
+      if (!records.length) {
+        tbody.innerHTML = '<tr><td colspan="10" class="empty">Nenhum caso válido encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = records.map(item => `
+        <tr>
+          <td>${brandChip(item.marca)}</td>
+          <td>${escapeHtml(item.caso)}</td>
+          <td>${statusChip(item.status)}</td>
+          <td>${escapeHtml(item.data)}</td>
+          <td>${escapeHtml(item.canal)}</td>
+          <td>${escapeHtml(item.motivo1)}</td>
+          <td>${escapeHtml(item.motivo2)}</td>
+          <td>${escapeHtml(item.chassi)}</td>
+          <td>${escapeHtml(item.cliente)}</td>
+          <td>${agingChip(item.aging)}</td>
+        </tr>
+      `).join("");
+    }
+
+    function calculateGrowSummary(records) {
+      const total = records.length;
+      const open = records.filter(r => String(r.status).toLowerCase().includes("aberto")).length;
+      const over30 = records.filter(r => Number(r.aging) > 30).length;
+      const reserve = records.filter(r =>
+        String(r.motivo1).toLowerCase().includes("veículo reserva") ||
+        String(r.motivo2).toLowerCase().includes("veículo")
+      ).length;
+      const peu = records.filter(r => r.marca === "Peugeot").length;
+      const cit = records.filter(r => r.marca === "Citroën").length;
+
+      updateSummary({ total, open, over30, reserve, peu, cit });
+    }
+
+    function updateSummary(obj) {
+      document.getElementById("totalCases").textContent = obj.total;
+      document.getElementById("openCases").textContent = obj.open;
+      document.getElementById("over30Cases").textContent = obj.over30;
+      document.getElementById("reserveCases").textContent = obj.reserve;
+      document.getElementById("peugeotCases").textContent = obj.peu;
+      document.getElementById("citroenCases").textContent = obj.cit;
+    }
+
+    function brandChip(marca) {
+      if (marca === "Peugeot") return '<span class="chip blue">Peugeot</span>';
+      if (marca === "Citroën") return '<span class="chip green">Citroën</span>';
+      return '<span class="chip yellow">Não identificado</span>';
+    }
+
+    function statusChip(status) {
+      const s = String(status || "").toLowerCase();
+      if (s.includes("aberto")) return '<span class="chip red">Aberto</span>';
+      if (s.includes("fechado") || s.includes("encerrado")) return '<span class="chip green">Fechado</span>';
+      return `<span class="chip yellow">${escapeHtml(status || "-")}</span>`;
+    }
+
+    function agingChip(aging) {
+      const a = Number(aging) || 0;
+      if (a > 30) return `<span class="chip red">${a} dias</span>`;
+      if (a >= 15) return `<span class="chip yellow">${a} dias</span>`;
+      return `<span class="chip green">${a} dias</span>`;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
   </script>
 </body>
 </html>
