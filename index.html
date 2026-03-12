@@ -1,84 +1,805 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>QUALIS - Sistema Integrado de Qualidade</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QUALIS — Sistema Integrado de Qualidade</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --bg-secondary:#eaf0f8;
+      --surface:#ffffff;
+      --surface-2:#f8fbff;
+      --text:#18253a;
+      --muted:#6e7d96;
+      --primary:#1f4fa3;
+      --primary-2:#3b82f6;
+      --accent:#7c3aed;
+      --success:#14b87a;
+      --warning:#f59e0b;
+      --danger:#ef4444;
+      --border:#dbe5f0;
+      --shadow:0 10px 30px rgba(31, 79, 163, 0.10);
+    }
 
-<style>
+    body.dark{
+      --bg:#09111f;
+      --bg-secondary:#0f1a2d;
+      --surface:#101c31;
+      --surface-2:#15233b;
+      --text:#edf4ff;
+      --muted:#9db0cf;
+      --primary:#3b82f6;
+      --primary-2:#60a5fa;
+      --accent:#8b5cf6;
+      --success:#10b981;
+      --warning:#f59e0b;
+      --danger:#f87171;
+      --border:#223453;
+      --shadow:0 16px 40px rgba(0,0,0,0.35);
+    }
 
-body{
-font-family: Arial;
-background:#f5f7fb;
-margin:0;
-}
+    *{
+      box-sizing:border-box;
+    }
 
-header{
-background:#0b3b74;
-color:white;
-padding:20px;
-font-size:22px;
-font-weight:bold;
-}
+    html, body{
+      margin:0;
+      padding:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      transition:background .25s ease, color .25s ease;
+    }
 
-.container{
-padding:30px;
-}
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
 
-.card{
-background:white;
-border-radius:12px;
-padding:20px;
-margin-bottom:20px;
-box-shadow:0 2px 10px rgba(0,0,0,0.08);
-}
+    .app{
+      display:flex;
+      min-height:100vh;
+    }
 
-button{
-background:#0b3b74;
-color:white;
-border:none;
-padding:12px 18px;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
+    .sidebar{
+      width:280px;
+      background:linear-gradient(180deg, #12336b 0%, #1b4589 100%);
+      color:#fff;
+      padding:22px 18px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      box-shadow:var(--shadow);
+    }
 
-button:hover{
-background:#062a52;
-}
+    body.dark .sidebar{
+      background:linear-gradient(180deg, #0c1730 0%, #122448 100%);
+    }
 
-</style>
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:8px 6px 18px 6px;
+      border-bottom:1px solid rgba(255,255,255,0.14);
+    }
 
+    .brand-mark{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:conic-gradient(from 210deg, #2563eb, #22c55e, #f59e0b, #ec4899, #2563eb);
+      box-shadow:0 8px 18px rgba(0,0,0,0.20);
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:28px;
+      line-height:1;
+      letter-spacing:0.5px;
+    }
+
+    .brand p{
+      margin:4px 0 0 0;
+      font-size:11px;
+      opacity:0.82;
+    }
+
+    .menu-group-title{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      opacity:.70;
+      margin:8px 10px 2px;
+    }
+
+    .menu{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .menu a{
+      display:block;
+      padding:12px 14px;
+      border-radius:14px;
+      font-size:14px;
+      font-weight:700;
+      color:#eef5ff;
+      background:transparent;
+      transition:.2s ease;
+    }
+
+    .menu a:hover{
+      background:rgba(255,255,255,0.10);
+    }
+
+    .menu a.active{
+      background:linear-gradient(90deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+      border:1px solid rgba(255,255,255,0.12);
+    }
+
+    .submenu{
+      margin-left:12px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .submenu a{
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:600;
+      opacity:.95;
+    }
+
+    .sidebar-footer{
+      margin-top:auto;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.12);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .sidebar-footer .user{
+      font-size:15px;
+      font-weight:800;
+      margin-bottom:4px;
+    }
+
+    .sidebar-footer .role{
+      font-size:12px;
+      opacity:.82;
+    }
+
+    .content{
+      flex:1;
+      padding:24px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+    }
+
+    .welcome h2{
+      margin:0;
+      font-size:30px;
+    }
+
+    .welcome p{
+      margin:6px 0 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .search{
+      min-width:280px;
+      background:var(--surface);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:12px 14px;
+      border-radius:14px;
+      outline:none;
+      box-shadow:var(--shadow);
+    }
+
+    .theme-toggle{
+      border:0;
+      background:linear-gradient(135deg, var(--primary), var(--accent));
+      color:#fff;
+      padding:12px 16px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .hero-card,
+    .panel,
+    .kpi-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
+
+    .hero-card{
+      padding:22px;
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,.12), transparent 30%),
+        radial-gradient(circle at left bottom, rgba(124,58,237,.10), transparent 35%),
+        var(--surface);
+    }
+
+    .hero-card h3{
+      margin:0;
+      font-size:26px;
+    }
+
+    .hero-card p{
+      color:var(--muted);
+      margin:8px 0 18px 0;
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .hero-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .tag{
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      color:var(--primary);
+    }
+
+    .hero-side{
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .hero-side h4{
+      margin:0;
+      font-size:20px;
+    }
+
+    .hero-side .mini{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+    }
+
+    .mini-title{
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    .mini-value{
+      font-size:28px;
+      font-weight:900;
+    }
+
+    .grid-kpis{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .kpi-card{
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .kpi-card::after{
+      content:"";
+      position:absolute;
+      right:-20px;
+      top:-20px;
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      background:rgba(59,130,246,0.10);
+    }
+
+    .kpi-card h4{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    .kpi-card .value{
+      font-size:38px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+
+    .kpi-card .sub{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .kpi-card.success .value{ color:var(--success); }
+    .kpi-card.warning .value{ color:var(--warning); }
+    .kpi-card.danger .value{ color:var(--danger); }
+    .kpi-card.primary .value{ color:var(--primary); }
+
+    .main-grid{
+      display:grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .panel{
+      padding:20px;
+    }
+
+    .panel h3{
+      margin:0 0 6px 0;
+      font-size:22px;
+    }
+
+    .panel-subtitle{
+      margin:0 0 18px 0;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .chart-box{
+      height:280px;
+      border-radius:18px;
+      background:
+        linear-gradient(180deg, rgba(59,130,246,.06), rgba(124,58,237,.02)),
+        var(--surface-2);
+      border:1px solid var(--border);
+      padding:20px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .chart-svg{
+      width:100%;
+      height:100%;
+    }
+
+    .updates{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .update-item{
+      padding:14px;
+      border-radius:16px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+    }
+
+    .update-item strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:14px;
+    }
+
+    .update-item span{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .secondary-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+      margin-bottom:18px;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .list-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      font-size:14px;
+    }
+
+    .badge{
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      color:#fff;
+    }
+
+    .badge.green{ background:var(--success); }
+    .badge.yellow{ background:var(--warning); }
+    .badge.red{ background:var(--danger); }
+    .badge.blue{ background:var(--primary); }
+
+    .footer-panels{
+      display:grid;
+      grid-template-columns: 1.1fr 1fr 1fr;
+      gap:18px;
+    }
+
+    .module-links{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+    }
+
+    .module-link{
+      padding:16px;
+      border-radius:18px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      font-weight:800;
+      color:var(--text);
+    }
+
+    .module-link small{
+      display:block;
+      margin-top:6px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    @media (max-width: 1200px){
+      .grid-kpis{ grid-template-columns: repeat(2,1fr); }
+      .hero,
+      .main-grid,
+      .secondary-grid,
+      .footer-panels{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 900px){
+      .app{
+        flex-direction:column;
+      }
+
+      .sidebar{
+        width:100%;
+      }
+
+      .content{
+        padding:16px;
+      }
+
+      .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .search{
+        min-width:100%;
+      }
+
+      .grid-kpis{
+        grid-template-columns:1fr;
+      }
+
+      .module-links{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <h1>QUALIS</h1>
+          <p>Sistema Integrado de Qualidade</p>
+        </div>
+      </div>
 
-<header>
-QUALIS — Sistema Integrado de Qualidade
-</header>
+      <div class="menu-group-title">Principal</div>
+      <nav class="menu">
+        <a href="#" class="active">Início</a>
+      </nav>
 
-<div class="container">
+      <div class="menu-group-title">Operação CX</div>
+      <nav class="menu">
+        <a href="#">Vendas</a>
+        <div class="submenu">
+          <a href="#">Painel CX Vendas</a>
+          <a href="#">Hot Alerts</a>
+          <a href="#">Treinamento</a>
+          <a href="#">Scorecard</a>
+          <a href="#">RACs</a>
+          <a href="#">Auditoria</a>
+        </div>
 
-<div class="card">
-<h2>Dashboard</h2>
-<p>Sistema em construção.</p>
-</div>
+        <a href="#">Pós-Vendas</a>
+        <div class="submenu">
+          <a href="#">Painel CX Pós-Vendas</a>
+          <a href="#">Hot Alerts</a>
+          <a href="#">Treinamento</a>
+          <a href="#">Scorecard</a>
+          <a href="#">RACs</a>
+          <a href="#">Auditoria</a>
+          <a href="#">Grow Customer Care</a>
+          <a href="#">Comitê</a>
+        </div>
+      </nav>
 
-<div class="card">
-<h2>Módulos</h2>
+      <div class="menu-group-title">Operação</div>
+      <nav class="menu">
+        <a href="#">Ferramentas</a>
+        <a href="#">Agenda</a>
+        <a href="#">Chat</a>
+        <a href="#">Configurações</a>
+      </nav>
 
-<ul>
-<li>CX Vendas</li>
-<li>CX Pós-Vendas</li>
-<li>Hot Alerts</li>
-<li>Treinamentos</li>
-<li>Scorecard</li>
-<li>Auditorias</li>
-<li>Ferramentas</li>
-</ul>
+      <div class="sidebar-footer">
+        <div class="user">Kamilly</div>
+        <div class="role">Super Admin</div>
+      </div>
+    </aside>
 
-</div>
+    <main class="content">
+      <div class="topbar">
+        <div class="welcome">
+          <h2>Bem-vinda ao QUALIS</h2>
+          <p>Painel central da qualidade, experiência do cliente e operação.</p>
+        </div>
 
-</div>
+        <div class="top-actions">
+          <input class="search" type="text" placeholder="Pesquisar cliente, caso, consultor ou indicador..." />
+          <button class="theme-toggle" onclick="toggleTheme()">Alternar tema</button>
+        </div>
+      </div>
 
+      <section class="hero">
+        <div class="hero-card">
+          <h3>Visão consolidada da operação</h3>
+          <p>
+            Acompanhe em um só lugar os resultados de Vendas, Pós-Vendas, Hot Alerts,
+            Treinamentos, Auditorias, Scorecard e Customer Care.
+          </p>
+          <div class="hero-tags">
+            <span class="tag">Peugeot</span>
+            <span class="tag">Citroën</span>
+            <span class="tag">Painel Executivo</span>
+            <span class="tag">Automação</span>
+            <span class="tag">Notificações</span>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <h4>Resumo do dia</h4>
+
+          <div class="mini">
+            <div class="mini-title">Próxima rotina</div>
+            <div class="mini-value">15:00</div>
+            <div class="panel-subtitle">Envio automático do relatório executivo</div>
+          </div>
+
+          <div class="mini">
+            <div class="mini-title">Pendências críticas</div>
+            <div class="mini-value" style="color:var(--danger);">12</div>
+            <div class="panel-subtitle">Hot Alerts, treinamentos e auditorias</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid-kpis">
+        <div class="kpi-card primary">
+          <h4>NPS Vendas</h4>
+          <div class="value">82</div>
+          <div class="sub">Meta mensal atingida</div>
+        </div>
+
+        <div class="kpi-card success">
+          <h4>NPS Pós-Vendas</h4>
+          <div class="value">91</div>
+          <div class="sub">Evolução positiva no trimestre</div>
+        </div>
+
+        <div class="kpi-card warning">
+          <h4>Treinamentos Pendentes</h4>
+          <div class="value">19</div>
+          <div class="sub">Aguardando regularização</div>
+        </div>
+
+        <div class="kpi-card danger">
+          <h4>Hot Alerts</h4>
+          <div class="value">07</div>
+          <div class="sub">Demandam ação imediata</div>
+        </div>
+      </section>
+
+      <section class="main-grid">
+        <div class="panel">
+          <h3>Evolução de NPS</h3>
+          <p class="panel-subtitle">Comparativo consolidado entre meses e operação.</p>
+
+          <div class="chart-box">
+            <svg class="chart-svg" viewBox="0 0 700 260" preserveAspectRatio="none">
+              <polyline
+                fill="none"
+                stroke="#3b82f6"
+                stroke-width="4"
+                points="20,190 100,160 180,175 260,135 340,120 420,98 500,110 580,72 660,50"
+              />
+              <polyline
+                fill="none"
+                stroke="#8b5cf6"
+                stroke-width="4"
+                points="20,210 100,185 180,160 260,148 340,138 420,122 500,108 580,94 660,82"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Últimas atualizações</h3>
+          <p class="panel-subtitle">Movimentos mais recentes do sistema.</p>
+
+          <div class="updates">
+            <div class="update-item">
+              <strong>Hot Alert atualizado</strong>
+              <span>Cliente João Silva recebeu tratativa e aguarda retorno.</span>
+            </div>
+
+            <div class="update-item">
+              <strong>Treinamentos processados</strong>
+              <span>19 colaboradores com pendências foram consolidados no lote atual.</span>
+            </div>
+
+            <div class="update-item">
+              <strong>Auditoria quinzenal registrada</strong>
+              <span>Checklist de Pós-Vendas importado com novas não conformidades.</span>
+            </div>
+
+            <div class="update-item">
+              <strong>Scorecard comparado</strong>
+              <span>Indicadores com queda foram enviados para análise gerencial.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="secondary-grid">
+        <div class="panel">
+          <h3>Grow Customer Care</h3>
+          <p class="panel-subtitle">Casos em acompanhamento por marca.</p>
+          <div class="list">
+            <div class="list-row"><span>Peugeot — casos abertos</span><span class="badge blue">23</span></div>
+            <div class="list-row"><span>Citroën — casos abertos</span><span class="badge blue">17</span></div>
+            <div class="list-row"><span>Peugeot — +30 dias</span><span class="badge yellow">04</span></div>
+            <div class="list-row"><span>Citroën — +30 dias</span><span class="badge red">06</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Auditorias</h3>
+          <p class="panel-subtitle">Monitoramento de conformidade quinzenal.</p>
+          <div class="list">
+            <div class="list-row"><span>Vendas — score atual</span><span class="badge green">91%</span></div>
+            <div class="list-row"><span>Pós-Vendas — score atual</span><span class="badge yellow">84%</span></div>
+            <div class="list-row"><span>Não conformidades abertas</span><span class="badge red">12</span></div>
+            <div class="list-row"><span>Próxima auditoria</span><span class="badge blue">15 dias</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Consultores</h3>
+          <p class="panel-subtitle">ISC e leitura de performance.</p>
+          <div class="list">
+            <div class="list-row"><span>Puxando para cima</span><span class="badge green">06</span></div>
+            <div class="list-row"><span>Neutros</span><span class="badge yellow">03</span></div>
+            <div class="list-row"><span>Puxando para baixo</span><span class="badge red">02</span></div>
+            <div class="list-row"><span>Sem pesquisa</span><span class="badge blue">01</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="footer-panels">
+        <div class="panel">
+          <h3>Acesso rápido aos módulos</h3>
+          <p class="panel-subtitle">Atalhos para as áreas mais usadas da operação.</p>
+          <div class="module-links">
+            <div class="module-link">Painel CX<small>Vendas e Pós-Vendas</small></div>
+            <div class="module-link">Hot Alerts<small>Fila crítica e tratativas</small></div>
+            <div class="module-link">Treinamentos<small>Cronograma e disparos</small></div>
+            <div class="module-link">Auditorias<small>Checklists e plano de ação</small></div>
+            <div class="module-link">Grow Customer Care<small>Casos, aging e motivos</small></div>
+            <div class="module-link">Ferramentas<small>Sistemas externos e acessos</small></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Notificações</h3>
+          <p class="panel-subtitle">Central de avisos importantes.</p>
+          <div class="list">
+            <div class="list-row"><span>Laís solicitou alteração de meta</span><span class="badge yellow">Nova</span></div>
+            <div class="list-row"><span>Relatório de vendas enviado</span><span class="badge green">Concluído</span></div>
+            <div class="list-row"><span>Resumo da sala agendado</span><span class="badge blue">17h</span></div>
+            <div class="list-row"><span>Scorecard com queda</span><span class="badge red">Atenção</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h3>Chat interno</h3>
+          <p class="panel-subtitle">Comunicação centralizada no portal.</p>
+          <div class="updates">
+            <div class="update-item">
+              <strong>@Letícia</strong>
+              <span>Atualiza por favor os casos novos do Grow antes do fechamento.</span>
+            </div>
+            <div class="update-item">
+              <strong>@Laís</strong>
+              <span>Consegue validar a amostra de pesquisas de amanhã?</span>
+            </div>
+            <div class="update-item">
+              <strong>Sistema</strong>
+              <span>O chat em tempo real será integrado nas próximas versões.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    (function initTheme(){
+      const saved = localStorage.getItem('qualis-theme');
+      if(saved === 'dark'){
+        document.body.classList.add('dark');
+      }
+    })();
+  </script>
 </body>
 </html>
