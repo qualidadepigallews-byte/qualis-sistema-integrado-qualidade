@@ -10,46 +10,42 @@
   <style>
     :root{
       --bg:#eef3fa;
-      --bg-soft:#e7eef8;
       --surface:#ffffff;
-      --surface-2:#f7faff;
-      --surface-3:#f0f5fc;
+      --surface-2:#f6f9fe;
+      --border:#d7e1ef;
       --text:#182437;
       --muted:#73839b;
-      --border:#d9e3f0;
       --primary:#1f4fa3;
       --primary-2:#315fc3;
-      --citroen:#7c3aed;
       --success:#16a34a;
-      --warning:#f59e0b;
       --danger:#dc2626;
-      --shadow:0 16px 40px rgba(24,36,55,0.08);
+      --warning:#f59e0b;
       --sidebar:#13366e;
       --sidebar-2:#1a4488;
-      --radius:24px;
+      --purple:#7c3aed;
+      --shadow:0 14px 36px rgba(24,36,55,.08);
+      --radius:22px;
     }
 
     body.dark{
       --bg:#0b1220;
-      --bg-soft:#121b2d;
       --surface:#111b2f;
-      --surface-2:#15233b;
-      --surface-3:#1a2a45;
+      --surface-2:#17253c;
+      --border:#263954;
       --text:#edf4ff;
       --muted:#9eb1d1;
-      --border:#263954;
       --primary:#5a93ff;
       --primary-2:#7c3aed;
-      --citroen:#9b6bff;
       --success:#22c55e;
-      --warning:#f59e0b;
       --danger:#f87171;
-      --shadow:0 20px 48px rgba(0,0,0,0.38);
+      --warning:#f59e0b;
       --sidebar:#081323;
       --sidebar-2:#10203d;
+      --purple:#9b6bff;
+      --shadow:0 18px 42px rgba(0,0,0,.35);
     }
 
-    *{ box-sizing:border-box; }
+    *{box-sizing:border-box}
     html,body{
       margin:0;
       padding:0;
@@ -57,7 +53,10 @@
       background:var(--bg);
       color:var(--text);
     }
-    button,input,textarea,select{ font-family:'Inter',sans-serif; }
+
+    button,input,textarea{
+      font-family:'Inter',sans-serif;
+    }
 
     .app{
       display:flex;
@@ -66,32 +65,29 @@
 
     .sidebar{
       width:300px;
-      background:linear-gradient(180deg,var(--sidebar) 0%,var(--sidebar-2) 100%);
+      background:linear-gradient(180deg,var(--sidebar),var(--sidebar-2));
       color:#fff;
       padding:22px 18px;
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-      box-shadow:var(--shadow);
       position:sticky;
       top:0;
       height:100vh;
       overflow:auto;
-      z-index:10;
+      box-shadow:var(--shadow);
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      padding:8px 6px 18px;
-      border-bottom:1px solid rgba(255,255,255,0.12);
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      margin-bottom:18px;
     }
 
     .brand-mark{
-      width:50px;
-      height:50px;
-      border-radius:16px;
+      width:48px;
+      height:48px;
+      border-radius:14px;
       background:conic-gradient(from 220deg,#2563eb,#22c55e,#f59e0b,#ec4899,#2563eb);
       flex-shrink:0;
     }
@@ -99,62 +95,69 @@
     .brand h1{
       margin:0;
       font-size:30px;
-      font-weight:900;
       line-height:1;
-      letter-spacing:-0.03em;
+      font-weight:900;
+      letter-spacing:-.03em;
     }
 
     .brand p{
       margin:5px 0 0;
       font-size:11px;
-      opacity:.84;
+      opacity:.85;
     }
 
-    .menu-group-title{
+    .menu-group{
+      margin-bottom:18px;
+    }
+
+    .menu-title{
       font-size:11px;
       text-transform:uppercase;
       letter-spacing:.14em;
-      opacity:.66;
-      margin:8px 8px 0;
+      opacity:.68;
+      margin:0 8px 8px;
       font-weight:700;
-    }
-
-    .menu{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
     }
 
     .menu-btn{
       width:100%;
-      text-align:left;
       border:0;
-      padding:12px 14px;
-      border-radius:14px;
       background:transparent;
       color:#eef5ff;
-      cursor:pointer;
-      font-size:14px;
+      text-align:left;
+      padding:12px 14px;
+      border-radius:14px;
       font-weight:700;
-      transition:.2s ease;
+      cursor:pointer;
+      margin-bottom:6px;
     }
 
-    .menu-btn:hover{ background:rgba(255,255,255,.10); }
+    .menu-btn:hover{
+      background:rgba(255,255,255,.10);
+    }
+
     .menu-btn.active{
-      background:linear-gradient(90deg, rgba(255,255,255,.16), rgba(255,255,255,.08));
+      background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
       border:1px solid rgba(255,255,255,.10);
     }
 
     .sidebar-footer{
-      margin-top:auto;
+      margin-top:20px;
+      padding:14px;
+      border-radius:16px;
       background:rgba(255,255,255,.08);
       border:1px solid rgba(255,255,255,.12);
-      border-radius:18px;
-      padding:14px;
     }
 
-    .sidebar-footer .user{ font-size:15px; font-weight:800; }
-    .sidebar-footer .role{ font-size:12px; opacity:.82; margin-top:4px; }
+    .sidebar-footer strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .sidebar-footer span{
+      font-size:12px;
+      opacity:.85;
+    }
 
     .main{
       flex:1;
@@ -172,22 +175,21 @@
 
     .topbar h2{
       margin:0;
-      font-size:23px;
+      font-size:24px;
       font-weight:900;
-      letter-spacing:-0.02em;
     }
 
     .topbar p{
       margin:8px 0 0;
-      font-size:14px;
       color:var(--muted);
+      font-size:14px;
     }
 
     .top-actions{
       display:flex;
-      align-items:center;
       gap:12px;
       flex-wrap:wrap;
+      align-items:center;
     }
 
     .search{
@@ -196,7 +198,7 @@
       background:var(--surface);
       color:var(--text);
       padding:12px 14px;
-      border-radius:16px;
+      border-radius:14px;
       outline:none;
       box-shadow:var(--shadow);
     }
@@ -206,27 +208,14 @@
       background:linear-gradient(135deg,var(--primary),var(--primary-2));
       color:#fff;
       padding:12px 16px;
-      border-radius:16px;
+      border-radius:14px;
       font-weight:800;
       cursor:pointer;
       box-shadow:var(--shadow);
     }
 
-    .page{ display:none; }
-    .page.active{ display:block; }
-
-    .page-title{
-      margin:0 0 8px;
-      font-size:30px;
-      font-weight:900;
-      letter-spacing:-0.03em;
-    }
-
-    .page-subtitle{
-      margin:0 0 22px;
-      color:var(--muted);
-      font-size:14px;
-    }
+    .page{display:none}
+    .page.active{display:block}
 
     .subnav{
       display:flex;
@@ -252,73 +241,56 @@
       border-color:transparent;
     }
 
-    .subpage{ display:none; }
-    .subpage.active{ display:block; }
+    .subpage{display:none}
+    .subpage.active{display:block}
 
-    .panel{
-      background:var(--surface);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:20px;
-      box-shadow:var(--shadow);
-    }
-
-    .banner-wrap{ margin-bottom:18px; }
     .banner{
       display:none;
       background:linear-gradient(135deg,var(--primary),var(--primary-2));
       color:#fff;
-      border-radius:28px;
       padding:28px;
+      border-radius:24px;
       box-shadow:var(--shadow);
-      min-height:180px;
-      position:relative;
-      overflow:hidden;
+      margin-bottom:14px;
     }
-    .banner.active{ display:block; }
-    .banner::after{
-      content:"";
-      position:absolute;
-      right:-40px;
-      top:-40px;
-      width:180px;
-      height:180px;
-      background:rgba(255,255,255,.10);
-      border-radius:50%;
-    }
+
+    .banner.active{display:block}
+
     .banner h3{
       margin:0;
       font-size:30px;
       font-weight:900;
-      letter-spacing:-0.03em;
-      position:relative;
-      z-index:1;
     }
+
     .banner p{
       margin:12px 0 0;
       line-height:1.6;
-      font-size:14px;
-      opacity:.95;
-      position:relative;
-      z-index:1;
       max-width:760px;
     }
 
     .banner-dots{
       display:flex;
-      gap:8px;
-      margin-top:12px;
       justify-content:flex-end;
+      gap:8px;
+      margin-bottom:18px;
     }
+
     .dot{
       width:10px;
       height:10px;
       border-radius:50%;
-      background:rgba(255,255,255,.35);
       border:0;
+      background:#c7d4eb;
       cursor:pointer;
     }
-    .dot.active{ background:#fff; }
+
+    .dot.active{
+      background:var(--primary);
+    }
+
+    body.dark .dot.active{
+      background:#fff;
+    }
 
     .summary-grid{
       display:grid;
@@ -327,49 +299,30 @@
       margin-bottom:18px;
     }
 
-    .summary-card{
+    .card{
       background:var(--surface);
       border:1px solid var(--border);
-      border-radius:24px;
+      border-radius:20px;
       padding:18px;
       box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
     }
 
-    .summary-card::after{
-      content:"";
-      position:absolute;
-      right:-20px;
-      top:-20px;
-      width:90px;
-      height:90px;
-      border-radius:50%;
-      background:rgba(33,84,180,.08);
-    }
-
-    .summary-card h4{
+    .card h4{
       margin:0 0 10px;
-      color:var(--muted);
       font-size:14px;
-      font-weight:700;
+      color:var(--muted);
     }
 
-    .summary-card .value{
+    .card .value{
       font-size:40px;
       font-weight:900;
       margin-bottom:6px;
     }
 
-    .summary-card .sub{
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .value.blue{color:var(--primary);}
-    .value.green{color:var(--success);}
-    .value.orange{color:var(--warning);}
-    .value.red{color:var(--danger);}
+    .blue{color:var(--primary)}
+    .green{color:var(--success)}
+    .orange{color:var(--warning)}
+    .red{color:var(--danger)}
 
     .triple-grid{
       display:grid;
@@ -386,36 +339,38 @@
 
     .list-item{
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:12px;
       background:var(--surface-2);
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px 16px;
+      padding:13px 14px;
+      border-radius:14px;
       font-size:14px;
     }
 
-    .list-item span:last-child{ font-weight:800; }
+    .list-item span:last-child{
+      font-weight:800;
+    }
 
     .quick-links{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:1fr 1fr;
       gap:12px;
     }
 
     .quick-link{
       background:var(--surface-2);
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:16px;
       padding:16px;
       cursor:pointer;
     }
 
     .quick-link strong{
       display:block;
-      font-size:15px;
       margin-bottom:6px;
+      font-size:15px;
     }
 
     .quick-link small{
@@ -427,60 +382,64 @@
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:20px;
-      margin-bottom:20px;
     }
 
     .brand-panel{
       background:var(--surface);
       border:1px solid var(--border);
-      border-radius:26px;
+      border-radius:24px;
       padding:16px;
       box-shadow:var(--shadow);
     }
 
     .brand-header{
       color:#fff;
-      border-radius:16px;
       padding:14px 16px;
+      border-radius:14px;
       font-weight:800;
-      font-size:15px;
       margin-bottom:16px;
     }
-    .brand-header.peugeot{ background:linear-gradient(90deg,#214ea8,#315ec2); }
-    .brand-header.citroen{ background:linear-gradient(90deg,#7c3aed,#8f49f2); }
+
+    .peugeot-head{
+      background:linear-gradient(90deg,#214ea8,#315ec2);
+    }
+
+    .citroen-head{
+      background:linear-gradient(90deg,var(--purple),#a855f7);
+    }
 
     .nps-hero{
       background:var(--surface-2);
       border:1px solid var(--border);
-      border-radius:24px;
-      padding:28px 18px;
+      border-radius:20px;
+      padding:24px 18px;
       text-align:center;
       margin-bottom:16px;
     }
 
     .nps-hero h3{
       margin:0 0 8px;
-      font-size:16px;
       color:var(--muted);
+      font-size:15px;
       text-transform:uppercase;
       letter-spacing:.12em;
-      font-weight:800;
     }
 
     .nps-value{
-      font-size:82px;
+      font-size:78px;
       font-weight:900;
       line-height:1;
       margin:8px 0 10px;
-      letter-spacing:-0.05em;
     }
+
     .nps-meta{
       color:var(--muted);
       font-size:18px;
       font-weight:700;
     }
-    .nps-green{ color:var(--success); }
-    .nps-red{ color:var(--danger); }
+
+    .nps-green{color:var(--success)}
+    .nps-red{color:var(--danger)}
 
     .metric-grid{
       display:grid;
@@ -488,46 +447,39 @@
       gap:12px;
     }
 
-    .metric-card{
+    .metric{
       background:var(--surface-2);
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:16px;
       text-align:center;
-      padding:18px 14px;
+      padding:16px 12px;
     }
 
-    .metric-card h4{
+    .metric h5{
       margin:0 0 8px;
-      color:var(--muted);
       font-size:13px;
-      font-weight:700;
+      color:var(--muted);
     }
 
-    .metric-card p{
+    .metric p{
       margin:0;
-      font-size:34px;
+      font-size:30px;
       font-weight:900;
-      letter-spacing:-0.03em;
     }
 
-    .module-placeholder{
+    .placeholder{
       background:var(--surface);
       border:1px dashed var(--border);
-      border-radius:24px;
+      border-radius:20px;
       padding:28px;
       color:var(--muted);
       box-shadow:var(--shadow);
     }
 
-    .module-placeholder h3{
+    .placeholder h3{
       margin:0 0 10px;
       color:var(--text);
       font-size:24px;
-    }
-
-    .module-placeholder p{
-      margin:0;
-      line-height:1.6;
     }
 
     .grow-inputs{
@@ -538,16 +490,16 @@
     }
 
     .grow-box{
-      background:var(--surface-2);
+      background:var(--surface);
       border:1px solid var(--border);
-      border-radius:22px;
+      border-radius:20px;
       padding:16px;
+      box-shadow:var(--shadow);
     }
 
     .grow-box h3{
       margin:0 0 10px;
       font-size:16px;
-      font-weight:800;
     }
 
     .grow-textarea{
@@ -555,19 +507,17 @@
       min-height:250px;
       resize:vertical;
       border:1px solid var(--border);
-      background:var(--surface);
+      background:var(--surface-2);
       color:var(--text);
-      border-radius:18px;
-      padding:16px;
+      border-radius:14px;
+      padding:14px;
       outline:none;
-      font-size:13px;
-      line-height:1.5;
     }
 
     .btn-row{
       display:flex;
-      flex-wrap:wrap;
       gap:12px;
+      flex-wrap:wrap;
       margin-top:12px;
     }
 
@@ -587,8 +537,8 @@
 
     .btn.secondary{
       background:var(--surface);
-      border:1px solid var(--border);
       color:var(--text);
+      border:1px solid var(--border);
     }
 
     .grow-summary{
@@ -601,7 +551,7 @@
     .grow-stat{
       background:var(--surface);
       border:1px solid var(--border);
-      border-radius:20px;
+      border-radius:16px;
       padding:16px;
       box-shadow:var(--shadow);
     }
@@ -622,14 +572,14 @@
       overflow:auto;
       background:var(--surface);
       border:1px solid var(--border);
-      border-radius:24px;
+      border-radius:20px;
       box-shadow:var(--shadow);
     }
 
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:1240px;
+      min-width:1200px;
     }
 
     th,td{
@@ -646,8 +596,6 @@
       text-transform:uppercase;
       letter-spacing:.05em;
       font-size:12px;
-      position:sticky;
-      top:0;
     }
 
     .chip{
@@ -659,11 +607,12 @@
       color:#fff;
       white-space:nowrap;
     }
-    .chip.blue{background:var(--primary);}
-    .chip.purple{background:var(--citroen);}
-    .chip.green{background:var(--success);}
-    .chip.red{background:var(--danger);}
-    .chip.yellow{background:var(--warning);}
+
+    .chip.blue{background:var(--primary)}
+    .chip.purple{background:var(--purple)}
+    .chip.green{background:var(--success)}
+    .chip.red{background:var(--danger)}
+    .chip.yellow{background:var(--warning)}
 
     .empty{
       text-align:center;
@@ -681,7 +630,7 @@
     .field{
       background:var(--surface-2);
       border:1px solid var(--border);
-      border-radius:18px;
+      border-radius:16px;
       padding:14px;
     }
 
@@ -692,7 +641,6 @@
       font-weight:700;
       margin-bottom:8px;
       text-transform:uppercase;
-      letter-spacing:.04em;
     }
 
     .field input{
@@ -707,32 +655,32 @@
 
     .save-row{
       display:flex;
-      gap:12px;
       justify-content:flex-end;
-      margin-top:8px;
+      gap:12px;
+      margin-top:6px;
     }
 
     @media (max-width: 1380px){
-      .summary-grid{ grid-template-columns:repeat(2,1fr); }
-      .triple-grid{ grid-template-columns:1fr; }
-      .brand-panels, .grow-inputs, .form-grid{ grid-template-columns:1fr; }
+      .summary-grid{grid-template-columns:repeat(2,1fr)}
+      .triple-grid{grid-template-columns:1fr}
+      .brand-panels,.grow-inputs,.form-grid{grid-template-columns:1fr}
     }
 
     @media (max-width: 1024px){
-      .app{ flex-direction:column; }
+      .app{flex-direction:column}
       .sidebar{
         width:100%;
         height:auto;
         position:relative;
       }
-      .main{ padding:16px; }
+      .main{padding:16px}
       .topbar{
         flex-direction:column;
         align-items:flex-start;
       }
-      .search{ min-width:100%; }
-      .summary-grid, .metric-grid, .grow-summary, .quick-links{ grid-template-columns:1fr; }
-      .nps-value{ font-size:66px; }
+      .search{min-width:100%}
+      .summary-grid,.metric-grid,.grow-summary,.quick-links{grid-template-columns:1fr}
+      .nps-value{font-size:64px}
     }
   </style>
 </head>
@@ -747,35 +695,35 @@
         </div>
       </div>
 
-      <div class="menu-group-title">Principal</div>
-      <div class="menu">
-        <button class="menu-btn active" data-page="inicio" onclick="openPage('inicio', this)">🏠 Início</button>
+      <div class="menu-group">
+        <div class="menu-title">Principal</div>
+        <button class="menu-btn active" onclick="openPage('inicio', this)">🏠 Início</button>
       </div>
 
-      <div class="menu-group-title">Operação CX</div>
-      <div class="menu">
-        <button class="menu-btn" data-page="vendas" onclick="openPage('vendas', this)">📊 Vendas</button>
-        <button class="menu-btn" data-page="posvendas" onclick="openPage('posvendas', this)">🔧 Pós-Vendas</button>
+      <div class="menu-group">
+        <div class="menu-title">Operação CX</div>
+        <button class="menu-btn" onclick="openPage('vendas', this)">📊 Vendas</button>
+        <button class="menu-btn" onclick="openPage('posvendas', this)">🔧 Pós-Vendas</button>
       </div>
 
-      <div class="menu-group-title">Complementares</div>
-      <div class="menu">
-        <button class="menu-btn" data-page="grow" onclick="openPage('grow', this)">📂 Grow Customer Care</button>
+      <div class="menu-group">
+        <div class="menu-title">Complementares</div>
+        <button class="menu-btn" onclick="openPage('grow', this)">📂 Grow Customer Care</button>
       </div>
 
-      <div class="menu-group-title">Ferramentas</div>
-      <div class="menu">
-        <button class="menu-btn" data-page="chat" onclick="openPage('chat', this)">💬 Chat</button>
+      <div class="menu-group">
+        <div class="menu-title">Ferramentas</div>
+        <button class="menu-btn" onclick="openPage('chat', this)">💬 Chat</button>
       </div>
 
-      <div class="menu-group-title">Configurações</div>
-      <div class="menu">
-        <button class="menu-btn" data-page="configuracoes" onclick="openPage('configuracoes', this)">⚙️ Configurações</button>
+      <div class="menu-group">
+        <div class="menu-title">Configurações</div>
+        <button class="menu-btn" onclick="openPage('config', this)">⚙ Configurações</button>
       </div>
 
       <div class="sidebar-footer">
-        <div class="user">Kamilly</div>
-        <div class="role">Super Admin</div>
+        <strong>Kamilly</strong>
+        <span>Super Admin</span>
       </div>
     </aside>
 
@@ -786,81 +734,51 @@
           <p id="topSubtitle">Resumo executivo e operacional da qualidade.</p>
         </div>
         <div class="top-actions">
-          <input class="search" type="text" placeholder="Pesquisar cliente, caso, consultor ou indicador..." />
+          <input class="search" type="text" placeholder="Pesquisar..." />
           <button class="theme-btn" onclick="toggleTheme()">Alternar tema</button>
         </div>
       </div>
 
+      <!-- INICIO -->
       <section id="inicio" class="page active">
-        <div class="banner-wrap">
-          <div class="banner active">
-            <h3>Bem-vinda ao QUALIS</h3>
-            <p>Seu sistema integrado de qualidade, experiência do cliente e operação. Aqui você acompanha resultados, pendências, treinamentos, RACs, auditorias e alertas em um só lugar.</p>
-          </div>
-          <div class="banner">
-            <h3>Resumo do dia da operação</h3>
-            <p>Verifique rapidamente quantas promotoras entraram hoje, status dos treinamentos, planos de ação em aberto e os principais alertas que exigem atenção imediata.</p>
-          </div>
-          <div class="banner">
-            <h3>Gestão centralizada para a diretoria</h3>
-            <p>O QUALIS consolida vendas, pós-vendas, grow, auditorias e acompanhamento operacional em uma experiência única, elegante e executiva.</p>
-          </div>
-          <div class="banner-dots">
-            <button class="dot active" onclick="showBanner(0)"></button>
-            <button class="dot" onclick="showBanner(1)"></button>
-            <button class="dot" onclick="showBanner(2)"></button>
-          </div>
+        <div class="banner active">
+          <h3>Bem-vinda ao QUALIS</h3>
+          <p>Seu sistema integrado de qualidade, experiência do cliente e operação. Aqui você acompanha resultados, pendências, treinamentos, RACs, auditorias e alertas em um só lugar.</p>
+        </div>
+
+        <div class="banner">
+          <h3>Resumo do dia da operação</h3>
+          <p>Veja promotoras, detratores, treinamentos pendentes, RACs, auditorias e planos de ação de forma rápida e executiva.</p>
+        </div>
+
+        <div class="banner">
+          <h3>Gestão centralizada</h3>
+          <p>Vendas, Pós-Vendas e Grow Customer Care integrados em uma estrutura única, limpa e pronta para evolução.</p>
+        </div>
+
+        <div class="banner-dots">
+          <button class="dot active" onclick="showBanner(0)"></button>
+          <button class="dot" onclick="showBanner(1)"></button>
+          <button class="dot" onclick="showBanner(2)"></button>
         </div>
 
         <div class="summary-grid">
-          <div class="summary-card">
-            <h4>Promotoras hoje</h4>
-            <div class="value green" id="homePromotorasHoje">12</div>
-            <div class="sub">Entradas registradas no dia</div>
-          </div>
-          <div class="summary-card">
-            <h4>Detratores hoje</h4>
-            <div class="value red" id="homeDetratoresHoje">3</div>
-            <div class="sub">Clientes críticos do dia</div>
-          </div>
-          <div class="summary-card">
-            <h4>Pesquisas respondidas</h4>
-            <div class="value blue" id="homePesquisasRespondidas">27</div>
-            <div class="sub">Total consolidado hoje</div>
-          </div>
-          <div class="summary-card">
-            <h4>Conversão do mês</h4>
-            <div class="value orange" id="homeConversaoMes">15%</div>
-            <div class="sub">Base x respostas</div>
-          </div>
+          <div class="card"><h4>Promotoras hoje</h4><div class="value green" id="homePromotorasHoje">12</div><div class="sub">Entradas registradas no dia</div></div>
+          <div class="card"><h4>Detratores hoje</h4><div class="value red" id="homeDetratoresHoje">3</div><div class="sub">Clientes críticos do dia</div></div>
+          <div class="card"><h4>Pesquisas respondidas</h4><div class="value blue" id="homePesquisasRespondidas">27</div><div class="sub">Total consolidado hoje</div></div>
+          <div class="card"><h4>Conversão do mês</h4><div class="value orange" id="homeConversaoMes">15%</div><div class="sub">Base x respostas</div></div>
         </div>
 
         <div class="summary-grid">
-          <div class="summary-card">
-            <h4>Treinamentos pendentes</h4>
-            <div class="value orange" id="homeTreinamentosPendentes">19</div>
-            <div class="sub">Equipe com regularização necessária</div>
-          </div>
-          <div class="summary-card">
-            <h4>RACs pendentes</h4>
-            <div class="value blue" id="homeRacsPendentes">7</div>
-            <div class="sub">Demandas em acompanhamento</div>
-          </div>
-          <div class="summary-card">
-            <h4>Auditorias pendentes</h4>
-            <div class="value red" id="homeAuditoriasPendentes">4</div>
-            <div class="sub">Processos aguardando análise</div>
-          </div>
-          <div class="summary-card">
-            <h4>Planos de ação pendentes</h4>
-            <div class="value red" id="homePlanosPendentes">6</div>
-            <div class="sub">Ações em aberto</div>
-          </div>
+          <div class="card"><h4>Treinamentos pendentes</h4><div class="value orange" id="homeTreinamentosPendentes">19</div><div class="sub">Equipe com regularização necessária</div></div>
+          <div class="card"><h4>RACs pendentes</h4><div class="value blue" id="homeRacsPendentes">7</div><div class="sub">Demandas em acompanhamento</div></div>
+          <div class="card"><h4>Auditorias pendentes</h4><div class="value red" id="homeAuditoriasPendentes">4</div><div class="sub">Processos aguardando análise</div></div>
+          <div class="card"><h4>Planos de ação pendentes</h4><div class="value red" id="homePlanosPendentes">6</div><div class="sub">Ações em aberto</div></div>
         </div>
 
         <div class="triple-grid">
-          <div class="panel">
-            <h3 style="margin:0 0 12px;">Alertas críticos</h3>
+          <div class="card">
+            <h4 style="margin:0 0 12px;color:var(--text)">Alertas críticos</h4>
             <div class="list">
               <div class="list-item"><span>Hot Alerts críticos</span><span id="homeHotAlertsCriticos">3</span></div>
               <div class="list-item"><span>RACs críticos</span><span id="homeRacsCriticos">2</span></div>
@@ -869,8 +787,8 @@
             </div>
           </div>
 
-          <div class="panel">
-            <h3 style="margin:0 0 12px;">Treinamento da equipe</h3>
+          <div class="card">
+            <h4 style="margin:0 0 12px;color:var(--text)">Treinamento da equipe</h4>
             <div class="list">
               <div class="list-item"><span>Pendentes</span><span id="homeTreinPendentes2">19</span></div>
               <div class="list-item"><span>Em cronograma</span><span id="homeTreinCronograma">8</span></div>
@@ -879,22 +797,22 @@
             </div>
           </div>
 
-          <div class="panel">
-            <h3 style="margin:0 0 12px;">Atalhos rápidos</h3>
+          <div class="card">
+            <h4 style="margin:0 0 12px;color:var(--text)">Atalhos rápidos</h4>
             <div class="quick-links">
-              <div class="quick-link" onclick="openPage('vendas', findMenuButton('vendas'))">
+              <div class="quick-link" onclick="openPage('vendas', document.querySelectorAll('.menu-btn')[1])">
                 <strong>Vendas</strong>
                 <small>Painel, Hot Alerts, Treinamentos, Scorecard, RACs e Auditoria.</small>
               </div>
-              <div class="quick-link" onclick="openPage('posvendas', findMenuButton('posvendas'))">
+              <div class="quick-link" onclick="openPage('posvendas', document.querySelectorAll('.menu-btn')[2])">
                 <strong>Pós-Vendas</strong>
                 <small>Painel, Hot Alerts, Treinamentos, Scorecard, RACs e Auditoria.</small>
               </div>
-              <div class="quick-link" onclick="openPage('grow', findMenuButton('grow'))">
+              <div class="quick-link" onclick="openPage('grow', document.querySelectorAll('.menu-btn')[3])">
                 <strong>Grow Customer Care</strong>
-                <small>Cole e acompanhe os casos operacionais.</small>
+                <small>Cole os casos e acompanhe a fila.</small>
               </div>
-              <div class="quick-link" onclick="openPage('configuracoes', findMenuButton('configuracoes'))">
+              <div class="quick-link" onclick="openPage('config', document.querySelectorAll('.menu-btn')[5])">
                 <strong>Banco de Dados</strong>
                 <small>Edite os números reais do sistema.</small>
               </div>
@@ -903,122 +821,125 @@
         </div>
       </section>
 
+      <!-- VENDAS -->
       <section id="vendas" class="page">
         <h1 class="page-title">Vendas</h1>
         <p class="page-subtitle">Gestão da operação de vendas com módulos internos.</p>
 
         <div class="subnav">
-          <button class="subnav-btn active" onclick="openSubpage('vendas', 'vendas-painel', this)">Painel</button>
-          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-hot-alerts', this)">Hot Alerts</button>
-          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-treinamentos', this)">Treinamentos</button>
-          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-scorecard', this)">Scorecard</button>
-          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-racs', this)">RACs</button>
-          <button class="subnav-btn" onclick="openSubpage('vendas', 'vendas-auditoria', this)">Auditoria</button>
+          <button class="subnav-btn active" onclick="openSubpage('vendas','vendas-painel',this)">Painel</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas','vendas-hotalerts',this)">Hot Alerts</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas','vendas-treinamentos',this)">Treinamentos</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas','vendas-scorecard',this)">Scorecard</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas','vendas-racs',this)">RACs</button>
+          <button class="subnav-btn" onclick="openSubpage('vendas','vendas-auditoria',this)">Auditoria</button>
         </div>
 
         <div id="vendas-painel" class="subpage active">
           <div class="brand-panels">
             <div class="brand-panel">
-              <div class="brand-header peugeot">Painel CX Vendas • Peugeot</div>
+              <div class="brand-header peugeot-head">Painel CX Vendas • Peugeot</div>
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
                 <div class="nps-value" id="npsVendasPeugeotValue">82</div>
                 <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85</span></div>
               </div>
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p id="vendasPeugeotPromotores">45</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p id="vendasPeugeotNeutros">12</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p id="vendasPeugeotDetratores">5</p></div>
-                <div class="metric-card"><h4>Pesquisas</h4><p id="vendasPeugeotPesquisas">62</p></div>
-                <div class="metric-card"><h4>Base</h4><p id="vendasPeugeotBase">410</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p id="vendasPeugeotConversao">15%</p></div>
+                <div class="metric"><h5>Promotores</h5><p id="vendasPeugeotPromotores">45</p></div>
+                <div class="metric"><h5>Neutros</h5><p id="vendasPeugeotNeutros">12</p></div>
+                <div class="metric"><h5>Detratores</h5><p id="vendasPeugeotDetratores">5</p></div>
+                <div class="metric"><h5>Pesquisas</h5><p id="vendasPeugeotPesquisas">62</p></div>
+                <div class="metric"><h5>Base</h5><p id="vendasPeugeotBase">410</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="vendasPeugeotConversao">15%</p></div>
               </div>
             </div>
 
             <div class="brand-panel">
-              <div class="brand-header citroen">Painel CX Vendas • Citroën</div>
+              <div class="brand-header citroen-head">Painel CX Vendas • Citroën</div>
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
                 <div class="nps-value" id="npsVendasCitroenValue">76</div>
                 <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85</span></div>
               </div>
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p id="vendasCitroenPromotores">28</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p id="vendasCitroenNeutros">9</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p id="vendasCitroenDetratores">7</p></div>
-                <div class="metric-card"><h4>Pesquisas</h4><p id="vendasCitroenPesquisas">44</p></div>
-                <div class="metric-card"><h4>Base</h4><p id="vendasCitroenBase">295</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p id="vendasCitroenConversao">14%</p></div>
+                <div class="metric"><h5>Promotores</h5><p id="vendasCitroenPromotores">28</p></div>
+                <div class="metric"><h5>Neutros</h5><p id="vendasCitroenNeutros">9</p></div>
+                <div class="metric"><h5>Detratores</h5><p id="vendasCitroenDetratores">7</p></div>
+                <div class="metric"><h5>Pesquisas</h5><p id="vendasCitroenPesquisas">44</p></div>
+                <div class="metric"><h5>Base</h5><p id="vendasCitroenBase">295</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="vendasCitroenConversao">14%</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="vendas-hot-alerts" class="subpage"><div class="module-placeholder"><h3>Hot Alerts • Vendas</h3><p>Área reservada para tratativas de clientes críticos na operação de vendas.</p></div></div>
-        <div id="vendas-treinamentos" class="subpage"><div class="module-placeholder"><h3>Treinamentos • Vendas</h3><p>Área reservada para controle e pendências de treinamentos da equipe de vendas.</p></div></div>
-        <div id="vendas-scorecard" class="subpage"><div class="module-placeholder"><h3>Scorecard • Vendas</h3><p>Área reservada para indicadores e comparativos do scorecard da operação de vendas.</p></div></div>
-        <div id="vendas-racs" class="subpage"><div class="module-placeholder"><h3>RACs • Vendas</h3><p>Área reservada para monitoramento dos RACs de vendas.</p></div></div>
-        <div id="vendas-auditoria" class="subpage"><div class="module-placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para checklists, conformidade e plano de ação da operação de vendas.</p></div></div>
+        <div id="vendas-hotalerts" class="subpage"><div class="placeholder"><h3>Hot Alerts • Vendas</h3><p>Área reservada para tratativas críticas da operação de vendas.</p></div></div>
+        <div id="vendas-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Vendas</h3><p>Área reservada para pendências de treinamento da equipe de vendas.</p></div></div>
+        <div id="vendas-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Vendas</h3><p>Área reservada para scorecard da operação de vendas.</p></div></div>
+        <div id="vendas-racs" class="subpage"><div class="placeholder"><h3>RACs • Vendas</h3><p>Área reservada para RACs da operação de vendas.</p></div></div>
+        <div id="vendas-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para auditoria da operação de vendas.</p></div></div>
       </section>
 
+      <!-- POS-VENDAS -->
       <section id="posvendas" class="page">
         <h1 class="page-title">Pós-Vendas</h1>
         <p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
 
         <div class="subnav">
-          <button class="subnav-btn active" onclick="openSubpage('posvendas', 'posvendas-painel', this)">Painel</button>
-          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-hot-alerts', this)">Hot Alerts</button>
-          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-treinamentos', this)">Treinamentos</button>
-          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-scorecard', this)">Scorecard</button>
-          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-racs', this)">RACs</button>
-          <button class="subnav-btn" onclick="openSubpage('posvendas', 'posvendas-auditoria', this)">Auditoria</button>
+          <button class="subnav-btn active" onclick="openSubpage('posvendas','pos-painel',this)">Painel</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas','pos-hotalerts',this)">Hot Alerts</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas','pos-treinamentos',this)">Treinamentos</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas','pos-scorecard',this)">Scorecard</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas','pos-racs',this)">RACs</button>
+          <button class="subnav-btn" onclick="openSubpage('posvendas','pos-auditoria',this)">Auditoria</button>
         </div>
 
-        <div id="posvendas-painel" class="subpage active">
+        <div id="pos-painel" class="subpage active">
           <div class="brand-panels">
             <div class="brand-panel">
-              <div class="brand-header peugeot">Painel CX Pós-Vendas • Peugeot</div>
+              <div class="brand-header peugeot-head">Painel CX Pós-Vendas • Peugeot</div>
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
                 <div class="nps-value" id="npsPosPeugeotValue">91</div>
                 <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85</span></div>
               </div>
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p id="posPeugeotPromotores">58</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p id="posPeugeotNeutros">10</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p id="posPeugeotDetratores">3</p></div>
-                <div class="metric-card"><h4>Pesquisas</h4><p id="posPeugeotPesquisas">71</p></div>
-                <div class="metric-card"><h4>Base</h4><p id="posPeugeotBase">455</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p id="posPeugeotConversao">16%</p></div>
+                <div class="metric"><h5>Promotores</h5><p id="posPeugeotPromotores">58</p></div>
+                <div class="metric"><h5>Neutros</h5><p id="posPeugeotNeutros">10</p></div>
+                <div class="metric"><h5>Detratores</h5><p id="posPeugeotDetratores">3</p></div>
+                <div class="metric"><h5>Pesquisas</h5><p id="posPeugeotPesquisas">71</p></div>
+                <div class="metric"><h5>Base</h5><p id="posPeugeotBase">455</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="posPeugeotConversao">16%</p></div>
               </div>
             </div>
 
             <div class="brand-panel">
-              <div class="brand-header citroen">Painel CX Pós-Vendas • Citroën</div>
+              <div class="brand-header citroen-head">Painel CX Pós-Vendas • Citroën</div>
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
                 <div class="nps-value" id="npsPosCitroenValue">79</div>
                 <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85</span></div>
               </div>
               <div class="metric-grid">
-                <div class="metric-card"><h4>Promotores</h4><p id="posCitroenPromotores">33</p></div>
-                <div class="metric-card"><h4>Neutros</h4><p id="posCitroenNeutros">11</p></div>
-                <div class="metric-card"><h4>Detratores</h4><p id="posCitroenDetratores">6</p></div>
-                <div class="metric-card"><h4>Pesquisas</h4><p id="posCitroenPesquisas">50</p></div>
-                <div class="metric-card"><h4>Base</h4><p id="posCitroenBase">320</p></div>
-                <div class="metric-card"><h4>Conversão</h4><p id="posCitroenConversao">15%</p></div>
+                <div class="metric"><h5>Promotores</h5><p id="posCitroenPromotores">33</p></div>
+                <div class="metric"><h5>Neutros</h5><p id="posCitroenNeutros">11</p></div>
+                <div class="metric"><h5>Detratores</h5><p id="posCitroenDetratores">6</p></div>
+                <div class="metric"><h5>Pesquisas</h5><p id="posCitroenPesquisas">50</p></div>
+                <div class="metric"><h5>Base</h5><p id="posCitroenBase">320</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="posCitroenConversao">15%</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div id="posvendas-hot-alerts" class="subpage"><div class="module-placeholder"><h3>Hot Alerts • Pós-Vendas</h3><p>Área reservada para tratativas de clientes críticos na operação de pós-vendas.</p></div></div>
-        <div id="posvendas-treinamentos" class="subpage"><div class="module-placeholder"><h3>Treinamentos • Pós-Vendas</h3><p>Área reservada para controle e pendências de treinamentos da equipe de pós-vendas.</p></div></div>
-        <div id="posvendas-scorecard" class="subpage"><div class="module-placeholder"><h3>Scorecard • Pós-Vendas</h3><p>Área reservada para indicadores e comparativos do scorecard da operação de pós-vendas.</p></div></div>
-        <div id="posvendas-racs" class="subpage"><div class="module-placeholder"><h3>RACs • Pós-Vendas</h3><p>Área reservada para monitoramento dos RACs de pós-vendas.</p></div></div>
-        <div id="posvendas-auditoria" class="subpage"><div class="module-placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Área reservada para checklists, conformidade e plano de ação da operação de pós-vendas.</p></div></div>
+        <div id="pos-hotalerts" class="subpage"><div class="placeholder"><h3>Hot Alerts • Pós-Vendas</h3><p>Área reservada para tratativas críticas da operação de pós-vendas.</p></div></div>
+        <div id="pos-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Pós-Vendas</h3><p>Área reservada para pendências de treinamento da equipe de pós-vendas.</p></div></div>
+        <div id="pos-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Pós-Vendas</h3><p>Área reservada para scorecard da operação de pós-vendas.</p></div></div>
+        <div id="pos-racs" class="subpage"><div class="placeholder"><h3>RACs • Pós-Vendas</h3><p>Área reservada para RACs da operação de pós-vendas.</p></div></div>
+        <div id="pos-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Área reservada para auditoria da operação de pós-vendas.</p></div></div>
       </section>
 
+      <!-- GROW -->
       <section id="grow" class="page">
         <h1 class="page-title">Grow Customer Care</h1>
         <p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
@@ -1078,93 +999,80 @@
         </div>
       </section>
 
+      <!-- CHAT -->
       <section id="chat" class="page">
-        <div class="module-placeholder">
+        <div class="placeholder">
           <h3>Chat</h3>
           <p>Área reservada para comunicação interna entre Kamilly, Letícia e Laís dentro do QUALIS.</p>
         </div>
       </section>
 
-      <section id="configuracoes" class="page">
+      <!-- CONFIG -->
+      <section id="config" class="page">
         <h1 class="page-title">Configurações</h1>
         <p class="page-subtitle">Área administrativa do sistema.</p>
 
         <div class="subnav">
-          <button class="subnav-btn active" onclick="openSubpage('configuracoes', 'config-db', this)">Banco de Dados</button>
-          <button class="subnav-btn" onclick="openSubpage('configuracoes', 'config-users', this)">Usuários</button>
-          <button class="subnav-btn" onclick="openSubpage('configuracoes', 'config-prefs', this)">Preferências</button>
+          <button class="subnav-btn active" onclick="openSubpage('config','config-db',this)">Banco de Dados</button>
         </div>
 
         <div id="config-db" class="subpage active">
-          <div class="panel">
-            <h3 style="margin:0 0 14px;">Banco de Dados</h3>
-            <p class="page-subtitle">Edite aqui os números reais que alimentam o portal.</p>
+          <div class="card">
+            <h4 style="margin:0 0 14px;color:var(--text);font-size:22px;">Banco de Dados</h4>
+            <p style="margin:0 0 16px;color:var(--muted)">Edite aqui os números reais que alimentam o portal.</p>
 
             <div class="form-grid">
               <div class="field"><label>Promotoras hoje</label><input id="cfg_homePromotorasHoje" type="number" value="12"></div>
               <div class="field"><label>Detratores hoje</label><input id="cfg_homeDetratoresHoje" type="number" value="3"></div>
               <div class="field"><label>Pesquisas respondidas</label><input id="cfg_homePesquisasRespondidas" type="number" value="27"></div>
-
-              <div class="field"><label>Conversão do mês (%)</label><input id="cfg_homeConversaoMes" type="text" value="15%"></div>
+              <div class="field"><label>Conversão do mês</label><input id="cfg_homeConversaoMes" type="text" value="15%"></div>
               <div class="field"><label>Treinamentos pendentes</label><input id="cfg_homeTreinamentosPendentes" type="number" value="19"></div>
               <div class="field"><label>RACs pendentes</label><input id="cfg_homeRacsPendentes" type="number" value="7"></div>
-
               <div class="field"><label>Auditorias pendentes</label><input id="cfg_homeAuditoriasPendentes" type="number" value="4"></div>
-              <div class="field"><label>Planos de ação pendentes</label><input id="cfg_homePlanosPendentes" type="number" value="6"></div>
+              <div class="field"><label>Planos pendentes</label><input id="cfg_homePlanosPendentes" type="number" value="6"></div>
               <div class="field"><label>Hot Alerts críticos</label><input id="cfg_homeHotAlertsCriticos" type="number" value="3"></div>
-
               <div class="field"><label>RACs críticos</label><input id="cfg_homeRacsCriticos" type="number" value="2"></div>
               <div class="field"><label>Auditorias urgentes</label><input id="cfg_homeAuditoriasUrgentes" type="number" value="1"></div>
               <div class="field"><label>Planos críticos</label><input id="cfg_homePlanosCriticos" type="number" value="2"></div>
-            </div>
-
-            <div class="form-grid">
+              <div class="field"><label>Treinamentos pendentes resumo</label><input id="cfg_homeTreinPendentes2" type="number" value="19"></div>
               <div class="field"><label>Treinamentos em cronograma</label><input id="cfg_homeTreinCronograma" type="number" value="8"></div>
-              <div class="field"><label>Treinamentos concluídos semana</label><input id="cfg_homeTreinConcluidosSemana" type="number" value="14"></div>
-              <div class="field"><label>Treinamentos pendentes (resumo)</label><input id="cfg_homeTreinPendentes2" type="number" value="19"></div>
+              <div class="field"><label>Concluídos na semana</label><input id="cfg_homeTreinConcluidosSemana" type="number" value="14"></div>
             </div>
 
             <div class="form-grid">
               <div class="field"><label>NPS Vendas Peugeot</label><input id="cfg_npsVendasPeugeotValue" type="number" value="82"></div>
               <div class="field"><label>Meta Vendas Peugeot</label><input id="cfg_npsVendasPeugeotMeta" type="number" value="85"></div>
               <div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_vendasPeugeotPromotores" type="number" value="45"></div>
-
               <div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_vendasPeugeotNeutros" type="number" value="12"></div>
               <div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_vendasPeugeotDetratores" type="number" value="5"></div>
               <div class="field"><label>Pesquisas Vendas Peugeot</label><input id="cfg_vendasPeugeotPesquisas" type="number" value="62"></div>
-
               <div class="field"><label>Base Vendas Peugeot</label><input id="cfg_vendasPeugeotBase" type="number" value="410"></div>
               <div class="field"><label>Conversão Vendas Peugeot</label><input id="cfg_vendasPeugeotConversao" type="text" value="15%"></div>
               <div class="field"><label>NPS Vendas Citroën</label><input id="cfg_npsVendasCitroenValue" type="number" value="76"></div>
-
               <div class="field"><label>Meta Vendas Citroën</label><input id="cfg_npsVendasCitroenMeta" type="number" value="85"></div>
               <div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_vendasCitroenPromotores" type="number" value="28"></div>
               <div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_vendasCitroenNeutros" type="number" value="9"></div>
-
               <div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_vendasCitroenDetratores" type="number" value="7"></div>
               <div class="field"><label>Pesquisas Vendas Citroën</label><input id="cfg_vendasCitroenPesquisas" type="number" value="44"></div>
               <div class="field"><label>Base Vendas Citroën</label><input id="cfg_vendasCitroenBase" type="number" value="295"></div>
-
               <div class="field"><label>Conversão Vendas Citroën</label><input id="cfg_vendasCitroenConversao" type="text" value="14%"></div>
+            </div>
+
+            <div class="form-grid">
               <div class="field"><label>NPS Pós Peugeot</label><input id="cfg_npsPosPeugeotValue" type="number" value="91"></div>
               <div class="field"><label>Meta Pós Peugeot</label><input id="cfg_npsPosPeugeotMeta" type="number" value="85"></div>
-
               <div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_posPeugeotPromotores" type="number" value="58"></div>
               <div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_posPeugeotNeutros" type="number" value="10"></div>
               <div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_posPeugeotDetratores" type="number" value="3"></div>
-
               <div class="field"><label>Pesquisas Pós Peugeot</label><input id="cfg_posPeugeotPesquisas" type="number" value="71"></div>
               <div class="field"><label>Base Pós Peugeot</label><input id="cfg_posPeugeotBase" type="number" value="455"></div>
               <div class="field"><label>Conversão Pós Peugeot</label><input id="cfg_posPeugeotConversao" type="text" value="16%"></div>
-
               <div class="field"><label>NPS Pós Citroën</label><input id="cfg_npsPosCitroenValue" type="number" value="79"></div>
               <div class="field"><label>Meta Pós Citroën</label><input id="cfg_npsPosCitroenMeta" type="number" value="85"></div>
               <div class="field"><label>Promotores Pós Citroën</label><input id="cfg_posCitroenPromotores" type="number" value="33"></div>
-
               <div class="field"><label>Neutros Pós Citroën</label><input id="cfg_posCitroenNeutros" type="number" value="11"></div>
               <div class="field"><label>Detratores Pós Citroën</label><input id="cfg_posCitroenDetratores" type="number" value="6"></div>
               <div class="field"><label>Pesquisas Pós Citroën</label><input id="cfg_posCitroenPesquisas" type="number" value="50"></div>
-
               <div class="field"><label>Base Pós Citroën</label><input id="cfg_posCitroenBase" type="number" value="320"></div>
               <div class="field"><label>Conversão Pós Citroën</label><input id="cfg_posCitroenConversao" type="text" value="15%"></div>
             </div>
@@ -1175,86 +1083,72 @@
             </div>
           </div>
         </div>
-
-        <div id="config-users" class="subpage">
-          <div class="module-placeholder">
-            <h3>Usuários</h3>
-            <p>Kamilly = super admin. Letícia e Laís = usuárias operacionais. Área reservada para permissões e controle de acesso.</p>
-          </div>
-        </div>
-
-        <div id="config-prefs" class="subpage">
-          <div class="module-placeholder">
-            <h3>Preferências</h3>
-            <p>Área reservada para objetivos, parâmetros visuais, banners e comportamentos do sistema.</p>
-          </div>
-        </div>
       </section>
     </main>
   </div>
 
   <script>
     const pageTitles = {
-      inicio: ["Início", "Resumo executivo e operacional da qualidade."],
-      vendas: ["Vendas", "Gestão da operação de vendas com módulos internos."],
-      posvendas: ["Pós-Vendas", "Gestão da operação de pós-vendas com módulos internos."],
-      grow: ["Grow Customer Care", "Controle operacional dos casos copiados do portal Grow."],
-      chat: ["Chat", "Comunicação interna do portal."],
-      configuracoes: ["Configurações", "Área administrativa do sistema."]
+      inicio: ['Início', 'Resumo executivo e operacional da qualidade.'],
+      vendas: ['Vendas', 'Gestão da operação de vendas com módulos internos.'],
+      posvendas: ['Pós-Vendas', 'Gestão da operação de pós-vendas com módulos internos.'],
+      grow: ['Grow Customer Care', 'Controle operacional dos casos copiados do portal Grow.'],
+      chat: ['Chat', 'Comunicação interna do portal.'],
+      config: ['Configurações', 'Área administrativa do sistema.']
     };
 
     const DEFAULT_DB = {
-      homePromotorasHoje: "12",
-      homeDetratoresHoje: "3",
-      homePesquisasRespondidas: "27",
-      homeConversaoMes: "15%",
-      homeTreinamentosPendentes: "19",
-      homeRacsPendentes: "7",
-      homeAuditoriasPendentes: "4",
-      homePlanosPendentes: "6",
-      homeHotAlertsCriticos: "3",
-      homeRacsCriticos: "2",
-      homeAuditoriasUrgentes: "1",
-      homePlanosCriticos: "2",
-      homeTreinPendentes2: "19",
-      homeTreinCronograma: "8",
-      homeTreinConcluidosSemana: "14",
+      homePromotorasHoje:'12',
+      homeDetratoresHoje:'3',
+      homePesquisasRespondidas:'27',
+      homeConversaoMes:'15%',
+      homeTreinamentosPendentes:'19',
+      homeRacsPendentes:'7',
+      homeAuditoriasPendentes:'4',
+      homePlanosPendentes:'6',
+      homeHotAlertsCriticos:'3',
+      homeRacsCriticos:'2',
+      homeAuditoriasUrgentes:'1',
+      homePlanosCriticos:'2',
+      homeTreinPendentes2:'19',
+      homeTreinCronograma:'8',
+      homeTreinConcluidosSemana:'14',
 
-      npsVendasPeugeotValue: "82",
-      npsVendasPeugeotMeta: "85",
-      vendasPeugeotPromotores: "45",
-      vendasPeugeotNeutros: "12",
-      vendasPeugeotDetratores: "5",
-      vendasPeugeotPesquisas: "62",
-      vendasPeugeotBase: "410",
-      vendasPeugeotConversao: "15%",
+      npsVendasPeugeotValue:'82',
+      npsVendasPeugeotMeta:'85',
+      vendasPeugeotPromotores:'45',
+      vendasPeugeotNeutros:'12',
+      vendasPeugeotDetratores:'5',
+      vendasPeugeotPesquisas:'62',
+      vendasPeugeotBase:'410',
+      vendasPeugeotConversao:'15%',
 
-      npsVendasCitroenValue: "76",
-      npsVendasCitroenMeta: "85",
-      vendasCitroenPromotores: "28",
-      vendasCitroenNeutros: "9",
-      vendasCitroenDetratores: "7",
-      vendasCitroenPesquisas: "44",
-      vendasCitroenBase: "295",
-      vendasCitroenConversao: "14%",
+      npsVendasCitroenValue:'76',
+      npsVendasCitroenMeta:'85',
+      vendasCitroenPromotores:'28',
+      vendasCitroenNeutros:'9',
+      vendasCitroenDetratores:'7',
+      vendasCitroenPesquisas:'44',
+      vendasCitroenBase:'295',
+      vendasCitroenConversao:'14%',
 
-      npsPosPeugeotValue: "91",
-      npsPosPeugeotMeta: "85",
-      posPeugeotPromotores: "58",
-      posPeugeotNeutros: "10",
-      posPeugeotDetratores: "3",
-      posPeugeotPesquisas: "71",
-      posPeugeotBase: "455",
-      posPeugeotConversao: "16%",
+      npsPosPeugeotValue:'91',
+      npsPosPeugeotMeta:'85',
+      posPeugeotPromotores:'58',
+      posPeugeotNeutros:'10',
+      posPeugeotDetratores:'3',
+      posPeugeotPesquisas:'71',
+      posPeugeotBase:'455',
+      posPeugeotConversao:'16%',
 
-      npsPosCitroenValue: "79",
-      npsPosCitroenMeta: "85",
-      posCitroenPromotores: "33",
-      posCitroenNeutros: "11",
-      posCitroenDetratores: "6",
-      posCitroenPesquisas: "50",
-      posCitroenBase: "320",
-      posCitroenConversao: "15%"
+      npsPosCitroenValue:'79',
+      npsPosCitroenMeta:'85',
+      posCitroenPromotores:'33',
+      posCitroenNeutros:'11',
+      posCitroenDetratores:'6',
+      posCitroenPesquisas:'50',
+      posCitroenBase:'320',
+      posCitroenConversao:'15%'
     };
 
     function openPage(id, btn){
@@ -1262,84 +1156,34 @@
       const target = document.getElementById(id);
       if (target) target.classList.add('active');
 
-      document.querySelectorAll('.menu-btn').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
 
-      const meta = pageTitles[id] || ["QUALIS", ""];
-      document.getElementById('topTitle').innerText = meta[0];
-      document.getElementById('topSubtitle').innerText = meta[1];
+      document.getElementById('topTitle').innerText = pageTitles[id][0];
+      document.getElementById('topSubtitle').innerText = pageTitles[id][1];
       window.scrollTo({top:0, behavior:'smooth'});
-    }
-
-    function findMenuButton(pageId){
-      return document.querySelector(`.menu-btn[data-page="${pageId}"]`);
     }
 
     function openSubpage(sectionId, subpageId, btn){
       const section = document.getElementById(sectionId);
       if (!section) return;
 
-      section.querySelectorAll('.subpage').forEach(sub => sub.classList.remove('active'));
-      const target = section.querySelector(`#${subpageId}`);
+      section.querySelectorAll('.subpage').forEach(sp => sp.classList.remove('active'));
+      const target = document.getElementById(subpageId);
       if (target) target.classList.add('active');
 
       section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
     }
 
-    function toggleTheme() {
+    function toggleTheme(){
       document.body.classList.toggle('dark');
       localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
     }
 
-    (function initTheme(){
+    function loadTheme(){
       const saved = localStorage.getItem('qualis-theme');
-      if(saved === 'dark') document.body.classList.add('dark');
-    })();
-
-    function applyNPSColor(idValue, idMeta){
-      const valueEl = document.getElementById(idValue);
-      const metaEl = document.getElementById(idMeta);
-      if(!valueEl || !metaEl) return;
-
-      const value = parseFloat(String(valueEl.innerText).replace(',', '.'));
-      const meta = parseFloat(String(metaEl.innerText).replace(',', '.'));
-
-      valueEl.classList.remove('nps-green','nps-red');
-      if (value >= meta) valueEl.classList.add('nps-green');
-      else valueEl.classList.add('nps-red');
-    }
-
-    let currentBanner = 0;
-
-    function showBanner(index){
-      const banners = document.querySelectorAll('.banner');
-      const dots = document.querySelectorAll('.dot');
-      if(!banners.length) return;
-
-      banners.forEach(b => b.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-
-      banners[index].classList.add('active');
-      if (dots[index]) dots[index].classList.add('active');
-      currentBanner = index;
-    }
-
-    function rotateBanners(){
-      const banners = document.querySelectorAll('.banner');
-      if(!banners.length) return;
-      currentBanner = (currentBanner + 1) % banners.length;
-      showBanner(currentBanner);
-    }
-
-    function loadDatabase(){
-      const raw = localStorage.getItem('qualis-db');
-      if(!raw) return {...DEFAULT_DB};
-      try {
-        return {...DEFAULT_DB, ...JSON.parse(raw)};
-      } catch {
-        return {...DEFAULT_DB};
-      }
+      if (saved === 'dark') document.body.classList.add('dark');
     }
 
     function setText(id, value){
@@ -1347,22 +1191,42 @@
       if (el) el.innerText = value;
     }
 
+    function loadDatabase(){
+      const raw = localStorage.getItem('qualis-db');
+      if (!raw) return {...DEFAULT_DB};
+      try{
+        return {...DEFAULT_DB, ...JSON.parse(raw)};
+      }catch{
+        return {...DEFAULT_DB};
+      }
+    }
+
     function fillConfigForm(db){
       Object.keys(DEFAULT_DB).forEach(key => {
         const input = document.getElementById('cfg_' + key);
-        if (input) input.value = db[key] ?? "";
+        if (input) input.value = db[key];
       });
     }
 
-    function applyDatabaseToUI(db){
-      Object.keys(DEFAULT_DB).forEach(key => {
-        setText(key, db[key]);
-      });
+    function applyNPSColor(idValue, idMeta){
+      const valueEl = document.getElementById(idValue);
+      const metaEl = document.getElementById(idMeta);
+      if (!valueEl || !metaEl) return;
 
-      applyNPSColor("npsVendasPeugeotValue", "npsVendasPeugeotMeta");
-      applyNPSColor("npsVendasCitroenValue", "npsVendasCitroenMeta");
-      applyNPSColor("npsPosPeugeotValue", "npsPosPeugeotMeta");
-      applyNPSColor("npsPosCitroenValue", "npsPosCitroenMeta");
+      const value = parseFloat(String(valueEl.innerText).replace('%','').replace(',','.'));
+      const meta = parseFloat(String(metaEl.innerText).replace('%','').replace(',','.'));
+
+      valueEl.classList.remove('nps-green','nps-red');
+      if (value >= meta) valueEl.classList.add('nps-green');
+      else valueEl.classList.add('nps-red');
+    }
+
+    function applyDatabaseToUI(db){
+      Object.keys(DEFAULT_DB).forEach(key => setText(key, db[key]));
+      applyNPSColor('npsVendasPeugeotValue','npsVendasPeugeotMeta');
+      applyNPSColor('npsVendasCitroenValue','npsVendasCitroenMeta');
+      applyNPSColor('npsPosPeugeotValue','npsPosPeugeotMeta');
+      applyNPSColor('npsPosCitroenValue','npsPosCitroenMeta');
     }
 
     function saveDatabase(){
@@ -1381,11 +1245,29 @@
       const db = {...DEFAULT_DB};
       fillConfigForm(db);
       applyDatabaseToUI(db);
-      alert('Banco de dados restaurado para o padrão.');
+      alert('Banco de dados restaurado.');
     }
 
-    function loadGrowExamplePeugeot() {
-      document.getElementById("growPeugeot").value = `15725953
+    let currentBanner = 0;
+
+    function showBanner(index){
+      const banners = document.querySelectorAll('.banner');
+      const dots = document.querySelectorAll('.dot');
+      banners.forEach(b => b.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      if (banners[index]) banners[index].classList.add('active');
+      if (dots[index]) dots[index].classList.add('active');
+      currentBanner = index;
+    }
+
+    function rotateBanners(){
+      const banners = document.querySelectorAll('.banner');
+      currentBanner = (currentBanner + 1) % banners.length;
+      showBanner(currentBanner);
+    }
+
+    function loadGrowExamplePeugeot(){
+      document.getElementById('growPeugeot').value = `15725953
 Aberto
 05/11/2025 15:15
 Telefone
@@ -1395,24 +1277,12 @@ Veículo na concessionária
 THICIANE ARAUJO CHAVES
 Urgente
 Pâmela Souza Lopes
-NNE - NORDESTE
-
-16064678
-Aberto
-26/01/2026 10:14
-Diretoria
-Tratativa Comercial
-Compensação/Cortesia
-8ADUAFCA1SG576844
-THICIANE ARAUJO CHAVES
-Urgente
-ROSITA BUONAFINA
 NNE - NORDESTE`;
       processGrowData();
     }
 
-    function loadGrowExampleCitroen() {
-      document.getElementById("growCitroen").value = `16316483
+    function loadGrowExampleCitroen(){
+      document.getElementById('growCitroen').value = `16316483
 Aberto
 11/03/2026 09:10
 WhatsApp
@@ -1426,77 +1296,57 @@ NNE - NORDESTE`;
       processGrowData();
     }
 
-    function clearGrowData() {
-      document.getElementById("growPeugeot").value = "";
-      document.getElementById("growCitroen").value = "";
-      document.getElementById("growTableBody").innerHTML =
-        '<tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>';
-      updateGrowSummary({ total:0, open:0, over30:0, reserve:0, peu:0, cit:0 });
+    function clearGrowData(){
+      document.getElementById('growPeugeot').value = '';
+      document.getElementById('growCitroen').value = '';
+      document.getElementById('growTableBody').innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>';
+      updateGrowSummary({total:0,open:0,over30:0,reserve:0,peu:0,cit:0});
     }
 
-    function processGrowData() {
-      const peuRaw = document.getElementById("growPeugeot").value.trim();
-      const citRaw = document.getElementById("growCitroen").value.trim();
-
-      const peuRecords = parseBlockRecords(peuRaw, "Peugeot");
-      const citRecords = parseBlockRecords(citRaw, "Citroën");
-
+    function processGrowData(){
+      const peuRaw = document.getElementById('growPeugeot').value.trim();
+      const citRaw = document.getElementById('growCitroen').value.trim();
+      const peuRecords = parseBlockRecords(peuRaw, 'Peugeot');
+      const citRecords = parseBlockRecords(citRaw, 'Citroën');
       const records = [...peuRecords, ...citRecords];
       renderGrowTable(records);
       calculateGrowSummary(records);
     }
 
-    function parseBlockRecords(raw, marca) {
+    function parseBlockRecords(raw, marca){
       if (!raw) return [];
 
       const ignored = new Set([
-        "número do item","número do caso","classificado em ordem crescente","status",
-        "data/hora de abertura","canal de entrada","motivo de contato 1","motivo de contato 2",
-        "chassi completo","conta nome","prioridade","responsável_nome","regional description",
-        "caoss grow customer care peugeot","casos grow customer care peugeot",
-        "casos grow customer care citroën","casos grow customer care citroen","sort","ação"
+        'número do item','número do caso','classificado em ordem crescente','status',
+        'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
+        'chassi completo','conta nome','prioridade','responsável_nome','regional description',
+        'caoss grow customer care peugeot','casos grow customer care peugeot',
+        'casos grow customer care citroën','casos grow customer care citroen','sort','ação'
       ]);
 
-      const lines = raw
-        .split(/\n/)
-        .map(x => x.trim())
-        .filter(x => x && !ignored.has(x.toLowerCase()));
-
+      const lines = raw.split(/\n/).map(x => x.trim()).filter(x => x && !ignored.has(x.toLowerCase()));
       const records = [];
 
-      function isCaseNumber(value) {
-        return /^\d{7,9}$/.test(String(value || "").trim());
-      }
-
-      function isStatus(value) {
-        const v = String(value || "").trim().toLowerCase();
-        return v === "aberto" || v === "fechado" || v === "encerrado";
-      }
-
-      function isDateTime(value) {
-        return /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(value || "").trim());
-      }
+      const isCaseNumber = v => /^\d{7,9}$/.test(String(v || '').trim());
+      const isStatus = v => ['aberto','fechado','encerrado'].includes(String(v || '').trim().toLowerCase());
+      const isDateTime = v => /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(v || '').trim());
 
       let i = 0;
-
-      while (i < lines.length) {
-        if (!isCaseNumber(lines[i])) {
-          i++;
-          continue;
-        }
+      while (i < lines.length){
+        if (!isCaseNumber(lines[i])) { i++; continue; }
 
         const start = i;
-        const caso = lines[i++] || "";
-        const status = lines[i++] || "";
-        const data = lines[i++] || "";
-        const canal = lines[i++] || "";
-        const motivo1 = lines[i++] || "";
-        const motivo2 = lines[i++] || "";
-        const chassi = lines[i++] || "";
-        const cliente = lines[i++] || "";
-        const prioridade = lines[i++] || "";
-        const responsavel = lines[i++] || "";
-        const regional = lines[i++] || "";
+        const caso = lines[i++] || '';
+        const status = lines[i++] || '';
+        const data = lines[i++] || '';
+        const canal = lines[i++] || '';
+        const motivo1 = lines[i++] || '';
+        const motivo2 = lines[i++] || '';
+        const chassi = lines[i++] || '';
+        const cliente = lines[i++] || '';
+        const prioridade = lines[i++] || '';
+        const responsavel = lines[i++] || '';
+        const regional = lines[i++] || '';
 
         if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
           i = start + 1;
@@ -1512,18 +1362,18 @@ NNE - NORDESTE`;
       return records;
     }
 
-    function calcAging(dataStr) {
-      const match = String(dataStr || "").match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    function calcAging(dataStr){
+      const match = String(dataStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
       if (!match) return 0;
-      const [, dd, mm, yyyy] = match;
-      const d = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+      const [,dd,mm,yyyy] = match;
+      const d = new Date(Number(yyyy), Number(mm)-1, Number(dd));
       const now = new Date();
-      return Math.max(0, Math.floor((now - d) / (1000 * 60 * 60 * 24)));
+      return Math.max(0, Math.floor((now - d)/(1000*60*60*24)));
     }
 
-    function renderGrowTable(records) {
-      const tbody = document.getElementById("growTableBody");
-      if (!records.length) {
+    function renderGrowTable(records){
+      const tbody = document.getElementById('growTableBody');
+      if (!records.length){
         tbody.innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso válido encontrado.</td></tr>';
         return;
       }
@@ -1544,90 +1394,68 @@ NNE - NORDESTE`;
           <td>${escapeHtml(item.regional)}</td>
           <td>${agingChip(item.aging)}</td>
         </tr>
-      `).join("");
+      `).join('');
     }
 
-    function calculateGrowSummary(records) {
+    function calculateGrowSummary(records){
       const total = records.length;
-      const open = records.filter(r => String(r.status).toLowerCase().includes("aberto")).length;
+      const open = records.filter(r => String(r.status).toLowerCase().includes('aberto')).length;
       const over30 = records.filter(r => Number(r.aging) > 30).length;
       const reserve = records.filter(r =>
-        String(r.motivo1).toLowerCase().includes("veículo reserva") ||
-        String(r.motivo2).toLowerCase().includes("veículo")
+        String(r.motivo1).toLowerCase().includes('veículo reserva') ||
+        String(r.motivo2).toLowerCase().includes('veículo')
       ).length;
-      const peu = records.filter(r => r.marca === "Peugeot").length;
-      const cit = records.filter(r => r.marca === "Citroën").length;
-
-      updateGrowSummary({ total, open, over30, reserve, peu, cit });
+      const peu = records.filter(r => r.marca === 'Peugeot').length;
+      const cit = records.filter(r => r.marca === 'Citroën').length;
+      updateGrowSummary({total,open,over30,reserve,peu,cit});
     }
 
-    function updateGrowSummary(obj) {
-      document.getElementById("totalCases").textContent = obj.total;
-      document.getElementById("openCases").textContent = obj.open;
-      document.getElementById("over30Cases").textContent = obj.over30;
-      document.getElementById("reserveCases").textContent = obj.reserve;
-      document.getElementById("peugeotCases").textContent = obj.peu;
-      document.getElementById("citroenCases").textContent = obj.cit;
+    function updateGrowSummary(obj){
+      document.getElementById('totalCases').textContent = obj.total;
+      document.getElementById('openCases').textContent = obj.open;
+      document.getElementById('over30Cases').textContent = obj.over30;
+      document.getElementById('reserveCases').textContent = obj.reserve;
+      document.getElementById('peugeotCases').textContent = obj.peu;
+      document.getElementById('citroenCases').textContent = obj.cit;
     }
 
-    function brandChip(marca) {
-      if (marca === "Peugeot") return '<span class="chip blue">Peugeot</span>';
-      if (marca === "Citroën") return '<span class="chip purple">Citroën</span>';
+    function brandChip(marca){
+      if (marca === 'Peugeot') return '<span class="chip blue">Peugeot</span>';
+      if (marca === 'Citroën') return '<span class="chip purple">Citroën</span>';
       return '<span class="chip yellow">Não identificado</span>';
     }
 
-    function statusChip(status) {
-      const s = String(status || "").toLowerCase();
-      if (s.includes("aberto")) return '<span class="chip red">Aberto</span>';
-      if (s.includes("fechado") || s.includes("encerrado")) return '<span class="chip green">Fechado</span>';
-      return `<span class="chip yellow">${escapeHtml(status || "-")}</span>`;
+    function statusChip(status){
+      const s = String(status || '').toLowerCase();
+      if (s.includes('aberto')) return '<span class="chip red">Aberto</span>';
+      if (s.includes('fechado') || s.includes('encerrado')) return '<span class="chip green">Fechado</span>';
+      return '<span class="chip yellow">-</span>';
     }
 
-    function priorityChip(value) {
-      const s = String(value || "").toLowerCase();
-      if (s.includes("urgente")) return '<span class="chip red">Urgente</span>';
-      if (s.includes("alto")) return '<span class="chip yellow">Alto</span>';
-      if (s.includes("média") || s.includes("media")) return '<span class="chip blue">Média</span>';
-      return `<span class="chip green">${escapeHtml(value || "-")}</span>`;
+    function priorityChip(value){
+      const s = String(value || '').toLowerCase();
+      if (s.includes('urgente')) return '<span class="chip red">Urgente</span>';
+      if (s.includes('alto')) return '<span class="chip yellow">Alto</span>';
+      if (s.includes('média') || s.includes('media')) return '<span class="chip blue">Média</span>';
+      return '<span class="chip green">Normal</span>';
     }
 
-    function agingChip(aging) {
+    function agingChip(aging){
       const a = Number(aging) || 0;
       if (a > 30) return `<span class="chip red">${a} dias</span>`;
       if (a >= 15) return `<span class="chip yellow">${a} dias</span>`;
       return `<span class="chip green">${a} dias</span>`;
     }
 
-    function escapeHtml(str) {
-      return String(str ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    function escapeHtml(str){
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
     }
 
-    let currentBanner = 0;
-
-    function showBanner(index){
-      const banners = document.querySelectorAll('.banner');
-      const dots = document.querySelectorAll('.dot');
-      if(!banners.length) return;
-
-      banners.forEach(b => b.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-
-      banners[index].classList.add('active');
-      if (dots[index]) dots[index].classList.add('active');
-      currentBanner = index;
-    }
-
-    function rotateBanners(){
-      const banners = document.querySelectorAll('.banner');
-      if(!banners.length) return;
-      currentBanner = (currentBanner + 1) % banners.length;
-      showBanner(currentBanner);
-    }
-
-    window.onload = function() {
+    window.onload = function(){
+      loadTheme();
       const db = loadDatabase();
       fillConfigForm(db);
       applyDatabaseToUI(db);
