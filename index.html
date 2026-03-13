@@ -65,10 +65,9 @@
       align-items:center;
       justify-content:center;
       padding:24px;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 25%),
-        radial-gradient(circle at bottom left, rgba(255,255,255,.12), transparent 28%),
-        linear-gradient(135deg, #13366e 0%, #315fc3 55%, #7c3aed 100%);
+      position:relative;
+      overflow:hidden;
+      background:#0b1220;
     }
 
     .login-shell{
@@ -1214,10 +1213,29 @@
       .message{max-width:88%}
       .login-shell{grid-template-columns:1fr}
     }
+    #loginCanvas{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+    }
+ #loginScreen{
+      position:relative;
+      overflow:hidden;
+   background:#0b1220;
+    }
+.login-shell{
+  position:relative;
+  z-index:2;
+}
+/*FIM */
   </style>
 </head>
 <body>
   <section id="loginScreen">
+    <canvas id="loginCanvas"></canvas>
     <div class="login-shell">
       <div class="login-brand">
         <div class="login-logo">
@@ -2822,6 +2840,62 @@ Tente algo como:
       }, 3000);
     }
 
+    function initLoginCanvas(){
+const canvas=document.getElementById("loginCanvas");
+if(!canvas)return;
+
+const ctx=canvas.getContext("2d");
+
+function resize(){
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+}
+
+resize();
+window.addEventListener("resize",resize);
+
+let particles=[];
+
+for(let i=0;i<60;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2+1,
+    speed:Math.random()*0.6+0.2
+  });
+}
+
+function animate(){
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    p.y-=p.speed;
+
+    if(p.y<0){
+      p.y=canvas.height;
+      p.x=Math.random()*canvas.width;
+    }
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="rgba(255,255,255,0.15)";
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+}
+
+const oldBoot = boot;
+boot = function(){
+  initLoginCanvas();
+  oldBoot();
+};
+
+window.onload = boot;
     window.onload = boot;
   </script>
 </body>
