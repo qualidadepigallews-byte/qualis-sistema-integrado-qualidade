@@ -2840,55 +2840,127 @@ Tente algo como:
       }, 3000);
     }
 
-    function initLoginCanvas(){
-const canvas=document.getElementById("loginCanvas");
-if(!canvas)return;
+function initLoginCanvas(){
 
-const ctx=canvas.getContext("2d");
+const canvas = document.getElementById("loginCanvas");
+if(!canvas) return;
+
+const ctx = canvas.getContext("2d");
+
+let bars = [];
+let points = [];
+let mouseX = 0;
 
 function resize(){
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+bars = Array.from({length: 40}, (_, i)=>({
+x:(canvas.width/40)*i+10,
+w:12,
+h:80+Math.random()*200,
+speed:0.5+Math.random(),
+offset:Math.random()*1000
+}));
+
+points = Array.from({length:20}, (_,i)=>({
+x:(canvas.width/20)*i,
+y:canvas.height*0.45,
+offset:Math.random()*1000
+}));
 }
+
+function drawGrid(){
+
+ctx.strokeStyle="rgba(255,255,255,0.05)";
+ctx.lineWidth=1;
+
+for(let x=0;x<canvas.width;x+=80){
+ctx.beginPath();
+ctx.moveTo(x,0);
+ctx.lineTo(x,canvas.height);
+ctx.stroke();
+}
+
+for(let y=0;y<canvas.height;y+=80){
+ctx.beginPath();
+ctx.moveTo(0,y);
+ctx.lineTo(canvas.width,y);
+ctx.stroke();
+}
+
+}
+
+function drawBars(t){
+
+bars.forEach(bar=>{
+
+let dynamic =
+bar.h+
+Math.sin(t*0.001+bar.offset)*40+
+(mouseX/canvas.width)*60;
+
+let y=canvas.height-dynamic-40;
+
+let grad=ctx.createLinearGradient(0,y,0,y+dynamic);
+grad.addColorStop(0,"rgba(90,147,255,0.9)");
+grad.addColorStop(1,"rgba(90,147,255,0.2)");
+
+ctx.fillStyle=grad;
+ctx.fillRect(bar.x,y,bar.w,dynamic);
+
+});
+
+}
+
+function drawLine(t){
+
+ctx.beginPath();
+
+points.forEach((p,i)=>{
+
+let x=p.x;
+let y=p.y+Math.sin(t*0.002+p.offset)*50;
+
+if(i===0) ctx.moveTo(x,y);
+else ctx.lineTo(x,y);
+
+});
+
+ctx.strokeStyle="rgba(124,58,237,0.7)";
+ctx.lineWidth=3;
+ctx.stroke();
+
+}
+
+function animate(t){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+const bg=ctx.createLinearGradient(0,0,0,canvas.height);
+bg.addColorStop(0,"#08111f");
+bg.addColorStop(1,"#0c1730");
+
+ctx.fillStyle=bg;
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+drawGrid();
+drawLine(t);
+drawBars(t);
+
+requestAnimationFrame(animate);
+
+}
+
+window.addEventListener("mousemove",e=>{
+mouseX=e.clientX;
+});
 
 resize();
 window.addEventListener("resize",resize);
+requestAnimationFrame(animate);
 
-let particles=[];
-
-for(let i=0;i<60;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2+1,
-    speed:Math.random()*0.6+0.2
-  });
 }
-
-function animate(){
-
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  particles.forEach(p=>{
-    p.y-=p.speed;
-
-    if(p.y<0){
-      p.y=canvas.height;
-      p.x=Math.random()*canvas.width;
-    }
-
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="rgba(255,255,255,0.15)";
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-}
-
 const oldBoot = boot;
 boot = function(){
   initLoginCanvas();
