@@ -1267,7 +1267,7 @@
         </div>
 
         <div class="login-meta">
-          Em caso de esquecimento ou expiração de senha, a solicitação é direcionada para a super administradora.
+          Em caso de esquecimento ou expiração de senha, a solicitação é direcionada para à Administradora Master.
         </div>
 
         <div class="login-error" id="loginError"></div>
@@ -1288,29 +1288,29 @@
 
         <div class="menu-group">
           <div class="menu-title">Principal</div>
-          <button class="menu-btn active" onclick="openPage('inicio', this)">🏠 Início</button>
+          <button class="menu-btn active" onclick="openPage('inicio', this)">INÍCIO</button>
         </div>
 
         <div class="menu-group">
           <div class="menu-title">Operação CX</div>
-          <button class="menu-btn" onclick="openPage('vendas', this)">📊 Vendas</button>
-          <button class="menu-btn" onclick="openPage('posvendas', this)">🔧 Pós-Vendas</button>
+          <button class="menu-btn" onclick="openPage('vendas', this)">VENDASs</button>
+          <button class="menu-btn" onclick="openPage('posvendas', this)">PÓS-VENDAS</button>
         </div>
 
         <div class="menu-group">
           <div class="menu-title">Complementares</div>
-          <button class="menu-btn" onclick="openPage('grow', this)">📂 Grow Customer Care</button>
+          <button class="menu-btn" onclick="openPage('grow', this)">GROW CUSTOMER CARE</button>
         </div>
 
         <div class="menu-group">
           <div class="menu-title">Ferramentas</div>
-          <button class="menu-btn" onclick="openPage('chat', this)">💬 Chat</button>
-          <button class="menu-btn" onclick="openPage('sistemas', this)">🌐 Sistemas</button>
+          <button class="menu-btn" onclick="openPage('chat', this)">CHAT</button>
+          <button class="menu-btn" onclick="openPage('sistemas', this)">SISTEMAS</button>
         </div>
 
         <div class="menu-group">
           <div class="menu-title">Configurações</div>
-          <button class="menu-btn" onclick="openPage('config', this)">⚙ Configurações</button>
+          <button class="menu-btn" onclick="openPage('config', this)">Configurações</button>
         </div>
 
         <div class="sidebar-footer">
@@ -1874,7 +1874,7 @@
       }
 
       if (daysSince(user.passwordChangedAt) >= 15){
-        showLoginError('Senha expirada. Solicite redefinição à super administradora.');
+        showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
         return;
       }
 
