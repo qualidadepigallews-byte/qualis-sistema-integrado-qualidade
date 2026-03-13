@@ -55,10 +55,7 @@
       color:var(--text);
     }
 
-    button,input,textarea,select{
-      font-family:'Inter',sans-serif;
-    }
-
+    button,input,textarea,select{font-family:'Inter',sans-serif}
     .hidden{display:none !important}
 
     /* LOGIN */
@@ -75,16 +72,16 @@
     }
 
     .login-shell{
-      width:min(980px, 100%);
+      width:min(1080px, 100%);
       display:grid;
-      grid-template-columns:1.1fr .9fr;
+      grid-template-columns:1.08fr .92fr;
       gap:24px;
       align-items:stretch;
     }
 
     .login-brand{
       color:#fff;
-      padding:32px;
+      padding:34px;
       border-radius:28px;
       background:rgba(255,255,255,.10);
       border:1px solid rgba(255,255,255,.16);
@@ -109,7 +106,7 @@
       display:flex;
       align-items:center;
       gap:14px;
-      margin-bottom:26px;
+      margin-bottom:24px;
       position:relative;
       z-index:1;
     }
@@ -138,8 +135,8 @@
 
     .login-brand h2{
       margin:0 0 12px;
-      font-size:34px;
-      line-height:1.05;
+      font-size:36px;
+      line-height:1.04;
       letter-spacing:-.04em;
       position:relative;
       z-index:1;
@@ -147,7 +144,7 @@
 
     .brand-text{
       font-size:15px;
-      line-height:1.7;
+      line-height:1.75;
       max-width:520px;
       opacity:.92;
       position:relative;
@@ -177,7 +174,7 @@
       border-radius:28px;
       padding:28px;
       box-shadow:0 24px 50px rgba(0,0,0,.18);
-      min-height:620px;
+      min-height:650px;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -229,9 +226,7 @@
       font-size:14px;
     }
 
-    .login-field{
-      margin-bottom:14px;
-    }
+    .login-field{margin-bottom:14px}
 
     .login-field label{
       display:block;
@@ -301,9 +296,9 @@
       text-align:center;
     }
 
-    #portalApp{ display:none; }
+    #portalApp{display:none}
 
-    /* PORTAL */
+    /* APP */
     .app{
       display:flex;
       min-height:100vh;
@@ -352,9 +347,7 @@
       opacity:.85;
     }
 
-    .menu-group{
-      margin-bottom:18px;
-    }
+    .menu-group{margin-bottom:18px}
 
     .menu-title{
       font-size:11px;
@@ -378,9 +371,7 @@
       margin-bottom:6px;
     }
 
-    .menu-btn:hover{
-      background:rgba(255,255,255,.10);
-    }
+    .menu-btn:hover{background:rgba(255,255,255,.10)}
 
     .menu-btn.active{
       background:linear-gradient(90deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
@@ -571,13 +562,8 @@
       cursor:pointer;
     }
 
-    .dot.active{
-      background:var(--primary);
-    }
-
-    body.dark .dot.active{
-      background:#fff;
-    }
+    .dot.active{background:var(--primary)}
+    body.dark .dot.active{background:#fff}
 
     .summary-grid{
       display:grid;
@@ -641,9 +627,7 @@
       font-size:14px;
     }
 
-    .list-item span:last-child{
-      font-weight:800;
-    }
+    .list-item span:last-child{font-weight:800}
 
     .quick-links{
       display:grid;
@@ -692,13 +676,8 @@
       margin-bottom:16px;
     }
 
-    .peugeot-head{
-      background:linear-gradient(90deg,#214ea8,#315ec2);
-    }
-
-    .citroen-head{
-      background:linear-gradient(90deg,var(--purple),#a855f7);
-    }
+    .peugeot-head{background:linear-gradient(90deg,#214ea8,#315ec2)}
+    .citroen-head{background:linear-gradient(90deg,var(--purple),#a855f7)}
 
     .nps-hero{
       background:var(--surface-2);
@@ -935,7 +914,7 @@
       text-transform:uppercase;
     }
 
-    .field input,.field select{
+    .field input{
       width:100%;
       border:1px solid var(--border);
       background:var(--surface);
@@ -1115,7 +1094,7 @@
           <div class="login-chip">Login com e-mail e senha</div>
           <div class="login-chip">Controle por superadmin</div>
           <div class="login-chip">Expiração a cada 15 dias</div>
-          <div class="login-chip">Ambiente interno do time</div>
+          <div class="login-chip">Chat em grupo integrado</div>
         </div>
       </div>
 
@@ -1210,7 +1189,6 @@
           </div>
         </div>
 
-        <!-- INÍCIO -->
         <section id="inicio" class="page active">
           <div class="banner active">
             <h3>Bem-vinda ao QUALIS</h3>
@@ -1283,16 +1261,15 @@
                   <strong>Grow Customer Care</strong>
                   <small>Cole os casos e acompanhe a fila.</small>
                 </div>
-                <div class="quick-link" onclick="openPage('config', document.querySelectorAll('.menu-btn')[5])">
-                  <strong>Banco de Dados</strong>
-                  <small>Edite os números reais do sistema.</small>
+                <div class="quick-link" onclick="openPage('chat', document.querySelectorAll('.menu-btn')[4])">
+                  <strong>Chat do grupo</strong>
+                  <small>Comunicação interna entre Kamilly, Letícia e Laís.</small>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- VENDAS -->
         <section id="vendas" class="page">
           <h1 class="page-title">Vendas</h1>
           <p class="page-subtitle">Gestão da operação de vendas com módulos internos.</p>
@@ -1353,7 +1330,6 @@
           <div id="vendas-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para auditoria da operação de vendas.</p></div></div>
         </section>
 
-        <!-- PÓS-VENDAS -->
         <section id="posvendas" class="page">
           <h1 class="page-title">Pós-Vendas</h1>
           <p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
@@ -1414,7 +1390,6 @@
           <div id="pos-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Área reservada para auditoria da operação de pós-vendas.</p></div></div>
         </section>
 
-        <!-- GROW -->
         <section id="grow" class="page">
           <h1 class="page-title">Grow Customer Care</h1>
           <p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
@@ -1474,7 +1449,6 @@
           </div>
         </section>
 
-        <!-- CHAT -->
         <section id="chat" class="page">
           <h1 class="page-title">Chat</h1>
           <p class="page-subtitle">Grupo interno entre Kamilly, Letícia e Laís.</p>
@@ -1485,7 +1459,9 @@
                 <h3>Grupo QUALIS</h3>
                 <p id="chatHeaderInfo">Mensagens visíveis para todo o grupo.</p>
               </div>
+
               <div class="chat-messages" id="chatMessages"></div>
+
               <div class="chat-compose">
                 <textarea id="chatInput" placeholder="Digite sua mensagem para o grupo..."></textarea>
                 <button class="btn primary" onclick="sendChatMessage()">Enviar</button>
@@ -1495,7 +1471,6 @@
           </div>
         </section>
 
-        <!-- CONFIG -->
         <section id="config" class="page">
           <h1 class="page-title">Configurações</h1>
           <p class="page-subtitle">Área administrativa do sistema.</p>
@@ -1570,6 +1545,8 @@
   </div>
 
   <script>
+    const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
+
     const pageTitles = {
       inicio: ['Início', 'Resumo executivo e operacional da qualidade.'],
       vendas: ['Vendas', 'Gestão da operação de vendas com módulos internos.'],
@@ -1580,27 +1557,9 @@
     };
 
     const DEFAULT_USERS = [
-      {
-        name: 'Kamilly',
-        role: 'superadmin',
-        email: 'kamilly.paiva@adtsa.com.br',
-        password: 'Capivara321@',
-        passwordChangedAt: '2026-03-12'
-      },
-      {
-        name: 'Letícia',
-        role: 'user',
-        email: 'leticia.martins@adtsa.com.br',
-        password: 'Barata321@',
-        passwordChangedAt: '2026-03-12'
-      },
-      {
-        name: 'Laís',
-        role: 'user',
-        email: 'lais.batista@adtsa.com.br',
-        password: 'Calango321@',
-        passwordChangedAt: '2026-03-12'
-      }
+      { name: 'Kamilly', role: 'superadmin', email: 'kamilly.paiva@adtsa.com.br', password: 'Capivara321@', passwordChangedAt: '2026-03-12' },
+      { name: 'Letícia', role: 'user', email: 'leticia.martins@adtsa.com.br', password: 'Barata321@', passwordChangedAt: '2026-03-12' },
+      { name: 'Laís', role: 'user', email: 'lais.batista@adtsa.com.br', password: 'Calango321@', passwordChangedAt: '2026-03-12' }
     ];
 
     const DEFAULT_DB = {
@@ -1694,7 +1653,6 @@
 
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
-
       const user = getUserByEmail(email);
 
       if (!user){
@@ -1779,12 +1737,16 @@ Portal QUALIS`
       const n = Number(neutros) || 0;
       const d = Number(detratores) || 0;
       const total = p + n + d;
+
       if (total <= 0) return meta > 0 ? 1 : 0;
+
       const currentNps = ((p - d) / total) * 100;
       if (currentNps >= meta) return 0;
+
       const numerator = ((meta / 100) * total) - (p - d);
       const denominator = 1 - (meta / 100);
       if (denominator <= 0) return 0;
+
       return Math.max(0, Math.ceil(numerator / denominator));
     }
 
@@ -1839,8 +1801,10 @@ Portal QUALIS`
       const valueEl = document.getElementById(idValue);
       const metaEl = document.getElementById(idMeta);
       if (!valueEl || !metaEl) return;
+
       const value = parseFloat(String(valueEl.innerText).replace('%','').replace(',','.'));
       const meta = parseFloat(String(metaEl.innerText).replace('%','').replace(',','.'));
+
       valueEl.classList.remove('nps-green','nps-red');
       valueEl.classList.add(value >= meta ? 'nps-green' : 'nps-red');
     }
@@ -1939,15 +1903,15 @@ Portal QUALIS`
     }
 
     function showBanner(index){
-      const banners = document.querySelectorAll('.banner');
-      const dots = document.querySelectorAll('.dot');
+      const banners = document.querySelectorAll('#inicio .banner');
+      const dots = document.querySelectorAll('#inicio .dot');
       banners.forEach((b,i) => b.classList.toggle('active', i === index));
       dots.forEach((d,i) => d.classList.toggle('active', i === index));
       currentBanner = index;
     }
 
     function rotateBanners(){
-      const banners = document.querySelectorAll('.banner');
+      const banners = document.querySelectorAll('#inicio .banner');
       if (!banners.length) return;
       currentBanner = (currentBanner + 1) % banners.length;
       showBanner(currentBanner);
@@ -2002,6 +1966,7 @@ NNE - NORDESTE`;
 
     function parseBlockRecords(raw, marca){
       if (!raw) return [];
+
       const ignored = new Set([
         'número do item','número do caso','classificado em ordem crescente','status',
         'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
@@ -2019,6 +1984,7 @@ NNE - NORDESTE`;
       let i = 0;
       while (i < lines.length){
         if (!isCaseNumber(lines[i])) { i++; continue; }
+
         const start = i;
         const caso = lines[i++] || '';
         const status = lines[i++] || '';
@@ -2137,17 +2103,16 @@ NNE - NORDESTE`;
         .replace(/>/g, '&gt;');
     }
 
-    function loadChatStore(){
-      const raw = localStorage.getItem('qualis-group-chat');
-      if (!raw) {
-        return [{ user:'Sistema', text:'Grupo QUALIS iniciado.', time:timeNow() }];
+    async function fetchChatMessages(){
+      try{
+        const response = await fetch(`${CHAT_API_URL}?action=list`);
+        const data = await response.json();
+        if (!data.ok) return [];
+        return Array.isArray(data.messages) ? data.messages : [];
+      }catch(err){
+        console.error('Erro ao buscar mensagens:', err);
+        return [];
       }
-      try{ return JSON.parse(raw); }
-      catch{ return [{ user:'Sistema', text:'Grupo QUALIS iniciado.', time:timeNow() }]; }
-    }
-
-    function saveChatStore(store){
-      localStorage.setItem('qualis-group-chat', JSON.stringify(store));
     }
 
     function highlightMentions(text){
@@ -2157,20 +2122,23 @@ NNE - NORDESTE`;
         .replace(/@Laís/g, '<span class="mention">@Laís</span>');
     }
 
-    function renderChat(){
-      const store = loadChatStore();
+    async function renderChat(){
       const wrap = document.getElementById('chatMessages');
-      if (!store.length){
+      if (!wrap) return;
+
+      const messages = await fetchChatMessages();
+
+      if (!messages.length){
         wrap.innerHTML = '<div class="message other">Sem mensagens ainda.</div>';
         return;
       }
 
-      wrap.innerHTML = store.map(msg => {
-        const mine = currentUser && msg.user === currentUser.name;
+      wrap.innerHTML = messages.map(msg => {
+        const mine = currentUser && msg.usuario === currentUser.name;
         return `
           <div class="message ${mine ? 'mine' : 'other'}">
-            ${highlightMentions(msg.text)}
-            <small>${msg.user} • ${msg.time}</small>
+            ${highlightMentions(msg.mensagem)}
+            <small>${escapeHtml(msg.usuario)} • ${escapeHtml(msg.datahora || '')}</small>
           </div>
         `;
       }).join('');
@@ -2178,17 +2146,38 @@ NNE - NORDESTE`;
       wrap.scrollTop = wrap.scrollHeight;
     }
 
-    function sendChatMessage(){
+    async function sendChatMessage(){
       if (!currentUser) return;
+
       const input = document.getElementById('chatInput');
       const text = input.value.trim();
       if (!text) return;
 
-      const store = loadChatStore();
-      store.push({ user: currentUser.name, text, time: timeNow() });
-      saveChatStore(store);
-      input.value = '';
-      renderChat();
+      try{
+        const response = await fetch(CHAT_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify({
+            usuario: currentUser.name,
+            mensagem: text
+          })
+        });
+
+        const data = await response.json();
+
+        if (!data.ok){
+          alert('Não foi possível enviar a mensagem.');
+          return;
+        }
+
+        input.value = '';
+        await renderChat();
+      }catch(err){
+        console.error('Erro ao enviar mensagem:', err);
+        alert('Erro ao enviar mensagem.');
+      }
     }
 
     function initLoginMascot(){
@@ -2221,6 +2210,7 @@ NNE - NORDESTE`;
     function boot(){
       loadTheme();
       initLoginMascot();
+
       const storedUser = localStorage.getItem('qualis-current-user');
       if (storedUser) {
         try{
@@ -2238,7 +2228,14 @@ NNE - NORDESTE`;
           currentUser = null;
         }
       }
+
       setInterval(rotateBanners, 5000);
+
+      setInterval(() => {
+        if (document.getElementById('portalApp').style.display === 'block') {
+          renderChat();
+        }
+      }, 3000);
     }
 
     window.onload = boot;
