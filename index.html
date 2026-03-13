@@ -1045,11 +1045,116 @@
       font-size:12px;
     }
 
+    /* SISTEMAS */
+    .systems-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .system-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .system-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+    }
+
+    .system-title{
+      margin:0;
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+
+    .system-sub{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+      margin-top:4px;
+    }
+
+    .system-tag{
+      display:inline-block;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:800;
+      color:#fff;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      white-space:nowrap;
+    }
+
+    .system-fields{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .system-field{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .system-field-label{
+      font-size:11px;
+      font-weight:800;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      margin-bottom:6px;
+    }
+
+    .system-field-value{
+      font-size:14px;
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    .system-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:auto;
+    }
+
+    .system-btn{
+      border:0;
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+
+    .system-btn.primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+    }
+
+    .system-btn.secondary{
+      background:var(--surface);
+      color:var(--text);
+      border:1px solid var(--border);
+    }
+
     @media (max-width: 1380px){
       .login-shell,
       .summary-grid{grid-template-columns:repeat(2,1fr)}
       .triple-grid{grid-template-columns:1fr}
-      .brand-panels,.grow-inputs,.form-grid,.chat-layout{grid-template-columns:1fr}
+      .brand-panels,.grow-inputs,.form-grid,.chat-layout,.systems-grid{grid-template-columns:1fr}
     }
 
     @media (max-width: 1024px){
@@ -1163,6 +1268,7 @@
         <div class="menu-group">
           <div class="menu-title">Ferramentas</div>
           <button class="menu-btn" onclick="openPage('chat', this)">💬 Chat</button>
+          <button class="menu-btn" onclick="openPage('sistemas', this)">🌐 Sistemas</button>
         </div>
 
         <div class="menu-group">
@@ -1261,9 +1367,9 @@
                   <strong>Grow Customer Care</strong>
                   <small>Cole os casos e acompanhe a fila.</small>
                 </div>
-                <div class="quick-link" onclick="openPage('chat', document.querySelectorAll('.menu-btn')[4])">
-                  <strong>Chat do grupo</strong>
-                  <small>Comunicação interna entre Kamilly, Letícia e Laís.</small>
+                <div class="quick-link" onclick="openPage('sistemas', document.querySelectorAll('.menu-btn')[5])">
+                  <strong>Sistemas</strong>
+                  <small>Links externos, logins e senhas em cards.</small>
                 </div>
               </div>
             </div>
@@ -1471,6 +1577,13 @@
           </div>
         </section>
 
+        <section id="sistemas" class="page">
+          <h1 class="page-title">Sistemas</h1>
+          <p class="page-subtitle">Central de acessos externos, logins e senhas da operação.</p>
+
+          <div class="systems-grid" id="systemsGrid"></div>
+        </section>
+
         <section id="config" class="page">
           <h1 class="page-title">Configurações</h1>
           <p class="page-subtitle">Área administrativa do sistema.</p>
@@ -1547,12 +1660,200 @@
   <script>
     const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
 
+    const SYSTEMS = [
+      {
+        nome: 'Portal de Treinamentos',
+        descricao: 'Treinamentos corporativos',
+        categoria: 'Treinamento',
+        url: 'https://psa.csod.com/samldefault.aspx?ouid=2',
+        login: 'DN89492',
+        senha: 'Piga2070'
+      },
+      {
+        nome: 'DealerNet',
+        descricao: 'Portal de rede / fluxo',
+        categoria: 'Rede',
+        url: 'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html',
+        login: 'KAMILLY.PAIVA',
+        senha: 'Adtsa@2032'
+      },
+      {
+        nome: 'Holmes',
+        descricao: 'Acesso Holmes',
+        categoria: 'Operação',
+        url: '',
+        login: 'kamilly.paiva@adtsa.com.br',
+        senha: 'Adtsa@2025'
+      },
+      {
+        nome: 'Syonet',
+        descricao: 'Portal Syonet',
+        categoria: 'CRM',
+        url: 'https://adtsa.syonet.com/portal/app.do?modulo=login#/login',
+        login: 'KAMILLY.PAIVA',
+        senha: 'K10092018m@'
+      },
+      {
+        nome: 'Grow - Peugeot',
+        descricao: 'Portal Grow Peugeot',
+        categoria: 'Grow',
+        url: 'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',
+        login: 'DN89494',
+        senha: 'Piga2050'
+      },
+      {
+        nome: 'Grow - Citroën',
+        descricao: 'Portal Grow Citroën',
+        categoria: 'Grow',
+        url: 'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',
+        login: 'DN89492',
+        senha: 'Piga2407'
+      },
+      {
+        nome: 'Snap On - Auditoria/Autoavaliação',
+        descricao: 'Padrões e autoavaliação',
+        categoria: 'Auditoria',
+        url: 'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092',
+        login: 'DN89492',
+        senha: 'Piga2407'
+      },
+      {
+        nome: 'Focus - Peugeot',
+        descricao: 'Focus Peugeot',
+        categoria: 'Focus',
+        url: 'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',
+        login: 'DN89494',
+        senha: 'Piga2050'
+      },
+      {
+        nome: 'Focus - Citroën',
+        descricao: 'Focus Citroën',
+        categoria: 'Focus',
+        url: 'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',
+        login: 'DM62286',
+        senha: 'Piga2060'
+      },
+      {
+        nome: 'Trilogo',
+        descricao: 'Portal Trilogo',
+        categoria: 'Portal',
+        url: 'https://entrar.trilogo.app/',
+        login: 'kamilly.paiva@adtsa.com.br',
+        senha: 'K10092018m@'
+      },
+      {
+        nome: 'ADM Partenaires - Peugeot',
+        descricao: 'Acesso Peugeot',
+        categoria: 'Garantia',
+        url: 'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires',
+        login: 'DN89494',
+        senha: 'Piga2070'
+      },
+      {
+        nome: 'ADM Partenaires - Citroën',
+        descricao: 'Acesso Citroën',
+        categoria: 'Garantia',
+        url: 'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires',
+        login: 'DN89492',
+        senha: 'Piga2070'
+      },
+      {
+        nome: 'Reclame Aqui',
+        descricao: 'Painel Reclame Aqui',
+        categoria: 'Atendimento',
+        url: 'https://www.reclameaqui.com.br/',
+        login: 'kamilly.paiva@adtsa.com.br',
+        senha: 'Adtsa@2025'
+      },
+      {
+        nome: 'CSPS - Peugeot',
+        descricao: 'CSPS Peugeot',
+        categoria: 'Pesquisa',
+        url: '',
+        login: 'CA00064P',
+        senha: 'Piga2033'
+      },
+      {
+        nome: 'CSPS - Citroën',
+        descricao: 'CSPS Citroën',
+        categoria: 'Pesquisa',
+        url: '',
+        login: 'CA00013C',
+        senha: 'Piga2033'
+      },
+      {
+        nome: 'Webmail - Qualidade',
+        descricao: 'Webmail corporativo',
+        categoria: 'E-mail',
+        url: 'https://mail.google.com/mail/u/0/',
+        login: 'qualidade.pigallews@adtsa.com.br',
+        senha: 'Citroen@2026'
+      },
+      {
+        nome: 'Google My Business - Pigalle',
+        descricao: 'Perfil da empresa',
+        categoria: 'Google',
+        url: 'https://mail.google.com/mail/u/0/',
+        login: 'pigallepgle@gmail.com',
+        senha: 'Adtsa2021'
+      },
+      {
+        nome: 'Gmail - Qualidade',
+        descricao: 'Gmail da qualidade',
+        categoria: 'E-mail',
+        url: 'https://mail.google.com/mail/u/0/',
+        login: 'qualidadepigallews@gmail.com',
+        senha: 'Adtsa@2025'
+      },
+      {
+        nome: 'My People Peugeot',
+        descricao: 'Portal My People Peugeot',
+        categoria: 'Pessoas',
+        url: 'https://myPeople.fiat.com',
+        login: 'BR-000064P.admin',
+        senha: 'P3!wH8#mZ'
+      },
+      {
+        nome: 'My People Citroën',
+        descricao: 'Portal My People Citroën',
+        categoria: 'Pessoas',
+        url: 'https://myPeople.fiat.com',
+        login: 'TBR-CE41PUD.admin',
+        senha: 'Km.2027@pm'
+      },
+      {
+        nome: 'Mopar Eper',
+        descricao: 'Acesso Chico - Oficina',
+        categoria: 'Oficina',
+        url: 'https://eper-ltm.parts.fiat.com/',
+        login: 'TBR-CE41PUD.d002',
+        senha: 'Piga2027@'
+      },
+      {
+        nome: 'Mopar Tools',
+        descricao: 'Ferramentas Mopar',
+        categoria: 'Oficina',
+        url: 'https://tools.moparservicecenter.com.br/Acesso/Entrada',
+        login: 'TBR-CE41PUD.d002',
+        senha: 'Piga2027@'
+      },
+      {
+        nome: 'WiTech',
+        descricao: 'Diagnóstico WiTech',
+        categoria: 'Oficina',
+        url: 'https://app.l.fcawitech.com/wt2/index.html#/discovery/flight-recorder-templates',
+        login: 'TBR-CE41PUD.d002',
+        senha: 'Piga2027@'
+      }
+    ];
+
     const pageTitles = {
       inicio: ['Início', 'Resumo executivo e operacional da qualidade.'],
       vendas: ['Vendas', 'Gestão da operação de vendas com módulos internos.'],
       posvendas: ['Pós-Vendas', 'Gestão da operação de pós-vendas com módulos internos.'],
       grow: ['Grow Customer Care', 'Controle operacional dos casos copiados do portal Grow.'],
       chat: ['Chat', 'Comunicação interna do grupo QUALIS.'],
+      sistemas: ['Sistemas', 'Central de links, logins e senhas operacionais.'],
       config: ['Configurações', 'Área administrativa do sistema.']
     };
 
@@ -1700,6 +2001,7 @@ Portal QUALIS`
       fillConfigForm(db);
       applyDatabaseToUI(db);
       renderChat();
+      renderSystems();
     }
 
     function logout(){
@@ -1763,6 +2065,7 @@ Portal QUALIS`
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (id === 'chat') renderChat();
+      if (id === 'sistemas') renderSystems();
     }
 
     function openSubpage(sectionId, subpageId, btn){
@@ -2178,6 +2481,72 @@ NNE - NORDESTE`;
         console.error('Erro ao enviar mensagem:', err);
         alert('Erro ao enviar mensagem.');
       }
+    }
+
+    function renderSystems(){
+      const wrap = document.getElementById('systemsGrid');
+      if (!wrap) return;
+
+      wrap.innerHTML = SYSTEMS.map((item, index) => `
+        <div class="system-card">
+          <div class="system-head">
+            <div>
+              <h3 class="system-title">${escapeHtml(item.nome)}</h3>
+              <div class="system-sub">${escapeHtml(item.descricao || '')}</div>
+            </div>
+            <span class="system-tag">${escapeHtml(item.categoria || 'Sistema')}</span>
+          </div>
+
+          <div class="system-fields">
+            <div class="system-field">
+              <div class="system-field-label">Login</div>
+              <div class="system-field-value" id="systemLogin${index}">${escapeHtml(item.login || '-')}</div>
+            </div>
+
+            <div class="system-field">
+              <div class="system-field-label">Senha</div>
+              <div class="system-field-value" id="systemPassword${index}" data-raw="${escapeHtml(item.senha || '')}">••••••••</div>
+            </div>
+          </div>
+
+          <div class="system-actions">
+            <button class="system-btn secondary" onclick="copyToClipboard('${jsEscape(item.login || '')}', 'Login copiado')">Copiar login</button>
+            <button class="system-btn secondary" onclick="copyToClipboard('${jsEscape(item.senha || '')}', 'Senha copiada')">Copiar senha</button>
+            <button class="system-btn secondary" onclick="togglePassword(${index})">Mostrar senha</button>
+            <button class="system-btn primary" onclick="openSystemLink('${jsEscape(item.url || '')}')">Abrir portal</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function jsEscape(str){
+      return String(str || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'");
+    }
+
+    function copyToClipboard(text, msg){
+      navigator.clipboard.writeText(text).then(() => {
+        alert(msg);
+      }).catch(() => {
+        alert('Não foi possível copiar.');
+      });
+    }
+
+    function togglePassword(index){
+      const el = document.getElementById(`systemPassword${index}`);
+      if (!el) return;
+      const raw = el.getAttribute('data-raw') || '';
+      if (el.innerText === '••••••••') el.innerText = raw || '-';
+      else el.innerText = '••••••••';
+    }
+
+    function openSystemLink(url){
+      if (!url){
+        alert('Este card não possui link configurado.');
+        return;
+      }
+      window.open(url, '_blank');
     }
 
     function initLoginMascot(){
