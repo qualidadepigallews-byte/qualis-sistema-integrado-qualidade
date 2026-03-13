@@ -12,6 +12,7 @@
       --bg:#eef3fa;
       --surface:#ffffff;
       --surface-2:#f6f9fe;
+      --surface-3:#edf3fb;
       --border:#d7e1ef;
       --text:#182437;
       --muted:#73839b;
@@ -31,6 +32,7 @@
       --bg:#0b1220;
       --surface:#111b2f;
       --surface-2:#17253c;
+      --surface-3:#1d2d47;
       --border:#263954;
       --text:#edf4ff;
       --muted:#9eb1d1;
@@ -54,7 +56,7 @@
       color:var(--text);
     }
 
-    button,input,textarea{
+    button,input,textarea,select{
       font-family:'Inter',sans-serif;
     }
 
@@ -193,7 +195,7 @@
     }
 
     .search{
-      min-width:300px;
+      min-width:260px;
       border:1px solid var(--border);
       background:var(--surface);
       color:var(--text);
@@ -216,6 +218,19 @@
 
     .page{display:none}
     .page.active{display:block}
+
+    .page-title{
+      margin:0 0 8px;
+      font-size:30px;
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+
+    .page-subtitle{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:14px;
+    }
 
     .subnav{
       display:flex;
@@ -252,20 +267,37 @@
       border-radius:24px;
       box-shadow:var(--shadow);
       margin-bottom:14px;
+      position:relative;
+      overflow:hidden;
     }
 
     .banner.active{display:block}
+
+    .banner::after{
+      content:"";
+      position:absolute;
+      width:190px;
+      height:190px;
+      border-radius:50%;
+      right:-50px;
+      top:-50px;
+      background:rgba(255,255,255,.10);
+    }
 
     .banner h3{
       margin:0;
       font-size:30px;
       font-weight:900;
+      position:relative;
+      z-index:1;
     }
 
     .banner p{
       margin:12px 0 0;
       line-height:1.6;
       max-width:760px;
+      position:relative;
+      z-index:1;
     }
 
     .banner-dots{
@@ -323,6 +355,11 @@
     .green{color:var(--success)}
     .orange{color:var(--warning)}
     .red{color:var(--danger)}
+
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+    }
 
     .triple-grid{
       display:grid;
@@ -643,7 +680,7 @@
       text-transform:uppercase;
     }
 
-    .field input{
+    .field input,.field select{
       width:100%;
       border:1px solid var(--border);
       background:var(--surface);
@@ -660,10 +697,139 @@
       margin-top:6px;
     }
 
+    .chat-layout{
+      display:grid;
+      grid-template-columns:280px 1fr;
+      gap:18px;
+      min-height:560px;
+    }
+
+    .chat-users{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .chat-users h3{
+      margin:0 0 12px;
+      font-size:18px;
+    }
+
+    .chat-user{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--border);
+      background:var(--surface-2);
+      color:var(--text);
+      border-radius:14px;
+      padding:14px;
+      margin-bottom:10px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    .chat-user.active{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .chat-main{
+      display:flex;
+      flex-direction:column;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .chat-header{
+      padding:16px 18px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface-2);
+    }
+
+    .chat-header h3{
+      margin:0;
+      font-size:18px;
+    }
+
+    .chat-header p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .chat-messages{
+      flex:1;
+      padding:18px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background:var(--surface);
+      min-height:320px;
+    }
+
+    .message{
+      max-width:70%;
+      padding:12px 14px;
+      border-radius:16px;
+      line-height:1.5;
+      font-size:14px;
+      word-break:break-word;
+    }
+
+    .message.mine{
+      align-self:flex-end;
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-bottom-right-radius:6px;
+    }
+
+    .message.other{
+      align-self:flex-start;
+      background:var(--surface-2);
+      color:var(--text);
+      border:1px solid var(--border);
+      border-bottom-left-radius:6px;
+    }
+
+    .message small{
+      display:block;
+      margin-top:6px;
+      opacity:.75;
+      font-size:11px;
+    }
+
+    .chat-compose{
+      padding:16px;
+      border-top:1px solid var(--border);
+      display:flex;
+      gap:12px;
+      background:var(--surface-2);
+    }
+
+    .chat-compose textarea{
+      flex:1;
+      min-height:56px;
+      max-height:140px;
+      resize:vertical;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px;
+      outline:none;
+    }
+
     @media (max-width: 1380px){
       .summary-grid{grid-template-columns:repeat(2,1fr)}
       .triple-grid{grid-template-columns:1fr}
-      .brand-panels,.grow-inputs,.form-grid{grid-template-columns:1fr}
+      .brand-panels,.grow-inputs,.form-grid,.chat-layout{grid-template-columns:1fr}
     }
 
     @media (max-width: 1024px){
@@ -681,6 +847,7 @@
       .search{min-width:100%}
       .summary-grid,.metric-grid,.grow-summary,.quick-links{grid-template-columns:1fr}
       .nps-value{font-size:64px}
+      .message{max-width:88%}
     }
   </style>
 </head>
@@ -739,7 +906,7 @@
         </div>
       </div>
 
-      <!-- INICIO -->
+      <!-- INÍCIO -->
       <section id="inicio" class="page active">
         <div class="banner active">
           <h3>Bem-vinda ao QUALIS</h3>
@@ -841,8 +1008,8 @@
               <div class="brand-header peugeot-head">Painel CX Vendas • Peugeot</div>
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
-                <div class="nps-value" id="npsVendasPeugeotValue">82</div>
-                <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85</span></div>
+                <div class="nps-value" id="npsVendasPeugeotValue">82%</div>
+                <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85%</span></div>
               </div>
               <div class="metric-grid">
                 <div class="metric"><h5>Promotores</h5><p id="vendasPeugeotPromotores">45</p></div>
@@ -850,7 +1017,7 @@
                 <div class="metric"><h5>Detratores</h5><p id="vendasPeugeotDetratores">5</p></div>
                 <div class="metric"><h5>Pesquisas</h5><p id="vendasPeugeotPesquisas">62</p></div>
                 <div class="metric"><h5>Base</h5><p id="vendasPeugeotBase">410</p></div>
-                <div class="metric"><h5>Conversão</h5><p id="vendasPeugeotConversao">15%</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="vendasPeugeotConversao">15,1%</p></div>
               </div>
             </div>
 
@@ -858,8 +1025,8 @@
               <div class="brand-header citroen-head">Painel CX Vendas • Citroën</div>
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
-                <div class="nps-value" id="npsVendasCitroenValue">76</div>
-                <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85</span></div>
+                <div class="nps-value" id="npsVendasCitroenValue">47,7%</div>
+                <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85%</span></div>
               </div>
               <div class="metric-grid">
                 <div class="metric"><h5>Promotores</h5><p id="vendasCitroenPromotores">28</p></div>
@@ -867,7 +1034,7 @@
                 <div class="metric"><h5>Detratores</h5><p id="vendasCitroenDetratores">7</p></div>
                 <div class="metric"><h5>Pesquisas</h5><p id="vendasCitroenPesquisas">44</p></div>
                 <div class="metric"><h5>Base</h5><p id="vendasCitroenBase">295</p></div>
-                <div class="metric"><h5>Conversão</h5><p id="vendasCitroenConversao">14%</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="vendasCitroenConversao">14,9%</p></div>
               </div>
             </div>
           </div>
@@ -880,7 +1047,7 @@
         <div id="vendas-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para auditoria da operação de vendas.</p></div></div>
       </section>
 
-      <!-- POS-VENDAS -->
+      <!-- PÓS-VENDAS -->
       <section id="posvendas" class="page">
         <h1 class="page-title">Pós-Vendas</h1>
         <p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
@@ -900,8 +1067,8 @@
               <div class="brand-header peugeot-head">Painel CX Pós-Vendas • Peugeot</div>
               <div class="nps-hero">
                 <h3>NPS Peugeot</h3>
-                <div class="nps-value" id="npsPosPeugeotValue">91</div>
-                <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85</span></div>
+                <div class="nps-value" id="npsPosPeugeotValue">77,5%</div>
+                <div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85%</span></div>
               </div>
               <div class="metric-grid">
                 <div class="metric"><h5>Promotores</h5><p id="posPeugeotPromotores">58</p></div>
@@ -909,7 +1076,7 @@
                 <div class="metric"><h5>Detratores</h5><p id="posPeugeotDetratores">3</p></div>
                 <div class="metric"><h5>Pesquisas</h5><p id="posPeugeotPesquisas">71</p></div>
                 <div class="metric"><h5>Base</h5><p id="posPeugeotBase">455</p></div>
-                <div class="metric"><h5>Conversão</h5><p id="posPeugeotConversao">16%</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="posPeugeotConversao">15,6%</p></div>
               </div>
             </div>
 
@@ -917,8 +1084,8 @@
               <div class="brand-header citroen-head">Painel CX Pós-Vendas • Citroën</div>
               <div class="nps-hero">
                 <h3>NPS Citroën</h3>
-                <div class="nps-value" id="npsPosCitroenValue">79</div>
-                <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85</span></div>
+                <div class="nps-value" id="npsPosCitroenValue">54,0%</div>
+                <div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85%</span></div>
               </div>
               <div class="metric-grid">
                 <div class="metric"><h5>Promotores</h5><p id="posCitroenPromotores">33</p></div>
@@ -926,7 +1093,7 @@
                 <div class="metric"><h5>Detratores</h5><p id="posCitroenDetratores">6</p></div>
                 <div class="metric"><h5>Pesquisas</h5><p id="posCitroenPesquisas">50</p></div>
                 <div class="metric"><h5>Base</h5><p id="posCitroenBase">320</p></div>
-                <div class="metric"><h5>Conversão</h5><p id="posCitroenConversao">15%</p></div>
+                <div class="metric"><h5>Conversão</h5><p id="posCitroenConversao">15,6%</p></div>
               </div>
             </div>
           </div>
@@ -1001,9 +1168,28 @@
 
       <!-- CHAT -->
       <section id="chat" class="page">
-        <div class="placeholder">
-          <h3>Chat</h3>
-          <p>Área reservada para comunicação interna entre Kamilly, Letícia e Laís dentro do QUALIS.</p>
+        <h1 class="page-title">Chat</h1>
+        <p class="page-subtitle">Comunicação interna entre Kamilly, Letícia e Laís.</p>
+
+        <div class="chat-layout">
+          <div class="chat-users">
+            <h3>Conversas</h3>
+            <button class="chat-user active" onclick="selectChatUser('Kamilly', this)">Kamilly</button>
+            <button class="chat-user" onclick="selectChatUser('Letícia', this)">Letícia</button>
+            <button class="chat-user" onclick="selectChatUser('Laís', this)">Laís</button>
+          </div>
+
+          <div class="chat-main">
+            <div class="chat-header">
+              <h3 id="chatTitle">Conversa com Kamilly</h3>
+              <p>Chat interno visual do QUALIS</p>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-compose">
+              <textarea id="chatInput" placeholder="Digite sua mensagem..."></textarea>
+              <button class="btn primary" onclick="sendChatMessage()">Enviar</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1019,7 +1205,7 @@
         <div id="config-db" class="subpage active">
           <div class="card">
             <h4 style="margin:0 0 14px;color:var(--text);font-size:22px;">Banco de Dados</h4>
-            <p style="margin:0 0 16px;color:var(--muted)">Edite aqui os números reais que alimentam o portal.</p>
+            <p style="margin:0 0 16px;color:var(--muted)">Edite aqui os números reais. O sistema calcula automaticamente pesquisas, conversão e NPS.</p>
 
             <div class="form-grid">
               <div class="field"><label>Promotoras hoje</label><input id="cfg_homePromotorasHoje" type="number" value="12"></div>
@@ -1040,41 +1226,31 @@
             </div>
 
             <div class="form-grid">
-              <div class="field"><label>NPS Vendas Peugeot</label><input id="cfg_npsVendasPeugeotValue" type="number" value="82"></div>
-              <div class="field"><label>Meta Vendas Peugeot</label><input id="cfg_npsVendasPeugeotMeta" type="number" value="85"></div>
-              <div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_vendasPeugeotPromotores" type="number" value="45"></div>
-              <div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_vendasPeugeotNeutros" type="number" value="12"></div>
-              <div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_vendasPeugeotDetratores" type="number" value="5"></div>
-              <div class="field"><label>Pesquisas Vendas Peugeot</label><input id="cfg_vendasPeugeotPesquisas" type="number" value="62"></div>
-              <div class="field"><label>Base Vendas Peugeot</label><input id="cfg_vendasPeugeotBase" type="number" value="410"></div>
-              <div class="field"><label>Conversão Vendas Peugeot</label><input id="cfg_vendasPeugeotConversao" type="text" value="15%"></div>
-              <div class="field"><label>NPS Vendas Citroën</label><input id="cfg_npsVendasCitroenValue" type="number" value="76"></div>
-              <div class="field"><label>Meta Vendas Citroën</label><input id="cfg_npsVendasCitroenMeta" type="number" value="85"></div>
-              <div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_vendasCitroenPromotores" type="number" value="28"></div>
-              <div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_vendasCitroenNeutros" type="number" value="9"></div>
-              <div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_vendasCitroenDetratores" type="number" value="7"></div>
-              <div class="field"><label>Pesquisas Vendas Citroën</label><input id="cfg_vendasCitroenPesquisas" type="number" value="44"></div>
-              <div class="field"><label>Base Vendas Citroën</label><input id="cfg_vendasCitroenBase" type="number" value="295"></div>
-              <div class="field"><label>Conversão Vendas Citroën</label><input id="cfg_vendasCitroenConversao" type="text" value="14%"></div>
+              <div class="field"><label>Meta Vendas Peugeot (%)</label><input id="cfg_metaVendasPeugeot" type="number" value="85"></div>
+              <div class="field"><label>Base Vendas Peugeot</label><input id="cfg_baseVendasPeugeot" type="number" value="410"></div>
+              <div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_promotoresVendasPeugeot" type="number" value="45"></div>
+              <div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_neutrosVendasPeugeot" type="number" value="12"></div>
+              <div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_detratoresVendasPeugeot" type="number" value="5"></div>
+
+              <div class="field"><label>Meta Vendas Citroën (%)</label><input id="cfg_metaVendasCitroen" type="number" value="85"></div>
+              <div class="field"><label>Base Vendas Citroën</label><input id="cfg_baseVendasCitroen" type="number" value="295"></div>
+              <div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_promotoresVendasCitroen" type="number" value="28"></div>
+              <div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_neutrosVendasCitroen" type="number" value="9"></div>
+              <div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_detratoresVendasCitroen" type="number" value="7"></div>
             </div>
 
             <div class="form-grid">
-              <div class="field"><label>NPS Pós Peugeot</label><input id="cfg_npsPosPeugeotValue" type="number" value="91"></div>
-              <div class="field"><label>Meta Pós Peugeot</label><input id="cfg_npsPosPeugeotMeta" type="number" value="85"></div>
-              <div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_posPeugeotPromotores" type="number" value="58"></div>
-              <div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_posPeugeotNeutros" type="number" value="10"></div>
-              <div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_posPeugeotDetratores" type="number" value="3"></div>
-              <div class="field"><label>Pesquisas Pós Peugeot</label><input id="cfg_posPeugeotPesquisas" type="number" value="71"></div>
-              <div class="field"><label>Base Pós Peugeot</label><input id="cfg_posPeugeotBase" type="number" value="455"></div>
-              <div class="field"><label>Conversão Pós Peugeot</label><input id="cfg_posPeugeotConversao" type="text" value="16%"></div>
-              <div class="field"><label>NPS Pós Citroën</label><input id="cfg_npsPosCitroenValue" type="number" value="79"></div>
-              <div class="field"><label>Meta Pós Citroën</label><input id="cfg_npsPosCitroenMeta" type="number" value="85"></div>
-              <div class="field"><label>Promotores Pós Citroën</label><input id="cfg_posCitroenPromotores" type="number" value="33"></div>
-              <div class="field"><label>Neutros Pós Citroën</label><input id="cfg_posCitroenNeutros" type="number" value="11"></div>
-              <div class="field"><label>Detratores Pós Citroën</label><input id="cfg_posCitroenDetratores" type="number" value="6"></div>
-              <div class="field"><label>Pesquisas Pós Citroën</label><input id="cfg_posCitroenPesquisas" type="number" value="50"></div>
-              <div class="field"><label>Base Pós Citroën</label><input id="cfg_posCitroenBase" type="number" value="320"></div>
-              <div class="field"><label>Conversão Pós Citroën</label><input id="cfg_posCitroenConversao" type="text" value="15%"></div>
+              <div class="field"><label>Meta Pós Peugeot (%)</label><input id="cfg_metaPosPeugeot" type="number" value="85"></div>
+              <div class="field"><label>Base Pós Peugeot</label><input id="cfg_basePosPeugeot" type="number" value="455"></div>
+              <div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_promotoresPosPeugeot" type="number" value="58"></div>
+              <div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_neutrosPosPeugeot" type="number" value="10"></div>
+              <div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_detratoresPosPeugeot" type="number" value="3"></div>
+
+              <div class="field"><label>Meta Pós Citroën (%)</label><input id="cfg_metaPosCitroen" type="number" value="85"></div>
+              <div class="field"><label>Base Pós Citroën</label><input id="cfg_basePosCitroen" type="number" value="320"></div>
+              <div class="field"><label>Promotores Pós Citroën</label><input id="cfg_promotoresPosCitroen" type="number" value="33"></div>
+              <div class="field"><label>Neutros Pós Citroën</label><input id="cfg_neutrosPosCitroen" type="number" value="11"></div>
+              <div class="field"><label>Detratores Pós Citroën</label><input id="cfg_detratoresPosCitroen" type="number" value="6"></div>
             </div>
 
             <div class="save-row">
@@ -1114,42 +1290,71 @@
       homeTreinCronograma:'8',
       homeTreinConcluidosSemana:'14',
 
-      npsVendasPeugeotValue:'82',
-      npsVendasPeugeotMeta:'85',
-      vendasPeugeotPromotores:'45',
-      vendasPeugeotNeutros:'12',
-      vendasPeugeotDetratores:'5',
-      vendasPeugeotPesquisas:'62',
-      vendasPeugeotBase:'410',
-      vendasPeugeotConversao:'15%',
+      metaVendasPeugeot:'85',
+      baseVendasPeugeot:'410',
+      promotoresVendasPeugeot:'45',
+      neutrosVendasPeugeot:'12',
+      detratoresVendasPeugeot:'5',
 
-      npsVendasCitroenValue:'76',
-      npsVendasCitroenMeta:'85',
-      vendasCitroenPromotores:'28',
-      vendasCitroenNeutros:'9',
-      vendasCitroenDetratores:'7',
-      vendasCitroenPesquisas:'44',
-      vendasCitroenBase:'295',
-      vendasCitroenConversao:'14%',
+      metaVendasCitroen:'85',
+      baseVendasCitroen:'295',
+      promotoresVendasCitroen:'28',
+      neutrosVendasCitroen:'9',
+      detratoresVendasCitroen:'7',
 
-      npsPosPeugeotValue:'91',
-      npsPosPeugeotMeta:'85',
-      posPeugeotPromotores:'58',
-      posPeugeotNeutros:'10',
-      posPeugeotDetratores:'3',
-      posPeugeotPesquisas:'71',
-      posPeugeotBase:'455',
-      posPeugeotConversao:'16%',
+      metaPosPeugeot:'85',
+      basePosPeugeot:'455',
+      promotoresPosPeugeot:'58',
+      neutrosPosPeugeot:'10',
+      detratoresPosPeugeot:'3',
 
-      npsPosCitroenValue:'79',
-      npsPosCitroenMeta:'85',
-      posCitroenPromotores:'33',
-      posCitroenNeutros:'11',
-      posCitroenDetratores:'6',
-      posCitroenPesquisas:'50',
-      posCitroenBase:'320',
-      posCitroenConversao:'15%'
+      metaPosCitroen:'85',
+      basePosCitroen:'320',
+      promotoresPosCitroen:'33',
+      neutrosPosCitroen:'11',
+      detratoresPosCitroen:'6'
     };
+
+    let currentBanner = 0;
+    let currentChatUser = 'Kamilly';
+
+    const defaultChatStore = {
+      Kamilly: [
+        { author: 'system', text: 'Chat interno iniciado.', time: timeNow() }
+      ],
+      Letícia: [
+        { author: 'system', text: 'Conversa com Letícia iniciada.', time: timeNow() }
+      ],
+      Laís: [
+        { author: 'system', text: 'Conversa com Laís iniciada.', time: timeNow() }
+      ]
+    };
+
+    function timeNow(){
+      const d = new Date();
+      return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function formatPercent(value){
+      return Number(value || 0).toFixed(1).replace('.', ',') + '%';
+    }
+
+    function calculateIndicators(base, promotores, neutros, detratores){
+      base = Number(base) || 0;
+      promotores = Number(promotores) || 0;
+      neutros = Number(neutros) || 0;
+      detratores = Number(detratores) || 0;
+
+      const pesquisas = promotores + neutros + detratores;
+      const conversao = base > 0 ? (pesquisas / base) * 100 : 0;
+      const nps = pesquisas > 0 ? ((promotores - detratores) / pesquisas) * 100 : 0;
+
+      return {
+        pesquisas,
+        conversao,
+        nps
+      };
+    }
 
     function openPage(id, btn){
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -1161,7 +1366,7 @@
 
       document.getElementById('topTitle').innerText = pageTitles[id][0];
       document.getElementById('topSubtitle').innerText = pageTitles[id][1];
-      window.scrollTo({top:0, behavior:'smooth'});
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function openSubpage(sectionId, subpageId, btn){
@@ -1186,26 +1391,19 @@
       if (saved === 'dark') document.body.classList.add('dark');
     }
 
-    function setText(id, value){
-      const el = document.getElementById(id);
-      if (el) el.innerText = value;
-    }
-
     function loadDatabase(){
       const raw = localStorage.getItem('qualis-db');
-      if (!raw) return {...DEFAULT_DB};
+      if (!raw) return { ...DEFAULT_DB };
       try{
-        return {...DEFAULT_DB, ...JSON.parse(raw)};
+        return { ...DEFAULT_DB, ...JSON.parse(raw) };
       }catch{
-        return {...DEFAULT_DB};
+        return { ...DEFAULT_DB };
       }
     }
 
-    function fillConfigForm(db){
-      Object.keys(DEFAULT_DB).forEach(key => {
-        const input = document.getElementById('cfg_' + key);
-        if (input) input.value = db[key];
-      });
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if (el) el.innerText = value;
     }
 
     function applyNPSColor(idValue, idMeta){
@@ -1221,8 +1419,94 @@
       else valueEl.classList.add('nps-red');
     }
 
+    function fillConfigForm(db){
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        if (input) input.value = db[key];
+      });
+    }
+
     function applyDatabaseToUI(db){
-      Object.keys(DEFAULT_DB).forEach(key => setText(key, db[key]));
+      setText('homePromotorasHoje', db.homePromotorasHoje);
+      setText('homeDetratoresHoje', db.homeDetratoresHoje);
+      setText('homePesquisasRespondidas', db.homePesquisasRespondidas);
+      setText('homeConversaoMes', db.homeConversaoMes);
+      setText('homeTreinamentosPendentes', db.homeTreinamentosPendentes);
+      setText('homeRacsPendentes', db.homeRacsPendentes);
+      setText('homeAuditoriasPendentes', db.homeAuditoriasPendentes);
+      setText('homePlanosPendentes', db.homePlanosPendentes);
+      setText('homeHotAlertsCriticos', db.homeHotAlertsCriticos);
+      setText('homeRacsCriticos', db.homeRacsCriticos);
+      setText('homeAuditoriasUrgentes', db.homeAuditoriasUrgentes);
+      setText('homePlanosCriticos', db.homePlanosCriticos);
+      setText('homeTreinPendentes2', db.homeTreinPendentes2);
+      setText('homeTreinCronograma', db.homeTreinCronograma);
+      setText('homeTreinConcluidosSemana', db.homeTreinConcluidosSemana);
+
+      // VENDAS PEUGEOT
+      const vp = calculateIndicators(
+        db.baseVendasPeugeot,
+        db.promotoresVendasPeugeot,
+        db.neutrosVendasPeugeot,
+        db.detratoresVendasPeugeot
+      );
+      setText('npsVendasPeugeotValue', formatPercent(vp.nps));
+      setText('npsVendasPeugeotMeta', formatPercent(db.metaVendasPeugeot));
+      setText('vendasPeugeotPromotores', db.promotoresVendasPeugeot);
+      setText('vendasPeugeotNeutros', db.neutrosVendasPeugeot);
+      setText('vendasPeugeotDetratores', db.detratoresVendasPeugeot);
+      setText('vendasPeugeotPesquisas', vp.pesquisas);
+      setText('vendasPeugeotBase', db.baseVendasPeugeot);
+      setText('vendasPeugeotConversao', formatPercent(vp.conversao));
+
+      // VENDAS CITROEN
+      const vc = calculateIndicators(
+        db.baseVendasCitroen,
+        db.promotoresVendasCitroen,
+        db.neutrosVendasCitroen,
+        db.detratoresVendasCitroen
+      );
+      setText('npsVendasCitroenValue', formatPercent(vc.nps));
+      setText('npsVendasCitroenMeta', formatPercent(db.metaVendasCitroen));
+      setText('vendasCitroenPromotores', db.promotoresVendasCitroen);
+      setText('vendasCitroenNeutros', db.neutrosVendasCitroen);
+      setText('vendasCitroenDetratores', db.detratoresVendasCitroen);
+      setText('vendasCitroenPesquisas', vc.pesquisas);
+      setText('vendasCitroenBase', db.baseVendasCitroen);
+      setText('vendasCitroenConversao', formatPercent(vc.conversao));
+
+      // POS PEUGEOT
+      const pp = calculateIndicators(
+        db.basePosPeugeot,
+        db.promotoresPosPeugeot,
+        db.neutrosPosPeugeot,
+        db.detratoresPosPeugeot
+      );
+      setText('npsPosPeugeotValue', formatPercent(pp.nps));
+      setText('npsPosPeugeotMeta', formatPercent(db.metaPosPeugeot));
+      setText('posPeugeotPromotores', db.promotoresPosPeugeot);
+      setText('posPeugeotNeutros', db.neutrosPosPeugeot);
+      setText('posPeugeotDetratores', db.detratoresPosPeugeot);
+      setText('posPeugeotPesquisas', pp.pesquisas);
+      setText('posPeugeotBase', db.basePosPeugeot);
+      setText('posPeugeotConversao', formatPercent(pp.conversao));
+
+      // POS CITROEN
+      const pc = calculateIndicators(
+        db.basePosCitroen,
+        db.promotoresPosCitroen,
+        db.neutrosPosCitroen,
+        db.detratoresPosCitroen
+      );
+      setText('npsPosCitroenValue', formatPercent(pc.nps));
+      setText('npsPosCitroenMeta', formatPercent(db.metaPosCitroen));
+      setText('posCitroenPromotores', db.promotoresPosCitroen);
+      setText('posCitroenNeutros', db.neutrosPosCitroen);
+      setText('posCitroenDetratores', db.detratoresPosCitroen);
+      setText('posCitroenPesquisas', pc.pesquisas);
+      setText('posCitroenBase', db.basePosCitroen);
+      setText('posCitroenConversao', formatPercent(pc.conversao));
+
       applyNPSColor('npsVendasPeugeotValue','npsVendasPeugeotMeta');
       applyNPSColor('npsVendasCitroenValue','npsVendasCitroenMeta');
       applyNPSColor('npsPosPeugeotValue','npsPosPeugeotMeta');
@@ -1242,21 +1526,17 @@
 
     function resetDatabase(){
       localStorage.removeItem('qualis-db');
-      const db = {...DEFAULT_DB};
+      const db = { ...DEFAULT_DB };
       fillConfigForm(db);
       applyDatabaseToUI(db);
       alert('Banco de dados restaurado.');
     }
 
-    let currentBanner = 0;
-
     function showBanner(index){
       const banners = document.querySelectorAll('.banner');
       const dots = document.querySelectorAll('.dot');
-      banners.forEach(b => b.classList.remove('active'));
-      dots.forEach(d => d.classList.remove('active'));
-      if (banners[index]) banners[index].classList.add('active');
-      if (dots[index]) dots[index].classList.add('active');
+      banners.forEach((b,i) => b.classList.toggle('active', i === index));
+      dots.forEach((d,i) => d.classList.toggle('active', i === index));
       currentBanner = index;
     }
 
@@ -1454,11 +1734,71 @@ NNE - NORDESTE`;
         .replace(/>/g, '&gt;');
     }
 
+    function loadChatStore(){
+      const raw = localStorage.getItem('qualis-chat');
+      if (!raw) return JSON.parse(JSON.stringify(defaultChatStore));
+      try{
+        return JSON.parse(raw);
+      }catch{
+        return JSON.parse(JSON.stringify(defaultChatStore));
+      }
+    }
+
+    function saveChatStore(store){
+      localStorage.setItem('qualis-chat', JSON.stringify(store));
+    }
+
+    function renderChat(){
+      const store = loadChatStore();
+      const messages = store[currentChatUser] || [];
+      document.getElementById('chatTitle').innerText = 'Conversa com ' + currentChatUser;
+
+      const wrap = document.getElementById('chatMessages');
+      if (!messages.length){
+        wrap.innerHTML = '<div class="message other">Sem mensagens ainda.</div>';
+        return;
+      }
+
+      wrap.innerHTML = messages.map(msg => `
+        <div class="message ${msg.author === 'me' ? 'mine' : 'other'}">
+          ${escapeHtml(msg.text)}
+          <small>${msg.author === 'me' ? 'Você' : currentChatUser} • ${msg.time}</small>
+        </div>
+      `).join('');
+
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function selectChatUser(name, btn){
+      currentChatUser = name;
+      document.querySelectorAll('.chat-user').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderChat();
+    }
+
+    function sendChatMessage(){
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const store = loadChatStore();
+      if (!store[currentChatUser]) store[currentChatUser] = [];
+      store[currentChatUser].push({
+        author:'me',
+        text,
+        time:timeNow()
+      });
+      saveChatStore(store);
+      input.value = '';
+      renderChat();
+    }
+
     window.onload = function(){
       loadTheme();
       const db = loadDatabase();
       fillConfigForm(db);
       applyDatabaseToUI(db);
+      renderChat();
       setInterval(rotateBanners, 5000);
     };
   </script>
