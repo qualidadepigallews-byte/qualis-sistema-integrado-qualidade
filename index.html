@@ -1150,6 +1150,45 @@
       border:1px solid var(--border);
     }
 
+    /* ASSISTENTE */
+    .assistant-toolbar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:stretch;
+    }
+
+    .assistant-input{
+      flex:1;
+      min-width:280px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      padding:14px 16px;
+      border-radius:14px;
+      outline:none;
+      box-shadow:var(--shadow);
+    }
+
+    .assistant-presets{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .assistant-response{
+      margin-top:16px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      min-height:120px;
+      white-space:pre-wrap;
+      line-height:1.7;
+      color:var(--text);
+    }
+
     @media (max-width: 1380px){
       .login-shell,
       .summary-grid{grid-template-columns:repeat(2,1fr)}
@@ -1178,7 +1217,6 @@
   </style>
 </head>
 <body>
-  <!-- LOGIN -->
   <section id="loginScreen">
     <div class="login-shell">
       <div class="login-brand">
@@ -1237,7 +1275,6 @@
     </div>
   </section>
 
-  <!-- PORTAL -->
   <div id="portalApp">
     <div class="app">
       <aside class="sidebar">
@@ -1315,6 +1352,37 @@
             <button class="dot active" onclick="showBanner(0)"></button>
             <button class="dot" onclick="showBanner(1)"></button>
             <button class="dot" onclick="showBanner(2)"></button>
+          </div>
+
+          <div class="card" style="margin-bottom:18px;">
+            <h4 style="margin:0 0 10px;color:var(--text);font-size:22px;">Assistente QUALIS</h4>
+            <p style="margin:0 0 14px;color:var(--muted);line-height:1.6;">
+              Pergunte algo sobre NPS, meta, risco, recuperação, prioridades e resumo executivo da operação.
+            </p>
+
+            <div class="assistant-toolbar">
+              <input
+                id="assistantInput"
+                class="assistant-input"
+                type="text"
+                placeholder="Ex.: Qual marca está mais crítica? / Temos base suficiente para recuperar a Citroën? / Faça um texto para a diretoria"
+                onkeydown="if(event.key==='Enter'){runAssistant();}"
+              />
+              <button class="btn primary" onclick="runAssistant()">Perguntar</button>
+            </div>
+
+            <div class="assistant-presets">
+              <button class="btn secondary" onclick="askPreset('Qual o NPS da Peugeot?')">NPS Peugeot</button>
+              <button class="btn secondary" onclick="askPreset('Qual o NPS da Citroën?')">NPS Citroën</button>
+              <button class="btn secondary" onclick="askPreset('Quantos promotores faltam para bater a meta?')">Promotores p/ meta</button>
+              <button class="btn secondary" onclick="askPreset('Estamos em risco de não bater a meta?')">Risco</button>
+              <button class="btn secondary" onclick="askPreset('Qual marca está mais crítica?')">Marca crítica</button>
+              <button class="btn secondary" onclick="askPreset('Temos base suficiente para recuperar?')">Recuperação</button>
+              <button class="btn secondary" onclick="askPreset('Quais são as prioridades do dia?')">Prioridades</button>
+              <button class="btn secondary" onclick="askPreset('Faça um texto para a diretoria')">Texto diretoria</button>
+            </div>
+
+            <div id="assistantResponse" class="assistant-response">Olá. Posso analisar NPS, meta, risco, recuperação, prioridades e montar textos executivos com base nos indicadores atuais.</div>
           </div>
 
           <div class="summary-grid">
@@ -1661,190 +1729,29 @@
     const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
 
     const SYSTEMS = [
-      {
-        nome: 'Portal de Treinamentos',
-        descricao: 'Treinamentos corporativos',
-        categoria: 'Treinamento',
-        url: 'https://psa.csod.com/samldefault.aspx?ouid=2',
-        login: 'DN89492',
-        senha: 'Piga2070'
-      },
-      {
-        nome: 'DealerNet',
-        descricao: 'Portal de rede / fluxo',
-        categoria: 'Rede',
-        url: 'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html',
-        login: 'KAMILLY.PAIVA',
-        senha: 'Adtsa@2032'
-      },
-      {
-        nome: 'Holmes',
-        descricao: 'Acesso Holmes',
-        categoria: 'Operação',
-        url: '',
-        login: 'kamilly.paiva@adtsa.com.br',
-        senha: 'Adtsa@2025'
-      },
-      {
-        nome: 'Syonet',
-        descricao: 'Portal Syonet',
-        categoria: 'CRM',
-        url: 'https://adtsa.syonet.com/portal/app.do?modulo=login#/login',
-        login: 'KAMILLY.PAIVA',
-        senha: 'K10092018m@'
-      },
-      {
-        nome: 'Grow - Peugeot',
-        descricao: 'Portal Grow Peugeot',
-        categoria: 'Grow',
-        url: 'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',
-        login: 'DN89494',
-        senha: 'Piga2050'
-      },
-      {
-        nome: 'Grow - Citroën',
-        descricao: 'Portal Grow Citroën',
-        categoria: 'Grow',
-        url: 'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',
-        login: 'DN89492',
-        senha: 'Piga2407'
-      },
-      {
-        nome: 'Snap On - Auditoria/Autoavaliação',
-        descricao: 'Padrões e autoavaliação',
-        categoria: 'Auditoria',
-        url: 'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092',
-        login: 'DN89492',
-        senha: 'Piga2407'
-      },
-      {
-        nome: 'Focus - Peugeot',
-        descricao: 'Focus Peugeot',
-        categoria: 'Focus',
-        url: 'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',
-        login: 'DN89494',
-        senha: 'Piga2050'
-      },
-      {
-        nome: 'Focus - Citroën',
-        descricao: 'Focus Citroën',
-        categoria: 'Focus',
-        url: 'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',
-        login: 'DM62286',
-        senha: 'Piga2060'
-      },
-      {
-        nome: 'Trilogo',
-        descricao: 'Portal Trilogo',
-        categoria: 'Portal',
-        url: 'https://entrar.trilogo.app/',
-        login: 'kamilly.paiva@adtsa.com.br',
-        senha: 'K10092018m@'
-      },
-      {
-        nome: 'ADM Partenaires - Peugeot',
-        descricao: 'Acesso Peugeot',
-        categoria: 'Garantia',
-        url: 'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires',
-        login: 'DN89494',
-        senha: 'Piga2070'
-      },
-      {
-        nome: 'ADM Partenaires - Citroën',
-        descricao: 'Acesso Citroën',
-        categoria: 'Garantia',
-        url: 'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires',
-        login: 'DN89492',
-        senha: 'Piga2070'
-      },
-      {
-        nome: 'Reclame Aqui',
-        descricao: 'Painel Reclame Aqui',
-        categoria: 'Atendimento',
-        url: 'https://www.reclameaqui.com.br/',
-        login: 'kamilly.paiva@adtsa.com.br',
-        senha: 'Adtsa@2025'
-      },
-      {
-        nome: 'CSPS - Peugeot',
-        descricao: 'CSPS Peugeot',
-        categoria: 'Pesquisa',
-        url: '',
-        login: 'CA00064P',
-        senha: 'Piga2033'
-      },
-      {
-        nome: 'CSPS - Citroën',
-        descricao: 'CSPS Citroën',
-        categoria: 'Pesquisa',
-        url: '',
-        login: 'CA00013C',
-        senha: 'Piga2033'
-      },
-      {
-        nome: 'Webmail - Qualidade',
-        descricao: 'Webmail corporativo',
-        categoria: 'E-mail',
-        url: 'https://mail.google.com/mail/u/0/',
-        login: 'qualidade.pigallews@adtsa.com.br',
-        senha: 'Citroen@2026'
-      },
-      {
-        nome: 'Google My Business - Pigalle',
-        descricao: 'Perfil da empresa',
-        categoria: 'Google',
-        url: 'https://mail.google.com/mail/u/0/',
-        login: 'pigallepgle@gmail.com',
-        senha: 'Adtsa2021'
-      },
-      {
-        nome: 'Gmail - Qualidade',
-        descricao: 'Gmail da qualidade',
-        categoria: 'E-mail',
-        url: 'https://mail.google.com/mail/u/0/',
-        login: 'qualidadepigallews@gmail.com',
-        senha: 'Adtsa@2025'
-      },
-      {
-        nome: 'My People Peugeot',
-        descricao: 'Portal My People Peugeot',
-        categoria: 'Pessoas',
-        url: 'https://myPeople.fiat.com',
-        login: 'BR-000064P.admin',
-        senha: 'P3!wH8#mZ'
-      },
-      {
-        nome: 'My People Citroën',
-        descricao: 'Portal My People Citroën',
-        categoria: 'Pessoas',
-        url: 'https://myPeople.fiat.com',
-        login: 'TBR-CE41PUD.admin',
-        senha: 'Km.2027@pm'
-      },
-      {
-        nome: 'Mopar Eper',
-        descricao: 'Acesso Chico - Oficina',
-        categoria: 'Oficina',
-        url: 'https://eper-ltm.parts.fiat.com/',
-        login: 'TBR-CE41PUD.d002',
-        senha: 'Piga2027@'
-      },
-      {
-        nome: 'Mopar Tools',
-        descricao: 'Ferramentas Mopar',
-        categoria: 'Oficina',
-        url: 'https://tools.moparservicecenter.com.br/Acesso/Entrada',
-        login: 'TBR-CE41PUD.d002',
-        senha: 'Piga2027@'
-      },
-      {
-        nome: 'WiTech',
-        descricao: 'Diagnóstico WiTech',
-        categoria: 'Oficina',
-        url: 'https://app.l.fcawitech.com/wt2/index.html#/discovery/flight-recorder-templates',
-        login: 'TBR-CE41PUD.d002',
-        senha: 'Piga2027@'
-      }
+      { nome:'Portal de Treinamentos', descricao:'Treinamentos corporativos', categoria:'Treinamento', url:'https://psa.csod.com/samldefault.aspx?ouid=2', login:'DN89492', senha:'Piga2070' },
+      { nome:'DealerNet', descricao:'Portal de rede / fluxo', categoria:'Rede', url:'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html', login:'KAMILLY.PAIVA', senha:'Adtsa@2032' },
+      { nome:'Holmes', descricao:'Acesso Holmes', categoria:'Operação', url:'', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
+      { nome:'Syonet', descricao:'Portal Syonet', categoria:'CRM', url:'https://adtsa.syonet.com/portal/app.do?modulo=login#/login', login:'KAMILLY.PAIVA', senha:'K10092018m@' },
+      { nome:'Grow - Peugeot', descricao:'Portal Grow Peugeot', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89494', senha:'Piga2050' },
+      { nome:'Grow - Citroën', descricao:'Portal Grow Citroën', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89492', senha:'Piga2407' },
+      { nome:'Snap On - Auditoria/Autoavaliação', descricao:'Padrões e autoavaliação', categoria:'Auditoria', url:'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092', login:'DN89492', senha:'Piga2407' },
+      { nome:'Focus - Peugeot', descricao:'Focus Peugeot', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DN89494', senha:'Piga2050' },
+      { nome:'Focus - Citroën', descricao:'Focus Citroën', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DM62286', senha:'Piga2060' },
+      { nome:'Trilogo', descricao:'Portal Trilogo', categoria:'Portal', url:'https://entrar.trilogo.app/', login:'kamilly.paiva@adtsa.com.br', senha:'K10092018m@' },
+      { nome:'ADM Partenaires - Peugeot', descricao:'Acesso Peugeot', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89494', senha:'Piga2070' },
+      { nome:'ADM Partenaires - Citroën', descricao:'Acesso Citroën', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89492', senha:'Piga2070' },
+      { nome:'Reclame Aqui', descricao:'Painel Reclame Aqui', categoria:'Atendimento', url:'https://www.reclameaqui.com.br/', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
+      { nome:'CSPS - Peugeot', descricao:'CSPS Peugeot', categoria:'Pesquisa', url:'', login:'CA00064P', senha:'Piga2033' },
+      { nome:'CSPS - Citroën', descricao:'CSPS Citroën', categoria:'Pesquisa', url:'', login:'CA00013C', senha:'Piga2033' },
+      { nome:'Webmail - Qualidade', descricao:'Webmail corporativo', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidade.pigallews@adtsa.com.br', senha:'Citroen@2026' },
+      { nome:'Google My Business - Pigalle', descricao:'Perfil da empresa', categoria:'Google', url:'https://mail.google.com/mail/u/0/', login:'pigallepgle@gmail.com', senha:'Adtsa2021' },
+      { nome:'Gmail - Qualidade', descricao:'Gmail da qualidade', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidadepigallews@gmail.com', senha:'Adtsa@2025' },
+      { nome:'My People Peugeot', descricao:'Portal My People Peugeot', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'BR-000064P.admin', senha:'P3!wH8#mZ' },
+      { nome:'My People Citroën', descricao:'Portal My People Citroën', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'TBR-CE41PUD.admin', senha:'Km.2027@pm' },
+      { nome:'Mopar Eper', descricao:'Acesso Chico - Oficina', categoria:'Oficina', url:'https://eper-ltm.parts.fiat.com/', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
+      { nome:'Mopar Tools', descricao:'Ferramentas Mopar', categoria:'Oficina', url:'https://tools.moparservicecenter.com.br/Acesso/Entrada', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
+      { nome:'WiTech', descricao:'Diagnóstico WiTech', categoria:'Oficina', url:'https://app.l.fcawitech.com/wt2/index.html#/discovery/flight-recorder-templates', login:'TBR-CE41PUD.d002', senha:'Piga2027@' }
     ];
 
     const pageTitles = {
@@ -1858,9 +1765,9 @@
     };
 
     const DEFAULT_USERS = [
-      { name: 'Kamilly', role: 'superadmin', email: 'kamilly.paiva@adtsa.com.br', password: 'Capivara321@', passwordChangedAt: '2026-03-12' },
-      { name: 'Letícia', role: 'user', email: 'leticia.martins@adtsa.com.br', password: 'Barata321@', passwordChangedAt: '2026-03-12' },
-      { name: 'Laís', role: 'user', email: 'lais.batista@adtsa.com.br', password: 'Calango321@', passwordChangedAt: '2026-03-12' }
+      { name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivara321@', passwordChangedAt:'2026-03-12' },
+      { name:'Letícia', role:'user', email:'leticia.martins@adtsa.com.br', password:'Barata321@', passwordChangedAt:'2026-03-12' },
+      { name:'Laís', role:'user', email:'lais.batista@adtsa.com.br', password:'Calango321@', passwordChangedAt:'2026-03-12' }
     ];
 
     const DEFAULT_DB = {
@@ -1913,7 +1820,7 @@
 
     function timeNow(){
       const d = new Date();
-      return d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
     }
 
     function daysSince(dateStr){
@@ -2458,10 +2365,8 @@ NNE - NORDESTE`;
 
       try{
         const response = await fetch(CHAT_API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8'
-          },
+          method:'POST',
+          headers:{ 'Content-Type':'text/plain;charset=utf-8' },
           body: JSON.stringify({
             usuario: currentUser.name,
             mensagem: text
@@ -2500,7 +2405,7 @@ NNE - NORDESTE`;
           <div class="system-fields">
             <div class="system-field">
               <div class="system-field-label">Login</div>
-              <div class="system-field-value" id="systemLogin${index}">${escapeHtml(item.login || '-')}</div>
+              <div class="system-field-value">${escapeHtml(item.login || '-')}</div>
             </div>
 
             <div class="system-field">
@@ -2547,6 +2452,316 @@ NNE - NORDESTE`;
         return;
       }
       window.open(url, '_blank');
+    }
+
+    /* ASSISTENTE V2 */
+    function getAssistantData() {
+      const db = loadDatabase();
+
+      const vendasPeugeot = calculateIndicators(
+        db.promotoresVendasPeugeot,
+        db.neutrosVendasPeugeot,
+        db.detratoresVendasPeugeot
+      );
+
+      const vendasCitroen = calculateIndicators(
+        db.promotoresVendasCitroen,
+        db.neutrosVendasCitroen,
+        db.detratoresVendasCitroen
+      );
+
+      const posPeugeot = calculateIndicators(
+        db.promotoresPosPeugeot,
+        db.neutrosPosPeugeot,
+        db.detratoresPosPeugeot
+      );
+
+      const posCitroen = calculateIndicators(
+        db.promotoresPosCitroen,
+        db.neutrosPosCitroen,
+        db.detratoresPosCitroen
+      );
+
+      return { db, vendasPeugeot, vendasCitroen, posPeugeot, posCitroen };
+    }
+
+    function askPreset(text) {
+      const input = document.getElementById('assistantInput');
+      input.value = text;
+      runAssistant();
+    }
+
+    function assistantSetResponse(text) {
+      const box = document.getElementById('assistantResponse');
+      if (box) box.innerText = text;
+    }
+
+    function analyzeRiskBlock(nome, nps, meta, base, receber, faltam) {
+      const riscoMeta = nps < meta;
+      const capacidadeRecuperacao = (Number(base) || 0) + (Number(receber) || 0);
+      const recupera = faltam <= capacidadeRecuperacao;
+
+      let status = `${nome}\n`;
+      status += `NPS atual: ${formatPercent(nps)}\n`;
+      status += `Meta: ${formatPercent(meta)}\n`;
+      status += `Promotores necessários: ${faltam}\n`;
+      status += `Capacidade disponível (base + vão receber): ${capacidadeRecuperacao}\n`;
+
+      if (!riscoMeta) status += `Status: meta já atingida.`;
+      else if (recupera) status += `Status: abaixo da meta, mas com possibilidade de recuperação.`;
+      else status += `Status: abaixo da meta e sem base suficiente para recuperação.`;
+
+      return status;
+    }
+
+    function getRecoveryEvaluation(label, faltam, base, receber) {
+      const capacidade = (Number(base) || 0) + (Number(receber) || 0);
+      const recupera = faltam <= capacidade;
+
+      return {
+        label,
+        faltam,
+        capacidade,
+        recupera,
+        texto: recupera
+          ? `${label}: há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
+          : `${label}: não há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
+      };
+    }
+
+    function getCriticalBrand(data) {
+      const blocks = [
+        { nome:'Vendas Peugeot', nps:data.vendasPeugeot.nps, meta:Number(data.db.metaVendasPeugeot), faltam:calculatePromotersNeeded(data.db.metaVendasPeugeot, data.db.promotoresVendasPeugeot, data.db.neutrosVendasPeugeot, data.db.detratoresVendasPeugeot) },
+        { nome:'Vendas Citroën', nps:data.vendasCitroen.nps, meta:Number(data.db.metaVendasCitroen), faltam:calculatePromotersNeeded(data.db.metaVendasCitroen, data.db.promotoresVendasCitroen, data.db.neutrosVendasCitroen, data.db.detratoresVendasCitroen) },
+        { nome:'Pós-Vendas Peugeot', nps:data.posPeugeot.nps, meta:Number(data.db.metaPosPeugeot), faltam:calculatePromotersNeeded(data.db.metaPosPeugeot, data.db.promotoresPosPeugeot, data.db.neutrosPosPeugeot, data.db.detratoresPosPeugeot) },
+        { nome:'Pós-Vendas Citroën', nps:data.posCitroen.nps, meta:Number(data.db.metaPosCitroen), faltam:calculatePromotersNeeded(data.db.metaPosCitroen, data.db.promotoresPosCitroen, data.db.neutrosPosCitroen, data.db.detratoresPosCitroen) }
+      ];
+
+      blocks.forEach(b => b.gap = b.meta - b.nps);
+      blocks.sort((a,b) => b.gap - a.gap);
+      return blocks[0];
+    }
+
+    function runAssistant() {
+      const input = document.getElementById('assistantInput');
+      const questionRaw = (input?.value || '').trim();
+      const question = questionRaw.toLowerCase();
+
+      if (!question) {
+        assistantSetResponse('Digite uma pergunta para a Assistente QUALIS.');
+        return;
+      }
+
+      const data = getAssistantData();
+      const { db, vendasPeugeot, vendasCitroen, posPeugeot, posCitroen } = data;
+
+      const faltamVendasPeugeot = calculatePromotersNeeded(db.metaVendasPeugeot, db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
+      const faltamVendasCitroen = calculatePromotersNeeded(db.metaVendasCitroen, db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
+      const faltamPosPeugeot = calculatePromotersNeeded(db.metaPosPeugeot, db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
+      const faltamPosCitroen = calculatePromotersNeeded(db.metaPosCitroen, db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
+
+      if (question.includes('nps') && question.includes('peugeot') && !question.includes('pós') && !question.includes('pos')) {
+        assistantSetResponse(
+`NPS Vendas Peugeot: ${formatPercent(vendasPeugeot.nps)}
+Meta: ${formatPercent(db.metaVendasPeugeot)}
+
+Promotores: ${db.promotoresVendasPeugeot}
+Neutros: ${db.neutrosVendasPeugeot}
+Detratores: ${db.detratoresVendasPeugeot}
+Pesquisas respondidas: ${vendasPeugeot.pesquisas}
+Base de clientes: ${db.baseVendasPeugeot}
+Vão receber: ${db.receberVendasPeugeot}
+Promotores necessários para meta: ${faltamVendasPeugeot}`
+        );
+        return;
+      }
+
+      if (question.includes('nps') && (question.includes('citroën') || question.includes('citroen')) && !question.includes('pós') && !question.includes('pos')) {
+        assistantSetResponse(
+`NPS Vendas Citroën: ${formatPercent(vendasCitroen.nps)}
+Meta: ${formatPercent(db.metaVendasCitroen)}
+
+Promotores: ${db.promotoresVendasCitroen}
+Neutros: ${db.neutrosVendasCitroen}
+Detratores: ${db.detratoresVendasCitroen}
+Pesquisas respondidas: ${vendasCitroen.pesquisas}
+Base de clientes: ${db.baseVendasCitroen}
+Vão receber: ${db.receberVendasCitroen}
+Promotores necessários para meta: ${faltamVendasCitroen}`
+        );
+        return;
+      }
+
+      if (question.includes('nps') && question.includes('peugeot') && (question.includes('pós') || question.includes('pos'))) {
+        assistantSetResponse(
+`NPS Pós-Vendas Peugeot: ${formatPercent(posPeugeot.nps)}
+Meta: ${formatPercent(db.metaPosPeugeot)}
+
+Promotores: ${db.promotoresPosPeugeot}
+Neutros: ${db.neutrosPosPeugeot}
+Detratores: ${db.detratoresPosPeugeot}
+Pesquisas respondidas: ${posPeugeot.pesquisas}
+Base de clientes: ${db.basePosPeugeot}
+Vão receber: ${db.receberPosPeugeot}
+Promotores necessários para meta: ${faltamPosPeugeot}`
+        );
+        return;
+      }
+
+      if (question.includes('nps') && (question.includes('citroën') || question.includes('citroen')) && (question.includes('pós') || question.includes('pos'))) {
+        assistantSetResponse(
+`NPS Pós-Vendas Citroën: ${formatPercent(posCitroen.nps)}
+Meta: ${formatPercent(db.metaPosCitroen)}
+
+Promotores: ${db.promotoresPosCitroen}
+Neutros: ${db.neutrosPosCitroen}
+Detratores: ${db.detratoresPosCitroen}
+Pesquisas respondidas: ${posCitroen.pesquisas}
+Base de clientes: ${db.basePosCitroen}
+Vão receber: ${db.receberPosCitroen}
+Promotores necessários para meta: ${faltamPosCitroen}`
+        );
+        return;
+      }
+
+      if (question.includes('promotores') || question.includes('faltam para bater a meta') || question.includes('bater a meta')) {
+        assistantSetResponse(
+`Promotores necessários para atingir a meta
+
+Vendas Peugeot: ${faltamVendasPeugeot}
+Vendas Citroën: ${faltamVendasCitroen}
+Pós-Vendas Peugeot: ${faltamPosPeugeot}
+Pós-Vendas Citroën: ${faltamPosCitroen}`
+        );
+        return;
+      }
+
+      if (question.includes('risco') || question.includes('não bater a meta') || question.includes('nao bater a meta')) {
+        assistantSetResponse(
+`${analyzeRiskBlock('Vendas Peugeot', vendasPeugeot.nps, Number(db.metaVendasPeugeot), db.baseVendasPeugeot, db.receberVendasPeugeot, faltamVendasPeugeot)}
+
+${analyzeRiskBlock('Vendas Citroën', vendasCitroen.nps, Number(db.metaVendasCitroen), db.baseVendasCitroen, db.receberVendasCitroen, faltamVendasCitroen)}
+
+${analyzeRiskBlock('Pós-Vendas Peugeot', posPeugeot.nps, Number(db.metaPosPeugeot), db.basePosPeugeot, db.receberPosPeugeot, faltamPosPeugeot)}
+
+${analyzeRiskBlock('Pós-Vendas Citroën', posCitroen.nps, Number(db.metaPosCitroen), db.basePosCitroen, db.receberPosCitroen, faltamPosCitroen)}`
+        );
+        return;
+      }
+
+      if (question.includes('marca está mais crítica') || question.includes('marca mais crítica') || question.includes('mais critica')) {
+        const critical = getCriticalBrand(data);
+        assistantSetResponse(
+`Marca/área mais crítica no momento: ${critical.nome}
+
+NPS atual: ${formatPercent(critical.nps)}
+Meta: ${formatPercent(critical.meta)}
+Gap para a meta: ${formatPercent(critical.gap)}
+Promotores necessários para recuperar: ${critical.faltam}
+
+Leitura:
+Esta é a frente com maior distância percentual em relação à meta e, portanto, merece prioridade imediata.`
+        );
+        return;
+      }
+
+      if (question.includes('base suficiente') || question.includes('recuperar') || question.includes('recuperação')) {
+        const evaluations = [
+          getRecoveryEvaluation('Vendas Peugeot', faltamVendasPeugeot, db.baseVendasPeugeot, db.receberVendasPeugeot),
+          getRecoveryEvaluation('Vendas Citroën', faltamVendasCitroen, db.baseVendasCitroen, db.receberVendasCitroen),
+          getRecoveryEvaluation('Pós-Vendas Peugeot', faltamPosPeugeot, db.basePosPeugeot, db.receberPosPeugeot),
+          getRecoveryEvaluation('Pós-Vendas Citroën', faltamPosCitroen, db.basePosCitroen, db.receberPosCitroen)
+        ];
+
+        assistantSetResponse(
+`Avaliação de capacidade de recuperação
+
+${evaluations.map(e => e.texto).join('\n\n')}`
+        );
+        return;
+      }
+
+      if (question.includes('prioridades do dia') || question.includes('prioridades') || question.includes('o que priorizar')) {
+        const critical = getCriticalBrand(data);
+        assistantSetResponse(
+`Prioridades do dia
+
+1. Atacar a frente mais crítica: ${critical.nome}
+   • Gap atual para a meta: ${formatPercent(critical.gap)}
+   • Promotores necessários: ${critical.faltam}
+
+2. Tratar detratores do dia
+   • Detratores hoje: ${db.homeDetratoresHoje}
+
+3. Reduzir pendências operacionais
+   • Hot Alerts críticos: ${db.homeHotAlertsCriticos}
+   • RACs críticos: ${db.homeRacsCriticos}
+   • Auditorias urgentes: ${db.homeAuditoriasUrgentes}
+
+4. Regularizar treinamento
+   • Treinamentos pendentes: ${db.homeTreinamentosPendentes}
+
+5. Acompanhar a base disponível para conversão
+   • Vendas Peugeot: base ${db.baseVendasPeugeot} | vão receber ${db.receberVendasPeugeot}
+   • Vendas Citroën: base ${db.baseVendasCitroen} | vão receber ${db.receberVendasCitroen}
+   • Pós Peugeot: base ${db.basePosPeugeot} | vão receber ${db.receberPosPeugeot}
+   • Pós Citroën: base ${db.basePosCitroen} | vão receber ${db.receberPosCitroen}`
+        );
+        return;
+      }
+
+      if (question.includes('texto para a diretoria') || question.includes('diretoria') || question.includes('texto executivo')) {
+        const critical = getCriticalBrand(data);
+        assistantSetResponse(
+`Resumo Executivo – QUALIS
+
+No fechamento atual da operação, registramos ${db.homePesquisasRespondidas} pesquisas respondidas no dia, com ${db.homePromotorasHoje} promotoras e ${db.homeDetratoresHoje} detratores.
+
+Em vendas, Peugeot está em ${formatPercent(vendasPeugeot.nps)} e Citroën em ${formatPercent(vendasCitroen.nps)}. Em pós-vendas, Peugeot registra ${formatPercent(posPeugeot.nps)} e Citroën ${formatPercent(posCitroen.nps)}.
+
+A frente mais crítica no momento é ${critical.nome}, que apresenta o maior gap em relação à meta e demanda priorização imediata. Além disso, permanecem como pontos de atenção ${db.homeHotAlertsCriticos} Hot Alerts críticos, ${db.homeRacsCriticos} RACs críticos, ${db.homeAuditoriasUrgentes} auditorias urgentes e ${db.homeTreinamentosPendentes} treinamentos pendentes.
+
+A recomendação operacional é concentrar esforços na conversão da base disponível, na tratativa imediata dos detratores e na redução das pendências que podem impactar diretamente o resultado do trimestre.`
+        );
+        return;
+      }
+
+      if (question.includes('resumo') || question.includes('resumo do dia') || question.includes('executivo')) {
+        assistantSetResponse(
+`Resumo Executivo – QUALIS
+
+Hoje registramos ${db.homePesquisasRespondidas} pesquisas respondidas, com ${db.homePromotorasHoje} promotoras e ${db.homeDetratoresHoje} detratores no dia.
+
+Em vendas, Peugeot está em ${formatPercent(vendasPeugeot.nps)} e Citroën em ${formatPercent(vendasCitroen.nps)}.
+Em pós-vendas, Peugeot está em ${formatPercent(posPeugeot.nps)} e Citroën em ${formatPercent(posCitroen.nps)}.
+
+Treinamentos pendentes: ${db.homeTreinamentosPendentes}
+RACs pendentes: ${db.homeRacsPendentes}
+Auditorias pendentes: ${db.homeAuditoriasPendentes}
+Planos de ação pendentes: ${db.homePlanosPendentes}
+
+Pontos de atenção:
+• Hot Alerts críticos: ${db.homeHotAlertsCriticos}
+• RACs críticos: ${db.homeRacsCriticos}
+• Auditorias urgentes: ${db.homeAuditoriasUrgentes}`
+        );
+        return;
+      }
+
+      assistantSetResponse(
+`Ainda não entendi essa pergunta.
+
+Tente algo como:
+• Qual o NPS da Peugeot?
+• Qual o NPS da Citroën?
+• Qual o NPS pós-vendas Peugeot?
+• Quantos promotores faltam para bater a meta?
+• Estamos em risco de não bater a meta?
+• Qual marca está mais crítica?
+• Temos base suficiente para recuperar?
+• Quais são as prioridades do dia?
+• Faça um texto para a diretoria`
+      );
     }
 
     function initLoginMascot(){
