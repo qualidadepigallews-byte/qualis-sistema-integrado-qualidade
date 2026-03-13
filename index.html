@@ -1744,7 +1744,8 @@
   </div>
 
   <script>
-    const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
+
 
     const SYSTEMS = [
       { nome:'Portal de Treinamentos', descricao:'Treinamentos corporativos', categoria:'Treinamento', url:'https://psa.csod.com/samldefault.aspx?ouid=2', login:'DN89492', senha:'Piga2070' },
@@ -1918,16 +1919,18 @@ Portal QUALIS`
       window.location.href = `mailto:kamilly.paiva@adtsa.com.br?subject=${subject}&body=${body}`;
     }
 
-    function startPortal(){
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('portalApp').style.display = 'block';
-      applyUserContext();
-      const db = loadDatabase();
-      fillConfigForm(db);
-      applyDatabaseToUI(db);
-      renderChat();
-      renderSystems();
-    }
+    async function startPortal(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portalApp').style.display = 'block';
+  applyUserContext();
+
+  const db = await loadDatabase();
+  fillConfigForm(db);
+  applyDatabaseToUI(db);
+
+  renderChat();
+  renderSystems();
+}
 
     function logout(){
       localStorage.removeItem('qualis-current-user');
@@ -2111,24 +2114,43 @@ Portal QUALIS`
       applyNPSColor('npsPosCitroenValue','npsPosCitroenMeta');
     }
 
-    function saveDatabase(){
-      const db = {};
-      Object.keys(DEFAULT_DB).forEach(key => {
-        const input = document.getElementById('cfg_' + key);
-        db[key] = input ? input.value : DEFAULT_DB[key];
-      });
-      localStorage.setItem('qualis-db', JSON.stringify(db));
-      applyDatabaseToUI(db);
-      alert('Números salvos com sucesso.');
+    async function saveDatabase(){
+  const db = {};
+
+  Object.keys(DEFAULT_DB).forEach(key => {
+    const input = document.getElementById('cfg_' + key);
+    db[key] = input ? input.value : DEFAULT_DB[key];
+  });
+
+  try{
+    const response = await fetch(`${API_URL}?action=saveConfig`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(db)
+    });
+
+    const result = await response.json();
+
+    if (!result.ok){
+      alert('Não foi possível salvar os dados.');
+      return;
     }
 
+    applyDatabaseToUI(db);
+    alert('Números salvos com sucesso.');
+  }catch(err){
+    console.error('Erro ao salvar CONFIG:', err);
+    alert('Erro ao salvar os dados.');
+  }
+}
+
+
     function resetDatabase(){
-      localStorage.removeItem('qualis-db');
-      const db = { ...DEFAULT_DB };
-      fillConfigForm(db);
-      applyDatabaseToUI(db);
-      alert('Banco de dados restaurado.');
-    }
+  fillConfigForm({ ...DEFAULT_DB });
+  applyDatabaseToUI({ ...DEFAULT_DB });
+  alert('Valores restaurados na tela. Clique em "Salvar números" para enviar para a planilha.');
+}
+
 
     function showBanner(index){
       const banners = document.querySelectorAll('#inicio .banner');
@@ -2331,17 +2353,39 @@ NNE - NORDESTE`;
         .replace(/>/g, '&gt;');
     }
 
-    async function fetchChatMessages(){
-      try{
-        const response = await fetch(`${CHAT_API_URL}?action=list`);
-        const data = await response.json();
-        if (!data.ok) return [];
-        return Array.isArray(data.messages) ? data.messages : [];
-      }catch(err){
-        console.error('Erro ao buscar mensagens:', err);
-        return [];
-      }
+  async function sendChatMessage(){
+  if (!currentUser) return;
+
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  try{
+    const response = await fetch(`${API_URL}?action=send`, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        usuario: currentUser.name,
+        mensagem: text
+      })
+    });
+
+    const data = await response.json();
+
+    if (!data.ok){
+      alert('Não foi possível enviar a mensagem.');
+      return;
     }
+
+    input.value = '';
+    await renderChat();
+  }catch(err){
+    console.error('Erro ao enviar mensagem:', err);
+    alert('Erro ao enviar mensagem.');
+  }
+}
+
+
 
     function highlightMentions(text){
       return escapeHtml(text)
@@ -2808,37 +2852,43 @@ Tente algo como:
         mascot.style.transform = 'translateX(0) rotate(0deg)';
       });
     }
+function boot(){
+  loadTheme();
+  initLoginMascot();
+  initLoginCanvas();
 
-    function boot(){
-      loadTheme();
-      initLoginMascot();
-
-      const storedUser = localStorage.getItem('qualis-current-user');
-      if (storedUser) {
-        try{
-          currentUser = JSON.parse(storedUser);
-          const fresh = getUserByEmail(currentUser.email);
-          if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
-            currentUser = fresh;
-            startPortal();
-          } else {
-            localStorage.removeItem('qualis-current-user');
-            currentUser = null;
-          }
-        }catch{
-          localStorage.removeItem('qualis-current-user');
-          currentUser = null;
-        }
+  const storedUser = localStorage.getItem('qualis-current-user');
+  if (storedUser) {
+    try{
+      currentUser = JSON.parse(storedUser);
+      const fresh = getUserByEmail(currentUser.email);
+      if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
+        currentUser = fresh;
+        startPortal();
+      } else {
+        localStorage.removeItem('qualis-current-user');
+        currentUser = null;
       }
-
-      setInterval(rotateBanners, 5000);
-
-      setInterval(() => {
-        if (document.getElementById('portalApp').style.display === 'block') {
-          renderChat();
-        }
-      }, 3000);
+    }catch{
+      localStorage.removeItem('qualis-current-user');
+      currentUser = null;
     }
+  }
+
+  setInterval(rotateBanners, 5000);
+
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      renderChat();
+    }
+  }, 3000);
+
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      syncDatabaseSilently();
+    }
+  }, 5000);
+}
 
 function initLoginCanvas(){
 
@@ -2871,7 +2921,6 @@ offset:Math.random()*1000
 }
 
 function drawGrid(){
-
 ctx.strokeStyle="rgba(255,255,255,0.05)";
 ctx.lineWidth=1;
 
@@ -2888,13 +2937,10 @@ ctx.moveTo(0,y);
 ctx.lineTo(canvas.width,y);
 ctx.stroke();
 }
-
 }
 
 function drawBars(t){
-
 bars.forEach(bar=>{
-
 let dynamic =
 bar.h+
 Math.sin(t*0.001+bar.offset)*40+
@@ -2908,33 +2954,26 @@ grad.addColorStop(1,"rgba(90,147,255,0.2)");
 
 ctx.fillStyle=grad;
 ctx.fillRect(bar.x,y,bar.w,dynamic);
-
 });
-
 }
 
 function drawLine(t){
-
 ctx.beginPath();
 
 points.forEach((p,i)=>{
-
 let x=p.x;
 let y=p.y+Math.sin(t*0.002+p.offset)*50;
 
 if(i===0) ctx.moveTo(x,y);
 else ctx.lineTo(x,y);
-
 });
 
 ctx.strokeStyle="rgba(124,58,237,0.7)";
 ctx.lineWidth=3;
 ctx.stroke();
-
 }
 
 function animate(t){
-
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
 const bg=ctx.createLinearGradient(0,0,0,canvas.height);
@@ -2949,7 +2988,6 @@ drawLine(t);
 drawBars(t);
 
 requestAnimationFrame(animate);
-
 }
 
 window.addEventListener("mousemove",e=>{
@@ -2959,16 +2997,9 @@ mouseX=e.clientX;
 resize();
 window.addEventListener("resize",resize);
 requestAnimationFrame(animate);
-
 }
-const oldBoot = boot;
-boot = function(){
-  initLoginCanvas();
-  oldBoot();
-};
 
 window.onload = boot;
-    window.onload = boot;
   </script>
 </body>
 </html>
