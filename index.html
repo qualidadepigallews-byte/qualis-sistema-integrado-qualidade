@@ -1244,89 +1244,403 @@
       .login-shell{width:min(100%,420px)}
       .qualis-robot{display:none}
     }
+  
+    /* ===== LOGIN QUALIS NOVO ===== */
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top left, rgba(124,58,237,.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(90,147,255,.16), transparent 26%),
+    linear-gradient(180deg,#071120 0%,#0b1730 55%,#0f1f3d 100%);
+  isolation:isolate;
+}
+
+#loginCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+
+.login-shell{
+  position:relative;
+  z-index:3;
+  width:min(460px, 100%);
+  display:block !important;
+}
+
+.login-brand{
+  display:none !important;
+}
+
+.login-card{
+  background:rgba(255,255,255,.08) !important;
+  border:1px solid rgba(255,255,255,.14) !important;
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-radius:28px;
+  padding:30px 28px;
+  box-shadow:0 24px 50px rgba(0,0,0,.28);
+  min-height:auto !important;
+  color:#fff;
+}
+
+body.dark .login-card{
+  background:rgba(17,27,47,.50) !important;
+}
+
+.mascote-wrap,
+.mascote-card{
+  display:none !important;
+}
+
+.login-qualis-mark{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.login-qualis-icon{
+  width:52px;
+  height:52px;
+  border-radius:16px;
+  background:conic-gradient(from 220deg,#ffffff,#b9d5ff,#ffffff,#e9dcff,#ffffff);
+  box-shadow:0 10px 24px rgba(0,0,0,.24);
+  flex-shrink:0;
+}
+
+.login-qualis-text{
+  text-align:left;
+}
+
+.login-qualis-text strong{
+  display:block;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-.04em;
+  color:#fff;
+}
+
+.login-qualis-text span{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.10em;
+  color:rgba(255,255,255,.72);
+}
+
+.login-title{
+  text-align:center;
+  margin:12px 0 6px;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-.03em;
+  color:#fff;
+}
+
+.login-subtitle{
+  text-align:center;
+  color:rgba(255,255,255,.78);
+  margin:0 0 22px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.login-field label{
+  color:rgba(255,255,255,.76);
+}
+
+.login-input{
+  width:100%;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  padding:14px 16px;
+  border-radius:14px;
+  outline:none;
+  font-size:14px;
+  box-shadow:none;
+  transition:border-color .2s ease, box-shadow .2s ease, transform .2s ease, background .2s ease;
+}
+
+.login-input::placeholder{
+  color:rgba(255,255,255,.42);
+}
+
+.login-input:focus{
+  border-color:rgba(90,147,255,.95);
+  background:rgba(255,255,255,.14);
+  box-shadow:0 0 0 4px rgba(90,147,255,.18);
+  transform:translateY(-1px);
+}
+
+.login-btn{
+  width:100%;
+  border:0;
+  padding:14px 16px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#4f8cff,#7c3aed);
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  font-size:15px;
+  box-shadow:0 12px 24px rgba(55,65,180,.28);
+}
+
+.login-btn.secondary{
+  background:rgba(255,255,255,.10);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:none;
+}
+
+.login-meta{
+  margin-top:14px;
+  padding:14px;
+  border-radius:16px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10);
+  color:rgba(255,255,255,.68);
+  font-size:13px;
+  line-height:1.6;
+  text-align:center;
+}
+
+.login-error{
+  min-height:18px;
+  margin-top:12px;
+  color:#ff8c8c;
+  font-size:13px;
+  font-weight:700;
+  text-align:center;
+}
+
+.qualis-robot-wrap{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+
+.qualis-robot{
+  position:absolute;
+  right:7%;
+  bottom:7%;
+  width:min(360px, 26vw);
+  animation:qualisRobotFloat 6.5s ease-in-out infinite;
+  filter:drop-shadow(0 18px 34px rgba(0,0,0,.26));
+  opacity:.96;
+}
+
+.qualis-robot img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.qualis-holo{
+  position:absolute;
+  right:24%;
+  bottom:34%;
+  width:170px;
+  height:110px;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(86,165,255,.16), rgba(124,58,237,.08));
+  border:1px solid rgba(120,180,255,.24);
+  box-shadow:
+    0 0 22px rgba(90,147,255,.16),
+    inset 0 0 18px rgba(255,255,255,.04);
+  backdrop-filter:blur(6px);
+  animation:qualisHoloFloat 4.8s ease-in-out infinite;
+}
+
+.qualis-holo::before{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:18px;
+  height:2px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+}
+
+.qualis-holo .bar{
+  position:absolute;
+  bottom:22px;
+  width:12px;
+  border-radius:10px 10px 4px 4px;
+  background:linear-gradient(180deg, rgba(125,211,252,.9), rgba(96,165,250,.25));
+  box-shadow:0 0 14px rgba(125,211,252,.18);
+}
+
+.qualis-holo .bar.b1{left:26px;height:28px;animation:holoBar1 2.8s ease-in-out infinite;}
+.qualis-holo .bar.b2{left:48px;height:44px;animation:holoBar2 2.4s ease-in-out infinite;}
+.qualis-holo .bar.b3{left:70px;height:64px;animation:holoBar3 3.1s ease-in-out infinite;}
+.qualis-holo .bar.b4{left:92px;height:38px;animation:holoBar4 2.6s ease-in-out infinite;}
+.qualis-holo .bar.b5{left:114px;height:56px;animation:holoBar5 3s ease-in-out infinite;}
+
+.qualis-holo .line{
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:26px;
+  height:36px;
+}
+
+.qualis-holo .line svg{
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+
+#loginScreen.email-focus .qualis-robot{
+  animation-duration:4.6s;
+}
+
+#loginScreen.email-focus .qualis-holo{
+  transform:scale(1.03);
+}
+
+#loginScreen.password-focus .qualis-robot{
+  transform:translateY(0) rotate(-3deg);
+}
+
+@keyframes qualisRobotFloat{
+  0%,100%{transform:translateY(0) translateX(0)}
+  25%{transform:translateY(-10px) translateX(-6px)}
+  50%{transform:translateY(-18px) translateX(2px)}
+  75%{transform:translateY(-8px) translateX(-10px)}
+}
+
+@keyframes qualisHoloFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+@keyframes holoBar1{
+  0%,100%{height:28px}
+  50%{height:48px}
+}
+@keyframes holoBar2{
+  0%,100%{height:44px}
+  50%{height:66px}
+}
+@keyframes holoBar3{
+  0%,100%{height:64px}
+  50%{height:40px}
+}
+@keyframes holoBar4{
+  0%,100%{height:38px}
+  50%{height:58px}
+}
+@keyframes holoBar5{
+  0%,100%{height:56px}
+  50%{height:34px}
+}
+
+@media (max-width: 1024px){
+  .qualis-robot{
+    width:min(240px, 34vw);
+    right:2%;
+    bottom:5%;
+    opacity:.72;
+  }
+
+  .qualis-holo{
+    right:18%;
+    bottom:31%;
+    width:120px;
+    height:84px;
+  }
+}
+
+@media (max-width: 768px){
+  .qualis-robot-wrap{
+    opacity:.45;
+  }
+
+  .qualis-holo{
+    display:none;
+  }
+
+  .login-shell{
+    width:min(94vw, 430px);
+  }
+}
   </style>
 </head>
 <body>
   <section id="loginScreen">
-    <canvas id="loginCanvas"></canvas>
+  <canvas id="loginCanvas"></canvas>
 
-    <div class="qualis-robot" aria-hidden="true">
-      <svg viewBox="0 0 220 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g class="float-panel">
-          <rect x="8" y="34" width="68" height="44" rx="12" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.24)"/>
-          <path d="M20 63 L34 48 L46 57 L62 42" stroke="#7dd3fc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="62" cy="42" r="4" fill="#7dd3fc"/>
-        </g>
-        <g class="float-panel second">
-          <rect x="150" y="18" width="58" height="40" rx="12" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.24)"/>
-          <rect x="162" y="44" width="8" height="6" rx="2" fill="#c4b5fd"/>
-          <rect x="176" y="36" width="8" height="14" rx="2" fill="#60a5fa"/>
-          <rect x="190" y="28" width="8" height="22" rx="2" fill="#34d399"/>
-        </g>
-
-        <ellipse cx="110" cy="236" rx="44" ry="12" fill="rgba(0,0,0,.18)"/>
-        <rect x="74" y="72" width="72" height="70" rx="24" fill="#f8fbff"/>
-        <rect x="83" y="85" width="54" height="32" rx="14" fill="#0f172a"/>
-        <circle class="eye" cx="99" cy="101" r="6" fill="#7dd3fc"/>
-        <circle class="eye" cx="121" cy="101" r="6" fill="#7dd3fc"/>
-        <rect x="102" y="58" width="16" height="14" rx="6" fill="#f8fbff"/>
-        <circle cx="110" cy="52" r="8" fill="#a78bfa"/>
-
-        <rect x="88" y="142" width="44" height="44" rx="16" fill="#f8fbff"/>
-        <rect x="92" y="184" width="14" height="32" rx="7" fill="#dbeafe"/>
-        <rect x="114" y="184" width="14" height="32" rx="7" fill="#dbeafe"/>
-        <rect x="88" y="210" width="18" height="10" rx="5" fill="#c4b5fd"/>
-        <rect x="114" y="210" width="18" height="10" rx="5" fill="#c4b5fd"/>
-
-        <g class="arm-left">
-          <rect x="58" y="128" width="32" height="12" rx="6" fill="#dbeafe"/>
-          <circle cx="56" cy="134" r="8" fill="#f8fbff"/>
-        </g>
-        <g class="arm-right">
-          <rect x="130" y="128" width="34" height="12" rx="6" fill="#dbeafe"/>
-          <circle cx="168" cy="134" r="8" fill="#f8fbff"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="login-shell">
-      <div class="login-card">
-        <div class="login-qualis-mark">
-          <div class="login-qualis-icon"></div>
-          <div class="login-qualis-text">
-            <strong>QUALIS</strong>
-            <span>Sistema Integrado de Qualidade</span>
-          </div>
-        </div>
-
-        <div class="login-title">Acesso ao QUALIS</div>
-        <div class="login-subtitle">
-          Entre com suas credenciais corporativas para acessar o portal de qualidade, resultados e colaboração interna.
-        </div>
-
-        <div class="login-field">
-          <label for="loginEmail">E-mail</label>
-          <input class="login-input" id="loginEmail" type="email" placeholder="seuemail@adtsa.com.br">
-        </div>
-
-        <div class="login-field">
-          <label for="loginPassword">Senha</label>
-          <input class="login-input" id="loginPassword" type="password" placeholder="Digite sua senha" onkeydown="handleLoginEnter(event)">
-        </div>
-
-        <div class="login-actions">
-          <button class="login-btn" onclick="handleLogin()">Entrar</button>
-          <button class="login-btn secondary" onclick="handleForgotPassword()">Esqueci minha senha</button>
-        </div>
-
-        <div class="login-meta">
-          Em caso de esquecimento ou expiração da senha, a solicitação é direcionada para a Administradora Master.
-        </div>
-
-        <div class="login-error" id="loginError"></div>
+  <div class="qualis-robot-wrap">
+    <div class="qualis-holo">
+      <div class="line">
+        <svg viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 28 C18 18, 26 8, 42 14 C58 20, 68 30, 82 22 C96 14, 112 6, 138 12" stroke="rgba(167,139,250,.85)" stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
       </div>
+      <span class="bar b1"></span>
+      <span class="bar b2"></span>
+      <span class="bar b3"></span>
+      <span class="bar b4"></span>
+      <span class="bar b5"></span>
     </div>
-  </section>
+
+    <div class="qualis-robot">
+      <img src="https://chat.openai.com/c/container/files/file_000000002850720e8ff4f2ea0ffaca3a" alt="Qualis">
+    </div>
+  </div>
+
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="login-qualis-mark">
+        <div class="login-qualis-icon"></div>
+        <div class="login-qualis-text">
+          <strong>QUALIS</strong>
+          <span>Sistema Integrado de Qualidade</span>
+        </div>
+      </div>
+
+      <div class="login-title">Acesso ao QUALIS</div>
+      <div class="login-subtitle">
+        Entre com suas credenciais corporativas para acessar o portal integrado da qualidade.
+      </div>
+
+      <div class="login-field">
+        <label for="loginEmail">E-mail</label>
+        <input class="login-input" id="loginEmail" type="email" placeholder="seuemail@adtsa.com.br">
+      </div>
+
+      <div class="login-field">
+        <label for="loginPassword">Senha</label>
+        <input class="login-input" id="loginPassword" type="password" placeholder="Digite sua senha" onkeydown="handleLoginEnter(event)">
+      </div>
+
+      <div class="login-actions">
+        <button class="login-btn" type="button" onclick="handleLogin()">Entrar</button>
+        <button class="login-btn secondary" type="button" onclick="handleForgotPassword()">Esqueci minha senha</button>
+      </div>
+
+      <div class="login-meta">
+        Em caso de esquecimento ou expiração da senha, a solicitação é direcionada para a Administradora Master.
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</section>
 
   <div id="portalApp">
     <div class="app">
@@ -1912,42 +2226,44 @@
     }
 
     function handleLoginEnter(event){
-      if(event.key === 'Enter'){
-        event.preventDefault();
-        handleLogin();
-      }
-    }
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    handleLogin();
+  }
+}
 
-    function handleLogin(){
-      clearLoginError();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const user = getUserByEmail(email);
+function handleLogin(){
+  clearLoginError();
 
-      if (!user){
-        showLoginError('Usuária não encontrada.');
-        return;
-      }
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  const user = getUserByEmail(email);
 
-      if (user.password !== password){
-        showLoginError('Senha incorreta.');
-        return;
-      }
+  if (!user){
+    showLoginError('Usuária não encontrada.');
+    return;
+  }
 
-      if (daysSince(user.passwordChangedAt) >= 15){
-        showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
-        return;
-      }
+  if (user.password !== password){
+    showLoginError('Senha incorreta.');
+    return;
+  }
 
-      currentUser = user;
-      localStorage.setItem('qualis-current-user', JSON.stringify(user));
-      startPortal();
-    }
+  if (daysSince(user.passwordChangedAt) >= 15){
+    showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
+    return;
+  }
 
-    function handleForgotPassword(){
-      const email = document.getElementById('loginEmail').value.trim() || 'usuária não informada';
-      const subject = encodeURIComponent('QUALIS - Solicitação de redefinição de senha');
-      const body = encodeURIComponent(`Olá, Kamilly.
+  currentUser = user;
+  localStorage.setItem('qualis-current-user', JSON.stringify(user));
+  startPortal();
+}
+
+function handleForgotPassword(){
+  const email = document.getElementById('loginEmail').value.trim() || 'usuária não informada';
+  const subject = encodeURIComponent('QUALIS - Solicitação de redefinição de senha');
+  const body = encodeURIComponent(
+`Olá, Kamilly.
 
 Foi solicitada uma redefinição de senha no QUALIS.
 
@@ -1955,1031 +2271,244 @@ Usuária solicitante: ${email}
 Data/Hora: ${new Date().toLocaleString('pt-BR')}
 
 Atenciosamente,
-Portal QUALIS`);
-      window.location.href = `mailto:kamilly.paiva@adtsa.com.br?subject=${subject}&body=${body}`;
-    }
+Portal QUALIS`
+  );
+  window.location.href = `mailto:kamilly.paiva@adtsa.com.br?subject=${subject}&body=${body}`;
+}
 
 async function startPortal(){
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('portalApp').style.display = 'block';
-      applyUserContext();
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portalApp').style.display = 'block';
+  applyUserContext();
 
-      const db = await loadDatabase();
-      fillConfigForm(db);
-      applyDatabaseToUI(db);
+  const db = await loadDatabase();
+  fillConfigForm(db);
+  applyDatabaseToUI(db);
 
-      await renderChat();
-      renderSystems();
+  await renderChat();
+  renderSystems();
+}
+
+function initLoginInteractions(){
+  const screen = document.getElementById('loginScreen');
+  const email = document.getElementById('loginEmail');
+  const password = document.getElementById('loginPassword');
+
+  if(!screen || !email || !password) return;
+
+  email.addEventListener('focus', () => {
+    screen.classList.add('email-focus');
+    screen.classList.remove('password-focus');
+  });
+
+  password.addEventListener('focus', () => {
+    screen.classList.add('password-focus');
+    screen.classList.remove('email-focus');
+  });
+
+  email.addEventListener('blur', () => {
+    setTimeout(() => {
+      if(document.activeElement !== password){
+        screen.classList.remove('email-focus');
+      }
+    }, 50);
+  });
+
+  password.addEventListener('blur', () => {
+    setTimeout(() => {
+      if(document.activeElement !== email){
+        screen.classList.remove('password-focus');
+      }
+    }, 50);
+  });
+}
+
+function initLoginCanvas(){
+  const canvas = document.getElementById("loginCanvas");
+  if(!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let bars = [];
+  let points = [];
+  let percents = [];
+  let mouseX = 0;
+  let mouseY = 0;
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    bars = Array.from({length: 44}, (_, i) => ({
+      x:(canvas.width / 44) * i + 10,
+      w:10 + Math.random() * 8,
+      h:90 + Math.random() * 230,
+      offset:Math.random() * 1000
+    }));
+
+    points = Array.from({length: 24}, (_, i) => ({
+      x:(canvas.width / 23) * i,
+      y:canvas.height * 0.42,
+      offset:Math.random() * 1000
+    }));
+
+    percents = Array.from({length: 18}, (_, i) => ({
+      x:Math.random() * canvas.width,
+      y:60 + Math.random() * (canvas.height - 180),
+      value:(82 + Math.random() * 17).toFixed(1).replace('.', ',') + '%',
+      size:16 + Math.random() * 20,
+      speed:0.14 + Math.random() * 0.32,
+      blur:Math.random() > 0.15,
+      alpha:0.08 + Math.random() * 0.08
+    }));
+  }
+
+  function drawGrid(){
+    ctx.strokeStyle = "rgba(255,255,255,0.035)";
+    ctx.lineWidth = 1;
+
+    for(let x = 0; x < canvas.width; x += 90){
+      ctx.beginPath();
+      ctx.moveTo(x,0);
+      ctx.lineTo(x,canvas.height);
+      ctx.stroke();
     }
 
-    function logout(){
+    for(let y = 0; y < canvas.height; y += 90){
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(canvas.width,y);
+      ctx.stroke();
+    }
+  }
+
+  function drawBars(t){
+    bars.forEach(bar => {
+      const dynamic =
+        bar.h +
+        Math.sin(t * 0.001 + bar.offset) * 42 +
+        (mouseX / Math.max(canvas.width, 1)) * 34;
+
+      const y = canvas.height - dynamic - 30;
+
+      const grad = ctx.createLinearGradient(0, y, 0, y + dynamic);
+      grad.addColorStop(0, "rgba(90,147,255,0.34)");
+      grad.addColorStop(1, "rgba(90,147,255,0.03)");
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(bar.x, y, bar.w, dynamic);
+    });
+  }
+
+  function drawLine(t){
+    ctx.beginPath();
+
+    points.forEach((p, i) => {
+      const x = p.x;
+      const y = p.y + Math.sin(t * 0.002 + p.offset) * 44 + (mouseY / Math.max(canvas.height, 1)) * 12;
+
+      if(i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+
+    ctx.strokeStyle = "rgba(124,58,237,0.42)";
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = "rgba(124,58,237,0.16)";
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  }
+
+  function drawPercents(t){
+    percents.forEach((item, i) => {
+      const x = (item.x + (t * item.speed * 0.025)) % (canvas.width + 260);
+      const y = item.y + Math.sin((t * 0.0011) + i) * 10;
+
+      ctx.save();
+      ctx.globalAlpha = item.alpha;
+      if(item.blur){
+        ctx.filter = "blur(2.6px)";
+      }
+      ctx.fillStyle = "rgba(255,255,255,0.92)";
+      ctx.font = `700 ${item.size}px Inter, sans-serif`;
+      ctx.fillText(item.value, x - 180, y);
+      ctx.restore();
+    });
+  }
+
+  function animate(t){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const bg = ctx.createLinearGradient(0,0,0,canvas.height);
+    bg.addColorStop(0,"#071120");
+    bg.addColorStop(0.52,"#0b1730");
+    bg.addColorStop(1,"#10203d");
+
+    ctx.fillStyle = bg;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    drawGrid();
+    drawPercents(t);
+    drawLine(t);
+    drawBars(t);
+
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("mousemove", e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  resize();
+  window.addEventListener("resize", resize);
+  requestAnimationFrame(animate);
+}
+
+function boot(){
+  loadTheme();
+  initLoginCanvas();
+  initLoginInteractions();
+  requestNotificationPermission();
+
+  document.addEventListener('click', () => {
+    chatSoundEnabled = true;
+  }, { once:true });
+
+  const storedUser = localStorage.getItem('qualis-current-user');
+  if (storedUser) {
+    try{
+      currentUser = JSON.parse(storedUser);
+      const fresh = getUserByEmail(currentUser.email);
+      if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
+        currentUser = fresh;
+        startPortal();
+      } else {
+        localStorage.removeItem('qualis-current-user');
+        currentUser = null;
+      }
+    }catch{
       localStorage.removeItem('qualis-current-user');
       currentUser = null;
-      unreadChatCount = 0;
-      updateChatBadge();
-      document.getElementById('portalApp').style.display = 'none';
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('loginPassword').value = '';
-      clearLoginError();
     }
+  }
 
-    function applyUserContext(){
-      if (!currentUser) return;
-      document.getElementById('sidebarUserName').innerText = currentUser.name;
-      document.getElementById('sidebarUserRole').innerText = currentUser.role === 'superadmin' ? 'Super Admin' : 'Usuária Operacional';
-      document.getElementById('chatHeaderInfo').innerText = `Mensagens visíveis para todo o grupo. Logada como ${currentUser.name}.`;
+  setInterval(rotateBanners, 5000);
+
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      renderChat();
     }
+  }, 3000);
 
-    function formatPercent(value){
-      return Number(value || 0).toFixed(1).replace('.', ',') + '%';
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      syncDatabaseSilently();
     }
+  }, 3000);
+}
 
-    function calculateIndicators(promotores, neutros, detratores){
-      promotores = Number(promotores) || 0;
-      neutros = Number(neutros) || 0;
-      detratores = Number(detratores) || 0;
-      const pesquisas = promotores + neutros + detratores;
-      const nps = pesquisas > 0 ? ((promotores - detratores) / pesquisas) * 100 : 0;
-      return { pesquisas, nps };
-    }
-
-    function calculatePromotersNeeded(metaPercent, promotores, neutros, detratores){
-      const meta = Number(metaPercent) || 0;
-      const p = Number(promotores) || 0;
-      const n = Number(neutros) || 0;
-      const d = Number(detratores) || 0;
-      const total = p + n + d;
-
-      if (total <= 0) return meta > 0 ? 1 : 0;
-
-      const currentNps = ((p - d) / total) * 100;
-      if (currentNps >= meta) return 0;
-
-      const numerator = ((meta / 100) * total) - (p - d);
-      const denominator = 1 - (meta / 100);
-      if (denominator <= 0) return 0;
-
-      return Math.max(0, Math.ceil(numerator / denominator));
-    }
-
-    function openPage(id, btn){
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      const target = document.getElementById(id);
-      if (target) target.classList.add('active');
-
-      document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-
-      document.getElementById('topTitle').innerText = pageTitles[id][0];
-      document.getElementById('topSubtitle').innerText = pageTitles[id][1];
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      if (id === 'chat') {
-        unreadChatCount = 0;
-        updateChatBadge();
-        renderChat();
-      }
-      if (id === 'sistemas') renderSystems();
-    }
-
-    function openSubpage(sectionId, subpageId, btn){
-      const section = document.getElementById(sectionId);
-      if (!section) return;
-      section.querySelectorAll('.subpage').forEach(sp => sp.classList.remove('active'));
-      const target = document.getElementById(subpageId);
-      if (target) target.classList.add('active');
-      section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-    }
-
-    function toggleTheme(){
-      document.body.classList.toggle('dark');
-      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-    }
-
-    function loadTheme(){
-      const saved = localStorage.getItem('qualis-theme');
-      if (saved === 'dark') document.body.classList.add('dark');
-    }
-
-    async function loadDatabase(){
-      try{
-        const response = await fetch(`${API_URL}?action=getConfig&_=${Date.now()}`, {
-          method:'GET',
-          cache:'no-store'
-        });
-        const result = await response.json();
-
-        if (result.ok && result.data){
-          return { ...DEFAULT_DB, ...result.data };
-        }
-      }catch(err){
-        console.error('Erro ao carregar CONFIG:', err);
-      }
-      return { ...DEFAULT_DB };
-    }
-
-    async function syncDatabaseSilently(){
-      try{
-        const db = await loadDatabase();
-        fillConfigForm(db);
-        applyDatabaseToUI(db);
-      }catch(err){
-        console.error('Erro ao sincronizar CONFIG:', err);
-      }
-    }
-
-    function setText(id, value){
-      const el = document.getElementById(id);
-      if (el) el.innerText = value;
-    }
-
-    function applyNPSColor(idValue, idMeta){
-      const valueEl = document.getElementById(idValue);
-      const metaEl = document.getElementById(idMeta);
-      if (!valueEl || !metaEl) return;
-
-      const value = parseFloat(String(valueEl.innerText).replace('%','').replace(',','.'));
-      const meta = parseFloat(String(metaEl.innerText).replace('%','').replace(',','.'));
-
-      valueEl.classList.remove('nps-green','nps-red');
-      valueEl.classList.add(value >= meta ? 'nps-green' : 'nps-red');
-    }
-
-    function fillConfigForm(db){
-      Object.keys(DEFAULT_DB).forEach(key => {
-        const input = document.getElementById('cfg_' + key);
-        if (input) input.value = db[key];
-      });
-    }
-
-    function applyDatabaseToUI(db){
-      setText('homePromotorasHoje', db.homePromotorasHoje);
-      setText('homeDetratoresHoje', db.homeDetratoresHoje);
-      setText('homePesquisasRespondidas', db.homePesquisasRespondidas);
-      setText('homeTreinamentosPendentes', db.homeTreinamentosPendentes);
-      setText('homeRacsPendentes', db.homeRacsPendentes);
-      setText('homeAuditoriasPendentes', db.homeAuditoriasPendentes);
-      setText('homePlanosPendentes', db.homePlanosPendentes);
-      setText('homeHotAlertsCriticos', db.homeHotAlertsCriticos);
-      setText('homeRacsCriticos', db.homeRacsCriticos);
-      setText('homeAuditoriasUrgentes', db.homeAuditoriasUrgentes);
-      setText('homePlanosCriticos', db.homePlanosCriticos);
-      setText('homeTreinPendentes2', db.homeTreinPendentes2);
-      setText('homeTreinCronograma', db.homeTreinCronograma);
-      setText('homeTreinCronograma2', db.homeTreinCronograma);
-      setText('homeTreinConcluidosSemana', db.homeTreinConcluidosSemana);
-
-      const vp = calculateIndicators(db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
-      setText('npsVendasPeugeotValue', formatPercent(vp.nps));
-      setText('npsVendasPeugeotMeta', formatPercent(db.metaVendasPeugeot));
-      setText('vendasPeugeotPromotores', db.promotoresVendasPeugeot);
-      setText('vendasPeugeotNeutros', db.neutrosVendasPeugeot);
-      setText('vendasPeugeotDetratores', db.detratoresVendasPeugeot);
-      setText('vendasPeugeotPesquisas', vp.pesquisas);
-      setText('vendasPeugeotBase', db.baseVendasPeugeot);
-      setText('vendasPeugeotReceber', db.receberVendasPeugeot);
-      setText('vendasPeugeotNecessarios', calculatePromotersNeeded(db.metaVendasPeugeot, db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot));
-
-      const vc = calculateIndicators(db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
-      setText('npsVendasCitroenValue', formatPercent(vc.nps));
-      setText('npsVendasCitroenMeta', formatPercent(db.metaVendasCitroen));
-      setText('vendasCitroenPromotores', db.promotoresVendasCitroen);
-      setText('vendasCitroenNeutros', db.neutrosVendasCitroen);
-      setText('vendasCitroenDetratores', db.detratoresVendasCitroen);
-      setText('vendasCitroenPesquisas', vc.pesquisas);
-      setText('vendasCitroenBase', db.baseVendasCitroen);
-      setText('vendasCitroenReceber', db.receberVendasCitroen);
-      setText('vendasCitroenNecessarios', calculatePromotersNeeded(db.metaVendasCitroen, db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen));
-
-      const pp = calculateIndicators(db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
-      setText('npsPosPeugeotValue', formatPercent(pp.nps));
-      setText('npsPosPeugeotMeta', formatPercent(db.metaPosPeugeot));
-      setText('posPeugeotPromotores', db.promotoresPosPeugeot);
-      setText('posPeugeotNeutros', db.neutrosPosPeugeot);
-      setText('posPeugeotDetratores', db.detratoresPosPeugeot);
-      setText('posPeugeotPesquisas', pp.pesquisas);
-      setText('posPeugeotBase', db.basePosPeugeot);
-      setText('posPeugeotReceber', db.receberPosPeugeot);
-      setText('posPeugeotNecessarios', calculatePromotersNeeded(db.metaPosPeugeot, db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot));
-
-      const pc = calculateIndicators(db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
-      setText('npsPosCitroenValue', formatPercent(pc.nps));
-      setText('npsPosCitroenMeta', formatPercent(db.metaPosCitroen));
-      setText('posCitroenPromotores', db.promotoresPosCitroen);
-      setText('posCitroenNeutros', db.neutrosPosCitroen);
-      setText('posCitroenDetratores', db.detratoresPosCitroen);
-      setText('posCitroenPesquisas', pc.pesquisas);
-      setText('posCitroenBase', db.basePosCitroen);
-      setText('posCitroenReceber', db.receberPosCitroen);
-      setText('posCitroenNecessarios', calculatePromotersNeeded(db.metaPosCitroen, db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen));
-
-      applyNPSColor('npsVendasPeugeotValue','npsVendasPeugeotMeta');
-      applyNPSColor('npsVendasCitroenValue','npsVendasCitroenMeta');
-      applyNPSColor('npsPosPeugeotValue','npsPosPeugeotMeta');
-      applyNPSColor('npsPosCitroenValue','npsPosCitroenMeta');
-    }
-
-    async function saveDatabase(){
-      const db = {};
-      Object.keys(DEFAULT_DB).forEach(key => {
-        const input = document.getElementById('cfg_' + key);
-        db[key] = input ? input.value : DEFAULT_DB[key];
-      });
-
-      try{
-        const response = await fetch(`${API_URL}?action=saveConfig&_=${Date.now()}`, {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify(db)
-        });
-
-        const result = await response.json();
-
-        if (!result.ok){
-          alert('Não foi possível salvar os dados.');
-          return;
-        }
-
-        const freshDb = await loadDatabase();
-        fillConfigForm(freshDb);
-        applyDatabaseToUI(freshDb);
-        alert('Números salvos com sucesso.');
-      }catch(err){
-        console.error('Erro ao salvar CONFIG:', err);
-        alert('Erro ao salvar os dados.');
-      }
-    }
-
-    function resetDatabase(){
-      fillConfigForm({ ...DEFAULT_DB });
-      applyDatabaseToUI({ ...DEFAULT_DB });
-      alert('Valores restaurados na tela. Clique em \"Salvar números\" para enviar para a planilha.');
-    }
-
-    function showBanner(index){
-      const banners = document.querySelectorAll('#inicio .banner');
-      const dots = document.querySelectorAll('#inicio .dot');
-      banners.forEach((b,i) => b.classList.toggle('active', i === index));
-      dots.forEach((d,i) => d.classList.toggle('active', i === index));
-      currentBanner = index;
-    }
-
-    function rotateBanners(){
-      const banners = document.querySelectorAll('#inicio .banner');
-      if (!banners.length) return;
-      currentBanner = (currentBanner + 1) % banners.length;
-      showBanner(currentBanner);
-    }
-
-    function loadGrowExamplePeugeot(){
-      document.getElementById('growPeugeot').value = `15725953
-Aberto
-05/11/2025 15:15
-Telefone
-Veículo Reserva
-Veículo na concessionária
-8ADUAFCA1SG576844
-THICIANE ARAUJO CHAVES
-Urgente
-Pâmela Souza Lopes
-NNE - NORDESTE`;
-      processGrowData();
-    }
-
-    function loadGrowExampleCitroen(){
-      document.getElementById('growCitroen').value = `16316483
-Aberto
-11/03/2026 09:10
-WhatsApp
-Campanha Recall
-Baixa Detração
-9V7VBBHXGLA001448
-EMILIO CAVALCANTE
-Urgente
-Pâmela Souza Lopes
-NNE - NORDESTE`;
-      processGrowData();
-    }
-
-    function clearGrowData(){
-      document.getElementById('growPeugeot').value = '';
-      document.getElementById('growCitroen').value = '';
-      document.getElementById('growTableBody').innerHTML = '<tr><td colspan=\"13\" class=\"empty\">Nenhum caso analisado ainda.</td></tr>';
-      updateGrowSummary({total:0,open:0,over30:0,reserve:0,peu:0,cit:0});
-    }
-
-    function processGrowData(){
-      const peuRaw = document.getElementById('growPeugeot').value.trim();
-      const citRaw = document.getElementById('growCitroen').value.trim();
-      const peuRecords = parseBlockRecords(peuRaw, 'Peugeot');
-      const citRecords = parseBlockRecords(citRaw, 'Citroën');
-      const records = [...peuRecords, ...citRecords];
-      renderGrowTable(records);
-      calculateGrowSummary(records);
-    }
-
-    function parseBlockRecords(raw, marca){
-      if (!raw) return [];
-
-      const ignored = new Set([
-        'número do item','número do caso','classificado em ordem crescente','status',
-        'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
-        'chassi completo','conta nome','prioridade','responsável_nome','regional description',
-        'caoss grow customer care peugeot','casos grow customer care peugeot',
-        'casos grow customer care citroën','casos grow customer care citroen','sort','ação'
-      ]);
-
-      const lines = raw.split(/\\n/).map(x => x.trim()).filter(x => x && !ignored.has(x.toLowerCase()));
-      const records = [];
-      const isCaseNumber = v => /^\\d{7,9}$/.test(String(v || '').trim());
-      const isStatus = v => ['aberto','fechado','encerrado'].includes(String(v || '').trim().toLowerCase());
-      const isDateTime = v => /^\\d{2}\\/\\d{2}\\/\\d{4}( \\d{2}:\\d{2})?$/.test(String(v || '').trim());
-
-      let i = 0;
-      while (i < lines.length){
-        if (!isCaseNumber(lines[i])) { i++; continue; }
-
-        const start = i;
-        const caso = lines[i++] || '';
-        const status = lines[i++] || '';
-        const data = lines[i++] || '';
-        const canal = lines[i++] || '';
-        const motivo1 = lines[i++] || '';
-        const motivo2 = lines[i++] || '';
-        const chassi = lines[i++] || '';
-        const cliente = lines[i++] || '';
-        const prioridade = lines[i++] || '';
-        const responsavel = lines[i++] || '';
-        const regional = lines[i++] || '';
-
-        if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
-          i = start + 1;
-          continue;
-        }
-
-        records.push({
-          marca, caso, status, data, canal, motivo1, motivo2, chassi, cliente,
-          prioridade, responsavel, regional, aging: calcAging(data)
-        });
-      }
-      return records;
-    }
-
-    function calcAging(dataStr){
-      const match = String(dataStr || '').match(/(\\d{2})\\/(\\d{2})\\/(\\d{4})/);
-      if (!match) return 0;
-      const [,dd,mm,yyyy] = match;
-      const d = new Date(Number(yyyy), Number(mm)-1, Number(dd));
-      const now = new Date();
-      return Math.max(0, Math.floor((now - d)/(1000*60*60*24)));
-    }
-
-    function renderGrowTable(records){
-      const tbody = document.getElementById('growTableBody');
-      if (!records.length){
-        tbody.innerHTML = '<tr><td colspan=\"13\" class=\"empty\">Nenhum caso válido encontrado.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = records.map(item => `
-        <tr>
-          <td>${brandChip(item.marca)}</td>
-          <td>${escapeHtml(item.caso)}</td>
-          <td>${statusChip(item.status)}</td>
-          <td>${escapeHtml(item.data)}</td>
-          <td>${escapeHtml(item.canal)}</td>
-          <td>${escapeHtml(item.motivo1)}</td>
-          <td>${escapeHtml(item.motivo2)}</td>
-          <td>${escapeHtml(item.chassi)}</td>
-          <td>${escapeHtml(item.cliente)}</td>
-          <td>${priorityChip(item.prioridade)}</td>
-          <td>${escapeHtml(item.responsavel)}</td>
-          <td>${escapeHtml(item.regional)}</td>
-          <td>${agingChip(item.aging)}</td>
-        </tr>
-      `).join('');
-    }
-
-    function calculateGrowSummary(records){
-      const total = records.length;
-      const open = records.filter(r => String(r.status).toLowerCase().includes('aberto')).length;
-      const over30 = records.filter(r => Number(r.aging) > 30).length;
-      const reserve = records.filter(r =>
-        String(r.motivo1).toLowerCase().includes('veículo reserva') ||
-        String(r.motivo2).toLowerCase().includes('veículo')
-      ).length;
-      const peu = records.filter(r => r.marca === 'Peugeot').length;
-      const cit = records.filter(r => r.marca === 'Citroën').length;
-      updateGrowSummary({total,open,over30,reserve,peu,cit});
-    }
-
-    function updateGrowSummary(obj){
-      document.getElementById('totalCases').textContent = obj.total;
-      document.getElementById('openCases').textContent = obj.open;
-      document.getElementById('over30Cases').textContent = obj.over30;
-      document.getElementById('reserveCases').textContent = obj.reserve;
-      document.getElementById('peugeotCases').textContent = obj.peu;
-      document.getElementById('citroenCases').textContent = obj.cit;
-    }
-
-    function brandChip(marca){
-      if (marca === 'Peugeot') return '<span class=\"chip blue\">Peugeot</span>';
-      if (marca === 'Citroën') return '<span class=\"chip purple\">Citroën</span>';
-      return '<span class=\"chip yellow\">Não identificado</span>';
-    }
-
-    function statusChip(status){
-      const s = String(status || '').toLowerCase();
-      if (s.includes('aberto')) return '<span class=\"chip red\">Aberto</span>';
-      if (s.includes('fechado') || s.includes('encerrado')) return '<span class=\"chip green\">Fechado</span>';
-      return '<span class=\"chip yellow\">-</span>';
-    }
-
-    function priorityChip(value){
-      const s = String(value || '').toLowerCase();
-      if (s.includes('urgente')) return '<span class=\"chip red\">Urgente</span>';
-      if (s.includes('alto')) return '<span class=\"chip yellow\">Alto</span>';
-      if (s.includes('média') || s.includes('media')) return '<span class=\"chip blue\">Média</span>';
-      return '<span class=\"chip green\">Normal</span>';
-    }
-
-    function agingChip(aging){
-      const a = Number(aging) || 0;
-      if (a > 30) return `<span class=\"chip red\">${a} dias</span>`;
-      if (a >= 15) return `<span class=\"chip yellow\">${a} dias</span>`;
-      return `<span class=\"chip green\">${a} dias</span>`;
-    }
-
-    function escapeHtml(str){
-      return String(str ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
-
-    function highlightMentions(text){
-      return escapeHtml(text)
-        .replace(/@Kamilly/g, '<span class=\"mention\">@Kamilly</span>')
-        .replace(/@Letícia/g, '<span class=\"mention\">@Letícia</span>')
-        .replace(/@Laís/g, '<span class=\"mention\">@Laís</span>');
-    }
-
-    function handleChatEnter(event){
-      if (event.key === 'Enter' && !event.shiftKey){
-        event.preventDefault();
-        sendChatMessage();
-      }
-    }
-
-    async function fetchChatMessages(){
-      try{
-        const response = await fetch(`${API_URL}?action=list&_=${Date.now()}`, {
-          method:'GET',
-          cache:'no-store'
-        });
-        const data = await response.json();
-        if (!data.ok) return [];
-        return Array.isArray(data.messages) ? data.messages : [];
-      }catch(err){
-        console.error('Erro ao buscar mensagens:', err);
-        return [];
-      }
-    }
-
-    async function sendChatMessage(){
-      if (!currentUser) return;
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      try{
-        const response = await fetch(`${API_URL}?action=send&_=${Date.now()}`, {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify({
-            usuario: currentUser.name,
-            mensagem: text
-          })
-        });
-
-        const data = await response.json();
-
-        if (!data.ok){
-          console.error('Erro do Apps Script:', data);
-          alert('Não foi possível enviar a mensagem.');
-          return;
-        }
-
-        input.value = '';
-        await renderChat();
-      }catch(err){
-        console.error('Erro ao enviar mensagem:', err);
-        alert('Erro ao enviar mensagem.');
-      }
-    }
-
-    function updateChatBadge(){
-      const badge = document.getElementById('chatBadge');
-      if (!badge) return;
-
-      if (unreadChatCount > 0){
-        badge.style.display = 'inline-flex';
-        badge.textContent = unreadChatCount > 99 ? '99+' : unreadChatCount;
-      }else{
-        badge.style.display = 'none';
-      }
-    }
-
-    function requestNotificationPermission(){
-      if ('Notification' in window && Notification.permission === 'default'){
-        Notification.requestPermission().catch(() => {});
-      }
-    }
-
-    function notifyIncomingMessage(msg){
-      if (!msg || !('Notification' in window)) return;
-      if (document.visibilityState === 'visible' && document.getElementById('chat')?.classList.contains('active')) return;
-
-      if (Notification.permission === 'granted'){
-        try{
-          new Notification(`Nova mensagem de ${msg.usuario}`, {
-            body: msg.mensagem,
-            tag: 'qualis-chat',
-            silent: true
-          });
-        }catch(err){
-          console.error('Erro na notificação:', err);
-        }
-      }
-    }
-
-    function playChatSound(){
-      if (!chatSoundEnabled) return;
-      const sound = document.getElementById('chatSound');
-      if (!sound) return;
-      sound.currentTime = 0;
-      sound.play().catch(() => {});
-    }
-
-    async function renderChat(){
-      const wrap = document.getElementById('chatMessages');
-      if (!wrap) return;
-
-      const messages = await fetchChatMessages();
-
-      if (!messages.length){
-        wrap.innerHTML = '<div class=\"message other\">Sem mensagens ainda.</div>';
-        lastRenderedMessageIds = [];
-        return;
-      }
-
-      const newIncomingMessages = messages.filter(msg => {
-        const id = String(msg.id);
-        return !lastRenderedMessageIds.includes(id) && (!currentUser || msg.usuario !== currentUser.name);
-      });
-
-      wrap.innerHTML = messages.map(msg => {
-        const mine = currentUser && msg.usuario === currentUser.name;
-        return `
-          <div class=\"message ${mine ? 'mine' : 'other'}\">
-            ${highlightMentions(msg.mensagem)}
-            <small>${escapeHtml(msg.usuario)} • ${escapeHtml(msg.datahora || '')}</small>
-          </div>
-        `;
-      }).join('');
-
-      wrap.scrollTop = wrap.scrollHeight;
-
-      if (newIncomingMessages.length){
-        unreadChatCount += newIncomingMessages.length;
-        if (document.getElementById('chat')?.classList.contains('active')) {
-          unreadChatCount = 0;
-        } else {
-          playChatSound();
-          notifyIncomingMessage(newIncomingMessages[newIncomingMessages.length - 1]);
-        }
-        updateChatBadge();
-      }
-
-      lastRenderedMessageIds = messages.map(msg => String(msg.id));
-    }
-
-    function renderSystems(){
-      const wrap = document.getElementById('systemsGrid');
-      if (!wrap) return;
-
-      wrap.innerHTML = SYSTEMS.map((item, index) => `
-        <div class=\"system-card\">
-          <div class=\"system-head\">
-            <div>
-              <h3 class=\"system-title\">${escapeHtml(item.nome)}</h3>
-              <div class=\"system-sub\">${escapeHtml(item.descricao || '')}</div>
-            </div>
-            <span class=\"system-tag\">${escapeHtml(item.categoria || 'Sistema')}</span>
-          </div>
-
-          <div class=\"system-fields\">
-            <div class=\"system-field\">
-              <div class=\"system-field-label\">Login</div>
-              <div class=\"system-field-value\">${escapeHtml(item.login || '-')}</div>
-            </div>
-
-            <div class=\"system-field\">
-              <div class=\"system-field-label\">Senha</div>
-              <div class=\"system-field-value\" id=\"systemPassword${index}\" data-raw=\"${escapeHtml(item.senha || '')}\">••••••••</div>
-            </div>
-          </div>
-
-          <div class=\"system-actions\">
-            <button class=\"system-btn secondary\" onclick=\"copyToClipboard('${String(item.login || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}', 'Login copiado')\">Copiar login</button>
-            <button class=\"system-btn secondary\" onclick=\"copyToClipboard('${String(item.senha || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}', 'Senha copiada')\">Copiar senha</button>
-            <button class=\"system-btn secondary\" onclick=\"togglePassword(${index})\">Mostrar senha</button>
-            <button class=\"system-btn primary\" onclick=\"openSystemLink('${String(item.url || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}')\">Abrir portal</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function copyToClipboard(text, msg){
-      navigator.clipboard.writeText(text).then(() => {
-        alert(msg);
-      }).catch(() => {
-        alert('Não foi possível copiar.');
-      });
-    }
-
-    function togglePassword(index){
-      const el = document.getElementById(`systemPassword${index}`);
-      if (!el) return;
-      const raw = el.getAttribute('data-raw') || '';
-      if (el.innerText === '••••••••') el.innerText = raw || '-';
-      else el.innerText = '••••••••';
-    }
-
-    function openSystemLink(url){
-      if (!url){
-        alert('Este card não possui link configurado.');
-        return;
-      }
-      window.open(url, '_blank');
-    }
-
-    function getAssistantData() {
-      const db = {};
-      Object.keys(DEFAULT_DB).forEach(key => {
-        const input = document.getElementById('cfg_' + key);
-        db[key] = input ? input.value : DEFAULT_DB[key];
-      });
-
-      const vendasPeugeot = calculateIndicators(db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
-      const vendasCitroen = calculateIndicators(db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
-      const posPeugeot = calculateIndicators(db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
-      const posCitroen = calculateIndicators(db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
-
-      return { db, vendasPeugeot, vendasCitroen, posPeugeot, posCitroen };
-    }
-
-    function askPreset(text) {
-      const input = document.getElementById('assistantInput');
-      input.value = text;
-      runAssistant();
-    }
-
-    function assistantSetResponse(text) {
-      const box = document.getElementById('assistantResponse');
-      if (box) box.innerText = text;
-    }
-
-    function analyzeRiskBlock(nome, nps, meta, base, receber, faltam) {
-      const riscoMeta = nps < meta;
-      const capacidadeRecuperacao = (Number(base) || 0) + (Number(receber) || 0);
-      const recupera = faltam <= capacidadeRecuperacao;
-
-      let status = `${nome}\\n`;
-      status += `NPS atual: ${formatPercent(nps)}\\n`;
-      status += `Meta: ${formatPercent(meta)}\\n`;
-      status += `Promotores necessários: ${faltam}\\n`;
-      status += `Capacidade disponível (base + vão receber): ${capacidadeRecuperacao}\\n`;
-
-      if (!riscoMeta) status += `Status: meta já atingida.`;
-      else if (recupera) status += `Status: abaixo da meta, mas com possibilidade de recuperação.`;
-      else status += `Status: abaixo da meta e sem base suficiente para recuperação.`;
-
-      return status;
-    }
-
-    function getRecoveryEvaluation(label, faltam, base, receber) {
-      const capacidade = (Number(base) || 0) + (Number(receber) || 0);
-      const recupera = faltam <= capacidade;
-
-      return {
-        label,
-        faltam,
-        capacidade,
-        recupera,
-        texto: recupera
-          ? `${label}: há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
-          : `${label}: não há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
-      };
-    }
-
-    function getCriticalBrand(data) {
-      const blocks = [
-        { nome:'Vendas Peugeot', nps:data.vendasPeugeot.nps, meta:Number(data.db.metaVendasPeugeot), faltam:calculatePromotersNeeded(data.db.metaVendasPeugeot, data.db.promotoresVendasPeugeot, data.db.neutrosVendasPeugeot, data.db.detratoresVendasPeugeot) },
-        { nome:'Vendas Citroën', nps:data.vendasCitroen.nps, meta:Number(data.db.metaVendasCitroen), faltam:calculatePromotersNeeded(data.db.metaVendasCitroen, data.db.promotoresVendasCitroen, data.db.neutrosVendasCitroen, data.db.detratoresVendasCitroen) },
-        { nome:'Pós-Vendas Peugeot', nps:data.posPeugeot.nps, meta:Number(data.db.metaPosPeugeot), faltam:calculatePromotersNeeded(data.db.metaPosPeugeot, data.db.promotoresPosPeugeot, data.db.neutrosPosPeugeot, data.db.detratoresPosPeugeot) },
-        { nome:'Pós-Vendas Citroën', nps:data.posCitroen.nps, meta:Number(data.db.metaPosCitroen), faltam:calculatePromotersNeeded(data.db.metaPosCitroen, data.db.promotoresPosCitroen, data.db.neutrosPosCitroen, data.db.detratoresPosCitroen) }
-      ];
-
-      blocks.forEach(b => b.gap = b.meta - b.nps);
-      blocks.sort((a,b) => b.gap - a.gap);
-      return blocks[0];
-    }
-
-    function runAssistant() {
-      const input = document.getElementById('assistantInput');
-      const questionRaw = (input?.value || '').trim();
-      const question = questionRaw.toLowerCase();
-
-      if (!question) {
-        assistantSetResponse('Digite uma pergunta para a Assistente QUALIS.');
-        return;
-      }
-
-      const data = getAssistantData();
-      const { db, vendasPeugeot, vendasCitroen, posPeugeot, posCitroen } = data;
-
-      const faltamVendasPeugeot = calculatePromotersNeeded(db.metaVendasPeugeot, db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
-      const faltamVendasCitroen = calculatePromotersNeeded(db.metaVendasCitroen, db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
-      const faltamPosPeugeot = calculatePromotersNeeded(db.metaPosPeugeot, db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
-      const faltamPosCitroen = calculatePromotersNeeded(db.metaPosCitroen, db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
-
-      if (question.includes('nps') && question.includes('peugeot') && !question.includes('pós') && !question.includes('pos')) {
-        assistantSetResponse(`NPS Vendas Peugeot: ${formatPercent(vendasPeugeot.nps)}
-Meta: ${formatPercent(db.metaVendasPeugeot)}
-
-Promotores: ${db.promotoresVendasPeugeot}
-Neutros: ${db.neutrosVendasPeugeot}
-Detratores: ${db.detratoresVendasPeugeot}
-Pesquisas respondidas: ${vendasPeugeot.pesquisas}
-Base de clientes: ${db.baseVendasPeugeot}
-Vão receber: ${db.receberVendasPeugeot}
-Promotores necessários para meta: ${faltamVendasPeugeot}`);
-        return;
-      }
-
-      if (question.includes('nps') && (question.includes('citroën') || question.includes('citroen')) && !question.includes('pós') && !question.includes('pos')) {
-        assistantSetResponse(`NPS Vendas Citroën: ${formatPercent(vendasCitroen.nps)}
-Meta: ${formatPercent(db.metaVendasCitroen)}
-
-Promotores: ${db.promotoresVendasCitroen}
-Neutros: ${db.neutrosVendasCitroen}
-Detratores: ${db.detratoresVendasCitroen}
-Pesquisas respondidas: ${vendasCitroen.pesquisas}
-Base de clientes: ${db.baseVendasCitroen}
-Vão receber: ${db.receberVendasCitroen}
-Promotores necessários para meta: ${faltamVendasCitroen}`);
-        return;
-      }
-
-      if (question.includes('promotores') || question.includes('faltam para bater a meta') || question.includes('bater a meta')) {
-        assistantSetResponse(`Promotores necessários para atingir a meta
-
-Vendas Peugeot: ${faltamVendasPeugeot}
-Vendas Citroën: ${faltamVendasCitroen}
-Pós-Vendas Peugeot: ${faltamPosPeugeot}
-Pós-Vendas Citroën: ${faltamPosCitroen}`);
-        return;
-      }
-
-      if (question.includes('risco') || question.includes('não bater a meta') || question.includes('nao bater a meta')) {
-        assistantSetResponse(`${analyzeRiskBlock('Vendas Peugeot', vendasPeugeot.nps, Number(db.metaVendasPeugeot), db.baseVendasPeugeot, db.receberVendasPeugeot, faltamVendasPeugeot)}
-
-${analyzeRiskBlock('Vendas Citroën', vendasCitroen.nps, Number(db.metaVendasCitroen), db.baseVendasCitroen, db.receberVendasCitroen, faltamVendasCitroen)}
-
-${analyzeRiskBlock('Pós-Vendas Peugeot', posPeugeot.nps, Number(db.metaPosPeugeot), db.basePosPeugeot, db.receberPosPeugeot, faltamPosPeugeot)}
-
-${analyzeRiskBlock('Pós-Vendas Citroën', posCitroen.nps, Number(db.metaPosCitroen), db.basePosCitroen, db.receberPosCitroen, faltamPosCitroen)}`);
-        return;
-      }
-
-      if (question.includes('marca está mais crítica') || question.includes('marca mais crítica') || question.includes('mais critica')) {
-        const critical = getCriticalBrand(data);
-        assistantSetResponse(`Marca/área mais crítica no momento: ${critical.nome}
-
-NPS atual: ${formatPercent(critical.nps)}
-Meta: ${formatPercent(critical.meta)}
-Gap para a meta: ${formatPercent(critical.gap)}
-Promotores necessários para recuperar: ${critical.faltam}
-
-Leitura:
-Esta é a frente com maior distância percentual em relação à meta e, portanto, merece prioridade imediata.`);
-        return;
-      }
-
-      if (question.includes('base suficiente') || question.includes('recuperar') || question.includes('recuperação')) {
-        const evaluations = [
-          getRecoveryEvaluation('Vendas Peugeot', faltamVendasPeugeot, db.baseVendasPeugeot, db.receberVendasPeugeot),
-          getRecoveryEvaluation('Vendas Citroën', faltamVendasCitroen, db.baseVendasCitroen, db.receberVendasCitroen),
-          getRecoveryEvaluation('Pós-Vendas Peugeot', faltamPosPeugeot, db.basePosPeugeot, db.receberPosPeugeot),
-          getRecoveryEvaluation('Pós-Vendas Citroën', faltamPosCitroen, db.basePosCitroen, db.receberPosCitroen)
-        ];
-
-        assistantSetResponse(`Avaliação de capacidade de recuperação
-
-${evaluations.map(e => e.texto).join('\\n\\n')}`);
-        return;
-      }
-
-      assistantSetResponse(`Ainda não entendi essa pergunta.
-
-Tente algo como:
-• Qual o NPS da Peugeot?
-• Qual o NPS da Citroën?
-• Quantos promotores faltam para bater a meta?
-• Estamos em risco de não bater a meta?
-• Qual marca está mais crítica?
-• Temos base suficiente para recuperar?
-• Faça um texto para a diretoria`);
-    }
-
-    function initLoginCanvas(){
-      const canvas = document.getElementById('loginCanvas');
-      if(!canvas) return;
-
-      const ctx = canvas.getContext('2d');
-      let bars = [];
-      let points = [];
-      let percents = [];
-      let mouseX = 0;
-      let mouseY = 0;
-
-      function resize(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        bars = Array.from({length: 42}, (_, i)=>({
-          x:(canvas.width/42)*i+8,
-          w:10 + Math.random() * 6,
-          h:80+Math.random()*220,
-          offset:Math.random()*1000
-        }));
-
-        points = Array.from({length:20}, (_,i)=>({
-          x:(canvas.width/19)*i,
-          y:canvas.height*0.40,
-          offset:Math.random()*1000
-        }));
-
-        percents = Array.from({length:12}, (_,i)=>({
-          x:Math.random()*canvas.width,
-          y:Math.random()*canvas.height,
-          value:(40 + Math.random()*60).toFixed(1).replace('.', ',') + '%',
-          size:14 + Math.random()*18,
-          speed:.15 + Math.random()*.25,
-          blur:Math.random() > .4
-        }));
-      }
-
-      function drawGrid(){
-        ctx.strokeStyle='rgba(255,255,255,0.05)';
-        ctx.lineWidth=1;
-
-        for(let x=0;x<canvas.width;x+=80){
-          ctx.beginPath();
-          ctx.moveTo(x,0);
-          ctx.lineTo(x,canvas.height);
-          ctx.stroke();
-        }
-
-        for(let y=0;y<canvas.height;y+=80){
-          ctx.beginPath();
-          ctx.moveTo(0,y);
-          ctx.lineTo(canvas.width,y);
-          ctx.stroke();
-        }
-      }
-
-      function drawBars(t){
-        bars.forEach(bar=>{
-          const dynamic =
-            bar.h +
-            Math.sin(t*0.001+bar.offset)*40 +
-            (mouseX/canvas.width)*50;
-
-          const y=canvas.height-dynamic-30;
-          const grad=ctx.createLinearGradient(0,y,0,y+dynamic);
-          grad.addColorStop(0,'rgba(96,165,250,0.78)');
-          grad.addColorStop(1,'rgba(96,165,250,0.10)');
-
-          ctx.fillStyle=grad;
-          ctx.fillRect(bar.x,y,bar.w,dynamic);
-        });
-      }
-
-      function drawLine(t){
-        ctx.beginPath();
-        points.forEach((p,i)=>{
-          const x=p.x;
-          const y=p.y+Math.sin(t*0.002+p.offset)*42 + (mouseY/canvas.height)*18;
-          if(i===0) ctx.moveTo(x,y);
-          else ctx.lineTo(x,y);
-        });
-
-        ctx.strokeStyle='rgba(167,139,250,0.82)';
-        ctx.lineWidth=3;
-        ctx.stroke();
-      }
-
-      function drawPercents(t){
-        percents.forEach((item, i) => {
-          const x = (item.x + (t * item.speed * 0.02)) % (canvas.width + 120);
-          const y = item.y + Math.sin((t * 0.001) + i) * 8;
-          ctx.save();
-          ctx.globalAlpha = 0.12;
-          if(item.blur){
-            ctx.shadowBlur = 18;
-            ctx.shadowColor = 'rgba(255,255,255,0.12)';
-          }
-          ctx.fillStyle = 'rgba(255,255,255,0.55)';
-          ctx.font = `700 ${item.size}px Inter, sans-serif`;
-          ctx.fillText(item.value, x - 120, y);
-          ctx.restore();
-        });
-      }
-
-      function animate(t){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-        const bg=ctx.createLinearGradient(0,0,0,canvas.height);
-        bg.addColorStop(0,'#071120');
-        bg.addColorStop(1,'#0f1c35');
-
-        ctx.fillStyle=bg;
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        drawGrid();
-        drawPercents(t);
-        drawLine(t);
-        drawBars(t);
-
-        requestAnimationFrame(animate);
-      }
-
-      window.addEventListener('mousemove',e=>{
-        mouseX=e.clientX;
-        mouseY=e.clientY;
-      });
-
-      resize();
-      window.addEventListener('resize',resize);
-      requestAnimationFrame(animate);
-    }
-
-    function boot(){
-      loadTheme();
-      initLoginCanvas();
-      requestNotificationPermission();
-
-      document.addEventListener('click', () => {
-        chatSoundEnabled = true;
-      }, { once:true });
-
-      const storedUser = localStorage.getItem('qualis-current-user');
-      if (storedUser) {
-        try{
-          currentUser = JSON.parse(storedUser);
-          const fresh = getUserByEmail(currentUser.email);
-          if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
-            currentUser = fresh;
-            startPortal();
-          } else {
-            localStorage.removeItem('qualis-current-user');
-            currentUser = null;
-          }
-        }catch{
-          localStorage.removeItem('qualis-current-user');
-          currentUser = null;
-        }
-      }
-
-      setInterval(rotateBanners, 5000);
-
-      setInterval(() => {
-        if (document.getElementById('portalApp').style.display === 'block') {
-          renderChat();
-        }
-      }, 3000);
-
-      setInterval(() => {
-        if (document.getElementById('portalApp').style.display === 'block') {
-          syncDatabaseSilently();
-        }
-      }, 3000);
-    }
-
-    window.onload = boot;
+window.onload = boot;
   </script>
 </body>
 </html>
+Preciso de uma grande ajuda sem erros - Manus
