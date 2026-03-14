@@ -2289,7 +2289,744 @@ async function startPortal(){
   renderSystems();
 }
 
-function initLoginInteractions(){
+
+
+    function logout(){
+      localStorage.removeItem('qualis-current-user');
+      currentUser = null;
+      unreadChatCount = 0;
+      updateChatBadge();
+      document.getElementById('portalApp').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginPassword').value = '';
+      clearLoginError();
+    }
+
+    function applyUserContext(){
+      if (!currentUser) return;
+      document.getElementById('sidebarUserName').innerText = currentUser.name;
+      document.getElementById('sidebarUserRole').innerText = currentUser.role === 'superadmin' ? 'Super Admin' : 'Usuária Operacional';
+      document.getElementById('chatHeaderInfo').innerText = `Mensagens visíveis para todo o grupo. Logada como ${currentUser.name}.`;
+    }
+
+    function formatPercent(value){
+      return Number(value || 0).toFixed(1).replace('.', ',') + '%';
+    }
+
+    function calculateIndicators(promotores, neutros, detratores){
+      promotores = Number(promotores) || 0;
+      neutros = Number(neutros) || 0;
+      detratores = Number(detratores) || 0;
+      const pesquisas = promotores + neutros + detratores;
+      const nps = pesquisas > 0 ? ((promotores - detratores) / pesquisas) * 100 : 0;
+      return { pesquisas, nps };
+    }
+
+    function calculatePromotersNeeded(metaPercent, promotores, neutros, detratores){
+      const meta = Number(metaPercent) || 0;
+      const p = Number(promotores) || 0;
+      const n = Number(neutros) || 0;
+      const d = Number(detratores) || 0;
+      const total = p + n + d;
+
+      if (total <= 0) return meta > 0 ? 1 : 0;
+
+      const currentNps = ((p - d) / total) * 100;
+      if (currentNps >= meta) return 0;
+
+      const numerator = ((meta / 100) * total) - (p - d);
+      const denominator = 1 - (meta / 100);
+      if (denominator <= 0) return 0;
+
+      return Math.max(0, Math.ceil(numerator / denominator));
+    }
+
+    function openPage(id, btn){
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      document.getElementById('topTitle').innerText = pageTitles[id][0];
+      document.getElementById('topSubtitle').innerText = pageTitles[id][1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (id === 'chat') {
+        unreadChatCount = 0;
+        updateChatBadge();
+        renderChat();
+      }
+      if (id === 'sistemas') renderSystems();
+    }
+
+    function openSubpage(sectionId, subpageId, btn){
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      section.querySelectorAll('.subpage').forEach(sp => sp.classList.remove('active'));
+      const target = document.getElementById(subpageId);
+      if (target) target.classList.add('active');
+      section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function toggleTheme(){
+      document.body.classList.toggle('dark');
+      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    function loadTheme(){
+      const saved = localStorage.getItem('qualis-theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+    }
+
+    async function loadDatabase(){
+      try{
+        const response = await fetch(`${API_URL}?action=getConfig&_=${Date.now()}`, {
+          method:'GET',
+          cache:'no-store'
+        });
+        const result = await response.json();
+
+        if (result.ok && result.data){
+          return { ...DEFAULT_DB, ...result.data };
+        }
+      }catch(err){
+        console.error('Erro ao carregar CONFIG:', err);
+      }
+      return { ...DEFAULT_DB };
+    }
+
+    async function syncDatabaseSilently(){
+      try{
+        const db = await loadDatabase();
+        fillConfigForm(db);
+        applyDatabaseToUI(db);
+      }catch(err){
+        console.error('Erro ao sincronizar CONFIG:', err);
+      }
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if (el) el.innerText = value;
+    }
+
+    function applyNPSColor(idValue, idMeta){
+      const valueEl = document.getElementById(idValue);
+      const metaEl = document.getElementById(idMeta);
+      if (!valueEl || !metaEl) return;
+
+      const value = parseFloat(String(valueEl.innerText).replace('%','').replace(',','.'));
+      const meta = parseFloat(String(metaEl.innerText).replace('%','').replace(',','.'));
+
+      valueEl.classList.remove('nps-green','nps-red');
+      valueEl.classList.add(value >= meta ? 'nps-green' : 'nps-red');
+    }
+
+    function fillConfigForm(db){
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        if (input) input.value = db[key];
+      });
+    }
+
+    function applyDatabaseToUI(db){
+      setText('homePromotorasHoje', db.homePromotorasHoje);
+      setText('homeDetratoresHoje', db.homeDetratoresHoje);
+      setText('homePesquisasRespondidas', db.homePesquisasRespondidas);
+      setText('homeTreinamentosPendentes', db.homeTreinamentosPendentes);
+      setText('homeRacsPendentes', db.homeRacsPendentes);
+      setText('homeAuditoriasPendentes', db.homeAuditoriasPendentes);
+      setText('homePlanosPendentes', db.homePlanosPendentes);
+      setText('homeHotAlertsCriticos', db.homeHotAlertsCriticos);
+      setText('homeRacsCriticos', db.homeRacsCriticos);
+      setText('homeAuditoriasUrgentes', db.homeAuditoriasUrgentes);
+      setText('homePlanosCriticos', db.homePlanosCriticos);
+      setText('homeTreinPendentes2', db.homeTreinPendentes2);
+      setText('homeTreinCronograma', db.homeTreinCronograma);
+      setText('homeTreinCronograma2', db.homeTreinCronograma);
+      setText('homeTreinConcluidosSemana', db.homeTreinConcluidosSemana);
+
+      const vp = calculateIndicators(db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
+      setText('npsVendasPeugeotValue', formatPercent(vp.nps));
+      setText('npsVendasPeugeotMeta', formatPercent(db.metaVendasPeugeot));
+      setText('vendasPeugeotPromotores', db.promotoresVendasPeugeot);
+      setText('vendasPeugeotNeutros', db.neutrosVendasPeugeot);
+      setText('vendasPeugeotDetratores', db.detratoresVendasPeugeot);
+      setText('vendasPeugeotPesquisas', vp.pesquisas);
+      setText('vendasPeugeotBase', db.baseVendasPeugeot);
+      setText('vendasPeugeotReceber', db.receberVendasPeugeot);
+      setText('vendasPeugeotNecessarios', calculatePromotersNeeded(db.metaVendasPeugeot, db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot));
+
+      const vc = calculateIndicators(db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
+      setText('npsVendasCitroenValue', formatPercent(vc.nps));
+      setText('npsVendasCitroenMeta', formatPercent(db.metaVendasCitroen));
+      setText('vendasCitroenPromotores', db.promotoresVendasCitroen);
+      setText('vendasCitroenNeutros', db.neutrosVendasCitroen);
+      setText('vendasCitroenDetratores', db.detratoresVendasCitroen);
+      setText('vendasCitroenPesquisas', vc.pesquisas);
+      setText('vendasCitroenBase', db.baseVendasCitroen);
+      setText('vendasCitroenReceber', db.receberVendasCitroen);
+      setText('vendasCitroenNecessarios', calculatePromotersNeeded(db.metaVendasCitroen, db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen));
+
+      const pp = calculateIndicators(db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
+      setText('npsPosPeugeotValue', formatPercent(pp.nps));
+      setText('npsPosPeugeotMeta', formatPercent(db.metaPosPeugeot));
+      setText('posPeugeotPromotores', db.promotoresPosPeugeot);
+      setText('posPeugeotNeutros', db.neutrosPosPeugeot);
+      setText('posPeugeotDetratores', db.detratoresPosPeugeot);
+      setText('posPeugeotPesquisas', pp.pesquisas);
+      setText('posPeugeotBase', db.basePosPeugeot);
+      setText('posPeugeotReceber', db.receberPosPeugeot);
+      setText('posPeugeotNecessarios', calculatePromotersNeeded(db.metaPosPeugeot, db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot));
+
+      const pc = calculateIndicators(db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
+      setText('npsPosCitroenValue', formatPercent(pc.nps));
+      setText('npsPosCitroenMeta', formatPercent(db.metaPosCitroen));
+      setText('posCitroenPromotores', db.promotoresPosCitroen);
+      setText('posCitroenNeutros', db.neutrosPosCitroen);
+      setText('posCitroenDetratores', db.detratoresPosCitroen);
+      setText('posCitroenPesquisas', pc.pesquisas);
+      setText('posCitroenBase', db.basePosCitroen);
+      setText('posCitroenReceber', db.receberPosCitroen);
+      setText('posCitroenNecessarios', calculatePromotersNeeded(db.metaPosCitroen, db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen));
+
+      applyNPSColor('npsVendasPeugeotValue','npsVendasPeugeotMeta');
+      applyNPSColor('npsVendasCitroenValue','npsVendasCitroenMeta');
+      applyNPSColor('npsPosPeugeotValue','npsPosPeugeotMeta');
+      applyNPSColor('npsPosCitroenValue','npsPosCitroenMeta');
+    }
+
+    async function saveDatabase(){
+      const db = {};
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        db[key] = input ? input.value : DEFAULT_DB[key];
+      });
+
+      try{
+        const response = await fetch(`${API_URL}?action=saveConfig&_=${Date.now()}`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(db)
+        });
+
+        const result = await response.json();
+
+        if (!result.ok){
+          alert('Não foi possível salvar os dados.');
+          return;
+        }
+
+        const freshDb = await loadDatabase();
+        fillConfigForm(freshDb);
+        applyDatabaseToUI(freshDb);
+        alert('Números salvos com sucesso.');
+      }catch(err){
+        console.error('Erro ao salvar CONFIG:', err);
+        alert('Erro ao salvar os dados.');
+      }
+    }
+
+    function resetDatabase(){
+      fillConfigForm({ ...DEFAULT_DB });
+      applyDatabaseToUI({ ...DEFAULT_DB });
+      alert('Valores restaurados na tela. Clique em \"Salvar números\" para enviar para a planilha.');
+    }
+
+    function showBanner(index){
+      const banners = document.querySelectorAll('#inicio .banner');
+      const dots = document.querySelectorAll('#inicio .dot');
+      banners.forEach((b,i) => b.classList.toggle('active', i === index));
+      dots.forEach((d,i) => d.classList.toggle('active', i === index));
+      currentBanner = index;
+    }
+
+    function rotateBanners(){
+      const banners = document.querySelectorAll('#inicio .banner');
+      if (!banners.length) return;
+      currentBanner = (currentBanner + 1) % banners.length;
+      showBanner(currentBanner);
+    }
+
+    function loadGrowExamplePeugeot(){
+      document.getElementById('growPeugeot').value = `15725953
+Aberto
+05/11/2025 15:15
+Telefone
+Veículo Reserva
+Veículo na concessionária
+8ADUAFCA1SG576844
+THICIANE ARAUJO CHAVES
+Urgente
+Pâmela Souza Lopes
+NNE - NORDESTE`;
+      processGrowData();
+    }
+
+    function loadGrowExampleCitroen(){
+      document.getElementById('growCitroen').value = `16316483
+Aberto
+11/03/2026 09:10
+WhatsApp
+Campanha Recall
+Baixa Detração
+9V7VBBHXGLA001448
+EMILIO CAVALCANTE
+Urgente
+Pâmela Souza Lopes
+NNE - NORDESTE`;
+      processGrowData();
+    }
+
+    function clearGrowData(){
+      document.getElementById('growPeugeot').value = '';
+      document.getElementById('growCitroen').value = '';
+      document.getElementById('growTableBody').innerHTML = '<tr><td colspan=\"13\" class=\"empty\">Nenhum caso analisado ainda.</td></tr>';
+      updateGrowSummary({total:0,open:0,over30:0,reserve:0,peu:0,cit:0});
+    }
+
+    function processGrowData(){
+      const peuRaw = document.getElementById('growPeugeot').value.trim();
+      const citRaw = document.getElementById('growCitroen').value.trim();
+      const peuRecords = parseBlockRecords(peuRaw, 'Peugeot');
+      const citRecords = parseBlockRecords(citRaw, 'Citroën');
+      const records = [...peuRecords, ...citRecords];
+      renderGrowTable(records);
+      calculateGrowSummary(records);
+    }
+
+    function parseBlockRecords(raw, marca){
+      if (!raw) return [];
+
+      const ignored = new Set([
+        'número do item','número do caso','classificado em ordem crescente','status',
+        'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
+        'chassi completo','conta nome','prioridade','responsável_nome','regional description',
+        'caoss grow customer care peugeot','casos grow customer care peugeot',
+        'casos grow customer care citroën','casos grow customer care citroen','sort','ação'
+      ]);
+
+      const lines = raw.split(/\\n/).map(x => x.trim()).filter(x => x && !ignored.has(x.toLowerCase()));
+      const records = [];
+      const isCaseNumber = v => /^\\d{7,9}$/.test(String(v || '').trim());
+      const isStatus = v => ['aberto','fechado','encerrado'].includes(String(v || '').trim().toLowerCase());
+      const isDateTime = v => /^\\d{2}\\/\\d{2}\\/\\d{4}( \\d{2}:\\d{2})?$/.test(String(v || '').trim());
+
+      let i = 0;
+      while (i < lines.length){
+        if (!isCaseNumber(lines[i])) { i++; continue; }
+
+        const start = i;
+        const caso = lines[i++] || '';
+        const status = lines[i++] || '';
+        const data = lines[i++] || '';
+        const canal = lines[i++] || '';
+        const motivo1 = lines[i++] || '';
+        const motivo2 = lines[i++] || '';
+        const chassi = lines[i++] || '';
+        const cliente = lines[i++] || '';
+        const prioridade = lines[i++] || '';
+        const responsavel = lines[i++] || '';
+        const regional = lines[i++] || '';
+
+        if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
+          i = start + 1;
+          continue;
+        }
+
+        records.push({
+          marca, caso, status, data, canal, motivo1, motivo2, chassi, cliente,
+          prioridade, responsavel, regional, aging: calcAging(data)
+        });
+      }
+      return records;
+    }
+
+    function calcAging(dataStr){
+      const match = String(dataStr || '').match(/(\\d{2})\\/(\\d{2})\\/(\\d{4})/);
+      if (!match) return 0;
+      const [,dd,mm,yyyy] = match;
+      const d = new Date(Number(yyyy), Number(mm)-1, Number(dd));
+      const now = new Date();
+      return Math.max(0, Math.floor((now - d)/(1000*60*60*24)));
+    }
+
+    function renderGrowTable(records){
+      const tbody = document.getElementById('growTableBody');
+      if (!records.length){
+        tbody.innerHTML = '<tr><td colspan=\"13\" class=\"empty\">Nenhum caso válido encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = records.map(item => `
+        <tr>
+          <td>${brandChip(item.marca)}</td>
+          <td>${escapeHtml(item.caso)}</td>
+          <td>${statusChip(item.status)}</td>
+          <td>${escapeHtml(item.data)}</td>
+          <td>${escapeHtml(item.canal)}</td>
+          <td>${escapeHtml(item.motivo1)}</td>
+          <td>${escapeHtml(item.motivo2)}</td>
+          <td>${escapeHtml(item.chassi)}</td>
+          <td>${escapeHtml(item.cliente)}</td>
+          <td>${priorityChip(item.prioridade)}</td>
+          <td>${escapeHtml(item.responsavel)}</td>
+          <td>${escapeHtml(item.regional)}</td>
+          <td>${agingChip(item.aging)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function calculateGrowSummary(records){
+      const total = records.length;
+      const open = records.filter(r => String(r.status).toLowerCase().includes('aberto')).length;
+      const over30 = records.filter(r => Number(r.aging) > 30).length;
+      const reserve = records.filter(r =>
+        String(r.motivo1).toLowerCase().includes('veículo reserva') ||
+        String(r.motivo2).toLowerCase().includes('veículo')
+      ).length;
+      const peu = records.filter(r => r.marca === 'Peugeot').length;
+      const cit = records.filter(r => r.marca === 'Citroën').length;
+      updateGrowSummary({total,open,over30,reserve,peu,cit});
+    }
+
+    function updateGrowSummary(obj){
+      document.getElementById('totalCases').textContent = obj.total;
+      document.getElementById('openCases').textContent = obj.open;
+      document.getElementById('over30Cases').textContent = obj.over30;
+      document.getElementById('reserveCases').textContent = obj.reserve;
+      document.getElementById('peugeotCases').textContent = obj.peu;
+      document.getElementById('citroenCases').textContent = obj.cit;
+    }
+
+    function brandChip(marca){
+      if (marca === 'Peugeot') return '<span class=\"chip blue\">Peugeot</span>';
+      if (marca === 'Citroën') return '<span class=\"chip purple\">Citroën</span>';
+      return '<span class=\"chip yellow\">Não identificado</span>';
+    }
+
+    function statusChip(status){
+      const s = String(status || '').toLowerCase();
+      if (s.includes('aberto')) return '<span class=\"chip red\">Aberto</span>';
+      if (s.includes('fechado') || s.includes('encerrado')) return '<span class=\"chip green\">Fechado</span>';
+      return '<span class=\"chip yellow\">-</span>';
+    }
+
+    function priorityChip(value){
+      const s = String(value || '').toLowerCase();
+      if (s.includes('urgente')) return '<span class=\"chip red\">Urgente</span>';
+      if (s.includes('alto')) return '<span class=\"chip yellow\">Alto</span>';
+      if (s.includes('média') || s.includes('media')) return '<span class=\"chip blue\">Média</span>';
+      return '<span class=\"chip green\">Normal</span>';
+    }
+
+    function agingChip(aging){
+      const a = Number(aging) || 0;
+      if (a > 30) return `<span class=\"chip red\">${a} dias</span>`;
+      if (a >= 15) return `<span class=\"chip yellow\">${a} dias</span>`;
+      return `<span class=\"chip green\">${a} dias</span>`;
+    }
+
+    function escapeHtml(str){
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function highlightMentions(text){
+      return escapeHtml(text)
+        .replace(/@Kamilly/g, '<span class=\"mention\">@Kamilly</span>')
+        .replace(/@Letícia/g, '<span class=\"mention\">@Letícia</span>')
+        .replace(/@Laís/g, '<span class=\"mention\">@Laís</span>');
+    }
+
+    function handleChatEnter(event){
+      if (event.key === 'Enter' && !event.shiftKey){
+        event.preventDefault();
+        sendChatMessage();
+      }
+    }
+
+    async function fetchChatMessages(){
+      try{
+        const response = await fetch(`${API_URL}?action=list&_=${Date.now()}`, {
+          method:'GET',
+          cache:'no-store'
+        });
+        const data = await response.json();
+        if (!data.ok) return [];
+        return Array.isArray(data.messages) ? data.messages : [];
+      }catch(err){
+        console.error('Erro ao buscar mensagens:', err);
+        return [];
+      }
+    }
+
+    async function sendChatMessage(){
+      if (!currentUser) return;
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      try{
+        const response = await fetch(`${API_URL}?action=send&_=${Date.now()}`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({
+            usuario: currentUser.name,
+            mensagem: text
+          })
+        });
+
+        const data = await response.json();
+
+        if (!data.ok){
+          console.error('Erro do Apps Script:', data);
+          alert('Não foi possível enviar a mensagem.');
+          return;
+        }
+
+        input.value = '';
+        await renderChat();
+      }catch(err){
+        console.error('Erro ao enviar mensagem:', err);
+        alert('Erro ao enviar mensagem.');
+      }
+    }
+
+    function updateChatBadge(){
+      const badge = document.getElementById('chatBadge');
+      if (!badge) return;
+
+      if (unreadChatCount > 0){
+        badge.style.display = 'inline-flex';
+        badge.textContent = unreadChatCount > 99 ? '99+' : unreadChatCount;
+      }else{
+        badge.style.display = 'none';
+      }
+    }
+
+    function requestNotificationPermission(){
+      if ('Notification' in window && Notification.permission === 'default'){
+        Notification.requestPermission().catch(() => {});
+      }
+    }
+
+    function notifyIncomingMessage(msg){
+      if (!msg || !('Notification' in window)) return;
+      if (document.visibilityState === 'visible' && document.getElementById('chat')?.classList.contains('active')) return;
+
+      if (Notification.permission === 'granted'){
+        try{
+          new Notification(`Nova mensagem de ${msg.usuario}`, {
+            body: msg.mensagem,
+            tag: 'qualis-chat',
+            silent: true
+          });
+        }catch(err){
+          console.error('Erro na notificação:', err);
+        }
+      }
+    }
+
+    function playChatSound(){
+      if (!chatSoundEnabled) return;
+      const sound = document.getElementById('chatSound');
+      if (!sound) return;
+      sound.currentTime = 0;
+      sound.play().catch(() => {});
+    }
+
+    async function renderChat(){
+      const wrap = document.getElementById('chatMessages');
+      if (!wrap) return;
+
+      const messages = await fetchChatMessages();
+
+      if (!messages.length){
+        wrap.innerHTML = '<div class=\"message other\">Sem mensagens ainda.</div>';
+        lastRenderedMessageIds = [];
+        return;
+      }
+
+      const newIncomingMessages = messages.filter(msg => {
+        const id = String(msg.id);
+        return !lastRenderedMessageIds.includes(id) && (!currentUser || msg.usuario !== currentUser.name);
+      });
+
+      wrap.innerHTML = messages.map(msg => {
+        const mine = currentUser && msg.usuario === currentUser.name;
+        return `
+          <div class=\"message ${mine ? 'mine' : 'other'}\">
+            ${highlightMentions(msg.mensagem)}
+            <small>${escapeHtml(msg.usuario)} • ${escapeHtml(msg.datahora || '')}</small>
+          </div>
+        `;
+      }).join('');
+
+      wrap.scrollTop = wrap.scrollHeight;
+
+      if (newIncomingMessages.length){
+        unreadChatCount += newIncomingMessages.length;
+        if (document.getElementById('chat')?.classList.contains('active')) {
+          unreadChatCount = 0;
+        } else {
+          playChatSound();
+          notifyIncomingMessage(newIncomingMessages[newIncomingMessages.length - 1]);
+        }
+        updateChatBadge();
+      }
+
+      lastRenderedMessageIds = messages.map(msg => String(msg.id));
+    }
+
+    function renderSystems(){
+      const wrap = document.getElementById('systemsGrid');
+      if (!wrap) return;
+
+      wrap.innerHTML = SYSTEMS.map((item, index) => `
+        <div class=\"system-card\">
+          <div class=\"system-head\">
+            <div>
+              <h3 class=\"system-title\">${escapeHtml(item.nome)}</h3>
+              <div class=\"system-sub\">${escapeHtml(item.descricao || '')}</div>
+            </div>
+            <span class=\"system-tag\">${escapeHtml(item.categoria || 'Sistema')}</span>
+          </div>
+
+          <div class=\"system-fields\">
+            <div class=\"system-field\">
+              <div class=\"system-field-label\">Login</div>
+              <div class=\"system-field-value\">${escapeHtml(item.login || '-')}</div>
+            </div>
+
+            <div class=\"system-field\">
+              <div class=\"system-field-label\">Senha</div>
+              <div class=\"system-field-value\" id=\"systemPassword${index}\" data-raw=\"${escapeHtml(item.senha || '')}\">••••••••</div>
+            </div>
+          </div>
+
+          <div class=\"system-actions\">
+            <button class=\"system-btn secondary\" onclick=\"copyToClipboard('${String(item.login || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}', 'Login copiado')\">Copiar login</button>
+            <button class=\"system-btn secondary\" onclick=\"copyToClipboard('${String(item.senha || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}', 'Senha copiada')\">Copiar senha</button>
+            <button class=\"system-btn secondary\" onclick=\"togglePassword(${index})\">Mostrar senha</button>
+            <button class=\"system-btn primary\" onclick=\"openSystemLink('${String(item.url || '').replace(/\\/g,'\\\\').replace(/'/g,\"\\\\'\")}')\">Abrir portal</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function copyToClipboard(text, msg){
+      navigator.clipboard.writeText(text).then(() => {
+        alert(msg);
+      }).catch(() => {
+        alert('Não foi possível copiar.');
+      });
+    }
+
+    function togglePassword(index){
+      const el = document.getElementById(`systemPassword${index}`);
+      if (!el) return;
+      const raw = el.getAttribute('data-raw') || '';
+      if (el.innerText === '••••••••') el.innerText = raw || '-';
+      else el.innerText = '••••••••';
+    }
+
+    function openSystemLink(url){
+      if (!url){
+        alert('Este card não possui link configurado.');
+        return;
+      }
+      window.open(url, '_blank');
+    }
+
+    function getAssistantData() {
+      const db = {};
+      Object.keys(DEFAULT_DB).forEach(key => {
+        const input = document.getElementById('cfg_' + key);
+        db[key] = input ? input.value : DEFAULT_DB[key];
+      });
+
+      const vendasPeugeot = calculateIndicators(db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
+      const vendasCitroen = calculateIndicators(db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
+      const posPeugeot = calculateIndicators(db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
+      const posCitroen = calculateIndicators(db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
+
+      return { db, vendasPeugeot, vendasCitroen, posPeugeot, posCitroen };
+    }
+
+    function askPreset(text) {
+      const input = document.getElementById('assistantInput');
+      input.value = text;
+      runAssistant();
+    }
+
+    function assistantSetResponse(text) {
+      const box = document.getElementById('assistantResponse');
+      if (box) box.innerText = text;
+    }
+
+    function analyzeRiskBlock(nome, nps, meta, base, receber, faltam) {
+      const riscoMeta = nps < meta;
+      const capacidadeRecuperacao = (Number(base) || 0) + (Number(receber) || 0);
+      const recupera = faltam <= capacidadeRecuperacao;
+
+      let status = `${nome}\\n`;
+      status += `NPS atual: ${formatPercent(nps)}\\n`;
+      status += `Meta: ${formatPercent(meta)}\\n`;
+      status += `Promotores necessários: ${faltam}\\n`;
+      status += `Capacidade disponível (base + vão receber): ${capacidadeRecuperacao}\\n`;
+
+      if (!riscoMeta) status += `Status: meta já atingida.`;
+      else if (recupera) status += `Status: abaixo da meta, mas com possibilidade de recuperação.`;
+      else status += `Status: abaixo da meta e sem base suficiente para recuperação.`;
+
+      return status;
+    }
+
+    function getRecoveryEvaluation(label, faltam, base, receber) {
+      const capacidade = (Number(base) || 0) + (Number(receber) || 0);
+      const recupera = faltam <= capacidade;
+
+      return {
+        label,
+        faltam,
+        capacidade,
+        recupera,
+        texto: recupera
+          ? `${label}: há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
+          : `${label}: não há base suficiente para recuperar. Necessários ${faltam} promotores; capacidade disponível ${capacidade}.`
+      };
+    }
+
+    function getCriticalBrand(data) {
+      const blocks = [
+        { nome:'Vendas Peugeot', nps:data.vendasPeugeot.nps, meta:Number(data.db.metaVendasPeugeot), faltam:calculatePromotersNeeded(data.db.metaVendasPeugeot, data.db.promotoresVendasPeugeot, data.db.neutrosVendasPeugeot, data.db.detratoresVendasPeugeot) },
+        { nome:'Vendas Citroën', nps:data.vendasCitroen.nps, meta:Number(data.db.metaVendasCitroen), faltam:calculatePromotersNeeded(data.db.metaVendasCitroen, data.db.promotoresVendasCitroen, data.db.neutrosVendasCitroen, data.db.detratoresVendasCitroen) },
+        { nome:'Pós-Vendas Peugeot', nps:data.posPeugeot.nps, meta:Number(data.db.metaPosPeugeot), faltam:calculatePromotersNeeded(data.db.metaPosPeugeot, data.db.promotoresPosPeugeot, data.db.neutrosPosPeugeot, data.db.detratoresPosPeugeot) },
+        { nome:'Pós-Vendas Citroën', nps:data.posCitroen.nps, meta:Number(data.db.metaPosCitroen), faltam:calculatePromotersNeeded(data.db.metaPosCitroen, data.db.promotoresPosCitroen, data.db.neutrosPosCitroen, data.db.detratoresPosCitroen) }
+      ];
+
+      blocks.forEach(b => b.gap = b.meta - b.nps);
+      blocks.sort((a,b) => b.gap - a.gap);
+      return blocks[0];
+    }
+
+    function runAssistant() {
+      const input = document.getElementById('assistantInput');
+      const questionRaw = (input?.value || '').trim();
+      const question = questionRaw.toLowerCase();
+
+      if (!question) {
+        assistantSetResponse('Digite uma pergunta para a Assistente QUALIS.');
+        return;
+      }
+
+    function initLoginInteractions(){
   const screen = document.getElementById('loginScreen');
   const email = document.getElementById('loginEmail');
   const password = document.getElementById('loginPassword');
