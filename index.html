@@ -65,10 +65,9 @@
       align-items:center;
       justify-content:center;
       padding:24px;
-      background:
-        radial-gradient(circle at top right, rgba(255,255,255,.18), transparent 25%),
-        radial-gradient(circle at bottom left, rgba(255,255,255,.12), transparent 28%),
-        linear-gradient(135deg, #13366e 0%, #315fc3 55%, #7c3aed 100%);
+      position:relative;
+      overflow:hidden;
+      background:#0b1220;
     }
 
     .login-shell{
@@ -1189,6 +1188,82 @@
       color:var(--text);
     }
 
+    
+    .import-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .import-box{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    .import-box h3{margin:0 0 10px;font-size:16px}
+    .import-box textarea{
+      width:100%;
+      min-height:180px;
+      resize:vertical;
+      border:1px solid var(--border);
+      background:var(--surface-2);
+      color:var(--text);
+      border-radius:14px;
+      padding:14px;
+      outline:none;
+    }
+    .toolbar-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:16px;
+    }
+    .toolbar-row select,.toolbar-row input{
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      outline:none;
+      box-shadow:var(--shadow);
+    }
+    .compact-table table{min-width:900px}
+    .base-status-vai-receber{background:#f1f5f9;color:#111827}
+    .base-status-pesquisavel{background:#dbeafe;color:#111827}
+    .base-status-expirado{background:#fed7aa;color:#111827}
+    .base-status-promotor{background:#166534;color:#fff;font-weight:800}
+    .base-status-neutro{background:#a16207;color:#fff;font-weight:800}
+    .base-status-detrator{background:#b91c1c;color:#fff;font-weight:800}
+    .editable-cell input,.editable-cell select,.editable-cell textarea{
+      width:100%;
+      border:1px solid transparent;
+      background:transparent;
+      color:inherit;
+      font:inherit;
+      outline:none;
+    }
+    .editable-cell textarea{min-height:52px;resize:vertical}
+    .insights-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .insight-card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    .insight-card h3{margin:0 0 8px;font-size:16px}
+    .insight-card p{margin:0;color:var(--muted);line-height:1.6}
+    .ranking-table td:first-child,.ranking-table th:first-child{font-weight:800}
+
+
     @media (max-width: 1380px){
       .login-shell,
       .summary-grid{grid-template-columns:repeat(2,1fr)}
@@ -1214,66 +1289,535 @@
       .message{max-width:88%}
       .login-shell{grid-template-columns:1fr}
     }
-  </style>
+    #loginCanvas{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+    }
+ #loginScreen{
+      position:relative;
+      overflow:hidden;
+   background:#0b1220;
+    }
+.login-shell{
+  position:relative;
+  z-index:2;
+}
+/*FIM */
+  
+/* ===== LOGIN V2 ===== */
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at top left, rgba(124,58,237,.18), transparent 26%),
+    radial-gradient(circle at bottom right, rgba(217,70,239,.12), transparent 22%),
+    linear-gradient(180deg,#f6f7ff 0%, #eef3fa 100%);
+}
+body.dark #loginScreen{
+  background:
+    radial-gradient(circle at top left, rgba(124,58,237,.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(217,70,239,.10), transparent 22%),
+    linear-gradient(180deg,#08111f 0%, #0f172a 100%);
+}
+#loginCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0;
+}
+.login-shell-v2{
+  position:relative;
+  z-index:2;
+  width:min(1080px, 100%);
+  display:grid !important;
+  grid-template-columns:1.06fr .94fr;
+  gap:0;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.65);
+  border-radius:32px;
+  overflow:hidden;
+  box-shadow:0 25px 70px rgba(20, 31, 58, .12);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+body.dark .login-shell-v2{
+  background:rgba(17,27,47,.74);
+  border-color:rgba(255,255,255,.08);
+  box-shadow:0 30px 80px rgba(0,0,0,.34);
+}
+.login-brand{display:none !important;}
+.login-scene{
+  position:relative;
+  min-height:620px;
+  padding:34px 34px 24px;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(90,147,255,.22), transparent 24%),
+    radial-gradient(circle at 82% 22%, rgba(124,58,237,.18), transparent 26%),
+    linear-gradient(160deg, rgba(255,255,255,.66), rgba(255,255,255,.18));
+}
+body.dark .login-scene{
+  background:
+    radial-gradient(circle at 18% 18%, rgba(90,147,255,.18), transparent 24%),
+    radial-gradient(circle at 82% 22%, rgba(124,58,237,.16), transparent 26%),
+    linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+}
+.login-theme-toggle{
+  position:absolute;
+  top:22px;
+  right:22px;
+  border:1px solid rgba(31,79,163,.12);
+  background:rgba(255,255,255,.65);
+  color:var(--text);
+  border-radius:999px;
+  padding:10px 16px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(24,36,55,.08);
+}
+body.dark .login-theme-toggle{
+  background:rgba(255,255,255,.07);
+  border-color:rgba(255,255,255,.08);
+  color:#fff;
+}
+.scene-copy{
+  position:relative;
+  z-index:2;
+  max-width:340px;
+}
+.scene-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#6d5cf6;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(124,58,237,.12);
+}
+.scene-copy h2{
+  margin:18px 0 10px;
+  font-size:38px;
+  line-height:1.03;
+  letter-spacing:-.05em;
+  color:#12233f;
+}
+.scene-copy p{
+  margin:0;
+  font-size:15px;
+  line-height:1.7;
+  color:#55657f;
+}
+body.dark .scene-copy h2{color:#edf4ff;}
+body.dark .scene-copy p{color:#9fb0cc;}
+.login-buddies{
+  position:absolute;
+  inset:auto 0 0 0;
+  height:74%;
+  z-index:1;
+}
+.float-orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(2px);
+  opacity:.9;
+}
+.orb-a{
+  width:120px;height:120px;left:12%;top:20%;
+  background:radial-gradient(circle, rgba(90,147,255,.28), transparent 68%);
+  animation:orbFloatA 6s ease-in-out infinite;
+}
+.orb-b{
+  width:150px;height:150px;right:16%;top:16%;
+  background:radial-gradient(circle, rgba(217,70,239,.22), transparent 70%);
+  animation:orbFloatB 8s ease-in-out infinite;
+}
+.orb-c{
+  width:110px;height:110px;left:42%;bottom:30%;
+  background:radial-gradient(circle, rgba(124,58,237,.20), transparent 68%);
+  animation:orbFloatC 7s ease-in-out infinite;
+}
+.scene-platform{
+  position:absolute;
+  left:10%;
+  right:10%;
+  bottom:11%;
+  height:18px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(31,79,163,.0), rgba(31,79,163,.12), rgba(124,58,237,.12), rgba(31,79,163,.0));
+  filter:blur(8px);
+  opacity:.75;
+}
+.buddy{
+  position:absolute;
+  bottom:17%;
+  transform-origin:center bottom;
+}
+.buddy-a{left:12%; width:220px; animation:buddyFloatA 5.8s ease-in-out infinite;}
+.buddy-b{left:42%; width:190px; animation:buddyFloatB 5.2s ease-in-out infinite;}
+.buddy-shadow{
+  position:absolute;
+  left:14%;
+  right:14%;
+  bottom:-10px;
+  height:20px;
+  border-radius:999px;
+  background:rgba(29,45,71,.14);
+  filter:blur(10px);
+}
+.buddy-body{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1.16;
+}
+.buddy-head{
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:78%;
+  height:58%;
+  border-radius:46% 46% 42% 42%;
+  background:linear-gradient(180deg,#fff,#f6efff);
+  box-shadow:0 14px 30px rgba(65,75,109,.12);
+}
+body.dark .buddy-head{
+  background:linear-gradient(180deg,#f5f8ff,#ece9ff);
+}
+.buddy-body::before{
+  content:"";
+  position:absolute;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:74%;
+  height:58%;
+  border-radius:42% 42% 36% 36%;
+  background:linear-gradient(180deg,#ffffff,#f7f2ff);
+  box-shadow:0 14px 30px rgba(65,75,109,.10);
+}
+.buddy-body::after{
+  content:"";
+  position:absolute;
+  bottom:8%;
+  left:50%;
+  transform:translateX(-50%);
+  width:26%;
+  height:18%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(124,58,237,.18), rgba(124,58,237,.04));
+}
+.buddy-face{
+  position:absolute;
+  inset:18% 13% 20%;
+  background:#132341;
+  border-radius:44px;
+  overflow:hidden;
+}
+.buddy-face::before,
+.buddy-face::after{
+  content:"";
+  position:absolute;
+  top:-8%;
+  width:26px;
+  height:10px;
+  border-radius:999px;
+  background:rgba(124,58,237,.55);
+  transition:transform .2s ease, opacity .2s ease;
+}
+.buddy-face::before{left:20%;}
+.buddy-face::after{right:20%;}
+.buddy-eye{
+  position:absolute;
+  top:34%;
+  width:22%;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  background:radial-gradient(circle at 40% 40%, #7dd3fc, #3b82f6 70%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform .2s ease, height .2s ease, border-radius .2s ease;
+}
+.buddy-eye.left{left:22%;}
+.buddy-eye.right{right:22%;}
+.pupil{
+  width:34%;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  background:#0f172a;
+  transition:transform .09s linear;
+}
+.buddy-mouth{
+  position:absolute;
+  left:50%;
+  bottom:22%;
+  transform:translateX(-50%);
+  width:22%;
+  height:9%;
+  border-radius:0 0 20px 20px;
+  border-bottom:4px solid #7dd3fc;
+  transition:all .2s ease;
+}
+.login-card-v2{
+  min-height:620px;
+  justify-content:center;
+  background:rgba(255,255,255,.88) !important;
+  border:0 !important;
+  border-left:1px solid rgba(31,79,163,.08);
+  border-radius:0 !important;
+  box-shadow:none !important;
+  padding:38px 38px 34px !important;
+}
+body.dark .login-card-v2{
+  background:rgba(15,23,42,.78) !important;
+  border-left-color:rgba(255,255,255,.08);
+}
+.login-logo-v2{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+.login-logo-v2 strong{
+  display:block;
+  font-size:28px;
+  color:var(--text);
+  line-height:1;
+  letter-spacing:-.04em;
+}
+.login-logo-v2 span{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:var(--muted);
+}
+.login-title{
+  text-align:left !important;
+  margin:16px 0 8px !important;
+}
+.login-subtitle{
+  text-align:left !important;
+  margin:0 0 24px !important;
+}
+.password-wrap{
+  position:relative;
+}
+.password-wrap .login-input{
+  padding-right:120px;
+}
+.password-toggle{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:rgba(31,79,163,.08);
+  color:var(--primary);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+body.dark .password-toggle{
+  background:rgba(255,255,255,.08);
+  color:#a7c8ff;
+}
+#loginScreen.email-focus .buddy,
+#loginScreen.password-focus .buddy{
+  animation-play-state:paused;
+}
+#loginScreen.password-focus .buddy-a .buddy-head,
+#loginScreen.password-focus .buddy-b .buddy-head{
+  transform:translateX(-50%) rotate(-11deg);
+}
+#loginScreen.password-focus.show-password .buddy-a .buddy-head,
+#loginScreen.password-focus.show-password .buddy-b .buddy-head{
+  transform:translateX(-50%) rotate(11deg);
+}
+#loginScreen.password-focus .buddy-face::before{
+  transform:rotate(-22deg) translateY(10px);
+}
+#loginScreen.password-focus .buddy-face::after{
+  transform:rotate(22deg) translateY(10px);
+}
+#loginScreen.mood-error .buddy-mouth{
+  width:18%;
+  height:7%;
+  border-radius:20px 20px 0 0;
+  border-top:4px solid #fb7185;
+  border-bottom:0;
+  bottom:21%;
+}
+#loginScreen.mood-error .buddy-eye{
+  height:12%;
+  border-radius:14px;
+  top:40%;
+}
+#loginScreen.mood-error .buddy-face::before,
+#loginScreen.mood-error .buddy-face::after{
+  background:#fb7185;
+}
+#loginScreen.mood-success .buddy-mouth{
+  width:26%;
+  border-bottom-color:#22c55e;
+}
+#loginScreen.mood-success .buddy-face::before,
+#loginScreen.mood-success .buddy-face::after{
+  background:#22c55e;
+}
+@keyframes buddyFloatA{
+  0%,100%{transform:translateY(0) rotate(-2deg);}
+  50%{transform:translateY(-12px) rotate(2deg);}
+}
+@keyframes buddyFloatB{
+  0%,100%{transform:translateY(0) rotate(2deg);}
+  50%{transform:translateY(-14px) rotate(-2deg);}
+}
+@keyframes orbFloatA{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-18px);}
+}
+@keyframes orbFloatB{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(14px);}
+}
+@keyframes orbFloatC{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-12px);}
+}
+@media (max-width: 980px){
+  .login-shell-v2{
+    grid-template-columns:1fr;
+    width:min(560px, 100%);
+  }
+  .login-scene{
+    min-height:320px;
+    padding:26px 22px 0;
+  }
+  .login-card-v2{
+    min-height:auto;
+    border-left:0 !important;
+    border-top:1px solid rgba(31,79,163,.08);
+  }
+  .login-buddies{height:82%;}
+  .buddy-a{left:12%; width:180px;}
+  .buddy-b{left:50%; width:150px;}
+}
+@media (max-width: 640px){
+  #loginScreen{padding:14px;}
+  .login-card-v2{padding:26px 20px 24px !important;}
+  .scene-copy h2{font-size:30px;}
+  .scene-copy p{font-size:14px;}
+  .login-theme-toggle{top:16px; right:16px;}
+}
+
+</style>
 </head>
 <body>
-  <section id="loginScreen">
-    <div class="login-shell">
-      <div class="login-brand">
-        <div class="login-logo">
-          <div class="login-logo-mark"></div>
-          <div>
-            <h1>QUALIS</h1>
-            <p>Sistema Integrado de Qualidade</p>
-          </div>
-        </div>
+  
+<section id="loginScreen">
+  <canvas id="loginCanvas"></canvas>
 
-        <h2>Gestão integrada com acesso seguro.</h2>
-        <div class="brand-text">
-          Entre com seu e-mail corporativo para acessar o portal. O QUALIS identifica automaticamente quem está logado, controla validade de senha e mantém a operação centralizada.
-        </div>
+  <div class="login-shell login-shell-v2">
+    <div class="login-scene">
+      <button class="login-theme-toggle" type="button" onclick="toggleTheme()">Alternar tema</button>
 
-        <div class="login-highlights">
-          <div class="login-chip">Login com e-mail e senha</div>
-          <div class="login-chip">Controle por superadmin</div>
-          <div class="login-chip">Expiração a cada 15 dias</div>
-          <div class="login-chip">Chat em grupo integrado</div>
-        </div>
+      <div class="scene-copy">
+        <span class="scene-badge">QUALIS</span>
+        <h2>Bem-vinda de volta</h2>
+        <p>Seu sistema integrado de qualidade com visão de operação, indicadores e inteligência de acompanhamento.</p>
       </div>
 
-      <div class="login-card">
-        <div class="mascote-wrap">
-          <div class="mascote-card">
-            <img id="loginMascot" src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Mascote">
+      <div class="login-buddies" id="loginBuddies">
+        <div class="float-orb orb-a"></div>
+        <div class="float-orb orb-b"></div>
+        <div class="float-orb orb-c"></div>
+
+        <div class="buddy buddy-a" id="buddyA">
+          <div class="buddy-shadow"></div>
+          <div class="buddy-body">
+            <div class="buddy-head">
+              <div class="buddy-face">
+                <div class="buddy-eye left"><span class="pupil"></span></div>
+                <div class="buddy-eye right"><span class="pupil"></span></div>
+                <div class="buddy-mouth"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="login-title">Acesso ao QUALIS</div>
-        <div class="login-subtitle">Use suas credenciais corporativas</div>
-
-        <div class="login-field">
-          <label for="loginEmail">E-mail</label>
-          <input class="login-input" id="loginEmail" type="email" placeholder="seuemail@adtsa.com.br">
+        <div class="buddy buddy-b" id="buddyB">
+          <div class="buddy-shadow"></div>
+          <div class="buddy-body">
+            <div class="buddy-head">
+              <div class="buddy-face">
+                <div class="buddy-eye left"><span class="pupil"></span></div>
+                <div class="buddy-eye right"><span class="pupil"></span></div>
+                <div class="buddy-mouth"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="login-field">
-          <label for="loginPassword">Senha</label>
-          <input class="login-input" id="loginPassword" type="password" placeholder="Digite sua senha">
-        </div>
-
-        <div class="login-actions">
-          <button class="login-btn" onclick="handleLogin()">Entrar</button>
-          <button class="login-btn secondary" onclick="handleForgotPassword()">Esqueci minha senha</button>
-        </div>
-
-        <div class="login-meta">
-          Em caso de esquecimento ou expiração de senha, a solicitação é direcionada para à Administradora Master.
-        </div>
-
-        <div class="login-error" id="loginError"></div>
+        <div class="scene-platform"></div>
       </div>
     </div>
-  </section>
+
+    <div class="login-card login-card-v2">
+      <div class="login-logo-v2">
+        <div class="login-logo-mark"></div>
+        <div>
+          <strong>QUALIS</strong>
+          <span>Sistema Integrado de Qualidade</span>
+        </div>
+      </div>
+
+      <div class="login-title">Acesso ao portal</div>
+      <div class="login-subtitle">Entre com seu e-mail corporativo para acessar a operação integrada.</div>
+
+      <div class="login-field">
+        <label for="loginEmail">E-mail</label>
+        <input class="login-input" id="loginEmail" type="email" placeholder="seuemail@adtsa.com.br" autocomplete="username">
+      </div>
+
+      <div class="login-field">
+        <label for="loginPassword">Senha</label>
+        <div class="password-wrap">
+          <input class="login-input" id="loginPassword" type="password" placeholder="Digite sua senha" autocomplete="current-password" onkeydown="handleLoginEnter(event)">
+          <button class="password-toggle" type="button" onclick="togglePasswordVisibility()">Ver senha</button>
+        </div>
+      </div>
+
+      <div class="login-actions">
+        <button class="login-btn" type="button" onclick="handleLogin()">Entrar</button>
+        <button class="login-btn secondary" type="button" onclick="handleForgotPassword()">Esqueci minha senha</button>
+      </div>
+
+      <div class="login-meta">
+        Em caso de esquecimento ou expiração da senha, a solicitação é direcionada para a Administradora Master.
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+</section>
+
 
   <div id="portalApp">
     <div class="app">
@@ -1306,6 +1850,11 @@
           <div class="menu-title">Ferramentas</div>
           <button class="menu-btn" onclick="openPage('chat', this)">CHAT</button>
           <button class="menu-btn" onclick="openPage('sistemas', this)">SISTEMAS</button>
+        </div>
+
+        <div class="menu-group">
+          <div class="menu-title">Inteligência</div>
+          <button class="menu-btn" onclick="openPage('inteligencia', this)">INTELIGÊNCIA CX</button>
         </div>
 
         <div class="menu-group">
@@ -1444,449 +1993,596 @@
           </div>
         </section>
 
-        <section id="vendas" class="page">
-          <h1 class="page-title">Vendas</h1>
-          <p class="page-subtitle">Gestão da operação de vendas com módulos internos.</p>
+        
+<section id="vendas" class="page">
+  <h1 class="page-title">Vendas</h1>
+  <p class="page-subtitle">Gestão da operação de vendas com histórico de NPS, bases por marca, ranking e hot alerts.</p>
 
-          <div class="subnav">
-            <button class="subnav-btn active" onclick="openSubpage('vendas','vendas-painel',this)">Painel</button>
-            <button class="subnav-btn" onclick="openSubpage('vendas','vendas-hotalerts',this)">Hot Alerts</button>
-            <button class="subnav-btn" onclick="openSubpage('vendas','vendas-treinamentos',this)">Treinamentos</button>
-            <button class="subnav-btn" onclick="openSubpage('vendas','vendas-scorecard',this)">Scorecard</button>
-            <button class="subnav-btn" onclick="openSubpage('vendas','vendas-racs',this)">RACs</button>
-            <button class="subnav-btn" onclick="openSubpage('vendas','vendas-auditoria',this)">Auditoria</button>
-          </div>
+  <div class="subnav">
+    <button class="subnav-btn active" onclick="openSubpage('vendas','vendas-painel',this)">Painel</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-base-peugeot',this);loadBasePage('BASE_VENDAS_PEUGEOT')">Base Clientes Peugeot</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-base-citroen',this);loadBasePage('BASE_VENDAS_CITROEN')">Base Clientes Citroën</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-hotalerts',this);renderHotAlertsVendas()">Hot Alerts</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-treinamentos',this)">Treinamentos</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-scorecard',this)">Scorecard</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-ranking',this);renderRankingVendas()">Ranking Vendedores</button>
+    <button class="subnav-btn" onclick="openSubpage('vendas','vendas-auditoria',this)">Auditoria</button>
+  </div>
 
-          <div id="vendas-painel" class="subpage active">
-            <div class="brand-panels">
-              <div class="brand-panel">
-                <div class="brand-header peugeot-head">Painel CX Vendas • Peugeot</div>
-                <div class="nps-hero">
-                  <h3>NPS Peugeot</h3>
-                  <div class="nps-value" id="npsVendasPeugeotValue">82,0%</div>
-                  <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85,0%</span></div>
-                </div>
-                <div class="metric-grid">
-                  <div class="metric"><h5>Promotores</h5><p id="vendasPeugeotPromotores">45</p></div>
-                  <div class="metric"><h5>Neutros</h5><p id="vendasPeugeotNeutros">12</p></div>
-                  <div class="metric"><h5>Detratores</h5><p id="vendasPeugeotDetratores">5</p></div>
-                  <div class="metric"><h5>Pesq. respondidas</h5><p id="vendasPeugeotPesquisas">62</p></div>
-                  <div class="metric"><h5>Base de clientes</h5><p id="vendasPeugeotBase">410</p></div>
-                  <div class="metric"><h5>Vão receber</h5><p id="vendasPeugeotReceber">0</p></div>
-                  <div class="metric"><h5>Promot. p/ meta</h5><p id="vendasPeugeotNecessarios">3</p></div>
-                </div>
+  <div id="vendas-painel" class="subpage active">
+    <div class="toolbar-row">
+      <select id="filtroNpsVendasMarca" onchange="renderNpsHistoricoVendas()">
+        <option value="PEUGEOT">Peugeot</option>
+        <option value="CITROEN">Citroën</option>
+      </select>
+      <input id="filtroNpsVendasAno" type="number" value="2026" oninput="renderNpsHistoricoVendas()" placeholder="Ano">
+      <select id="filtroNpsVendasPeriodo" onchange="renderNpsHistoricoVendas()">
+        <option value="TODOS">Trimestre / Todos</option>
+        <option value="JANEIRO">Janeiro</option>
+        <option value="FEVEREIRO">Fevereiro</option>
+        <option value="MARCO">Março</option>
+        <option value="ABRIL">Abril</option>
+        <option value="MAIO">Maio</option>
+        <option value="JUNHO">Junho</option>
+        <option value="JULHO">Julho</option>
+        <option value="AGOSTO">Agosto</option>
+        <option value="SETEMBRO">Setembro</option>
+        <option value="OUTUBRO">Outubro</option>
+        <option value="NOVEMBRO">Novembro</option>
+        <option value="DEZEMBRO">Dezembro</option>
+      </select>
+    </div>
+    <div class="summary-grid" style="margin-bottom:18px;">
+      <div class="card"><h4>Promotoras</h4><div class="value green" id="histVendPromotoras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>Neutras</h4><div class="value orange" id="histVendNeutras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>Detratoras</h4><div class="value red" id="histVendDetratoras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>NPS consolidado</h4><div class="value blue" id="histVendNps">0,0%</div><div class="sub">Resultado consolidado do período</div></div>
+    </div>
+    <div class="brand-panels">
+      <div class="brand-panel">
+        <div class="brand-header peugeot-head">Painel CX Vendas • Peugeot</div>
+        <div class="nps-hero">
+          <h3>NPS Peugeot</h3>
+          <div class="nps-value" id="npsVendasPeugeotValue">82,0%</div>
+          <div class="nps-meta">Meta: <span id="npsVendasPeugeotMeta">85,0%</span></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><h5>Promotores</h5><p id="vendasPeugeotPromotores">45</p></div>
+          <div class="metric"><h5>Neutros</h5><p id="vendasPeugeotNeutros">12</p></div>
+          <div class="metric"><h5>Detratores</h5><p id="vendasPeugeotDetratores">5</p></div>
+          <div class="metric"><h5>Pesq. respondidas</h5><p id="vendasPeugeotPesquisas">62</p></div>
+          <div class="metric"><h5>Base de clientes</h5><p id="vendasPeugeotBase">410</p></div>
+          <div class="metric"><h5>Vão receber</h5><p id="vendasPeugeotReceber">0</p></div>
+          <div class="metric"><h5>Promot. p/ meta</h5><p id="vendasPeugeotNecessarios">3</p></div>
+        </div>
+      </div>
+      <div class="brand-panel">
+        <div class="brand-header citroen-head">Painel CX Vendas • Citroën</div>
+        <div class="nps-hero">
+          <h3>NPS Citroën</h3>
+          <div class="nps-value" id="npsVendasCitroenValue">47,7%</div>
+          <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85,0%</span></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><h5>Promotores</h5><p id="vendasCitroenPromotores">28</p></div>
+          <div class="metric"><h5>Neutros</h5><p id="vendasCitroenNeutros">9</p></div>
+          <div class="metric"><h5>Detratores</h5><p id="vendasCitroenDetratores">7</p></div>
+          <div class="metric"><h5>Pesq. respondidas</h5><p id="vendasCitroenPesquisas">44</p></div>
+          <div class="metric"><h5>Base de clientes</h5><p id="vendasCitroenBase">295</p></div>
+          <div class="metric"><h5>Vão receber</h5><p id="vendasCitroenReceber">0</p></div>
+          <div class="metric"><h5>Promot. p/ meta</h5><p id="vendasCitroenNecessarios">22</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vendas-base-peugeot" class="subpage">
+    <div class="import-grid">
+      <div class="import-box"><h3>COLAR BASE PEUGEOT</h3><textarea id="pasteBaseVendasPeugeot" placeholder="Cole aqui os dados da base de clientes Peugeot..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBaseFromPaste('BASE_VENDAS_PEUGEOT','pasteBaseVendasPeugeot')">Analisar / Importar</button></div></div>
+      <div class="import-box"><h3>Filtros da base</h3><div class="toolbar-row"><select id="filterStatus_BASE_VENDAS_PEUGEOT" onchange="renderBaseTable('BASE_VENDAS_PEUGEOT')"><option value="">Todos os status</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="filterSearch_BASE_VENDAS_PEUGEOT" oninput="renderBaseTable('BASE_VENDAS_PEUGEOT')" placeholder="Pesquisar cliente, VIN ou vendedor"></div><p class="sub">Edite diretamente as colunas SYONET, Tratativa e Nota NPS.</p></div>
+    </div>
+    <div class="table-wrap compact-table"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th></tr></thead><tbody id="tbody_BASE_VENDAS_PEUGEOT"><tr><td colspan="10" class="empty">Nenhum cliente carregado ainda.</td></tr></tbody></table></div>
+  </div>
+
+  <div id="vendas-base-citroen" class="subpage">
+    <div class="import-grid">
+      <div class="import-box"><h3>COLAR BASE CITROËN</h3><textarea id="pasteBaseVendasCitroen" placeholder="Cole aqui os dados da base de clientes Citroën..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBaseFromPaste('BASE_VENDAS_CITROEN','pasteBaseVendasCitroen')">Analisar / Importar</button></div></div>
+      <div class="import-box"><h3>Filtros da base</h3><div class="toolbar-row"><select id="filterStatus_BASE_VENDAS_CITROEN" onchange="renderBaseTable('BASE_VENDAS_CITROEN')"><option value="">Todos os status</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="filterSearch_BASE_VENDAS_CITROEN" oninput="renderBaseTable('BASE_VENDAS_CITROEN')" placeholder="Pesquisar cliente, VIN ou vendedor"></div><p class="sub">Edite diretamente as colunas SYONET, Tratativa e Nota NPS.</p></div>
+    </div>
+    <div class="table-wrap compact-table"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th></tr></thead><tbody id="tbody_BASE_VENDAS_CITROEN"><tr><td colspan="10" class="empty">Nenhum cliente carregado ainda.</td></tr></tbody></table></div>
+  </div>
+
+  <div id="vendas-hotalerts" class="subpage"><div class="table-wrap compact-table"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Vendedor</th><th>Nota</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tbodyHotAlertsVendas"><tr><td colspan="6" class="empty">Nenhum hot alert carregado.</td></tr></tbody></table></div></div>
+  <div id="vendas-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Vendas</h3><p>Área reservada para pendências de treinamento da equipe de vendas.</p></div></div>
+  <div id="vendas-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Vendas</h3><p>Área reservada para scorecard da operação de vendas.</p></div></div>
+  <div id="vendas-ranking" class="subpage"><div class="table-wrap compact-table ranking-table"><table><thead><tr><th>Vendedor</th><th>Promotoras Peugeot</th><th>Hot Alerts Peugeot</th><th>Promotoras Citroën</th><th>Hot Alerts Citroën</th><th>Total</th></tr></thead><tbody id="tbodyRankingVendas"><tr><td colspan="6" class="empty">Nenhum dado carregado.</td></tr></tbody></table></div></div>
+  <div id="vendas-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Vendas</h3><p>Checklist e planos de ação da auditoria de vendas.</p></div></div>
+</section>
+
+
+        
+<section id="posvendas" class="page">
+  <h1 class="page-title">Pós-Vendas</h1>
+  <p class="page-subtitle">Gestão da operação de pós-vendas com filtros históricos, bases por marca, conversões e ISC.</p>
+
+  <div class="subnav">
+    <button class="subnav-btn active" onclick="openSubpage('posvendas','pos-painel',this)">Painel</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-base-peugeot',this);loadBasePage('BASE_POS_PEUGEOT')">Base Clientes Peugeot</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-base-citroen',this);loadBasePage('BASE_POS_CITROEN')">Base Clientes Citroën</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-hotalerts',this);renderHotAlertsPos()">Hot Alerts</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-conversoes',this);renderConversoes()">Conversões NPS</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-isc',this);renderIscConsultor()">ISC Consultor</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-treinamentos',this)">Treinamentos</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-scorecard',this)">Scorecard</button>
+    <button class="subnav-btn" onclick="openSubpage('posvendas','pos-auditoria',this)">Auditoria</button>
+  </div>
+
+  <div id="pos-painel" class="subpage active">
+    <div class="toolbar-row">
+      <select id="filtroNpsPosMarca" onchange="renderNpsHistoricoPos()">
+        <option value="PEUGEOT">Peugeot</option>
+        <option value="CITROEN">Citroën</option>
+      </select>
+      <input id="filtroNpsPosAno" type="number" value="2026" oninput="renderNpsHistoricoPos()" placeholder="Ano">
+      <select id="filtroNpsPosPeriodo" onchange="renderNpsHistoricoPos()">
+        <option value="TODOS">Trimestre / Todos</option>
+        <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option><option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option><option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option><option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+      </select>
+    </div>
+    <div class="summary-grid" style="margin-bottom:18px;">
+      <div class="card"><h4>Promotoras</h4><div class="value green" id="histPosPromotoras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>Neutras</h4><div class="value orange" id="histPosNeutras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>Detratoras</h4><div class="value red" id="histPosDetratoras">0</div><div class="sub">Histórico filtrado</div></div>
+      <div class="card"><h4>NPS consolidado</h4><div class="value blue" id="histPosNps">0,0%</div><div class="sub">Resultado consolidado do período</div></div>
+    </div>
+    <div class="brand-panels">
+      <div class="brand-panel">
+        <div class="brand-header peugeot-head">Painel CX Pós-Vendas • Peugeot</div>
+        <div class="nps-hero"><h3>NPS Peugeot</h3><div class="nps-value" id="npsPosPeugeotValue">77,5%</div><div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85,0%</span></div></div>
+        <div class="metric-grid">
+          <div class="metric"><h5>Promotores</h5><p id="posPeugeotPromotores">58</p></div>
+          <div class="metric"><h5>Neutros</h5><p id="posPeugeotNeutros">10</p></div>
+          <div class="metric"><h5>Detratores</h5><p id="posPeugeotDetratores">3</p></div>
+          <div class="metric"><h5>Pesq. respondidas</h5><p id="posPeugeotPesquisas">71</p></div>
+          <div class="metric"><h5>Base de clientes</h5><p id="posPeugeotBase">455</p></div>
+          <div class="metric"><h5>Vão receber</h5><p id="posPeugeotReceber">0</p></div>
+          <div class="metric"><h5>Promot. p/ meta</h5><p id="posPeugeotNecessarios">8</p></div>
+        </div>
+      </div>
+      <div class="brand-panel">
+        <div class="brand-header citroen-head">Painel CX Pós-Vendas • Citroën</div>
+        <div class="nps-hero"><h3>NPS Citroën</h3><div class="nps-value" id="npsPosCitroenValue">54,0%</div><div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85,0%</span></div></div>
+        <div class="metric-grid">
+          <div class="metric"><h5>Promotores</h5><p id="posCitroenPromotores">33</p></div>
+          <div class="metric"><h5>Neutros</h5><p id="posCitroenNeutros">11</p></div>
+          <div class="metric"><h5>Detratores</h5><p id="posCitroenDetratores">6</p></div>
+          <div class="metric"><h5>Pesq. respondidas</h5><p id="posCitroenPesquisas">50</p></div>
+          <div class="metric"><h5>Base de clientes</h5><p id="posCitroenBase">320</p></div>
+          <div class="metric"><h5>Vão receber</h5><p id="posCitroenReceber">0</p></div>
+          <div class="metric"><h5>Promot. p/ meta</h5><p id="posCitroenNecessarios">14</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="pos-base-peugeot" class="subpage">
+    <div class="import-grid">
+      <div class="import-box"><h3>COLAR BASE PEUGEOT</h3><textarea id="pasteBasePosPeugeot" placeholder="Cole aqui os dados da base Peugeot..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBaseFromPaste('BASE_POS_PEUGEOT','pasteBasePosPeugeot')">Analisar / Importar</button></div></div>
+      <div class="import-box"><h3>Filtros da base</h3><div class="toolbar-row"><select id="filterStatus_BASE_POS_PEUGEOT" onchange="renderBaseTable('BASE_POS_PEUGEOT')"><option value="">Todos os status</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="filterSearch_BASE_POS_PEUGEOT" oninput="renderBaseTable('BASE_POS_PEUGEOT')" placeholder="Pesquisar cliente, VIN ou consultor"></div><p class="sub">Edite SYONET, Tratativa, Nota NPS e Convertida por.</p></div>
+    </div>
+    <div class="table-wrap compact-table"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tbody_BASE_POS_PEUGEOT"><tr><td colspan="11" class="empty">Nenhum cliente carregado ainda.</td></tr></tbody></table></div>
+  </div>
+
+  <div id="pos-base-citroen" class="subpage">
+    <div class="import-grid">
+      <div class="import-box"><h3>COLAR BASE CITROËN</h3><textarea id="pasteBasePosCitroen" placeholder="Cole aqui os dados da base Citroën..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBaseFromPaste('BASE_POS_CITROEN','pasteBasePosCitroen')">Analisar / Importar</button></div></div>
+      <div class="import-box"><h3>Filtros da base</h3><div class="toolbar-row"><select id="filterStatus_BASE_POS_CITROEN" onchange="renderBaseTable('BASE_POS_CITROEN')"><option value="">Todos os status</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="filterSearch_BASE_POS_CITROEN" oninput="renderBaseTable('BASE_POS_CITROEN')" placeholder="Pesquisar cliente, VIN ou consultor"></div><p class="sub">Edite SYONET, Tratativa, Nota NPS e Convertida por.</p></div>
+    </div>
+    <div class="table-wrap compact-table"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tbody_BASE_POS_CITROEN"><tr><td colspan="11" class="empty">Nenhum cliente carregado ainda.</td></tr></tbody></table></div>
+  </div>
+
+  <div id="pos-hotalerts" class="subpage"><div class="table-wrap compact-table"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Consultor</th><th>Nota</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tbodyHotAlertsPos"><tr><td colspan="6" class="empty">Nenhum hot alert carregado.</td></tr></tbody></table></div></div>
+  <div id="pos-conversoes" class="subpage"><div class="table-wrap compact-table"><table><thead><tr><th>Responsável</th><th>Conversões</th></tr></thead><tbody id="tbodyConversoes"><tr><td colspan="2" class="empty">Nenhuma conversão carregada.</td></tr></tbody></table></div></div>
+  <div id="pos-isc" class="subpage"><div class="table-wrap compact-table"><table><thead><tr><th>Consultor</th><th>Promotores</th><th>Neutros</th><th>Detratores</th><th>Pesquisas</th></tr></thead><tbody id="tbodyIsc"><tr><td colspan="5" class="empty">Nenhum indicador carregado.</td></tr></tbody></table></div></div>
+  <div id="pos-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Pós-Vendas</h3><p>Área reservada para pendências de treinamento da equipe de pós-vendas.</p></div></div>
+  <div id="pos-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Pós-Vendas</h3><p>Área reservada para scorecard da operação de pós-vendas.</p></div></div>
+  <div id="pos-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Checklist e planos de ação da auditoria de pós-vendas.</p></div></div>
+</section>
+
+
+        <section id="grow" class="page">
+          <h1 class="page-title">Grow Customer Care</h1>
+          <p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
+
+          <div class="grow-inputs">
+            <div class="grow-box">
+              <h3>CASOS GROW CUSTOMER CARE PEUGEOT</h3>
+              <textarea id="growPeugeot" class="grow-textarea" placeholder="Cole aqui os casos da Peugeot..."></textarea>
+              <div class="btn-row">
+                <button class="btn primary" onclick="processGrowData()">Analisar casos</button>
+                <button class="btn secondary" onclick="loadGrowExamplePeugeot()">Exemplo Peugeot</button>
               </div>
+            </div>
 
-              <div class="brand-panel">
-                <div class="brand-header citroen-head">Painel CX Vendas • Citroën</div>
-                <div class="nps-hero">
-                  <h3>NPS Citroën</h3>
-                  <div class="nps-value" id="npsVendasCitroenValue">47,7%</div>
-                  <div class="nps-meta">Meta: <span id="npsVendasCitroenMeta">85,0%</span></div>
-                </div>
-                <div class="metric-grid">
-                  <div class="metric"><h5>Promotores</h5><p id="vendasCitroenPromotores">28</p></div>
-                  <div class="metric"><h5>Neutros</h5><p id="vendasCitroenNeutros">9</p></div>
-                  <div class="metric"><h5>Detratores</h5><p id="vendasCitroenDetratores">7</p></div>
-                  <div class="metric"><h5>Pesq. respondidas</h5><p id="vendasCitroenPesquisas">44</p></div>
-                  <div class="metric"><h5>Base de clientes</h5><p id="vendasCitroenBase">295</p></div>
-                  <div class="metric"><h5>Vão receber</h5><p id="vendasCitroenReceber">0</p></div>
-                  <div class="metric"><h5>Promot. p/ meta</h5><p id="vendasCitroenNecessarios">22</p></div>
-                </div>
+            <div class="grow-box">
+              <h3>CASOS GROW CUSTOMER CARE CITROËN</h3>
+              <textarea id="growCitroen" class="grow-textarea" placeholder="Cole aqui os casos da Citroën..."></textarea>
+              <div class="btn-row">
+                <button class="btn secondary" onclick="loadGrowExampleCitroen()">Exemplo Citroën</button>
+                <button class="btn secondary" onclick="clearGrowData()">Limpar tudo</button>
               </div>
             </div>
           </div>
 
-          <div id="vendas-hotalerts" class="subpage"><div class="placeholder"><h3>Hot Alerts • Vendas</h3><p>Área reservada para tratativas críticas da operação de vendas.</p></div></div>
-      	<div id="vendas-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Vendas</h3><p>Área reservada para pendências de treinamento da equipe de vendas.</p></div></div>
-      	<div id="vendas-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Vendas</h3><p>Área reservada para scorecard da operação de vendas.</p></div></div>
-      	<div id="vendas-racs" class="subpage"><div class="placeholder"><h3>RACs • Vendas</h3><p>Área reservada para RACs da operação de vendas.</p></div></div>
-      	<div id="vendas-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Vendas</h3><p>Área reservada para auditoria da operação de vendas.</p></div></div>
-    	</section>
+          <div class="grow-summary">
+            <div class="grow-stat"><div class="label">Total de casos</div><div class="big" id="totalCases">0</div></div>
+            <div class="grow-stat"><div class="label">Casos abertos</div><div class="big" id="openCases">0</div></div>
+            <div class="grow-stat"><div class="label">Casos +30 dias</div><div class="big" id="over30Cases">0</div></div>
+            <div class="grow-stat"><div class="label">Veículo reserva</div><div class="big" id="reserveCases">0</div></div>
+            <div class="grow-stat"><div class="label">Peugeot</div><div class="big" id="peugeotCases">0</div></div>
+            <div class="grow-stat"><div class="label">Citroën</div><div class="big" id="citroenCases">0</div></div>
+          </div>
 
-    	<section id="posvendas" class="page">
-      	<h1 class="page-title">Pós-Vendas</h1>
-      	<p class="page-subtitle">Gestão da operação de pós-vendas com módulos internos.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Marca</th>
+                  <th>Caso</th>
+                  <th>Status</th>
+                  <th>Data</th>
+                  <th>Canal</th>
+                  <th>Motivo 1</th>
+                  <th>Motivo 2</th>
+                  <th>Chassi</th>
+                  <th>Cliente</th>
+                  <th>Prioridade</th>
+                  <th>Responsável</th>
+                  <th>Regional</th>
+                  <th>Aging</th><th>Consultor</th>
+                </tr>
+              </thead>
+              <tbody id="growTableBody">
+                <tr><td colspan="14" class="empty">Nenhum caso analisado ainda.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      	<div class="subnav">
-        	<button class="subnav-btn active" onclick="openSubpage('posvendas','pos-painel',this)">Painel</button>
-        	<button class="subnav-btn" onclick="openSubpage('posvendas','pos-hotalerts',this)">Hot Alerts</button>
-        	<button class="subnav-btn" onclick="openSubpage('posvendas','pos-treinamentos',this)">Treinamentos</button>
-        	<button class="subnav-btn" onclick="openSubpage('posvendas','pos-scorecard',this)">Scorecard</button>
-        	<button class="subnav-btn" onclick="openSubpage('posvendas','pos-racs',this)">RACs</button>
-        	<button class="subnav-btn" onclick="openSubpage('posvendas','pos-auditoria',this)">Auditoria</button>
-      	</div>
+        <section id="chat" class="page">
+          <h1 class="page-title">Chat</h1>
+          <p class="page-subtitle">Grupo interno entre Kamilly, Letícia e Laís.</p>
 
-      	<div id="pos-painel" class="subpage active">
-        	<div class="brand-panels">
-          	<div class="brand-panel">
-            	<div class="brand-header peugeot-head">Painel CX Pós-Vendas • Peugeot</div>
-            	<div class="nps-hero">
-              	<h3>NPS Peugeot</h3>
-              	<div class="nps-value" id="npsPosPeugeotValue">77,5%</div>
-              	<div class="nps-meta">Meta: <span id="npsPosPeugeotMeta">85,0%</span></div>
-            	</div>
-            	<div class="metric-grid">
-              	<div class="metric"><h5>Promotores</h5><p id="posPeugeotPromotores">58</p></div>
-              	<div class="metric"><h5>Neutros</h5><p id="posPeugeotNeutros">10</p></div>
-              	<div class="metric"><h5>Detratores</h5><p id="posPeugeotDetratores">3</p></div>
-              	<div class="metric"><h5>Pesq. respondidas</h5><p id="posPeugeotPesquisas">71</p></div>
-              	<div class="metric"><h5>Base de clientes</h5><p id="posPeugeotBase">455</p></div>
-              	<div class="metric"><h5>Vão receber</h5><p id="posPeugeotReceber">0</p></div>
-              	<div class="metric"><h5>Promot. p/ meta</h5><p id="posPeugeotNecessarios">8</p></div>
-            	</div>
-          	</div>
+          <div class="chat-layout">
+            <div class="chat-main">
+              <div class="chat-header">
+                <h3>Grupo QUALIS</h3>
+                <p id="chatHeaderInfo">Mensagens visíveis para todo o grupo.</p>
+              </div>
 
-          	<div class="brand-panel">
-            	<div class="brand-header citroen-head">Painel CX Pós-Vendas • Citroën</div>
-            	<div class="nps-hero">
-              	<h3>NPS Citroën</h3>
-              	<div class="nps-value" id="npsPosCitroenValue">54,0%</div>
-              	<div class="nps-meta">Meta: <span id="npsPosCitroenMeta">85,0%</span></div>
-            	</div>
-            	<div class="metric-grid">
-              	<div class="metric"><h5>Promotores</h5><p id="posCitroenPromotores">33</p></div>
-              	<div class="metric"><h5>Neutros</h5><p id="posCitroenNeutros">11</p></div>
-              	<div class="metric"><h5>Detratores</h5><p id="posCitroenDetratores">6</p></div>
-              	<div class="metric"><h5>Pesq. respondidas</h5><p id="posCitroenPesquisas">50</p></div>
-              	<div class="metric"><h5>Base de clientes</h5><p id="posCitroenBase">320</p></div>
-              	<div class="metric"><h5>Vão receber</h5><p id="posCitroenReceber">0</p></div>
-              	<div class="metric"><h5>Promot. p/ meta</h5><p id="posCitroenNecessarios">14</p></div>
-            	</div>
-          	</div>
-        	</div>
-      	</div>
+              <div class="chat-messages" id="chatMessages"></div>
 
-      	<div id="pos-hotalerts" class="subpage"><div class="placeholder"><h3>Hot Alerts • Pós-Vendas</h3><p>Área reservada para tratativas críticas da operação de pós-vendas.</p></div></div>
-      	<div id="pos-treinamentos" class="subpage"><div class="placeholder"><h3>Treinamentos • Pós-Vendas</h3><p>Área reservada para pendências de treinamento da equipe de pós-vendas.</p></div></div>
-      	<div id="pos-scorecard" class="subpage"><div class="placeholder"><h3>Scorecard • Pós-Vendas</h3><p>Área reservada para scorecard da operação de pós-vendas.</p></div></div>
-      	<div id="pos-racs" class="subpage"><div class="placeholder"><h3>RACs • Pós-Vendas</h3><p>Área reservada para RACs da operação de pós-vendas.</p></div></div>
-      	<div id="pos-auditoria" class="subpage"><div class="placeholder"><h3>Auditoria • Pós-Vendas</h3><p>Área reservada para auditoria da operação de pós-vendas.</p></div></div>
-    	</section>
+              <div class="chat-compose">
+                <textarea id="chatInput" placeholder="Digite sua mensagem para o grupo..."></textarea>
+                <button class="btn primary" onclick="sendChatMessage()">Enviar</button>
+                <div class="chat-help">Use @Kamilly, @Letícia e @Laís para menções.</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-    	<section id="grow" class="page">
-      	<h1 class="page-title">Grow Customer Care</h1>
-      	<p class="page-subtitle">Cole separadamente os casos da Peugeot e da Citroën. O resultado operacional aparece abaixo.</p>
+        <section id="sistemas" class="page">
+          <h1 class="page-title">Sistemas</h1>
+          <p class="page-subtitle">Central de acessos externos, logins e senhas da operação.</p>
 
-      	<div class="grow-inputs">
-        	<div class="grow-box">
-          	<h3>CASOS GROW CUSTOMER CARE PEUGEOT</h3>
-          	<textarea id="growPeugeot" class="grow-textarea" placeholder="Cole aqui os casos da Peugeot..."></textarea>
-          	<div class="btn-row">
-            	<button class="btn primary" onclick="processGrowData()">Analisar casos</button>
-            	<button class="btn secondary" onclick="loadGrowExamplePeugeot()">Exemplo Peugeot</button>
-          	</div>
-        	</div>
+          <div class="systems-grid" id="systemsGrid"></div>
+        </section>
 
-        	<div class="grow-box">
-          	<h3>CASOS GROW CUSTOMER CARE CITROËN</h3>
-          	<textarea id="growCitroen" class="grow-textarea" placeholder="Cole aqui os casos da Citroën..."></textarea>
-          	<div class="btn-row">
-            	<button class="btn secondary" onclick="loadGrowExampleCitroen()">Exemplo Citroën</button>
-            	<button class="btn secondary" onclick="clearGrowData()">Limpar tudo</button>
-          	</div>
-        	</div>
-      	</div>
+        
+<section id="inteligencia" class="page">
+  <h1 class="page-title">Inteligência CX</h1>
+  <p class="page-subtitle">Assistente Qualis e leitura dos dados de base, Grow, conversões e hot alerts.</p>
+  <div class="insights-grid">
+    <div class="insight-card"><h3>Assistente Qualis</h3><p id="insightResumo">Carregando leitura automática da operação...</p></div>
+    <div class="insight-card"><h3>Grow por consultor</h3><p id="insightGrow">Sem dados.</p></div>
+    <div class="insight-card"><h3>Conversões NPS</h3><p id="insightConversoes">Sem dados.</p></div>
+    <div class="insight-card"><h3>Pesquisas pendentes</h3><p id="insightPendentes">Sem dados.</p></div>
+    <div class="insight-card"><h3>Consultor crítico</h3><p id="insightCritico">Sem dados.</p></div>
+    <div class="insight-card"><h3>Ranking de vendas</h3><p id="insightRanking">Sem dados.</p></div>
+  </div>
+  <div class="card">
+    <h4 style="margin:0 0 12px;color:var(--text);font-size:22px;">Pergunte à Assistente Qualis</h4>
+    <p style="margin:0 0 14px;color:var(--muted);">A assistente resume dados de bases, Grow, conversões e hot alerts.</p>
+    <div class="assistant-toolbar">
+      <input id="assistantCxInput" class="assistant-input" type="text" placeholder="Ex.: Quem é o consultor com mais detratores? / Quantos casos grow por consultor?" onkeydown="if(event.key==='Enter'){runAssistantCx();}">
+      <button class="btn primary" onclick="runAssistantCx()">Perguntar</button>
+    </div>
+    <div id="assistantCxResponse" class="assistant-response">Aguardando pergunta.</div>
+  </div>
+</section>
 
-      	<div class="grow-summary">
-        	<div class="grow-stat"><div class="label">Total de casos</div><div class="big" id="totalCases">0</div></div>
-        	<div class="grow-stat"><div class="label">Casos abertos</div><div class="big" id="openCases">0</div></div>
-        	<div class="grow-stat"><div class="label">Casos +30 dias</div><div class="big" id="over30Cases">0</div></div>
-        	<div class="grow-stat"><div class="label">Veículo reserva</div><div class="big" id="reserveCases">0</div></div>
-        	<div class="grow-stat"><div class="label">Peugeot</div><div class="big" id="peugeotCases">0</div></div>
-        	<div class="grow-stat"><div class="label">Citroën</div><div class="big" id="citroenCases">0</div></div>
-      	</div>
 
-      	<div class="table-wrap">
-        	<table>
-          	<thead>
-            	<tr>
-              	<th>Marca</th>
-              	<th>Caso</th>
-              	<th>Status</th>
-              	<th>Data</th>
-              	<th>Canal</th>
-              	<th>Motivo 1</th>
-              	<th>Motivo 2</th>
-              	<th>Chassi</th>
-              	<th>Cliente</th>
-              	<th>Prioridade</th>
-              	<th>Responsável</th>
-              	<th>Regional</th>
-              	<th>Aging</th>
-            	</tr>
-          	</thead>
-          	<tbody id="growTableBody">
-            	<tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>
-          	</tbody>
-        	</table>
-      	</div>
-    	</section>
+        <section id="config" class="page">
+          <h1 class="page-title">Configurações</h1>
+          <p class="page-subtitle">Área administrativa do sistema.</p>
 
-    	<section id="chat" class="page">
-      	<h1 class="page-title">Chat</h1>
-      	<p class="page-subtitle">Grupo interno entre Kamilly, Letícia e Laís.</p>
+          <div class="subnav">
+            <button class="subnav-btn active" onclick="openSubpage('config','config-db',this)">Banco de Dados</button>
+            <button class="subnav-btn" onclick="openSubpage('config','config-equipe',this);loadEquipeConfig()">Equipe</button>
+          </div>
 
-      	<div class="chat-layout">
-        	<div class="chat-main">
-          	<div class="chat-header">
-            	<h3>Grupo QUALIS</h3>
-            	<p id="chatHeaderInfo">Mensagens visíveis para todo o grupo.</p>
-          	</div>
+          <div id="config-db" class="subpage active">
+            <div class="card">
+              <h4 style="margin:0 0 14px;color:var(--text);font-size:22px;">Banco de Dados</h4>
+              <p style="margin:0 0 16px;color:var(--muted)">Edite aqui os números reais. O sistema calcula automaticamente pesquisas respondidas, NPS e promotores necessários.</p>
 
-          	<div class="chat-messages" id="chatMessages"></div>
+              <div class="form-grid">
+                <div class="field"><label>Promotoras hoje</label><input id="cfg_homePromotorasHoje" type="number" value="12"></div>
+                <div class="field"><label>Detratores hoje</label><input id="cfg_homeDetratoresHoje" type="number" value="3"></div>
+                <div class="field"><label>Pesquisas respondidas</label><input id="cfg_homePesquisasRespondidas" type="number" value="27"></div>
+                <div class="field"><label>Treinamentos pendentes</label><input id="cfg_homeTreinamentosPendentes" type="number" value="19"></div>
+                <div class="field"><label>RACs pendentes</label><input id="cfg_homeRacsPendentes" type="number" value="7"></div>
+                <div class="field"><label>Auditorias pendentes</label><input id="cfg_homeAuditoriasPendentes" type="number" value="4"></div>
+                <div class="field"><label>Planos pendentes</label><input id="cfg_homePlanosPendentes" type="number" value="6"></div>
+                <div class="field"><label>Hot Alerts críticos</label><input id="cfg_homeHotAlertsCriticos" type="number" value="3"></div>
+                <div class="field"><label>RACs críticos</label><input id="cfg_homeRacsCriticos" type="number" value="2"></div>
+                <div class="field"><label>Auditorias urgentes</label><input id="cfg_homeAuditoriasUrgentes" type="number" value="1"></div>
+                <div class="field"><label>Planos críticos</label><input id="cfg_homePlanosCriticos" type="number" value="2"></div>
+                <div class="field"><label>Treinamentos pendentes resumo</label><input id="cfg_homeTreinPendentes2" type="number" value="19"></div>
+                <div class="field"><label>Treinamentos em cronograma</label><input id="cfg_homeTreinCronograma" type="number" value="8"></div>
+                <div class="field"><label>Concluídos na semana</label><input id="cfg_homeTreinConcluidosSemana" type="number" value="14"></div>
+              </div>
 
-          	<div class="chat-compose">
-            	<textarea id="chatInput" placeholder="Digite sua mensagem para o grupo..."></textarea>
-            	<button class="btn primary" onclick="sendChatMessage()">Enviar</button>
-            	<div class="chat-help">Use @Kamilly, @Letícia e @Laís para menções.</div>
-          	</div>
-        	</div>
-      	</div>
-    	</section>
+              <div class="form-grid">
+                <div class="field"><label>Meta Vendas Peugeot (%)</label><input id="cfg_metaVendasPeugeot" type="number" value="85"></div>
+                <div class="field"><label>Base Vendas Peugeot</label><input id="cfg_baseVendasPeugeot" type="number" value="410"></div>
+                <div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_promotoresVendasPeugeot" type="number" value="45"></div>
+                <div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_neutrosVendasPeugeot" type="number" value="12"></div>
+                <div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_detratoresVendasPeugeot" type="number" value="5"></div>
+                <div class="field"><label>Vão receber Peugeot</label><input id="cfg_receberVendasPeugeot" type="number" value="0"></div>
 
-    	<section id="sistemas" class="page">
-      	<h1 class="page-title">Sistemas</h1>
-      	<p class="page-subtitle">Central de acessos externos, logins e senhas da operação.</p>
+                <div class="field"><label>Meta Vendas Citroën (%)</label><input id="cfg_metaVendasCitroen" type="number" value="85"></div>
+                <div class="field"><label>Base Vendas Citroën</label><input id="cfg_baseVendasCitroen" type="number" value="295"></div>
+                <div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_promotoresVendasCitroen" type="number" value="28"></div>
+                <div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_neutrosVendasCitroen" type="number" value="9"></div>
+                <div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_detratoresVendasCitroen" type="number" value="7"></div>
+                <div class="field"><label>Vão receber Citroën</label><input id="cfg_receberVendasCitroen" type="number" value="0"></div>
+              </div>
 
-      	<div class="systems-grid" id="systemsGrid"></div>
-    	</section>
+              <div class="form-grid">
+                <div class="field"><label>Meta Pós Peugeot (%)</label><input id="cfg_metaPosPeugeot" type="number" value="85"></div>
+                <div class="field"><label>Base Pós Peugeot</label><input id="cfg_basePosPeugeot" type="number" value="455"></div>
+                <div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_promotoresPosPeugeot" type="number" value="58"></div>
+                <div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_neutrosPosPeugeot" type="number" value="10"></div>
+                <div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_detratoresPosPeugeot" type="number" value="3"></div>
+                <div class="field"><label>Vão receber Pós Peugeot</label><input id="cfg_receberPosPeugeot" type="number" value="0"></div>
 
-    	<section id="config" class="page">
-      	<h1 class="page-title">Configurações</h1>
-      	<p class="page-subtitle">Área administrativa do sistema.</p>
+                <div class="field"><label>Meta Pós Citroën (%)</label><input id="cfg_metaPosCitroen" type="number" value="85"></div>
+                <div class="field"><label>Base Pós Citroën</label><input id="cfg_basePosCitroen" type="number" value="320"></div>
+                <div class="field"><label>Promotores Pós Citroën</label><input id="cfg_promotoresPosCitroen" type="number" value="33"></div>
+                <div class="field"><label>Neutros Pós Citroën</label><input id="cfg_neutrosPosCitroen" type="number" value="11"></div>
+                <div class="field"><label>Detratores Pós Citroën</label><input id="cfg_detratoresPosCitroen" type="number" value="6"></div>
+                <div class="field"><label>Vão receber Pós Citroën</label><input id="cfg_receberPosCitroen" type="number" value="0"></div>
+              </div>
 
-      	<div class="subnav">
-        	<button class="subnav-btn active" onclick="openSubpage('config','config-db',this)">Banco de Dados</button>
-      	</div>
+              <div class="save-row">
+                <button class="btn secondary" onclick="resetDatabase()">Restaurar padrão</button>
+                <button class="btn primary" onclick="saveDatabase()">Salvar números</button>
+              </div>
+            </div>
+          </div>
+        
+          <div id="config-equipe" class="subpage">
+            <div class="card">
+              <h4 style="margin:0 0 14px;color:var(--text);font-size:22px;">Equipe</h4>
+              <p style="margin:0 0 16px;color:var(--muted)">Cadastre vendedores, consultores e gestores para alimentar as listas do portal.</p>
 
-      	<div id="config-db" class="subpage active">
-        	<div class="card">
-          	<h4 style="margin:0 0 14px;color:var(--text);font-size:22px;">Banco de Dados</h4>
-          	<p style="margin:0 0 16px;color:var(--muted)">Edite aqui os números reais. O sistema calcula automaticamente pesquisas respondidas, NPS e promotores necessários.</p>
+              <div class="triple-grid">
+                <div class="card">
+                  <h4 style="margin:0 0 12px;color:var(--text)">Novo Vendedor</h4>
+                  <div class="field"><label>Nome</label><input id="novoVendedorNome" type="text"></div>
+                  <div class="field"><label>Email</label><input id="novoVendedorEmail" type="text"></div>
+                  <div class="field"><label>Cargo</label><input id="novoVendedorCargo" type="text" value="Vendedor"></div>
+                  <div class="save-row"><button class="btn primary" onclick="addEquipeItem('Vendedor')">Adicionar vendedor</button></div>
+                </div>
+                <div class="card">
+                  <h4 style="margin:0 0 12px;color:var(--text)">Novo Consultor</h4>
+                  <div class="field"><label>Nome</label><input id="novoConsultorNome" type="text"></div>
+                  <div class="field"><label>Email</label><input id="novoConsultorEmail" type="text"></div>
+                  <div class="field"><label>Cargo</label><input id="novoConsultorCargo" type="text" value="Consultor"></div>
+                  <div class="save-row"><button class="btn primary" onclick="addEquipeItem('Consultor')">Adicionar consultor</button></div>
+                </div>
+                <div class="card">
+                  <h4 style="margin:0 0 12px;color:var(--text)">Novo Gestor</h4>
+                  <div class="field"><label>Nome</label><input id="novoGestorNome" type="text"></div>
+                  <div class="field"><label>Email</label><input id="novoGestorEmail" type="text"></div>
+                  <div class="field"><label>Cargo</label><input id="novoGestorCargo" type="text" value="Gestor"></div>
+                  <div class="field"><label>Área</label><input id="novoGestorArea" type="text" placeholder="vendas / posvendas / geral"></div>
+                  <div class="save-row"><button class="btn primary" onclick="addEquipeItem('Gestor')">Adicionar gestor</button></div>
+                </div>
+              </div>
 
-          	<div class="form-grid">
-            	<div class="field"><label>Promotoras hoje</label><input id="cfg_homePromotorasHoje" type="number" value="12"></div>
-            	<div class="field"><label>Detratores hoje</label><input id="cfg_homeDetratoresHoje" type="number" value="3"></div>
-            	<div class="field"><label>Pesquisas respondidas</label><input id="cfg_homePesquisasRespondidas" type="number" value="27"></div>
-            	<div class="field"><label>Treinamentos pendentes</label><input id="cfg_homeTreinamentosPendentes" type="number" value="19"></div>
-            	<div class="field"><label>RACs pendentes</label><input id="cfg_homeRacsPendentes" type="number" value="7"></div>
-            	<div class="field"><label>Auditorias pendentes</label><input id="cfg_homeAuditoriasPendentes" type="number" value="4"></div>
-            	<div class="field"><label>Planos pendentes</label><input id="cfg_homePlanosPendentes" type="number" value="6"></div>
-            	<div class="field"><label>Hot Alerts críticos</label><input id="cfg_homeHotAlertsCriticos" type="number" value="3"></div>
-            	<div class="field"><label>RACs críticos</label><input id="cfg_homeRacsCriticos" type="number" value="2"></div>
-            	<div class="field"><label>Auditorias urgentes</label><input id="cfg_homeAuditoriasUrgentes" type="number" value="1"></div>
-            	<div class="field"><label>Planos críticos</label><input id="cfg_homePlanosCriticos" type="number" value="2"></div>
-            	<div class="field"><label>Treinamentos pendentes resumo</label><input id="cfg_homeTreinPendentes2" type="number" value="19"></div>
-            	<div class="field"><label>Treinamentos em cronograma</label><input id="cfg_homeTreinCronograma" type="number" value="8"></div>
-            	<div class="field"><label>Concluídos na semana</label><input id="cfg_homeTreinConcluidosSemana" type="number" value="14"></div>
-          	</div>
-
-          	<div class="form-grid">
-            	<div class="field"><label>Meta Vendas Peugeot (%)</label><input id="cfg_metaVendasPeugeot" type="number" value="85"></div>
-            	<div class="field"><label>Base Vendas Peugeot</label><input id="cfg_baseVendasPeugeot" type="number" value="410"></div>
-            	<div class="field"><label>Promotores Vendas Peugeot</label><input id="cfg_promotoresVendasPeugeot" type="number" value="45"></div>
-            	<div class="field"><label>Neutros Vendas Peugeot</label><input id="cfg_neutrosVendasPeugeot" type="number" value="12"></div>
-            	<div class="field"><label>Detratores Vendas Peugeot</label><input id="cfg_detratoresVendasPeugeot" type="number" value="5"></div>
-            	<div class="field"><label>Vão receber Peugeot</label><input id="cfg_receberVendasPeugeot" type="number" value="0"></div>
-
-            	<div class="field"><label>Meta Vendas Citroën (%)</label><input id="cfg_metaVendasCitroen" type="number" value="85"></div>
-            	<div class="field"><label>Base Vendas Citroën</label><input id="cfg_baseVendasCitroen" type="number" value="295"></div>
-            	<div class="field"><label>Promotores Vendas Citroën</label><input id="cfg_promotoresVendasCitroen" type="number" value="28"></div>
-            	<div class="field"><label>Neutros Vendas Citroën</label><input id="cfg_neutrosVendasCitroen" type="number" value="9"></div>
-            	<div class="field"><label>Detratores Vendas Citroën</label><input id="cfg_detratoresVendasCitroen" type="number" value="7"></div>
-            	<div class="field"><label>Vão receber Citroën</label><input id="cfg_receberVendasCitroen" type="number" value="0"></div>
-          	</div>
-
-          	<div class="form-grid">
-            	<div class="field"><label>Meta Pós Peugeot (%)</label><input id="cfg_metaPosPeugeot" type="number" value="85"></div>
-            	<div class="field"><label>Base Pós Peugeot</label><input id="cfg_basePosPeugeot" type="number" value="455"></div>
-            	<div class="field"><label>Promotores Pós Peugeot</label><input id="cfg_promotoresPosPeugeot" type="number" value="58"></div>
-            	<div class="field"><label>Neutros Pós Peugeot</label><input id="cfg_neutrosPosPeugeot" type="number" value="10"></div>
-            	<div class="field"><label>Detratores Pós Peugeot</label><input id="cfg_detratoresPosPeugeot" type="number" value="3"></div>
-            	<div class="field"><label>Vão receber Pós Peugeot</label><input id="cfg_receberPosPeugeot" type="number" value="0"></div>
-
-            	<div class="field"><label>Meta Pós Citroën (%)</label><input id="cfg_metaPosCitroen" type="number" value="85"></div>
-            	<div class="field"><label>Base Pós Citroën</label><input id="cfg_basePosCitroen" type="number" value="320"></div>
-            	<div class="field"><label>Promotores Pós Citroën</label><input id="cfg_promotoresPosCitroen" type="number" value="33"></div>
-            	<div class="field"><label>Neutros Pós Citroën</label><input id="cfg_neutrosPosCitroen" type="number" value="11"></div>
-            	<div class="field"><label>Detratores Pós Citroën</label><input id="cfg_detratoresPosCitroen" type="number" value="6"></div>
-            	<div class="field"><label>Vão receber Pós Citroën</label><input id="cfg_receberPosCitroen" type="number" value="0"></div>
-          	</div>
-
-          	<div class="save-row">
-            	<button class="btn secondary" onclick="resetDatabase()">Restaurar padrão</button>
-            	<button class="btn primary" onclick="saveDatabase()">Salvar números</button>
-          	</div>
-        	</div>
-      	</div>
-    	</section>
-  	</main>
-	</div>
+              <div class="triple-grid">
+                <div class="card"><h4 style="margin:0 0 12px;color:var(--text)">Vendedores</h4><div class="table-wrap compact-table"><table><thead><tr><th>Nome</th><th>Email</th><th>Status</th><th>Ação</th></tr></thead><tbody id="tbodyVendedoresCfg"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody></table></div></div>
+                <div class="card"><h4 style="margin:0 0 12px;color:var(--text)">Consultores</h4><div class="table-wrap compact-table"><table><thead><tr><th>Nome</th><th>Email</th><th>Status</th><th>Ação</th></tr></thead><tbody id="tbodyConsultoresCfg"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody></table></div></div>
+                <div class="card"><h4 style="margin:0 0 12px;color:var(--text)">Gestores</h4><div class="table-wrap compact-table"><table><thead><tr><th>Nome</th><th>Email</th><th>Área</th><th>Status</th></tr></thead><tbody id="tbodyGestoresCfg"><tr><td colspan="4" class="empty">Carregando...</td></tr></tbody></table></div></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
   </div>
 
   <script>
-	const CHAT_API_URL = 'https://script.google.com/macros/s/AKfycbw6TYfTddo-yZT4eBy0kmRR7H_6VSp8jxzSUVenx_aeF_7g8WWHp7j6pgNiMGHd9ECb/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzpQNm78MUgOCDzQpr8ywXrC2NA5UGdTzZJJ_3L1urzvO6oYZOubnRZnIBfOKuzKNXRXg/exec';
 
-	const SYSTEMS = [
-  	{ nome:'Portal de Treinamentos', descricao:'Treinamentos corporativos', categoria:'Treinamento', url:'https://psa.csod.com/samldefault.aspx?ouid=2', login:'DN89492', senha:'Piga2070' },
-  	{ nome:'DealerNet', descricao:'Portal de rede / fluxo', categoria:'Rede', url:'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html', login:'KAMILLY.PAIVA', senha:'Adtsa@2032' },
-  	{ nome:'Holmes', descricao:'Acesso Holmes', categoria:'Operação', url:'', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
-  	{ nome:'Syonet', descricao:'Portal Syonet', categoria:'CRM', url:'https://adtsa.syonet.com/portal/app.do?modulo=login#/login', login:'KAMILLY.PAIVA', senha:'K10092018m@' },
-  	{ nome:'Grow - Peugeot', descricao:'Portal Grow Peugeot', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89494', senha:'Piga2050' },
-  	{ nome:'Grow - Citroën', descricao:'Portal Grow Citroën', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89492', senha:'Piga2407' },
-  	{ nome:'Snap On - Auditoria/Autoavaliação', descricao:'Padrões e autoavaliação', categoria:'Auditoria', url:'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092', login:'DN89492', senha:'Piga2407' },
-  	{ nome:'Focus - Peugeot', descricao:'Focus Peugeot', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DN89494', senha:'Piga2050' },
-  	{ nome:'Focus - Citroën', descricao:'Focus Citroën', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DM62286', senha:'Piga2060' },
-  	{ nome:'Trilogo', descricao:'Portal Trilogo', categoria:'Portal', url:'https://entrar.trilogo.app/', login:'kamilly.paiva@adtsa.com.br', senha:'K10092018m@' },
-  	{ nome:'ADM Partenaires - Peugeot', descricao:'Acesso Peugeot', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89494', senha:'Piga2070' },
-  	{ nome:'ADM Partenaires - Citroën', descricao:'Acesso Citroën', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89492', senha:'Piga2070' },
-  	{ nome:'Reclame Aqui', descricao:'Painel Reclame Aqui', categoria:'Atendimento', url:'https://www.reclameaqui.com.br/', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
-  	{ nome:'CSPS - Peugeot', descricao:'CSPS Peugeot', categoria:'Pesquisa', url:'', login:'CA00064P', senha:'Piga2033' },
-  	{ nome:'CSPS - Citroën', descricao:'CSPS Citroën', categoria:'Pesquisa', url:'', login:'CA00013C', senha:'Piga2033' },
-  	{ nome:'Webmail - Qualidade', descricao:'Webmail corporativo', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidade.pigallews@adtsa.com.br', senha:'Citroen@2026' },
-  	{ nome:'Google My Business - Pigalle', descricao:'Perfil da empresa', categoria:'Google', url:'https://mail.google.com/mail/u/0/', login:'pigallepgle@gmail.com', senha:'Adtsa2021' },
-  	{ nome:'Gmail - Qualidade', descricao:'Gmail da qualidade', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidadepigallews@gmail.com', senha:'Adtsa@2025' },
-  	{ nome:'My People Peugeot', descricao:'Portal My People Peugeot', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'BR-000064P.admin', senha:'P3!wH8#mZ' },
-  	{ nome:'My People Citroën', descricao:'Portal My People Citroën', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'TBR-CE41PUD.admin', senha:'Km.2027@pm' },
-  	{ nome:'Mopar Eper', descricao:'Acesso Chico - Oficina', categoria:'Oficina', url:'https://eper-ltm.parts.fiat.com/', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
-  	{ nome:'Mopar Tools', descricao:'Ferramentas Mopar', categoria:'Oficina', url:'https://tools.moparservicecenter.com.br/Acesso/Entrada', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
-  	{ nome:'WiTech', descricao:'Diagnóstico WiTech', categoria:'Oficina', url:'https://app.l.fcawitech.com/wt2/index.html#/discovery/flight-recorder-templates', login:'TBR-CE41PUD.d002', senha:'Piga2027@' }
-	];
 
-	const pageTitles = {
-  	inicio: ['Início', 'Resumo executivo e operacional da qualidade.'],
-  	vendas: ['Vendas', 'Gestão da operação de vendas com módulos internos.'],
-  	posvendas: ['Pós-Vendas', 'Gestão da operação de pós-vendas com módulos internos.'],
-  	grow: ['Grow Customer Care', 'Controle operacional dos casos copiados do portal Grow.'],
-  	chat: ['Chat', 'Comunicação interna do grupo QUALIS.'],
-  	sistemas: ['Sistemas', 'Central de links, logins e senhas operacionais.'],
-  	config: ['Configurações', 'Área administrativa do sistema.']
-	};
+    const SYSTEMS = [
+      { nome:'Portal de Treinamentos', descricao:'Treinamentos corporativos', categoria:'Treinamento', url:'https://psa.csod.com/samldefault.aspx?ouid=2', login:'DN89492', senha:'Piga2070' },
+      { nome:'DealerNet', descricao:'Portal de rede / fluxo', categoria:'Rede', url:'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html', login:'KAMILLY.PAIVA', senha:'Adtsa@2032' },
+      { nome:'Holmes', descricao:'Acesso Holmes', categoria:'Operação', url:'', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
+      { nome:'Syonet', descricao:'Portal Syonet', categoria:'CRM', url:'https://adtsa.syonet.com/portal/app.do?modulo=login#/login', login:'KAMILLY.PAIVA', senha:'K10092018m@' },
+      { nome:'Grow - Peugeot', descricao:'Portal Grow Peugeot', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89494', senha:'Piga2050' },
+      { nome:'Grow - Citroën', descricao:'Portal Grow Citroën', categoria:'Grow', url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers', login:'DN89492', senha:'Piga2407' },
+      { nome:'Snap On - Auditoria/Autoavaliação', descricao:'Padrões e autoavaliação', categoria:'Auditoria', url:'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092', login:'DN89492', senha:'Piga2407' },
+      { nome:'Focus - Peugeot', descricao:'Focus Peugeot', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DN89494', senha:'Piga2050' },
+      { nome:'Focus - Citroën', descricao:'Focus Citroën', categoria:'Focus', url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic', login:'DM62286', senha:'Piga2060' },
+      { nome:'Trilogo', descricao:'Portal Trilogo', categoria:'Portal', url:'https://entrar.trilogo.app/', login:'kamilly.paiva@adtsa.com.br', senha:'K10092018m@' },
+      { nome:'ADM Partenaires - Peugeot', descricao:'Acesso Peugeot', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89494', senha:'Piga2070' },
+      { nome:'ADM Partenaires - Citroën', descricao:'Acesso Citroën', categoria:'Garantia', url:'https://admpartenaires.psa-peugeot-citroen.com/admpartenaires/index.jsp?application=admpartenaires', login:'DN89492', senha:'Piga2070' },
+      { nome:'Reclame Aqui', descricao:'Painel Reclame Aqui', categoria:'Atendimento', url:'https://www.reclameaqui.com.br/', login:'kamilly.paiva@adtsa.com.br', senha:'Adtsa@2025' },
+      { nome:'CSPS - Peugeot', descricao:'CSPS Peugeot', categoria:'Pesquisa', url:'', login:'CA00064P', senha:'Piga2033' },
+      { nome:'CSPS - Citroën', descricao:'CSPS Citroën', categoria:'Pesquisa', url:'', login:'CA00013C', senha:'Piga2033' },
+      { nome:'Webmail - Qualidade', descricao:'Webmail corporativo', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidade.pigallews@adtsa.com.br', senha:'Citroen@2026' },
+      { nome:'Google My Business - Pigalle', descricao:'Perfil da empresa', categoria:'Google', url:'https://mail.google.com/mail/u/0/', login:'pigallepgle@gmail.com', senha:'Adtsa2021' },
+      { nome:'Gmail - Qualidade', descricao:'Gmail da qualidade', categoria:'E-mail', url:'https://mail.google.com/mail/u/0/', login:'qualidadepigallews@gmail.com', senha:'Adtsa@2025' },
+      { nome:'My People Peugeot', descricao:'Portal My People Peugeot', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'BR-000064P.admin', senha:'P3!wH8#mZ' },
+      { nome:'My People Citroën', descricao:'Portal My People Citroën', categoria:'Pessoas', url:'https://myPeople.fiat.com', login:'TBR-CE41PUD.admin', senha:'Km.2027@pm' },
+      { nome:'Mopar Eper', descricao:'Acesso Chico - Oficina', categoria:'Oficina', url:'https://eper-ltm.parts.fiat.com/', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
+      { nome:'Mopar Tools', descricao:'Ferramentas Mopar', categoria:'Oficina', url:'https://tools.moparservicecenter.com.br/Acesso/Entrada', login:'TBR-CE41PUD.d002', senha:'Piga2027@' },
+      { nome:'WiTech', descricao:'Diagnóstico WiTech', categoria:'Oficina', url:'https://app.l.fcawitech.com/wt2/index.html#/discovery/flight-recorder-templates', login:'TBR-CE41PUD.d002', senha:'Piga2027@' }
+    ];
 
-	const DEFAULT_USERS = [
-  	{ name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivara321@', passwordChangedAt:'2026-03-12' },
-  	{ name:'Letícia', role:'user', email:'leticia.martins@adtsa.com.br', password:'Barata321@', passwordChangedAt:'2026-03-12' },
-  	{ name:'Laís', role:'user', email:'lais.batista@adtsa.com.br', password:'Calango321@', passwordChangedAt:'2026-03-12' }
-	];
+    const pageTitles = {
+      inicio: ['Início', 'Resumo executivo e operacional da qualidade.'],
+      vendas: ['Vendas', 'Gestão da operação de vendas com módulos internos.'],
+      posvendas: ['Pós-Vendas', 'Gestão da operação de pós-vendas com módulos internos.'],
+      grow: ['Grow Customer Care', 'Controle operacional dos casos copiados do portal Grow.'],
+      chat: ['Chat', 'Comunicação interna do grupo QUALIS.'],
+      sistemas: ['Sistemas', 'Central de links, logins e senhas operacionais.'],
+      inteligencia: ['Inteligência CX', 'Análises automáticas da operação, Grow e conversões.'],
+      config: ['Configurações', 'Área administrativa do sistema.']
+    };
 
-	const DEFAULT_DB = {
-  	homePromotorasHoje:'12',
-  	homeDetratoresHoje:'3',
-  	homePesquisasRespondidas:'27',
-  	homeTreinamentosPendentes:'19',
-  	homeRacsPendentes:'7',
-  	homeAuditoriasPendentes:'4',
-  	homePlanosPendentes:'6',
-  	homeHotAlertsCriticos:'3',
-  	homeRacsCriticos:'2',
-  	homeAuditoriasUrgentes:'1',
-  	homePlanosCriticos:'2',
-  	homeTreinPendentes2:'19',
-  	homeTreinCronograma:'8',
-  	homeTreinConcluidosSemana:'14',
+    const DEFAULT_USERS = [
+      { name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivara321@', passwordChangedAt:'2026-03-12' },
+      { name:'Letícia', role:'user', email:'leticia.martins@adtsa.com.br', password:'Barata321@', passwordChangedAt:'2026-03-12' },
+      { name:'Laís', role:'user', email:'lais.batista@adtsa.com.br', password:'Calango321@', passwordChangedAt:'2026-03-12' }
+    ];
 
-  	metaVendasPeugeot:'85',
-  	baseVendasPeugeot:'410',
-  	promotoresVendasPeugeot:'45',
-  	neutrosVendasPeugeot:'12',
-  	detratoresVendasPeugeot:'5',
-  	receberVendasPeugeot:'0',
+    const DEFAULT_DB = {
+      homePromotorasHoje:'12',
+      homeDetratoresHoje:'3',
+      homePesquisasRespondidas:'27',
+      homeTreinamentosPendentes:'19',
+      homeRacsPendentes:'7',
+      homeAuditoriasPendentes:'4',
+      homePlanosPendentes:'6',
+      homeHotAlertsCriticos:'3',
+      homeRacsCriticos:'2',
+      homeAuditoriasUrgentes:'1',
+      homePlanosCriticos:'2',
+      homeTreinPendentes2:'19',
+      homeTreinCronograma:'8',
+      homeTreinConcluidosSemana:'14',
 
-  	metaVendasCitroen:'85',
-  	baseVendasCitroen:'295',
-  	promotoresVendasCitroen:'28',
-  	neutrosVendasCitroen:'9',
-  	detratoresVendasCitroen:'7',
-  	receberVendasCitroen:'0',
+      metaVendasPeugeot:'85',
+      baseVendasPeugeot:'410',
+      promotoresVendasPeugeot:'45',
+      neutrosVendasPeugeot:'12',
+      detratoresVendasPeugeot:'5',
+      receberVendasPeugeot:'0',
 
-  	metaPosPeugeot:'85',
-  	basePosPeugeot:'455',
-  	promotoresPosPeugeot:'58',
-  	neutrosPosPeugeot:'10',
-  	detratoresPosPeugeot:'3',
-  	receberPosPeugeot:'0',
+      metaVendasCitroen:'85',
+      baseVendasCitroen:'295',
+      promotoresVendasCitroen:'28',
+      neutrosVendasCitroen:'9',
+      detratoresVendasCitroen:'7',
+      receberVendasCitroen:'0',
 
-  	metaPosCitroen:'85',
-  	basePosCitroen:'320',
-  	promotoresPosCitroen:'33',
-  	neutrosPosCitroen:'11',
-  	detratoresPosCitroen:'6',
-  	receberPosCitroen:'0'
-	};
+      metaPosPeugeot:'85',
+      basePosPeugeot:'455',
+      promotoresPosPeugeot:'58',
+      neutrosPosPeugeot:'10',
+      detratoresPosPeugeot:'3',
+      receberPosPeugeot:'0',
 
-	let currentBanner = 0;
-	let currentUser = null;
+      metaPosCitroen:'85',
+      basePosCitroen:'320',
+      promotoresPosCitroen:'33',
+      neutrosPosCitroen:'11',
+      detratoresPosCitroen:'6',
+      receberPosCitroen:'0'
+    };
 
-	function timeNow(){
-  	const d = new Date();
-  	return d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
-	}
+    let currentBanner = 0;
+    let currentUser = null;
 
-	function daysSince(dateStr){
-  	const today = new Date();
-  	const date = new Date(dateStr + 'T00:00:00');
-  	const diff = today.getTime() - date.getTime();
-  	return Math.floor(diff / (1000 * 60 * 60 * 24));
-	}
+    function timeNow(){
+      const d = new Date();
+      return d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+    }
 
-	function getStoredUsers(){
-  	const raw = localStorage.getItem('qualis-users');
-  	if (!raw) {
-    	localStorage.setItem('qualis-users', JSON.stringify(DEFAULT_USERS));
-    	return JSON.parse(JSON.stringify(DEFAULT_USERS));
-  	}
-  	try{
-    	return JSON.parse(raw);
-  	}catch{
-    	localStorage.setItem('qualis-users', JSON.stringify(DEFAULT_USERS));
-    	return JSON.parse(JSON.stringify(DEFAULT_USERS));
-  	}
-	}
+    function daysSince(dateStr){
+      const today = new Date();
+      const date = new Date(dateStr + 'T00:00:00');
+      const diff = today.getTime() - date.getTime();
+      return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
 
-	function getUserByEmail(email){
-  	return getStoredUsers().find(u => u.email.toLowerCase() === String(email).trim().toLowerCase());
-	}
+    function getStoredUsers(){
+      const raw = localStorage.getItem('qualis-users');
+      if (!raw) {
+        localStorage.setItem('qualis-users', JSON.stringify(DEFAULT_USERS));
+        return JSON.parse(JSON.stringify(DEFAULT_USERS));
+      }
+      try{
+        return JSON.parse(raw);
+      }catch{
+        localStorage.setItem('qualis-users', JSON.stringify(DEFAULT_USERS));
+        return JSON.parse(JSON.stringify(DEFAULT_USERS));
+      }
+    }
 
-	function showLoginError(message){
-  	document.getElementById('loginError').innerText = message;
-	}
+    function getUserByEmail(email){
+      return getStoredUsers().find(u => u.email.toLowerCase() === String(email).trim().toLowerCase());
+    }
 
-	function clearLoginError(){
-  	document.getElementById('loginError').innerText = '';
-	}
+    function showLoginError(message){
+      document.getElementById('loginError').innerText = message;
+    }
 
-	function handleLogin(){
-  	clearLoginError();
+    function clearLoginError(){
+      document.getElementById('loginError').innerText = '';
+    }
 
-  	const email = document.getElementById('loginEmail').value.trim();
-  	const password = document.getElementById('loginPassword').value;
-  	const user = getUserByEmail(email);
+    async function handleLogin(){
+      clearLoginError();
+      setLoginMascotMood('default');
 
-  	if (!user){
-    	showLoginError('Usuária não encontrada.');
-    	return;
-  	}
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const user = getUserByEmail(email);
 
-  	if (user.password !== password){
-    	showLoginError('Senha incorreta.');
-    	return;
-  	}
+      if (!user){
+        showLoginError('Usuária não encontrada.');
+        setLoginMascotMood('error');
+        return;
+      }
 
-  	if (daysSince(user.passwordChangedAt) >= 15){
-    	showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
-    	return;
-  	}
+      if (user.password !== password){
+        showLoginError('Senha incorreta.');
+        setLoginMascotMood('error');
+        return;
+      }
 
-  	currentUser = user;
-  	localStorage.setItem('qualis-current-user', JSON.stringify(user));
-  	startPortal();
-	}
+      if (daysSince(user.passwordChangedAt) >= 15){
+        showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
+        setLoginMascotMood('error');
+        return;
+      }
 
-	function handleForgotPassword(){
-  	const email = document.getElementById('loginEmail').value.trim() || 'usuária não informada';
-  	const subject = encodeURIComponent('QUALIS - Solicitação de redefinição de senha');
-  	const body = encodeURIComponent(
+      setLoginMascotMood('success');
+      currentUser = user;
+      localStorage.setItem('qualis-current-user', JSON.stringify(user));
+      await startPortal();
+    }
+
+    function handleForgotPassword(){
+      const email = document.getElementById('loginEmail').value.trim() || 'usuária não informada';
+      const subject = encodeURIComponent('QUALIS - Solicitação de redefinição de senha');
+      const body = encodeURIComponent(
 `Olá, Kamilly.
 
 Foi solicitada uma redefinição de senha no QUALIS.
@@ -1896,239 +2592,150 @@ Data/Hora: ${new Date().toLocaleString('pt-BR')}
 
 Atenciosamente,
 Portal QUALIS`
-  	);
-  	window.location.href = `mailto:kamilly.paiva@adtsa.com.br?subject=${subject}&body=${body}`;
-	}
+      );
+      window.location.href = `mailto:kamilly.paiva@adtsa.com.br?subject=${subject}&body=${body}`;
+    }
 
-	function startPortal(){
-  	document.getElementById('loginScreen').style.display = 'none';
-  	document.getElementById('portalApp').style.display = 'block';
-  	applyUserContext();
-  	const db = loadDatabase();
-  	fillConfigForm(db);
-  	applyDatabaseToUI(db);
-  	renderChat();
-  	renderSystems();
-	}
+    async function startPortal(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portalApp').style.display = 'block';
+  applyUserContext();
 
-	function logout(){
-  	localStorage.removeItem('qualis-current-user');
-  	currentUser = null;
-  	document.getElementById('portalApp').style.display = 'none';
-  	document.getElementById('loginScreen').style.display = 'flex';
-  	document.getElementById('loginPassword').value = '';
-  	clearLoginError();
-	}
+  const db = await loadDatabase();
+  fillConfigForm(db);
+  applyDatabaseToUI(db);
 
-	function applyUserContext(){
-  	if (!currentUser) return;
-  	document.getElementById('sidebarUserName').innerText = currentUser.name;
-  	document.getElementById('sidebarUserRole').innerText = currentUser.role === 'superadmin' ? 'Super Admin' : 'Usuária Operacional';
-  	document.getElementById('chatHeaderInfo').innerText = `Mensagens visíveis para todo o grupo. Logada como ${currentUser.name}.`;
-	}
+  await renderChat();
+  renderSystems();
+}
 
-	function formatPercent(value){
-  	return Number(value || 0).toFixed(1).replace('.', ',') + '%';
-	}
+    function logout(){
+      localStorage.removeItem('qualis-current-user');
+      currentUser = null;
+      document.getElementById('portalApp').style.display = 'none';
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('loginPassword').value = '';
+      clearLoginError();
+    }
 
-	function calculateIndicators(promotores, neutros, detratores){
-  	promotores = Number(promotores) || 0;
-  	neutros = Number(neutros) || 0;
-  	detratores = Number(detratores) || 0;
-  	const pesquisas = promotores + neutros + detratores;
-  	const nps = pesquisas > 0 ? ((promotores - detratores) / pesquisas) * 100 : 0;
-  	return { pesquisas, nps };
-	}
+    function applyUserContext(){
+      if (!currentUser) return;
+      document.getElementById('sidebarUserName').innerText = currentUser.name;
+      document.getElementById('sidebarUserRole').innerText = currentUser.role === 'superadmin' ? 'Super Admin' : 'Usuária Operacional';
+      document.getElementById('chatHeaderInfo').innerText = `Mensagens visíveis para todo o grupo. Logada como ${currentUser.name}.`;
+    }
 
-	function calculatePromotersNeeded(metaPercent, promotores, neutros, detratores){
-  	const meta = Number(metaPercent) || 0;
-  	const p = Number(promotores) || 0;
-  	const n = Number(neutros) || 0;
-  	const d = Number(detratores) || 0;
-  	const total = p + n + d;
+    function formatPercent(value){
+      return Number(value || 0).toFixed(1).replace('.', ',') + '%';
+    }
 
-  	if (total <= 0) return meta > 0 ? 1 : 0;
+    function calculateIndicators(promotores, neutros, detratores){
+      promotores = Number(promotores) || 0;
+      neutros = Number(neutros) || 0;
+      detratores = Number(detratores) || 0;
+      const pesquisas = promotores + neutros + detratores;
+      const nps = pesquisas > 0 ? ((promotores - detratores) / pesquisas) * 100 : 0;
+      return { pesquisas, nps };
+    }
 
-  	const currentNps = ((p - d) / total) * 100;
-  	if (currentNps >= meta) return 0;
+    function calculatePromotersNeeded(metaPercent, promotores, neutros, detratores){
+      const meta = Number(metaPercent) || 0;
+      const p = Number(promotores) || 0;
+      const n = Number(neutros) || 0;
+      const d = Number(detratores) || 0;
+      const total = p + n + d;
 
-  	const numerator = ((meta / 100) * total) - (p - d);
-  	const denominator = 1 - (meta / 100);
-  	if (denominator <= 0) return 0;
+      if (total <= 0) return meta > 0 ? 1 : 0;
 
-  	return Math.max(0, Math.ceil(numerator / denominator));
-	}
+      const currentNps = ((p - d) / total) * 100;
+      if (currentNps >= meta) return 0;
 
-	function openPage(id, btn){
-  	document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-  	const target = document.getElementById(id);
-  	if (target) target.classList.add('active');
+      const numerator = ((meta / 100) * total) - (p - d);
+      const denominator = 1 - (meta / 100);
+      if (denominator <= 0) return 0;
 
-  	document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-  	if (btn) btn.classList.add('active');
+      return Math.max(0, Math.ceil(numerator / denominator));
+    }
 
-  	document.getElementById('topTitle').innerText = pageTitles[id][0];
-  	document.getElementById('topSubtitle').innerText = pageTitles[id][1];
-  	window.scrollTo({ top: 0, behavior: 'smooth' });
+    function openPage(id, btn){
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
 
-  	if (id === 'chat') renderChat();
-  	if (id === 'sistemas') renderSystems();
-	}
+      document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
 
-	function openSubpage(sectionId, subpageId, btn){
-  	const section = document.getElementById(sectionId);
-  	if (!section) return;
-  	section.querySelectorAll('.subpage').forEach(sp => sp.classList.remove('active'));
-  	const target = document.getElementById(subpageId);
-  	if (target) target.classList.add('active');
-  	section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
-  	if (btn) btn.classList.add('active');
-	}
+      document.getElementById('topTitle').innerText = pageTitles[id][0];
+      document.getElementById('topSubtitle').innerText = pageTitles[id][1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
-	function toggleTheme(){
-  	document.body.classList.toggle('dark');
-  	localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-	}
+      if (id === 'chat') renderChat();
+      if (id === 'sistemas') renderSystems();
+    }
 
-	function loadTheme(){
-  	const saved = localStorage.getItem('qualis-theme');
-  	if (saved === 'dark') document.body.classList.add('dark');
-	}
+    function openSubpage(sectionId, subpageId, btn){
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      section.querySelectorAll('.subpage').forEach(sp => sp.classList.remove('active'));
+      const target = document.getElementById(subpageId);
+      if (target) target.classList.add('active');
+      section.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
 
-	function loadDatabase(){
-  	const raw = localStorage.getItem('qualis-db');
-  	if (!raw) return { ...DEFAULT_DB };
-  	try{ return { ...DEFAULT_DB, ...JSON.parse(raw) }; }
-  	catch{ return { ...DEFAULT_DB }; }
-	}
+    function toggleTheme(){
+      document.body.classList.toggle('dark');
+      localStorage.setItem('qualis-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    }
 
-	function setText(id, value){
-  	const el = document.getElementById(id);
-  	if (el) el.innerText = value;
-	}
+    function loadTheme(){
+      const saved = localStorage.getItem('qualis-theme');
+      if (saved === 'dark') document.body.classList.add('dark');
+    }
 
-	function applyNPSColor(idValue, idMeta){
-  	const valueEl = document.getElementById(idValue);
-  	const metaEl = document.getElementById(idMeta);
-  	if (!valueEl || !metaEl) return;
+    async function loadDatabase(){
+  try{
+    const data = await apiGet('getConfig');
+    const cfg = data.config || {};
+    const merged = { ...DEFAULT_DB };
+    Object.keys(merged).forEach(k => {
+      if (cfg[k] !== undefined && cfg[k] !== null && cfg[k] !== '') merged[k] = cfg[k];
+    });
+    localStorage.setItem('qualis-db', JSON.stringify(merged));
+    return merged;
+  }catch(err){
+    const raw = localStorage.getItem('qualis-db');
+    if (!raw) return { ...DEFAULT_DB };
+    try{ return { ...DEFAULT_DB, ...JSON.parse(raw) }; }
+    catch{ return { ...DEFAULT_DB }; }
+  }
+}
 
-  	const value = parseFloat(String(valueEl.innerText).replace('%','').replace(',','.'));
-  	const meta = parseFloat(String(metaEl.innerText).replace('%','').replace(',','.'));
 
-  	valueEl.classList.remove('nps-green','nps-red');
-  	valueEl.classList.add(value >= meta ? 'nps-green' : 'nps-red');
-	}
+    function resetDatabase(){
+  fillConfigForm({ ...DEFAULT_DB });
+  applyDatabaseToUI({ ...DEFAULT_DB });
+  alert('Valores restaurados na tela. Clique em "Salvar números" para enviar para a planilha.');
+}
 
-	function fillConfigForm(db){
-  	Object.keys(DEFAULT_DB).forEach(key => {
-    	const input = document.getElementById('cfg_' + key);
-    	if (input) input.value = db[key];
-  	});
-	}
 
-	function applyDatabaseToUI(db){
-  	setText('homePromotorasHoje', db.homePromotorasHoje);
-  	setText('homeDetratoresHoje', db.homeDetratoresHoje);
-  	setText('homePesquisasRespondidas', db.homePesquisasRespondidas);
-  	setText('homeTreinamentosPendentes', db.homeTreinamentosPendentes);
-  	setText('homeRacsPendentes', db.homeRacsPendentes);
-  	setText('homeAuditoriasPendentes', db.homeAuditoriasPendentes);
-  	setText('homePlanosPendentes', db.homePlanosPendentes);
-  	setText('homeHotAlertsCriticos', db.homeHotAlertsCriticos);
-  	setText('homeRacsCriticos', db.homeRacsCriticos);
-  	setText('homeAuditoriasUrgentes', db.homeAuditoriasUrgentes);
-  	setText('homePlanosCriticos', db.homePlanosCriticos);
-  	setText('homeTreinPendentes2', db.homeTreinPendentes2);
-  	setText('homeTreinCronograma', db.homeTreinCronograma);
-  	setText('homeTreinCronograma2', db.homeTreinCronograma);
-  	setText('homeTreinConcluidosSemana', db.homeTreinConcluidosSemana);
+    function showBanner(index){
+      const banners = document.querySelectorAll('#inicio .banner');
+      const dots = document.querySelectorAll('#inicio .dot');
+      banners.forEach((b,i) => b.classList.toggle('active', i === index));
+      dots.forEach((d,i) => d.classList.toggle('active', i === index));
+      currentBanner = index;
+    }
 
-  	const vp = calculateIndicators(db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot);
-  	setText('npsVendasPeugeotValue', formatPercent(vp.nps));
-  	setText('npsVendasPeugeotMeta', formatPercent(db.metaVendasPeugeot));
-  	setText('vendasPeugeotPromotores', db.promotoresVendasPeugeot);
-  	setText('vendasPeugeotNeutros', db.neutrosVendasPeugeot);
-  	setText('vendasPeugeotDetratores', db.detratoresVendasPeugeot);
-  	setText('vendasPeugeotPesquisas', vp.pesquisas);
-  	setText('vendasPeugeotBase', db.baseVendasPeugeot);
-  	setText('vendasPeugeotReceber', db.receberVendasPeugeot);
-  	setText('vendasPeugeotNecessarios', calculatePromotersNeeded(db.metaVendasPeugeot, db.promotoresVendasPeugeot, db.neutrosVendasPeugeot, db.detratoresVendasPeugeot));
+    function rotateBanners(){
+      const banners = document.querySelectorAll('#inicio .banner');
+      if (!banners.length) return;
+      currentBanner = (currentBanner + 1) % banners.length;
+      showBanner(currentBanner);
+    }
 
-  	const vc = calculateIndicators(db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen);
-  	setText('npsVendasCitroenValue', formatPercent(vc.nps));
-  	setText('npsVendasCitroenMeta', formatPercent(db.metaVendasCitroen));
-  	setText('vendasCitroenPromotores', db.promotoresVendasCitroen);
-  	setText('vendasCitroenNeutros', db.neutrosVendasCitroen);
-  	setText('vendasCitroenDetratores', db.detratoresVendasCitroen);
-  	setText('vendasCitroenPesquisas', vc.pesquisas);
-  	setText('vendasCitroenBase', db.baseVendasCitroen);
-  	setText('vendasCitroenReceber', db.receberVendasCitroen);
-  	setText('vendasCitroenNecessarios', calculatePromotersNeeded(db.metaVendasCitroen, db.promotoresVendasCitroen, db.neutrosVendasCitroen, db.detratoresVendasCitroen));
-
-  	const pp = calculateIndicators(db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot);
-  	setText('npsPosPeugeotValue', formatPercent(pp.nps));
-  	setText('npsPosPeugeotMeta', formatPercent(db.metaPosPeugeot));
-  	setText('posPeugeotPromotores', db.promotoresPosPeugeot);
-  	setText('posPeugeotNeutros', db.neutrosPosPeugeot);
-  	setText('posPeugeotDetratores', db.detratoresPosPeugeot);
-  	setText('posPeugeotPesquisas', pp.pesquisas);
-  	setText('posPeugeotBase', db.basePosPeugeot);
-  	setText('posPeugeotReceber', db.receberPosPeugeot);
-  	setText('posPeugeotNecessarios', calculatePromotersNeeded(db.metaPosPeugeot, db.promotoresPosPeugeot, db.neutrosPosPeugeot, db.detratoresPosPeugeot));
-
-  	const pc = calculateIndicators(db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen);
-  	setText('npsPosCitroenValue', formatPercent(pc.nps));
-  	setText('npsPosCitroenMeta', formatPercent(db.metaPosCitroen));
-  	setText('posCitroenPromotores', db.promotoresPosCitroen);
-  	setText('posCitroenNeutros', db.neutrosPosCitroen);
-  	setText('posCitroenDetratores', db.detratoresPosCitroen);
-  	setText('posCitroenPesquisas', pc.pesquisas);
-  	setText('posCitroenBase', db.basePosCitroen);
-  	setText('posCitroenReceber', db.receberPosCitroen);
-  	setText('posCitroenNecessarios', calculatePromotersNeeded(db.metaPosCitroen, db.promotoresPosCitroen, db.neutrosPosCitroen, db.detratoresPosCitroen));
-
-  	applyNPSColor('npsVendasPeugeotValue','npsVendasPeugeotMeta');
-  	applyNPSColor('npsVendasCitroenValue','npsVendasCitroenMeta');
-  	applyNPSColor('npsPosPeugeotValue','npsPosPeugeotMeta');
-  	applyNPSColor('npsPosCitroenValue','npsPosCitroenMeta');
-	}
-
-	function saveDatabase(){
-  	const db = {};
-  	Object.keys(DEFAULT_DB).forEach(key => {
-    	const input = document.getElementById('cfg_' + key);
-    	db[key] = input ? input.value : DEFAULT_DB[key];
-  	});
-  	localStorage.setItem('qualis-db', JSON.stringify(db));
-  	applyDatabaseToUI(db);
-  	alert('Números salvos com sucesso.');
-	}
-
-	function resetDatabase(){
-  	localStorage.removeItem('qualis-db');
-  	const db = { ...DEFAULT_DB };
-  	fillConfigForm(db);
-  	applyDatabaseToUI(db);
-  	alert('Banco de dados restaurado.');
-	}
-
-	function showBanner(index){
-  	const banners = document.querySelectorAll('#inicio .banner');
-  	const dots = document.querySelectorAll('#inicio .dot');
-  	banners.forEach((b,i) => b.classList.toggle('active', i === index));
-  	dots.forEach((d,i) => d.classList.toggle('active', i === index));
-  	currentBanner = index;
-	}
-
-	function rotateBanners(){
-  	const banners = document.querySelectorAll('#inicio .banner');
-  	if (!banners.length) return;
-  	currentBanner = (currentBanner + 1) % banners.length;
-  	showBanner(currentBanner);
-	}
-
-	function loadGrowExamplePeugeot(){
-  	document.getElementById('growPeugeot').value = `15725953
+    function loadGrowExamplePeugeot(){
+      document.getElementById('growPeugeot').value = `15725953
 Aberto
 05/11/2025 15:15
 Telefone
@@ -2139,11 +2746,11 @@ THICIANE ARAUJO CHAVES
 Urgente
 Pâmela Souza Lopes
 NNE - NORDESTE`;
-  	processGrowData();
-	}
+      processGrowData();
+    }
 
-	function loadGrowExampleCitroen(){
-  	document.getElementById('growCitroen').value = `16316483
+    function loadGrowExampleCitroen(){
+      document.getElementById('growCitroen').value = `16316483
 Aberto
 11/03/2026 09:10
 WhatsApp
@@ -2154,105 +2761,105 @@ EMILIO CAVALCANTE
 Urgente
 Pâmela Souza Lopes
 NNE - NORDESTE`;
-  	processGrowData();
-	}
+      processGrowData();
+    }
 
-	function clearGrowData(){
-  	document.getElementById('growPeugeot').value = '';
-  	document.getElementById('growCitroen').value = '';
-  	document.getElementById('growTableBody').innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso analisado ainda.</td></tr>';
-  	updateGrowSummary({total:0,open:0,over30:0,reserve:0,peu:0,cit:0});
-	}
+    function clearGrowData(){
+      document.getElementById('growPeugeot').value = '';
+      document.getElementById('growCitroen').value = '';
+      document.getElementById('growTableBody').innerHTML = '<tr><td colspan="14" class="empty">Nenhum caso analisado ainda.</td></tr>';
+      updateGrowSummary({total:0,open:0,over30:0,reserve:0,peu:0,cit:0});
+    }
 
-	function processGrowData(){
-  	const peuRaw = document.getElementById('growPeugeot').value.trim();
-  	const citRaw = document.getElementById('growCitroen').value.trim();
-  	const peuRecords = parseBlockRecords(peuRaw, 'Peugeot');
-  	const citRecords = parseBlockRecords(citRaw, 'Citroën');
-  	const records = [...peuRecords, ...citRecords];
-  	renderGrowTable(records);
-  	calculateGrowSummary(records);
-	}
+    function processGrowData(){
+      const peuRaw = document.getElementById('growPeugeot').value.trim();
+      const citRaw = document.getElementById('growCitroen').value.trim();
+      const peuRecords = parseBlockRecords(peuRaw, 'Peugeot');
+      const citRecords = parseBlockRecords(citRaw, 'Citroën');
+      const records = [...peuRecords, ...citRecords];
+      renderGrowTable(records);
+      calculateGrowSummary(records);
+    }
 
-	function parseBlockRecords(raw, marca){
-  	if (!raw) return [];
+    function parseBlockRecords(raw, marca){
+      if (!raw) return [];
 
-  	const ignored = new Set([
-    	'número do item','número do caso','classificado em ordem crescente','status',
-    	'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
-    	'chassi completo','conta nome','prioridade','responsável_nome','regional description',
-    	'caoss grow customer care peugeot','casos grow customer care peugeot',
-    	'casos grow customer care citroën','casos grow customer care citroen','sort','ação'
-  	]);
+      const ignored = new Set([
+        'número do item','número do caso','classificado em ordem crescente','status',
+        'data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2',
+        'chassi completo','conta nome','prioridade','responsável_nome','regional description',
+        'caoss grow customer care peugeot','casos grow customer care peugeot',
+        'casos grow customer care citroën','casos grow customer care citroen','sort','ação'
+      ]);
 
-  	const lines = raw.split(/\n/).map(x => x.trim()).filter(x => x && !ignored.has(x.toLowerCase()));
-  	const records = [];
-  	const isCaseNumber = v => /^\d{7,9}$/.test(String(v || '').trim());
-  	const isStatus = v => ['aberto','fechado','encerrado'].includes(String(v || '').trim().toLowerCase());
-  	const isDateTime = v => /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(v || '').trim());
+      const lines = raw.split(/\n/).map(x => x.trim()).filter(x => x && !ignored.has(x.toLowerCase()));
+      const records = [];
+      const isCaseNumber = v => /^\d{7,9}$/.test(String(v || '').trim());
+      const isStatus = v => ['aberto','fechado','encerrado'].includes(String(v || '').trim().toLowerCase());
+      const isDateTime = v => /^\d{2}\/\d{2}\/\d{4}( \d{2}:\d{2})?$/.test(String(v || '').trim());
 
-  	let i = 0;
-  	while (i < lines.length){
-    	if (!isCaseNumber(lines[i])) { i++; continue; }
+      let i = 0;
+      while (i < lines.length){
+        if (!isCaseNumber(lines[i])) { i++; continue; }
 
-    	const start = i;
-    	const caso = lines[i++] || '';
-    	const status = lines[i++] || '';
-    	const data = lines[i++] || '';
-    	const canal = lines[i++] || '';
-    	const motivo1 = lines[i++] || '';
-    	const motivo2 = lines[i++] || '';
-    	const chassi = lines[i++] || '';
-    	const cliente = lines[i++] || '';
-    	const prioridade = lines[i++] || '';
-    	const responsavel = lines[i++] || '';
-    	const regional = lines[i++] || '';
+        const start = i;
+        const caso = lines[i++] || '';
+        const status = lines[i++] || '';
+        const data = lines[i++] || '';
+        const canal = lines[i++] || '';
+        const motivo1 = lines[i++] || '';
+        const motivo2 = lines[i++] || '';
+        const chassi = lines[i++] || '';
+        const cliente = lines[i++] || '';
+        const prioridade = lines[i++] || '';
+        const responsavel = lines[i++] || '';
+        const regional = lines[i++] || '';
 
-    	if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
-      	i = start + 1;
-      	continue;
-    	}
+        if (!isCaseNumber(caso) || !isStatus(status) || !isDateTime(data)) {
+          i = start + 1;
+          continue;
+        }
 
-    	records.push({
-      	marca, caso, status, data, canal, motivo1, motivo2, chassi, cliente,
-      	prioridade, responsavel, regional, aging: calcAging(data)
-    	});
-  	}
-  	return records;
-	}
+        records.push({
+          marca, caso, status, data, canal, motivo1, motivo2, chassi, cliente,
+          prioridade, responsavel, regional, aging: calcAging(data)
+        });
+      }
+      return records;
+    }
 
-	function calcAging(dataStr){
-  	const match = String(dataStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
-  	if (!match) return 0;
-  	const [,dd,mm,yyyy] = match;
-  	const d = new Date(Number(yyyy), Number(mm)-1, Number(dd));
-  	const now = new Date();
-  	return Math.max(0, Math.floor((now - d)/(1000*60*60*24)));
-	}
+    function calcAging(dataStr){
+      const match = String(dataStr || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if (!match) return 0;
+      const [,dd,mm,yyyy] = match;
+      const d = new Date(Number(yyyy), Number(mm)-1, Number(dd));
+      const now = new Date();
+      return Math.max(0, Math.floor((now - d)/(1000*60*60*24)));
+    }
 
-	function renderGrowTable(records){
-  	const tbody = document.getElementById('growTableBody');
-  	if (!records.length){
-    	tbody.innerHTML = '<tr><td colspan="13" class="empty">Nenhum caso válido encontrado.</td></tr>';
-    	return;
-  	}
+    function renderGrowTable(records){
+      const tbody = document.getElementById('growTableBody');
+      if (!records.length){
+        tbody.innerHTML = '<tr><td colspan="14" class="empty">Nenhum caso válido encontrado.</td></tr>';
+        return;
+      }
 
-  	tbody.innerHTML = records.map(item => `
-    	<tr>
-      	<td>${brandChip(item.marca)}</td>
-      	<td>${escapeHtml(item.caso)}</td>
-      	<td>${statusChip(item.status)}</td>
-      	<td>${escapeHtml(item.data)}</td>
-      	<td>${escapeHtml(item.canal)}</td>
-      	<td>${escapeHtml(item.motivo1)}</td>
-      	<td>${escapeHtml(item.motivo2)}</td>
-      	<td>${escapeHtml(item.chassi)}</td>
-      	<td>${escapeHtml(item.cliente)}</td>
-      	<td>${priorityChip(item.prioridade)}</td>
-      	<td>${escapeHtml(item.responsavel)}</td>
-      	<td>${escapeHtml(item.regional)}</td>
-      	<td>${agingChip(item.aging)}</td>
-    </tr>
+      tbody.innerHTML = records.map(item => `
+        <tr>
+          <td>${brandChip(item.marca)}</td>
+          <td>${escapeHtml(item.caso)}</td>
+          <td>${statusChip(item.status)}</td>
+          <td>${escapeHtml(item.data)}</td>
+          <td>${escapeHtml(item.canal)}</td>
+          <td>${escapeHtml(item.motivo1)}</td>
+          <td>${escapeHtml(item.motivo2)}</td>
+          <td>${escapeHtml(item.chassi)}</td>
+          <td>${escapeHtml(item.cliente)}</td>
+          <td>${priorityChip(item.prioridade)}</td>
+          <td>${escapeHtml(item.responsavel)}</td>
+          <td>${escapeHtml(item.regional)}</td>
+          <td>${agingChip(item.aging)}</td>
+        </tr>
       `).join('');
     }
 
@@ -2313,17 +2920,36 @@ NNE - NORDESTE`;
         .replace(/>/g, '&gt;');
     }
 
-    async function fetchChatMessages(){
-      try{
-        const response = await fetch(`${CHAT_API_URL}?action=list`);
-        const data = await response.json();
-        if (!data.ok) return [];
-        return Array.isArray(data.messages) ? data.messages : [];
-      }catch(err){
-        console.error('Erro ao buscar mensagens:', err);
-        return [];
-      }
+  async function sendChatMessage(){
+  if (!currentUser) return;
+
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  try{
+    const response = await fetch(API_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action:'sendChat', usuario: currentUser.name, mensagem: text })
+    });
+
+    const data = await response.json();
+
+    if (!data.ok){
+      alert('Não foi possível enviar a mensagem.');
+      return;
     }
+
+    input.value = '';
+    await renderChat();
+  }catch(err){
+    console.error('Erro ao enviar mensagem:', err);
+    alert('Erro ao enviar mensagem.');
+  }
+}
+
+
 
     function highlightMentions(text){
       return escapeHtml(text)
@@ -2364,13 +2990,10 @@ NNE - NORDESTE`;
       if (!text) return;
 
       try{
-        const response = await fetch(CHAT_API_URL, {
+        const response = await fetch(API_URL, {
           method:'POST',
           headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-          body: JSON.stringify({
-            usuario: currentUser.name,
-            mensagem: text
-          })
+          body: JSON.stringify({ action:'sendChat', usuario: currentUser.name, mensagem: text })
         });
 
         const data = await response.json();
@@ -2791,38 +3414,786 @@ Tente algo como:
       });
     }
 
-    function boot(){
-      loadTheme();
-      initLoginMascot();
+function handleLoginEnter(event){
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    handleLogin();
+  }
+}
 
-      const storedUser = localStorage.getItem('qualis-current-user');
-      if (storedUser) {
-        try{
-          currentUser = JSON.parse(storedUser);
-          const fresh = getUserByEmail(currentUser.email);
-          if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
-            currentUser = fresh;
-            startPortal();
-          } else {
-            localStorage.removeItem('qualis-current-user');
-            currentUser = null;
-          }
-        }catch{
-          localStorage.removeItem('qualis-current-user');
-          currentUser = null;
-        }
+function togglePasswordVisibility(){
+  const input = document.getElementById('loginPassword');
+  const screen = document.getElementById('loginScreen');
+  const btn = document.querySelector('.password-toggle');
+  if(!input) return;
+
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+
+  if(btn) btn.textContent = showing ? 'Ver senha' : 'Ocultar';
+  if(screen){
+    screen.classList.toggle('show-password', !showing);
+    screen.classList.add('password-focus');
+    setTimeout(() => screen.classList.remove('show-password'), 1200);
+  }
+}
+
+function setLoginMascotMood(mood){
+  const screen = document.getElementById('loginScreen');
+  if(!screen) return;
+  screen.classList.remove('mood-error','mood-success');
+
+  if(mood === 'error'){
+    screen.classList.add('mood-error');
+  }else if(mood === 'success'){
+    screen.classList.add('mood-success');
+    setTimeout(() => {
+      screen.classList.remove('mood-success');
+    }, 1500);
+  }
+}
+
+function initLoginInteractions(){
+  const screen = document.getElementById('loginScreen');
+  const email = document.getElementById('loginEmail');
+  const password = document.getElementById('loginPassword');
+  const eyes = Array.from(document.querySelectorAll('.buddy-eye .pupil'));
+
+  if(!screen || !email || !password) return;
+
+  function moveEyes(clientX, clientY){
+    eyes.forEach(pupil => {
+      const eye = pupil.parentElement.getBoundingClientRect();
+      const cx = eye.left + eye.width / 2;
+      const cy = eye.top + eye.height / 2;
+      const dx = Math.max(-10, Math.min(10, (clientX - cx) / 4));
+      const dy = Math.max(-10, Math.min(10, (clientY - cy) / 4));
+      pupil.style.transform = `translate(${dx}px, ${dy}px)`;
+    });
+  }
+
+  window.addEventListener('mousemove', (e) => {
+    moveEyes(e.clientX, e.clientY);
+  });
+
+  email.addEventListener('focus', () => {
+    screen.classList.add('email-focus');
+    screen.classList.remove('password-focus','mood-error');
+  });
+
+  password.addEventListener('focus', () => {
+    screen.classList.add('password-focus');
+    screen.classList.remove('email-focus','mood-error');
+  });
+
+  email.addEventListener('blur', () => {
+    setTimeout(() => {
+      if(document.activeElement !== password){
+        screen.classList.remove('email-focus');
       }
+    }, 50);
+  });
 
-      setInterval(rotateBanners, 5000);
+  password.addEventListener('blur', () => {
+    setTimeout(() => {
+      if(document.activeElement !== email){
+        screen.classList.remove('password-focus');
+      }
+    }, 50);
+  });
+}
 
-      setInterval(() => {
-        if (document.getElementById('portalApp').style.display === 'block') {
-          renderChat();
-        }
-      }, 3000);
+function boot(){
+  loadTheme();
+  initLoginCanvas();
+  initLoginInteractions();
+
+  const storedUser = localStorage.getItem('qualis-current-user');
+  if (storedUser) {
+    try{
+      currentUser = JSON.parse(storedUser);
+      const fresh = getUserByEmail(currentUser.email);
+      if (fresh && daysSince(fresh.passwordChangedAt) < 15) {
+        currentUser = fresh;
+        startPortal();
+      } else {
+        localStorage.removeItem('qualis-current-user');
+        currentUser = null;
+      }
+    }catch{
+      localStorage.removeItem('qualis-current-user');
+      currentUser = null;
+    }
+  }
+
+  setInterval(rotateBanners, 5000);
+
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      renderChat();
+    }
+  }, 3000);
+
+  setInterval(() => {
+    if (document.getElementById('portalApp').style.display === 'block') {
+      syncDatabaseSilently();
+    }
+  }, 5000);
+}
+
+function initLoginCanvas(){
+  const canvas = document.getElementById("loginCanvas");
+  if(!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let bars = [];
+  let points = [];
+  let percents = [];
+  let mouseX = 0;
+  let mouseY = 0;
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    bars = Array.from({length: 40}, (_, i) => ({
+      x:(canvas.width / 40) * i + 10,
+      w:12,
+      h:80 + Math.random() * 200,
+      offset:Math.random() * 1000
+    }));
+
+    points = Array.from({length: 20}, (_, i) => ({
+      x:(canvas.width / 20) * i,
+      y:canvas.height * 0.45,
+      offset:Math.random() * 1000
+    }));
+
+    percents = Array.from({length: 22}, (_, i) => ({
+      x:Math.random() * canvas.width,
+      y:40 + Math.random() * (canvas.height - 120),
+      value:(82 + Math.random() * 17).toFixed(0) + '%',
+      size:14 + Math.random() * 18,
+      speed:0.18 + Math.random() * 0.34,
+      alpha:0.06 + Math.random() * 0.08
+    }));
+  }
+
+  function drawGrid(){
+    ctx.strokeStyle = document.body.classList.contains('dark') ? "rgba(255,255,255,0.05)" : "rgba(31,79,163,0.05)";
+    ctx.lineWidth = 1;
+
+    for(let x = 0; x < canvas.width; x += 80){
+      ctx.beginPath();
+      ctx.moveTo(x,0);
+      ctx.lineTo(x,canvas.height);
+      ctx.stroke();
     }
 
-    window.onload = boot;
+    for(let y = 0; y < canvas.height; y += 80){
+      ctx.beginPath();
+      ctx.moveTo(0,y);
+      ctx.lineTo(canvas.width,y);
+      ctx.stroke();
+    }
+  }
+
+  function drawBars(t){
+    bars.forEach(bar => {
+      const dynamic = bar.h + Math.sin(t * 0.001 + bar.offset) * 40 + (mouseX / Math.max(canvas.width, 1)) * 60;
+      const y = canvas.height - dynamic - 40;
+      const grad = ctx.createLinearGradient(0, y, 0, y + dynamic);
+
+      if(document.body.classList.contains('dark')){
+        grad.addColorStop(0, "rgba(90,147,255,0.88)");
+        grad.addColorStop(1, "rgba(90,147,255,0.18)");
+      }else{
+        grad.addColorStop(0, "rgba(90,147,255,0.30)");
+        grad.addColorStop(1, "rgba(90,147,255,0.05)");
+      }
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(bar.x, y, bar.w, dynamic);
+    });
+  }
+
+  function drawLine(t){
+    ctx.beginPath();
+    points.forEach((p, i) => {
+      const x = p.x;
+      const y = p.y + Math.sin(t * 0.002 + p.offset) * 50 + (mouseY / Math.max(canvas.height,1)) * 10;
+      if(i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+
+    ctx.strokeStyle = document.body.classList.contains('dark') ? "rgba(124,58,237,0.55)" : "rgba(124,58,237,0.25)";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
+  function drawPercents(t){
+    percents.forEach((item, i) => {
+      const x = (item.x + (t * item.speed * 0.02)) % (canvas.width + 180);
+      const y = item.y + Math.sin((t * 0.0011) + i) * 10;
+      ctx.save();
+      ctx.globalAlpha = item.alpha;
+      ctx.filter = "blur(2px)";
+      ctx.fillStyle = document.body.classList.contains('dark') ? "rgba(255,255,255,0.92)" : "rgba(31,79,163,0.85)";
+      ctx.font = `700 ${item.size}px Inter, sans-serif`;
+      ctx.fillText(item.value, x - 140, y);
+      ctx.restore();
+    });
+  }
+
+  function animate(t){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    drawGrid();
+    drawPercents(t);
+    drawLine(t);
+    drawBars(t);
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("mousemove", e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  resize();
+  window.addEventListener("resize", resize);
+  requestAnimationFrame(animate);
+}
+
+
+/* ====== QUALIS V2 FUNCTIONS ====== */
+const SHEET_ACTIONS = {
+  BASE_VENDAS_PEUGEOT: { list:'listBaseVendasPeugeot', save:'saveBaseVendasPeugeot', roleField:'VENDEDOR', convert:false },
+  BASE_VENDAS_CITROEN: { list:'listBaseVendasCitroen', save:'saveBaseVendasCitroen', roleField:'VENDEDOR', convert:false },
+  BASE_POS_PEUGEOT: { list:'listBasePosPeugeot', save:'saveBasePosPeugeot', roleField:'CONSULTOR', convert:true },
+  BASE_POS_CITROEN: { list:'listBasePosCitroen', save:'saveBasePosCitroen', roleField:'CONSULTOR', convert:true },
+  GROW_PEUGEOT: { list:'listGrowPeugeot', save:'saveGrowPeugeot' },
+  GROW_CITROEN: { list:'listGrowCitroen', save:'saveGrowCitroen' }
+};
+const cacheStore = { rows:{}, vendedores:[], consultores:[], gestores:[], npsVendas:[], npsPos:[] };
+
+async function apiGet(action){
+  const res = await fetch(`${API_URL}?action=${encodeURIComponent(action)}&_ts=${Date.now()}`, { cache:'no-store' });
+  return await res.json();
+}
+async function apiPost(payload){
+  const res = await fetch(API_URL, {
+    method:'POST',
+    headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload),
+    cache:'no-store'
+  });
+  return await res.json();
+}
+
+function rowsOf(data){
+  if(Array.isArray(data)) return data;
+  if(data && Array.isArray(data.rows)) return data.rows;
+  if(data && Array.isArray(data.data)) return data.data;
+  return [];
+}
+
+
+async function fetchChatMessages(){
+  const data = await apiGet('listChat');
+  return data.rows || [];
+}
+
+async function sendChatMessage(){
+  if (!currentUser) return;
+  const input = document.getElementById('chatInput');
+  const text = (input.value || '').trim();
+  if (!text) return;
+  const data = await apiPost({ action:'sendChat', usuario: currentUser.name, mensagem: text });
+  if(!data.ok){ alert('Não foi possível enviar a mensagem.'); return; }
+  input.value = '';
+  await renderChat();
+}
+function initChatEnter(){
+  const input = document.getElementById('chatInput');
+  if(!input || input.dataset.bound === '1') return;
+  input.dataset.bound = '1';
+  input.addEventListener('keydown', e=>{
+    if(e.key === 'Enter' && !e.shiftKey){
+      e.preventDefault();
+      sendChatMessage();
+    }
+  });
+}
+async function syncDatabaseSilently(){
+  try{
+    await Promise.all([renderChat(), renderNpsHistoricoVendas(), renderNpsHistoricoPos()]);
+    const activeBase = document.querySelector('#vendas-base-peugeot.active, #vendas-base-citroen.active, #pos-base-peugeot.active, #pos-base-citroen.active');
+    if(activeBase){
+      const map = {
+        'vendas-base-peugeot':'BASE_VENDAS_PEUGEOT',
+        'vendas-base-citroen':'BASE_VENDAS_CITROEN',
+        'pos-base-peugeot':'BASE_POS_PEUGEOT',
+        'pos-base-citroen':'BASE_POS_CITROEN'
+      };
+      await loadBasePage(map[activeBase.id]);
+    }
+    if(document.getElementById('config-equipe')?.classList.contains('active')) await loadEquipeConfig();
+  }catch(err){ console.error('sync error', err); }
+}
+async function loadDatabase(){
+  const data = await apiGet('getConfig');
+  return data.config || { ...DEFAULT_DB };
+}
+async function saveDatabase(){
+  const db = {};
+  Object.keys(DEFAULT_DB).forEach(key => {
+    const input = document.getElementById('cfg_' + key);
+    db[key] = input ? input.value : DEFAULT_DB[key];
+  });
+
+  try{
+    const result = await apiPost({ action:'saveConfig', items: db });
+    if (!result.ok){
+      alert('Não foi possível salvar os dados.');
+      return;
+    }
+    localStorage.setItem('qualis-db', JSON.stringify(db));
+    applyDatabaseToUI(db);
+    alert('Números salvos com sucesso.');
+  }catch(err){
+    console.error('Erro ao salvar CONFIG:', err);
+    alert('Erro ao salvar os dados.');
+  }
+}
+function normalizeMonth(value){
+  const v = String(value || '').normalize('NFD').replace(/[^\w\s]/g,'').toUpperCase().trim();
+  const map = { 'MARÇO':'MARCO', 'MARCO':'MARCO' };
+  return map[v] || v;
+}
+async function loadNpsStores(){
+  const [v,p] = await Promise.all([apiGet('listNpsVendas'), apiGet('listNpsPosVendas')]);
+  cacheStore.npsVendas = rowsOf(v);
+  cacheStore.npsPos = rowsOf(p);
+}
+function calcNps(prom, neut, det){
+  prom = Number(prom)||0; neut = Number(neut)||0; det = Number(det)||0;
+  const total = prom+neut+det;
+  return total ? (((prom-det)/total)*100) : 0;
+}
+async function renderNpsHistoricoVendas(){
+  if(!cacheStore.npsVendas.length) await loadNpsStores();
+  const marca = (document.getElementById('filtroNpsVendasMarca')?.value || 'PEUGEOT').toUpperCase();
+  const ano = String(document.getElementById('filtroNpsVendasAno')?.value || '2026');
+  const periodo = normalizeMonth(document.getElementById('filtroNpsVendasPeriodo')?.value || 'TODOS');
+  const rows = cacheStore.npsVendas.filter(r => String(r.ANO||'')===ano && String(r.MARCA||'').toUpperCase()===marca && (periodo === 'TODOS' || normalizeMonth(r.MES)===periodo));
+  const prom = rows.reduce((s,r)=>s+Number(r.PROMOTORAS||0),0);
+  const neut = rows.reduce((s,r)=>s+Number(r.NEUTRAS||0),0);
+  const det = rows.reduce((s,r)=>s+Number(r.DETRATORAS||0),0);
+  setText('histVendPromotoras', String(prom));
+  setText('histVendNeutras', String(neut));
+  setText('histVendDetratoras', String(det));
+  setText('histVendNps', formatPercent(calcNps(prom,neut,det)));
+}
+async function renderNpsHistoricoPos(){
+  if(!cacheStore.npsPos.length) await loadNpsStores();
+  const marca = (document.getElementById('filtroNpsPosMarca')?.value || 'PEUGEOT').toUpperCase();
+  const ano = String(document.getElementById('filtroNpsPosAno')?.value || '2026');
+  const periodo = normalizeMonth(document.getElementById('filtroNpsPosPeriodo')?.value || 'TODOS');
+  const rows = cacheStore.npsPos.filter(r => String(r.ANO||'')===ano && String(r.MARCA||'').toUpperCase()===marca && (periodo === 'TODOS' || normalizeMonth(r.MES)===periodo));
+  const prom = rows.reduce((s,r)=>s+Number(r.PROMOTORAS||0),0);
+  const neut = rows.reduce((s,r)=>s+Number(r.NEUTRAS||0),0);
+  const det = rows.reduce((s,r)=>s+Number(r.DETRATORAS||0),0);
+  setText('histPosPromotoras', String(prom));
+  setText('histPosNeutras', String(neut));
+  setText('histPosDetratoras', String(det));
+  setText('histPosNps', formatPercent(calcNps(prom,neut,det)));
+}
+function parsePasteRows(text){
+  const lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  return lines.map(line => line.split(/	|;/).map(v=>String(v||'').trim())).filter(cols => cols.length >= 6 && cols[0]);
+}
+function makeBaseRow(sheetKey, cols){
+  const isPos = SHEET_ACTIONS[sheetKey].convert;
+  const roleField = isPos ? 'CONSULTOR' : 'VENDEDOR';
+  return {
+    ID:'',
+    VIN: cols[0] || '',
+    CLIENTE: cols[1] || '',
+    EMAIL: cols[2] || '',
+    TELEFONE: cols[3] || '',
+    [roleField]: cols[4] || '',
+    DATA_CONVITE: cols[5] || '',
+    NOTA_NPS: '',
+    STATUS: '',
+    SYONET: '',
+    TRATATIVA: '',
+    CONVERTIDA_POR: isPos ? '' : undefined,
+    DATA_RESPOSTA: '',
+    CLASSIFICACAO: '',
+    CRIADO_EM: '',
+    ATUALIZADO_EM: ''
+  };
+}
+async function importBaseFromPaste(sheetKey, textareaId){
+  const text = document.getElementById(textareaId)?.value || '';
+  const lines = parsePasteRows(text);
+  if(!lines.length){ alert('Cole os dados antes de importar.'); return; }
+
+  const invalid = lines.find(cols => cols.length < 6);
+  if(invalid){
+    alert('Formato inválido. Use: VIN;CLIENTE;EMAIL;TELEFONE;VENDEDOR/CONSULTOR;DATA_CONVITE');
+    return;
+  }
+
+  const rows = lines.map(cols => makeBaseRow(sheetKey, cols));
+  const saveAction = SHEET_ACTIONS[sheetKey].save;
+  const result = await apiPost({ action: saveAction, rows });
+  if(!result.ok){ alert('Erro ao importar base.'); return; }
+  document.getElementById(textareaId).value = '';
+  await loadBasePage(sheetKey);
+  if(sheetKey.includes('VENDAS')) await renderRankingVendas();
+  if(sheetKey.includes('POS')) { await renderConversoes(); await renderIscConsultor(); }
+  alert('Base importada com sucesso.');
+}
+function baseStatusClass(status){
+  const map = {
+    'VAI RECEBER':'base-status-vai-receber',
+    'PESQUISAVEL':'base-status-pesquisavel',
+    'EXPIRADO':'base-status-expirado',
+    'PROMOTOR':'base-status-promotor',
+    'NEUTRO':'base-status-neutro',
+    'DETRATOR':'base-status-detrator'
+  };
+  return map[String(status||'').toUpperCase()] || '';
+}
+async function loadEquipeLists(){
+  const [vend, cons, gest] = await Promise.all([apiGet('listVendedores'), apiGet('listConsultores'), apiGet('listGestores')]);
+  cacheStore.vendedores = vend.rows || vend || [];
+  cacheStore.consultores = cons.rows || cons || [];
+  cacheStore.gestores = gest.rows || gest || [];
+}
+
+async function addEquipeItem(tipo){
+  const lower = tipo.toLowerCase();
+  const nome = (document.getElementById(`novo${tipo}Nome`)?.value || '').trim();
+  const email = (document.getElementById(`novo${tipo}Email`)?.value || '').trim();
+  const cargo = (document.getElementById(`novo${tipo}Cargo`)?.value || '').trim();
+  const area = (document.getElementById(`novo${tipo}Area`)?.value || '').trim();
+
+  if(!nome){ alert('Informe o nome.'); return; }
+
+  let payload;
+  if(tipo === 'Vendedor'){
+    payload = { action:'saveVendedores', rows:[{ ID:'', NOME:nome, EMAIL:email, CARGO:cargo || 'Vendedor', ATIVO:'sim' }] };
+  }else if(tipo === 'Consultor'){
+    payload = { action:'saveConsultores', rows:[{ ID:'', NOME:nome, EMAIL:email, CARGO:cargo || 'Consultor', ATIVO:'sim' }] };
+  }else{
+    payload = { action:'saveGestores', rows:[{ ID:'', NOME:nome, EMAIL:email, CARGO:cargo || 'Gestor', AREA: area || 'geral', ATIVO:'sim' }] };
+  }
+
+  const result = await apiPost(payload);
+  if(!result.ok){ alert('Não foi possível salvar.'); return; }
+
+  ['Nome','Email','Cargo','Area'].forEach(s => {
+    const el = document.getElementById(`novo${tipo}${s}`);
+    if(el) el.value = '';
+  });
+
+  await loadEquipeLists();
+  await loadEquipeConfig();
+}
+
+async function toggleEquipeStatus(sheetLabel, id, novoStatus){
+  let list = [];
+  let action = '';
+  if(sheetLabel === 'VENDEDORES'){
+    list = cacheStore.vendedores;
+    action = 'saveVendedores';
+  }else if(sheetLabel === 'CONSULTORES'){
+    list = cacheStore.consultores;
+    action = 'saveConsultores';
+  }else{
+    return;
+  }
+  const row = list.find(r => String(r.ID) === String(id));
+  if(!row) return;
+  row.ATIVO = novoStatus;
+  const result = await apiPost({ action, rows:[row] });
+  if(!result.ok){ alert('Não foi possível atualizar o status.'); return; }
+  await loadEquipeLists();
+  await loadEquipeLists();
+  await loadEquipeConfig();
+}
+
+async function loadBasePage(sheetKey){
+  if(!cacheStore.vendedores.length || !cacheStore.consultores.length) await loadEquipeLists();
+  const data = await apiGet(SHEET_ACTIONS[sheetKey].list);
+  cacheStore.rows[sheetKey] = rowsOf(data);
+  renderBaseTable(sheetKey);
+}
+function getConvertOptions(row){
+  const consultant = row.CONSULTOR || '';
+  return ['','Laís', consultant].filter((v, i, arr) => v && arr.indexOf(v)===i);
+}
+function renderBaseTable(sheetKey){
+  const body = document.getElementById('tbody_' + sheetKey);
+  if(!body) return;
+  const cfg = SHEET_ACTIONS[sheetKey];
+  let rows = (cacheStore.rows[sheetKey] || []).slice();
+  const filterStatus = document.getElementById('filterStatus_' + sheetKey)?.value || '';
+  const search = (document.getElementById('filterSearch_' + sheetKey)?.value || '').toLowerCase();
+  if(filterStatus) rows = rows.filter(r => String(r.STATUS||'').toUpperCase() === filterStatus.toUpperCase());
+  if(search) rows = rows.filter(r => [r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(search));
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="${cfg.convert?11:10}" class="empty">Nenhum cliente encontrado.</td></tr>`;
+    return;
+  }
+  body.innerHTML = rows.map(row => {
+    const statusClass = baseStatusClass(row.STATUS);
+    const role = row[cfg.roleField] || '';
+    const convertCell = cfg.convert ? `<td class="editable-cell"><select onchange="updateBaseField('${sheetKey}','${row.ID}','CONVERTIDA_POR', this.value)">${getConvertOptions(row).map(opt => `<option value="${escapeHtml(opt)}" ${String(row.CONVERTIDA_POR||'')===opt?'selected':''}>${escapeHtml(opt || 'Selecionar')}</option>`).join('')}</select></td>` : '';
+    return `<tr class="${statusClass}">
+      <td>${escapeHtml(row.VIN || '')}</td>
+      <td>${escapeHtml(row.CLIENTE || '')}</td>
+      <td>${escapeHtml(row.EMAIL || '')}</td>
+      <td>${escapeHtml(row.TELEFONE || '')}</td>
+      <td>${escapeHtml(role)}</td>
+      <td>${escapeHtml(row.DATA_CONVITE || '')}</td>
+      <td class="editable-cell"><input value="${escapeHtml(row.NOTA_NPS || '')}" onchange="updateBaseField('${sheetKey}','${row.ID}','NOTA_NPS', this.value)"></td>
+      <td>${escapeHtml(row.STATUS || '')}</td>
+      <td class="editable-cell"><textarea onchange="updateBaseField('${sheetKey}','${row.ID}','SYONET', this.value)">${escapeHtml(row.SYONET || '')}</textarea></td>
+      <td class="editable-cell"><textarea onchange="updateBaseField('${sheetKey}','${row.ID}','TRATATIVA', this.value)">${escapeHtml(row.TRATATIVA || '')}</textarea></td>
+      ${convertCell}
+    </tr>`;
+  }).join('');
+}
+async function updateBaseField(sheetKey, id, field, value){
+  const rows = cacheStore.rows[sheetKey] || [];
+  const idx = rows.findIndex(r => String(r.ID) === String(id));
+  if(idx === -1) return;
+  rows[idx][field] = value;
+  const result = await apiPost({ action: SHEET_ACTIONS[sheetKey].save, rows:[rows[idx]] });
+  if(result.ok){
+    await loadBasePage(sheetKey);
+    if(sheetKey.includes('VENDAS')) renderRankingVendas();
+    if(sheetKey.includes('POS')) { renderConversoes(); renderIscConsultor(); }
+  }
+}
+async function renderHotAlertsVendas(){
+  await Promise.all([loadBasePage('BASE_VENDAS_PEUGEOT'), loadBasePage('BASE_VENDAS_CITROEN')]);
+  const body = document.getElementById('tbodyHotAlertsVendas');
+  const rows = [...(cacheStore.rows.BASE_VENDAS_PEUGEOT||[]).map(r=>({...r,MARCA:'Peugeot'})), ...(cacheStore.rows.BASE_VENDAS_CITROEN||[]).map(r=>({...r,MARCA:'Citroën'}))]
+    .filter(r => ['DETRATOR','NEUTRO'].includes(String(r.STATUS||'').toUpperCase()));
+  body.innerHTML = rows.length ? rows.map(r => `<tr><td>${r.MARCA}</td><td>${escapeHtml(r.CLIENTE||'')}</td><td>${escapeHtml(r.VENDEDOR||'')}</td><td>${escapeHtml(r.NOTA_NPS||'')}</td><td>${escapeHtml(r.STATUS||'')}</td><td>${escapeHtml(r.TRATATIVA||'')}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhum hot alert encontrado.</td></tr>';
+}
+async function renderHotAlertsPos(){
+  await Promise.all([loadBasePage('BASE_POS_PEUGEOT'), loadBasePage('BASE_POS_CITROEN')]);
+  const body = document.getElementById('tbodyHotAlertsPos');
+  const rows = [...(cacheStore.rows.BASE_POS_PEUGEOT||[]).map(r=>({...r,MARCA:'Peugeot'})), ...(cacheStore.rows.BASE_POS_CITROEN||[]).map(r=>({...r,MARCA:'Citroën'}))]
+    .filter(r => ['DETRATOR','NEUTRO'].includes(String(r.STATUS||'').toUpperCase()));
+  body.innerHTML = rows.length ? rows.map(r => `<tr><td>${r.MARCA}</td><td>${escapeHtml(r.CLIENTE||'')}</td><td>${escapeHtml(r.CONSULTOR||'')}</td><td>${escapeHtml(r.NOTA_NPS||'')}</td><td>${escapeHtml(r.STATUS||'')}</td><td>${escapeHtml(r.TRATATIVA||'')}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhum hot alert encontrado.</td></tr>';
+}
+async function renderRankingVendas(){
+  await Promise.all([loadBasePage('BASE_VENDAS_PEUGEOT'), loadBasePage('BASE_VENDAS_CITROEN'), loadEquipeLists()]);
+  const sellers = cacheStore.vendedores.map(v => v.NOME).filter(Boolean);
+  const body = document.getElementById('tbodyRankingVendas');
+  const p = cacheStore.rows.BASE_VENDAS_PEUGEOT || [];
+  const c = cacheStore.rows.BASE_VENDAS_CITROEN || [];
+  const rows = sellers.map(name => {
+    const promP = p.filter(r => String(r.VENDEDOR||'').toUpperCase()===String(name).toUpperCase() && String(r.STATUS)==='PROMOTOR').length;
+    const hotP = p.filter(r => String(r.VENDEDOR||'').toUpperCase()===String(name).toUpperCase() && ['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;
+    const promC = c.filter(r => String(r.VENDEDOR||'').toUpperCase()===String(name).toUpperCase() && String(r.STATUS)==='PROMOTOR').length;
+    const hotC = c.filter(r => String(r.VENDEDOR||'').toUpperCase()===String(name).toUpperCase() && ['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;
+    const total = promP+hotP+promC+hotC;
+    return { name, promP, hotP, promC, hotC, total };
+  }).sort((a,b)=>b.total-a.total);
+  body.innerHTML = rows.length ? rows.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td>${r.promP}</td><td>${r.hotP}</td><td>${r.promC}</td><td>${r.hotC}</td><td>${r.total}</td></tr>`).join('') : '<tr><td colspan="6" class="empty">Nenhum dado carregado.</td></tr>';
+}
+async function renderConversoes(){
+  await Promise.all([loadBasePage('BASE_POS_PEUGEOT'), loadBasePage('BASE_POS_CITROEN')]);
+  const rows = [...(cacheStore.rows.BASE_POS_PEUGEOT||[]), ...(cacheStore.rows.BASE_POS_CITROEN||[])].filter(r => String(r.CONVERTIDA_POR||'').trim());
+  const grouped = {};
+  rows.forEach(r => {
+    const key = String(r.CONVERTIDA_POR||'').trim();
+    grouped[key] = (grouped[key] || 0) + 1;
+  });
+  const body = document.getElementById('tbodyConversoes');
+  const entries = Object.entries(grouped).sort((a,b)=>b[1]-a[1]);
+  body.innerHTML = entries.length ? entries.map(([k,v])=>`<tr><td>${escapeHtml(k)}</td><td>${v}</td></tr>`).join('') : '<tr><td colspan="2" class="empty">Nenhuma conversão carregada.</td></tr>';
+}
+async function renderIscConsultor(){
+  await Promise.all([loadBasePage('BASE_POS_PEUGEOT'), loadBasePage('BASE_POS_CITROEN'), loadEquipeLists()]);
+  const consultants = cacheStore.consultores.map(c => c.NOME).filter(Boolean);
+  const rows = [...(cacheStore.rows.BASE_POS_PEUGEOT||[]), ...(cacheStore.rows.BASE_POS_CITROEN||[])];
+  const body = document.getElementById('tbodyIsc');
+  const out = consultants.map(name => {
+    const my = rows.filter(r => String(r.CONSULTOR||'').toUpperCase()===String(name).toUpperCase());
+    return {
+      name,
+      prom: my.filter(r => String(r.STATUS)==='PROMOTOR').length,
+      neu: my.filter(r => String(r.STATUS)==='NEUTRO').length,
+      det: my.filter(r => String(r.STATUS)==='DETRATOR').length,
+      total: my.filter(r => ['PROMOTOR','NEUTRO','DETRATOR'].includes(String(r.STATUS||''))).length
+    };
+  }).sort((a,b)=>b.total-a.total);
+  body.innerHTML = out.length ? out.map(r=>`<tr><td>${escapeHtml(r.name)}</td><td>${r.prom}</td><td>${r.neu}</td><td>${r.det}</td><td>${r.total}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Nenhum indicador carregado.</td></tr>';
+}
+async function processGrowData(){
+  const peuRecords = parseBlockRecords(document.getElementById('growPeugeot').value.trim(), 'Peugeot');
+  const citRecords = parseBlockRecords(document.getElementById('growCitroen').value.trim(), 'Citroën');
+  const enrich = [...peuRecords.map(r=>({...r,CONSULTOR_RESPONSAVEL:r.CONSULTOR_RESPONSAVEL||''})), ...citRecords.map(r=>({...r,CONSULTOR_RESPONSAVEL:r.CONSULTOR_RESPONSAVEL||''}))];
+  renderGrowTable(enrich);
+  calculateGrowSummary(enrich);
+  const peuSave = enrich.filter(r=>r.marca==='Peugeot').map(growRecordToSheetRow_);
+  const citSave = enrich.filter(r=>r.marca==='Citroën').map(growRecordToSheetRow_);
+  if(peuSave.length) await apiPost({ action:'saveGrowPeugeot', rows:peuSave });
+  if(citSave.length) await apiPost({ action:'saveGrowCitroen', rows:citSave });
+}
+function growRecordToSheetRow_(r){
+  return { ID:r.ID||'', CASO:r.caso, DATA_ABERTURA:r.data, CLIENTE:r.cliente, CHASSI:r.chassi, MOTIVO:r.motivo1 || r.motivo2 || '', STATUS:r.status, AGING:r.aging, RESPONSAVEL:r.responsavel, CONSULTOR:r.CONSULTOR_RESPONSAVEL || '', OBS:r.motivo2 || '', CRIADO_EM:'', ATUALIZADO_EM:'' };
+}
+function renderGrowTable(records){
+  const tbody = document.getElementById('growTableBody');
+  if (!records.length){
+    tbody.innerHTML = '<tr><td colspan="14" class="empty">Nenhum caso válido encontrado.</td></tr>';
+    return;
+  }
+  const consultorOptions = cacheStore.consultores.map(c=>String(c.NOME||'').trim()).filter(Boolean);
+  tbody.innerHTML = records.map(item => `
+    <tr>
+      <td>${brandChip(item.marca)}</td>
+      <td>${escapeHtml(item.caso)}</td>
+      <td>${statusChip(item.status)}</td>
+      <td>${escapeHtml(item.data)}</td>
+      <td>${escapeHtml(item.canal)}</td>
+      <td>${escapeHtml(item.motivo1)}</td>
+      <td>${escapeHtml(item.motivo2)}</td>
+      <td>${escapeHtml(item.chassi)}</td>
+      <td>${escapeHtml(item.cliente)}</td>
+      <td>${priorityChip(item.prioridade)}</td>
+      <td>${escapeHtml(item.responsavel)}</td>
+      <td>${escapeHtml(item.regional)}</td>
+      <td>${agingChip(item.aging)}</td>
+      <td><select onchange="updateGrowConsultor('${item.marca}','${item.caso}', this.value)"><option value="">Selecionar</option>${consultorOptions.map(opt=>`<option value="${escapeHtml(opt)}" ${item.CONSULTOR_RESPONSAVEL===opt?'selected':''}>${escapeHtml(opt)}</option>`).join('')}</select></td>
+    </tr>
+  `).join('');
+}
+async function updateGrowConsultor(marca, caso, value){
+  const action = marca === 'Peugeot' ? 'listGrowPeugeot' : 'listGrowCitroen';
+  const saveAction = marca === 'Peugeot' ? 'saveGrowPeugeot' : 'saveGrowCitroen';
+  const data = await apiGet(action);
+  const rows = rowsOf(data);
+  const row = rows.find(r => String(r.CASO||'') === String(caso));
+  if(!row) return;
+  row.CONSULTOR = value;
+  await apiPost({ action: saveAction, rows:[row] });
+  renderInteligenciaCx();
+}
+async function loadEquipeConfig(){
+  await loadEquipeLists();
+  const vendBody = document.getElementById('tbodyVendedoresCfg');
+  const consBody = document.getElementById('tbodyConsultoresCfg');
+  const gestBody = document.getElementById('tbodyGestoresCfg');
+  if(!vendBody || !consBody || !gestBody) return;
+
+  vendBody.innerHTML = (cacheStore.vendedores||[]).map(r=>`<tr>
+    <td>${escapeHtml(r.NOME||'')}</td>
+    <td>${escapeHtml(r.EMAIL||'')}</td>
+    <td>${escapeHtml(r.ATIVO||'')}</td>
+    <td><button class="btn secondary" onclick="toggleEquipeStatus('VENDEDORES','${escapeHtml(r.ID||'')}','${String(r.ATIVO||'').toLowerCase()==='sim'?'nao':'sim'}')">${String(r.ATIVO||'').toLowerCase()==='sim'?'Inativar':'Ativar'}</button></td>
+  </tr>`).join('') || '<tr><td colspan="4" class="empty">Nenhum vendedor cadastrado.</td></tr>';
+
+  consBody.innerHTML = (cacheStore.consultores||[]).map(r=>`<tr>
+    <td>${escapeHtml(r.NOME||'')}</td>
+    <td>${escapeHtml(r.EMAIL||'')}</td>
+    <td>${escapeHtml(r.ATIVO||'')}</td>
+    <td><button class="btn secondary" onclick="toggleEquipeStatus('CONSULTORES','${escapeHtml(r.ID||'')}','${String(r.ATIVO||'').toLowerCase()==='sim'?'nao':'sim'}')">${String(r.ATIVO||'').toLowerCase()==='sim'?'Inativar':'Ativar'}</button></td>
+  </tr>`).join('') || '<tr><td colspan="4" class="empty">Nenhum consultor cadastrado.</td></tr>';
+
+  gestBody.innerHTML = (cacheStore.gestores||[]).map(r=>`<tr>
+    <td>${escapeHtml(r.NOME||'')}</td>
+    <td>${escapeHtml(r.EMAIL||'')}</td>
+    <td>${escapeHtml(r.AREA||'')}</td>
+    <td>${escapeHtml(r.ATIVO||'')}</td>
+  </tr>`).join('') || '<tr><td colspan="4" class="empty">Nenhum gestor cadastrado.</td></tr>';
+}
+async function renderInteligenciaCx(){
+  await Promise.all([
+    loadBasePage('BASE_POS_PEUGEOT'),
+    loadBasePage('BASE_POS_CITROEN'),
+    loadBasePage('BASE_VENDAS_PEUGEOT'),
+    loadBasePage('BASE_VENDAS_CITROEN'),
+    loadEquipeLists(),
+    renderRankingVendas(),
+    renderConversoes(),
+    renderIscConsultor()
+  ]);
+  const posRows = [...(cacheStore.rows.BASE_POS_PEUGEOT||[]), ...(cacheStore.rows.BASE_POS_CITROEN||[])];
+  const vendRows = [...(cacheStore.rows.BASE_VENDAS_PEUGEOT||[]), ...(cacheStore.rows.BASE_VENDAS_CITROEN||[])];
+  const pendentes = posRows.filter(r => String(r.STATUS||'') === 'PESQUISAVEL').length + vendRows.filter(r => String(r.STATUS||'') === 'PESQUISAVEL').length;
+  const detratores = posRows.filter(r => String(r.STATUS||'') === 'DETRATOR');
+  const groupedDet = {};
+  detratores.forEach(r => { const k = r.CONSULTOR || 'Sem consultor'; groupedDet[k] = (groupedDet[k]||0)+1; });
+  const critico = Object.entries(groupedDet).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('insightResumo').innerText = `Hoje o portal identifica ${vendRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em vendas, ${posRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em pós-vendas e ${detratores.length} detratores em pós-vendas.`;
+  document.getElementById('insightPendentes').innerText = `${pendentes} clientes ainda estão pesquisáveis e podem responder a pesquisa.`;
+  document.getElementById('insightCritico').innerText = critico ? `${critico[0]} aparece com ${critico[1]} detratores registrados.` : 'Nenhum consultor crítico identificado.';
+  // grow insights
+  const [g1,g2] = await Promise.all([apiGet('listGrowPeugeot'), apiGet('listGrowCitroen')]);
+  const grows = [...rowsOf(g1), ...rowsOf(g2)];
+  const gg = {};
+  grows.forEach(r => { const k = r.CONSULTOR_RESPONSAVEL || r.CONSULTOR || 'Sem definição'; gg[k] = (gg[k]||0)+1; });
+  const growTxt = Object.entries(gg).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v} casos`).join('\n');
+  document.getElementById('insightGrow').innerText = growTxt || 'Sem casos Grow vinculados a consultores.';
+  const posConv = posRows.filter(r => String(r.CONVERTIDA_POR||'').trim());
+  const conv = {};
+  posConv.forEach(r => { const k = r.CONVERTIDA_POR; conv[k] = (conv[k]||0)+1; });
+  document.getElementById('insightConversoes').innerText = Object.entries(conv).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v} conversões`).join('\n') || 'Sem conversões registradas.';
+  const sellers = cacheStore.vendedores.map(v=>v.NOME).filter(Boolean);
+  const sellerStats = sellers.map(name => ({name,total: vendRows.filter(r => String(r.VENDEDOR||'').toUpperCase()===String(name).toUpperCase() && ['PROMOTOR','NEUTRO','DETRATOR'].includes(String(r.STATUS||''))).length})).sort((a,b)=>b.total-a.total)[0];
+  document.getElementById('insightRanking').innerText = sellerStats && sellerStats.total ? `${sellerStats.name} lidera o volume de pesquisas respondidas em vendas com ${sellerStats.total} respostas.` : 'Sem ranking disponível.';
+}
+function runAssistantCx(){
+  const q = (document.getElementById('assistantCxInput').value || '').toLowerCase();
+  let answer = 'Ainda não encontrei essa leitura.';
+  if(q.includes('detrator')){
+    const rows = [...(cacheStore.rows.BASE_POS_PEUGEOT||[]), ...(cacheStore.rows.BASE_POS_CITROEN||[])].filter(r => r.STATUS==='DETRATOR');
+    const map = {};
+    rows.forEach(r => { const k = r.CONSULTOR || 'Sem consultor'; map[k] = (map[k]||0)+1; });
+    const top = Object.entries(map).sort((a,b)=>b[1]-a[1])[0];
+    answer = top ? `${top[0]} é o consultor com mais detratores, com ${top[1]} registros.` : 'Nenhum detrator encontrado.';
+  } else if(q.includes('grow')){
+    answer = document.getElementById('insightGrow').innerText;
+  } else if(q.includes('convers')){
+    answer = document.getElementById('insightConversoes').innerText;
+  } else if(q.includes('pendent') || q.includes('expirar')){
+    answer = document.getElementById('insightPendentes').innerText;
+  } else if(q.includes('vendedor') || q.includes('ranking')){
+    answer = document.getElementById('insightRanking').innerText;
+  }
+  document.getElementById('assistantCxResponse').innerText = answer;
+}
+const _originalStartPortal = startPortal;
+startPortal = async function(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('portalApp').style.display = 'block';
+  applyUserContext();
+  const db = await loadDatabase();
+  fillConfigForm({ ...DEFAULT_DB, ...db });
+  applyDatabaseToUI({ ...DEFAULT_DB, ...db });
+  initChatEnter();
+  await loadEquipeLists();
+  await Promise.all([renderChat(), renderSystems(), renderNpsHistoricoVendas(), renderNpsHistoricoPos(), renderInteligenciaCx()]);
+};
+const _originalOpenPage = openPage;
+openPage = function(id, btn){
+  _originalOpenPage(id, btn);
+  if(id === 'chat') initChatEnter();
+  if(id === 'inteligencia') renderInteligenciaCx();
+};
+
+window.onload = boot;
+
   </script>
 </body>
 </html>
