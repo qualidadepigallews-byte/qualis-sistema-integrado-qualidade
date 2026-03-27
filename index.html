@@ -1263,6 +1263,193 @@
     .insight-card p{margin:0;color:var(--muted);line-height:1.6}
     .ranking-table td:first-child,.ranking-table th:first-child{font-weight:800}
 
+    /* ===== CHAT FIREBASE ===== */
+    .chat-layout{
+      display:grid;
+      grid-template-columns:1fr 260px;
+      gap:18px;
+      height:calc(100vh - 220px);
+      min-height:500px;
+    }
+    .chat-main{
+      display:flex;
+      flex-direction:column;
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .chat-header{
+      padding:16px 20px;
+      border-bottom:1px solid var(--border);
+      background:var(--surface-2);
+    }
+    .chat-messages{
+      flex:1;
+      overflow-y:auto;
+      padding:16px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .chat-compose{
+      padding:14px 16px;
+      border-top:1px solid var(--border);
+      background:var(--surface-2);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .chat-compose textarea{
+      width:100%;
+      min-height:60px;
+      max-height:120px;
+      resize:vertical;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      outline:none;
+      font-size:14px;
+      line-height:1.5;
+    }
+    .chat-help{font-size:12px;color:var(--muted);}
+    .chat-side{
+      display:flex;
+      flex-direction:column;
+      gap:0;
+    }
+    .chat-side-section{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+    /* Mensagens */
+    .msg-group{
+      display:flex;
+      flex-direction:column;
+      margin-bottom:10px;
+    }
+    .msg-group.mine{ align-items:flex-end; }
+    .msg-group.other{ align-items:flex-start; }
+    .msg-author{
+      font-size:11px;
+      font-weight:800;
+      color:var(--muted);
+      margin-bottom:3px;
+      padding:0 4px;
+    }
+    .msg-bubble{
+      max-width:72%;
+      padding:10px 14px;
+      border-radius:18px;
+      font-size:14px;
+      line-height:1.55;
+      position:relative;
+      word-break:break-word;
+    }
+    .msg-group.mine .msg-bubble{
+      background:linear-gradient(135deg,var(--primary),var(--primary-2));
+      color:#fff;
+      border-bottom-right-radius:4px;
+    }
+    .msg-group.other .msg-bubble{
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-bottom-left-radius:4px;
+    }
+    .msg-time{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:3px;
+      padding:0 4px;
+    }
+    .msg-reactions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:4px;
+      margin-top:5px;
+    }
+    .reaction-btn{
+      border:1px solid var(--border);
+      background:var(--surface);
+      border-radius:999px;
+      padding:3px 8px;
+      font-size:13px;
+      cursor:pointer;
+      transition:background .15s;
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+    .reaction-btn:hover{ background:var(--surface-3); }
+    .reaction-btn.mine{ background:var(--surface-3); border-color:var(--primary); }
+    .reaction-btn span{ font-size:11px; font-weight:700; color:var(--muted); }
+    .reaction-picker{
+      display:flex;
+      gap:6px;
+      margin-top:5px;
+      flex-wrap:wrap;
+    }
+    .reaction-pick{
+      border:0;
+      background:var(--surface-2);
+      border-radius:8px;
+      padding:4px 6px;
+      font-size:16px;
+      cursor:pointer;
+      transition:transform .1s;
+    }
+    .reaction-pick:hover{ transform:scale(1.25); }
+    .mention{
+      color:var(--primary);
+      font-weight:800;
+      background:rgba(31,79,163,.08);
+      border-radius:6px;
+      padding:1px 5px;
+    }
+    body.dark .mention{ background:rgba(90,147,255,.12); }
+    /* Online badge */
+    .online-badge{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      font-size:12px;
+      font-weight:700;
+    }
+    .online-dot{
+      width:8px;height:8px;
+      border-radius:50%;
+      background:#6b7280;
+      flex-shrink:0;
+    }
+    .online-dot.active{ background:var(--success); box-shadow:0 0 0 2px rgba(22,163,74,.25); }
+    .online-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:var(--surface-2);
+      border:1px solid var(--border);
+      font-size:13px;
+      font-weight:600;
+    }
+    @media(max-width:1024px){
+      .chat-layout{ grid-template-columns:1fr; height:auto; }
+      .chat-main{ min-height:500px; }
+      .chat-side{ display:none; }
+    }
+
 
     @media (max-width: 1380px){
       .login-shell,
@@ -1728,6 +1915,265 @@ body.dark .password-toggle{
 }
 
 </style>
+  <!-- Firebase SDK -->
+  <script type="module">
+    // ============================================================
+    // QUALIS CHAT — FIREBASE REALTIME
+    // ============================================================
+    // INSTRUÇÕES DE CONFIGURAÇÃO (1 vez só):
+    //   1. Acesse console.firebase.google.com
+    //   2. Crie um projeto > Realtime Database > modo de teste
+    //   3. Configurações do projeto > Seus apps > Web (</>) > copie firebaseConfig
+    //   4. Cole os valores abaixo substituindo os placeholders
+    // ============================================================
+
+    import { initializeApp }       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, push, onValue, set, onDisconnect, serverTimestamp, get }
+      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    // ✅ CREDENCIAIS FIREBASE — qualis-portal1
+    const FIREBASE_CONFIG = {
+      apiKey:            "AIzaSyDglwSytkT39MAzEdqAeVMwJjSXP3jgInA",
+      authDomain:        "qualis-portal1.firebaseapp.com",
+      databaseURL:       "https://qualis-portal1-default-rtdb.firebaseio.com",
+      projectId:         "qualis-portal1",
+      storageBucket:     "qualis-portal1.firebasestorage.app",
+      messagingSenderId: "618969990570",
+      appId:             "1:618969990570:web:ed827ca068163f5c0f57d3",
+      measurementId:     "G-8K5DPG6XE5"
+    };
+
+    const CONFIGURED = !FIREBASE_CONFIG.apiKey.includes('COLE_AQUI');
+
+    let db = null;
+    let unsubscribeMessages = null;
+    let unsubscribeOnline = null;
+
+    // Usuárias permitidas para menção
+    const TEAM_NAMES = ['Kamilly', 'Letícia', 'Laís'];
+    const EMOJI_OPTIONS = ['👍','❤️','😂','😮','🎉','🔥'];
+
+    // ── Inicializar Firebase ──────────────────────────────────────
+    function initFirebase() {
+      if (!CONFIGURED) {
+        document.getElementById('chatFirebaseStatus').style.display = 'block';
+        document.getElementById('chatMessages').innerHTML =
+          '<div style="text-align:center;padding:40px;color:var(--muted);">⚠️ Configure o Firebase para usar o chat.<br><small>Veja as instruções no HTML.</small></div>';
+        return false;
+      }
+      try {
+        const app = initializeApp(FIREBASE_CONFIG);
+        db = getDatabase(app);
+        return true;
+      } catch(e) {
+        console.error('Firebase init error:', e);
+        return false;
+      }
+    }
+
+    // ── Presença online ──────────────────────────────────────────
+    function setupPresence(userName) {
+      if (!db || !userName) return;
+      const presenceRef = ref(db, `qualis_presence/${userName}`);
+      set(presenceRef, { name: userName, online: true, last_seen: serverTimestamp() });
+      onDisconnect(presenceRef).set({ name: userName, online: false, last_seen: serverTimestamp() });
+
+      // Escutar lista de online
+      const allPresenceRef = ref(db, 'qualis_presence');
+      if (unsubscribeOnline) unsubscribeOnline();
+      unsubscribeOnline = onValue(allPresenceRef, snap => {
+        const data = snap.val() || {};
+        renderOnlineUsers(data);
+      });
+    }
+
+    function renderOnlineUsers(data) {
+      const list  = document.getElementById('onlineSideList');
+      const badge = document.getElementById('onlineList');
+      if (!list || !badge) return;
+
+      const users = Object.values(data);
+      list.innerHTML = TEAM_NAMES.map(name => {
+        const u = users.find(x => x.name === name);
+        const online = u && u.online;
+        return `<div class="online-item">
+          <div class="online-dot ${online ? 'active' : ''}"></div>
+          <span>${name}</span>
+          ${online ? '<span style="margin-left:auto;font-size:11px;color:var(--success);font-weight:700;">online</span>' : ''}
+        </div>`;
+      }).join('');
+
+      badge.innerHTML = TEAM_NAMES.map(name => {
+        const u = users.find(x => x.name === name);
+        const online = u && u.online;
+        return `<div class="online-badge">
+          <div class="online-dot ${online ? 'active' : ''}"></div>${name}
+        </div>`;
+      }).join('');
+    }
+
+    // ── Escutar mensagens ────────────────────────────────────────
+    function listenMessages() {
+      if (!db) return;
+      const msgsRef = ref(db, 'qualis_chat');
+      if (unsubscribeMessages) unsubscribeMessages();
+      unsubscribeMessages = onValue(msgsRef, snap => {
+        const raw = snap.val() || {};
+        const msgs = Object.entries(raw).map(([id, v]) => ({ id, ...v }))
+          .sort((a, b) => (a.ts || 0) - (b.ts || 0));
+        renderMessages(msgs);
+      });
+    }
+
+    // ── Renderizar mensagens ─────────────────────────────────────
+    function renderMessages(msgs) {
+      const wrap = document.getElementById('chatMessages');
+      if (!wrap) return;
+      const userName = window.currentUser?.name || '';
+      const atBottom = wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 80;
+
+      if (!msgs.length) {
+        wrap.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Nenhuma mensagem ainda. Diga olá! 👋</div>';
+        return;
+      }
+
+      wrap.innerHTML = msgs.map(msg => {
+        const mine = msg.usuario === userName;
+        const time = msg.ts ? new Date(msg.ts).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) : '';
+        const reactions = msg.reactions || {};
+
+        const reactionHtml = Object.entries(reactions).map(([emoji, users]) => {
+          const count = Object.keys(users).length;
+          if (!count) return '';
+          const iMine = users[userName] ? 'mine' : '';
+          return `<button class="reaction-btn ${iMine}" onclick="window.toggleReaction('${msg.id}','${emoji}')">
+            ${emoji} <span>${count}</span>
+          </button>`;
+        }).join('');
+
+        const emojiPickerHtml = EMOJI_OPTIONS.map(e =>
+          `<button class="reaction-pick" title="${e}" onclick="window.toggleReaction('${msg.id}','${e}')">${e}</button>`
+        ).join('');
+
+        return `<div class="msg-group ${mine ? 'mine' : 'other'}">
+          ${!mine ? `<div class="msg-author">${escHtml(msg.usuario)}</div>` : ''}
+          <div class="msg-bubble">${highlightMsg(msg.mensagem)}</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <div class="msg-time">${time}</div>
+            <div class="msg-reactions">${reactionHtml}</div>
+            <details style="cursor:pointer;font-size:12px;color:var(--muted);">
+              <summary style="list-style:none;">😊</summary>
+              <div class="reaction-picker">${emojiPickerHtml}</div>
+            </details>
+          </div>
+        </div>`;
+      }).join('');
+
+      if (atBottom) wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    // ── Enviar mensagem ──────────────────────────────────────────
+    async function sendMsg() {
+      if (!db) return;
+      const userName = window.currentUser?.name;
+      if (!userName) return;
+      const input = document.getElementById('chatInput');
+      const text = (input?.value || '').trim();
+      if (!text) return;
+
+      const msgsRef = ref(db, 'qualis_chat');
+      await push(msgsRef, {
+        usuario: userName,
+        mensagem: text,
+        ts: Date.now()
+      });
+      input.value = '';
+    }
+
+    // ── Reagir a mensagem ────────────────────────────────────────
+    async function toggleReaction(msgId, emoji) {
+      if (!db) return;
+      const userName = window.currentUser?.name;
+      if (!userName) return;
+      const path = ref(db, `qualis_chat/${msgId}/reactions/${emoji}/${userName}`);
+      const snap = await get(path);
+      if (snap.exists()) {
+        await set(path, null); // remove
+      } else {
+        await set(path, true); // adiciona
+      }
+    }
+
+    // ── Helpers ──────────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function highlightMsg(text) {
+      let s = escHtml(text);
+      TEAM_NAMES.forEach(name => {
+        const re = new RegExp('@' + name, 'g');
+        s = s.replace(re, `<span class="mention">@${name}</span>`);
+      });
+      // Quebras de linha
+      s = s.replace(/\n/g, '<br>');
+      return s;
+    }
+
+    // ── Expor funções ao escopo global ───────────────────────────
+    window.toggleReaction = toggleReaction;
+
+    window.sendChatMessage = async function() {
+      await sendMsg();
+    };
+
+    window.initChatEnter = function() {
+      const input = document.getElementById('chatInput');
+      if (!input || input.dataset.bound === '1') return;
+      input.dataset.bound = '1';
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendMsg();
+        }
+      });
+    };
+
+    // ── Boot do chat quando o portal abre ───────────────────────
+    // Observa currentUser e inicializa quando disponível
+    let _chatBooted = false;
+    function tryBootChat() {
+      if (_chatBooted) return;
+      const userName = window.currentUser?.name;
+      if (!userName) { setTimeout(tryBootChat, 300); return; }
+      _chatBooted = true;
+      if (!initFirebase()) return;
+      setupPresence(userName);
+      listenMessages();
+    }
+
+    // Chama tryBootChat quando a página do chat fica ativa
+    const _chatObserver = new MutationObserver(() => {
+      const chatPage = document.getElementById('chat');
+      if (chatPage && chatPage.classList.contains('active')) {
+        tryBootChat();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const chatPage = document.getElementById('chat');
+      if (chatPage) _chatObserver.observe(chatPage, { attributes: true, attributeFilter: ['class'] });
+
+      // Se já estiver na página de chat no boot
+      setTimeout(() => {
+        if (chatPage?.classList.contains('active')) tryBootChat();
+      }, 500);
+    });
+
+    // Também permite boot direto chamando initChatFirebase() após login
+    window.initChatFirebase = tryBootChat;
+
+  </script>
 </head>
 <body>
   
@@ -2251,21 +2697,53 @@ body.dark .password-toggle{
 
         <section id="chat" class="page">
           <h1 class="page-title">Chat</h1>
-          <p class="page-subtitle">Grupo interno entre Kamilly, Letícia e Laís.</p>
+          <p class="page-subtitle">Grupo interno em tempo real — Kamilly, Letícia e Laís.</p>
 
           <div class="chat-layout">
             <div class="chat-main">
               <div class="chat-header">
-                <h3>Grupo QUALIS</h3>
-                <p id="chatHeaderInfo">Mensagens visíveis para todo o grupo.</p>
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                  <div>
+                    <h3 style="margin:0;font-size:18px;">💬 Grupo QUALIS</h3>
+                    <p id="chatHeaderInfo" style="margin:4px 0 0;font-size:13px;color:var(--muted);">Mensagens visíveis para todo o grupo.</p>
+                  </div>
+                  <div id="onlineList" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+                </div>
               </div>
 
-              <div class="chat-messages" id="chatMessages"></div>
+              <div id="chatFirebaseStatus" style="display:none;padding:10px 16px;background:var(--surface-2);border-bottom:1px solid var(--border);font-size:13px;color:var(--warning);">
+                ⚠️ Configure o Firebase para ativar o chat em tempo real. Veja as instruções no topo do arquivo.
+              </div>
+
+              <div class="chat-messages" id="chatMessages">
+                <div style="text-align:center;padding:40px 20px;color:var(--muted);">
+                  <div style="font-size:32px;margin-bottom:10px;">💬</div>
+                  <div>Conectando ao chat...</div>
+                </div>
+              </div>
 
               <div class="chat-compose">
-                <textarea id="chatInput" placeholder="Digite sua mensagem para o grupo..."></textarea>
+                <textarea id="chatInput" placeholder="Digite sua mensagem... Use @Kamilly, @Letícia, @Laís para mencionar"></textarea>
                 <button class="btn primary" onclick="sendChatMessage()">Enviar</button>
-                <div class="chat-help">Use @Kamilly, @Letícia e @Laís para menções.</div>
+                <div class="chat-help">Enter envia · Shift+Enter quebra linha · @Nome para menções</div>
+              </div>
+            </div>
+
+            <div class="chat-side" id="chatSidebar">
+              <div class="chat-side-section">
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;">Online agora</div>
+                <div id="onlineSideList" style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="color:var(--muted);font-size:13px;">Verificando...</div>
+                </div>
+              </div>
+
+              <div class="chat-side-section" style="margin-top:18px;">
+                <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:12px;">Atalhos</div>
+                <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+                  <div>@Kamilly · @Letícia · @Laís</div>
+                  <div>Enter → enviar</div>
+                  <div>Shift+Enter → nova linha</div>
+                </div>
               </div>
             </div>
           </div>
@@ -2456,9 +2934,9 @@ body.dark .password-toggle{
     };
 
     const DEFAULT_USERS = [
-      { name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivara321@', passwordChangedAt:'2026-03-12' },
-      { name:'Letícia', role:'user', email:'leticia.martins@adtsa.com.br', password:'Barata321@', passwordChangedAt:'2026-03-12' },
-      { name:'Laís', role:'user', email:'lais.batista@adtsa.com.br', password:'Calango321@', passwordChangedAt:'2026-03-12' }
+      { name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivaraa321@', passwordChangedAt:'2026-03-12' },
+      { name:'Letícia', role:'user', email:'leticia.martins@adtsa.com.br', password:'Barataa321@', passwordChangedAt:'2026-03-12' },
+      { name:'Laís', role:'user', email:'lais.batista@adtsa.com.br', password:'Calangoo321@', passwordChangedAt:'2026-03-12' }
     ];
 
     const DEFAULT_DB = {
@@ -2602,11 +3080,20 @@ Portal QUALIS`
   applyUserContext();
 
   const db = await loadDatabase();
-  fillConfigForm(db);
-  applyDatabaseToUI(db);
+  const merged = { ...DEFAULT_DB, ...db };
+  fillConfigForm(merged);
+  applyDatabaseToUI(merged);
 
-  await renderChat();
-  renderSystems();
+  initChatEnter();
+
+  // Inicia Firebase chat em background
+  if (window.initChatFirebase) setTimeout(window.initChatFirebase, 400);
+
+  // Carrega NPS e sistemas sem travar o portal
+  Promise.all([
+    renderSystems(),
+    loadEquipeLists().then(() => Promise.all([renderNpsHistoricoVendas(), renderNpsHistoricoPos()]))
+  ]).catch(err => console.warn('startPortal background load:', err));
 }
 
     function logout(){
@@ -2669,8 +3156,9 @@ Portal QUALIS`
       document.getElementById('topSubtitle').innerText = pageTitles[id][1];
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      if (id === 'chat') renderChat();
+      if (id === 'chat') { renderChat(); initChatEnter(); }
       if (id === 'sistemas') renderSystems();
+      if (id === 'inteligencia') renderInteligenciaCx();
     }
 
     function openSubpage(sectionId, subpageId, btn){
@@ -2920,34 +3408,7 @@ NNE - NORDESTE`;
         .replace(/>/g, '&gt;');
     }
 
-  async function sendChatMessage(){
-  if (!currentUser) return;
-
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text) return;
-
-  try{
-    const response = await fetch(API_URL, {
-      method:'POST',
-      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action:'sendChat', usuario: currentUser.name, mensagem: text })
-    });
-
-    const data = await response.json();
-
-    if (!data.ok){
-      alert('Não foi possível enviar a mensagem.');
-      return;
-    }
-
-    input.value = '';
-    await renderChat();
-  }catch(err){
-    console.error('Erro ao enviar mensagem:', err);
-    alert('Erro ao enviar mensagem.');
-  }
-}
+  /* sendChatMessage definida abaixo (versão correta) */
 
 
 
@@ -2958,58 +3419,9 @@ NNE - NORDESTE`;
         .replace(/@Laís/g, '<span class="mention">@Laís</span>');
     }
 
-    async function renderChat(){
-      const wrap = document.getElementById('chatMessages');
-      if (!wrap) return;
+    /* renderChat() substituída pelo Firebase real-time (módulo ES6 acima) */
 
-      const messages = await fetchChatMessages();
-
-      if (!messages.length){
-        wrap.innerHTML = '<div class="message other">Sem mensagens ainda.</div>';
-        return;
-      }
-
-      wrap.innerHTML = messages.map(msg => {
-        const mine = currentUser && msg.usuario === currentUser.name;
-        return `
-          <div class="message ${mine ? 'mine' : 'other'}">
-            ${highlightMentions(msg.mensagem)}
-            <small>${escapeHtml(msg.usuario)} • ${escapeHtml(msg.datahora || '')}</small>
-          </div>
-        `;
-      }).join('');
-
-      wrap.scrollTop = wrap.scrollHeight;
-    }
-
-    async function sendChatMessage(){
-      if (!currentUser) return;
-
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      try{
-        const response = await fetch(API_URL, {
-          method:'POST',
-          headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action:'sendChat', usuario: currentUser.name, mensagem: text })
-        });
-
-        const data = await response.json();
-
-        if (!data.ok){
-          alert('Não foi possível enviar a mensagem.');
-          return;
-        }
-
-        input.value = '';
-        await renderChat();
-      }catch(err){
-        console.error('Erro ao enviar mensagem:', err);
-        alert('Erro ao enviar mensagem.');
-      }
-    }
+    /* sendChatMessage única — definida em V2 FUNCTIONS abaixo */
 
     function renderSystems(){
       const wrap = document.getElementById('systemsGrid');
@@ -3530,12 +3942,6 @@ function boot(){
 
   setInterval(() => {
     if (document.getElementById('portalApp').style.display === 'block') {
-      renderChat();
-    }
-  }, 3000);
-
-  setInterval(() => {
-    if (document.getElementById('portalApp').style.display === 'block') {
       syncDatabaseSilently();
     }
   }, 5000);
@@ -3690,29 +4096,8 @@ async function apiPost(payload){
   return await res.json();
 }
 
-function rowsOf(data){
-  if(Array.isArray(data)) return data;
-  if(data && Array.isArray(data.rows)) return data.rows;
-  if(data && Array.isArray(data.data)) return data.data;
-  return [];
-}
 
-
-async function fetchChatMessages(){
-  const data = await apiGet('listChat');
-  return data.rows || [];
-}
-
-async function sendChatMessage(){
-  if (!currentUser) return;
-  const input = document.getElementById('chatInput');
-  const text = (input.value || '').trim();
-  if (!text) return;
-  const data = await apiPost({ action:'sendChat', usuario: currentUser.name, mensagem: text });
-  if(!data.ok){ alert('Não foi possível enviar a mensagem.'); return; }
-  input.value = '';
-  await renderChat();
-}
+/* fetchChatMessages e sendChatMessage gerenciados pelo módulo Firebase (ES6 acima) */
 function initChatEnter(){
   const input = document.getElementById('chatInput');
   if(!input || input.dataset.bound === '1') return;
@@ -3726,7 +4111,7 @@ function initChatEnter(){
 }
 async function syncDatabaseSilently(){
   try{
-    await Promise.all([renderChat(), renderNpsHistoricoVendas(), renderNpsHistoricoPos()]);
+    await Promise.all([renderNpsHistoricoVendas(), renderNpsHistoricoPos()]);
     const activeBase = document.querySelector('#vendas-base-peugeot.active, #vendas-base-citroen.active, #pos-base-peugeot.active, #pos-base-citroen.active');
     if(activeBase){
       const map = {
@@ -3740,10 +4125,7 @@ async function syncDatabaseSilently(){
     if(document.getElementById('config-equipe')?.classList.contains('active')) await loadEquipeConfig();
   }catch(err){ console.error('sync error', err); }
 }
-async function loadDatabase(){
-  const data = await apiGet('getConfig');
-  return data.config || { ...DEFAULT_DB };
-}
+/* loadDatabase definida acima com fallback para localStorage */
 async function saveDatabase(){
   const db = {};
   Object.keys(DEFAULT_DB).forEach(key => {
@@ -3772,8 +4154,8 @@ function normalizeMonth(value){
 }
 async function loadNpsStores(){
   const [v,p] = await Promise.all([apiGet('listNpsVendas'), apiGet('listNpsPosVendas')]);
-  cacheStore.npsVendas = rowsOf(v);
-  cacheStore.npsPos = rowsOf(p);
+  cacheStore.npsVendas = v.rows || [];
+  cacheStore.npsPos = p.rows || [];
 }
 function calcNps(prom, neut, det){
   prom = Number(prom)||0; neut = Number(neut)||0; det = Number(det)||0;
@@ -3899,7 +4281,6 @@ async function addEquipeItem(tipo){
     if(el) el.value = '';
   });
 
-  await loadEquipeLists();
   await loadEquipeConfig();
 }
 
@@ -3921,14 +4302,13 @@ async function toggleEquipeStatus(sheetLabel, id, novoStatus){
   const result = await apiPost({ action, rows:[row] });
   if(!result.ok){ alert('Não foi possível atualizar o status.'); return; }
   await loadEquipeLists();
-  await loadEquipeLists();
   await loadEquipeConfig();
 }
 
 async function loadBasePage(sheetKey){
   if(!cacheStore.vendedores.length || !cacheStore.consultores.length) await loadEquipeLists();
   const data = await apiGet(SHEET_ACTIONS[sheetKey].list);
-  cacheStore.rows[sheetKey] = rowsOf(data);
+  cacheStore.rows[sheetKey] = data.rows || [];
   renderBaseTable(sheetKey);
 }
 function getConvertOptions(row){
@@ -4082,7 +4462,7 @@ async function updateGrowConsultor(marca, caso, value){
   const action = marca === 'Peugeot' ? 'listGrowPeugeot' : 'listGrowCitroen';
   const saveAction = marca === 'Peugeot' ? 'saveGrowPeugeot' : 'saveGrowCitroen';
   const data = await apiGet(action);
-  const rows = rowsOf(data);
+  const rows = data.rows || [];
   const row = rows.find(r => String(r.CASO||'') === String(caso));
   if(!row) return;
   row.CONSULTOR = value;
@@ -4094,7 +4474,6 @@ async function loadEquipeConfig(){
   const vendBody = document.getElementById('tbodyVendedoresCfg');
   const consBody = document.getElementById('tbodyConsultoresCfg');
   const gestBody = document.getElementById('tbodyGestoresCfg');
-  if(!vendBody || !consBody || !gestBody) return;
 
   vendBody.innerHTML = (cacheStore.vendedores||[]).map(r=>`<tr>
     <td>${escapeHtml(r.NOME||'')}</td>
@@ -4140,7 +4519,7 @@ async function renderInteligenciaCx(){
   document.getElementById('insightCritico').innerText = critico ? `${critico[0]} aparece com ${critico[1]} detratores registrados.` : 'Nenhum consultor crítico identificado.';
   // grow insights
   const [g1,g2] = await Promise.all([apiGet('listGrowPeugeot'), apiGet('listGrowCitroen')]);
-  const grows = [...rowsOf(g1), ...rowsOf(g2)];
+  const grows = [...(g1.rows||[]), ...(g2.rows||[])];
   const gg = {};
   grows.forEach(r => { const k = r.CONSULTOR_RESPONSAVEL || r.CONSULTOR || 'Sem definição'; gg[k] = (gg[k]||0)+1; });
   const growTxt = Object.entries(gg).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v} casos`).join('\n');
@@ -4173,24 +4552,7 @@ function runAssistantCx(){
   }
   document.getElementById('assistantCxResponse').innerText = answer;
 }
-const _originalStartPortal = startPortal;
-startPortal = async function(){
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('portalApp').style.display = 'block';
-  applyUserContext();
-  const db = await loadDatabase();
-  fillConfigForm({ ...DEFAULT_DB, ...db });
-  applyDatabaseToUI({ ...DEFAULT_DB, ...db });
-  initChatEnter();
-  await loadEquipeLists();
-  await Promise.all([renderChat(), renderSystems(), renderNpsHistoricoVendas(), renderNpsHistoricoPos(), renderInteligenciaCx()]);
-};
-const _originalOpenPage = openPage;
-openPage = function(id, btn){
-  _originalOpenPage(id, btn);
-  if(id === 'chat') initChatEnter();
-  if(id === 'inteligencia') renderInteligenciaCx();
-};
+/* startPortal e openPage gerenciados nas funções originais acima */
 
 window.onload = boot;
 
