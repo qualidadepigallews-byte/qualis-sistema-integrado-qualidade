@@ -784,6 +784,7 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
         </div>
         <div class="nav-group">
           <div class="nav-label">Ferramentas</div>
+          <button class="nav-btn" onclick="goPage('treinamentos',this)"><span class="icon">🎓</span> Treinamentos</button>
           <button class="nav-btn" onclick="goPage('chat',this);bootChat()"><span class="icon">💬</span> Chat</button>
           <button class="nav-btn" onclick="goPage('sistemas',this)"><span class="icon">🔗</span> Sistemas</button>
         </div>
@@ -955,6 +956,8 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
             <button class="subnav-btn" onclick="openSub('posvendas','p-citroen',this);loadBase('POS_CIT')">Base Citroën</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-hotalerts',this);renderHotAlertsPos()">Hot Alerts</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-conversoes',this);renderConversoes()">Conversões</button>
+            <button class="subnav-btn" onclick="openSub('posvendas','p-isc',this);loadIscFromFirebase()">📈 ISC Consultor</button>
+            <button class="subnav-btn" onclick="openSub('posvendas','p-treinamentos-pos',this);renderTreinamentosPos()">🎓 Treinamentos</button>
           </div>
 
           <div class="subpage active" id="p-painel">
@@ -1033,6 +1036,125 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
           <div class="subpage" id="p-conversoes">
             <div class="table-wrap"><table><thead><tr><th>Responsável</th><th>Conversões</th></tr></thead><tbody id="tbConv"><tr><td colspan="2" class="empty">Nenhuma conversão.</td></tr></tbody></table></div>
           </div>
+
+          <!-- ISC CONSULTOR -->
+          <div class="subpage" id="p-isc">
+            <div class="grid-2" style="margin-bottom:18px;">
+              <div class="card">
+                <div class="card-title">📋 Colar dados ISC</div>
+                <p style="font-size:13px;color:var(--c-muted);margin-bottom:10px;">
+                  Cole os dados no formato: <strong>Consultor | Det.Peu | Neu.Peu | Prom.Peu | Det.Cit | Neu.Cit | Prom.Cit</strong> (um por linha, separado por tab ou ponto-e-vírgula). Ou use a entrada manual abaixo.
+                </p>
+                <textarea id="iscPasteArea" style="width:100%;min-height:120px;resize:vertical;border:1.5px solid var(--c-border);border-radius:12px;padding:12px;font-size:12px;font-family:monospace;background:var(--c-surface2);color:var(--c-text);outline:none;" placeholder="FRANCISCO ADRIANO&#9;0&#9;0&#9;0&#9;2&#9;0&#9;10&#10;VIVIANE BRAGA&#9;0&#9;0&#9;0&#9;1&#9;2&#9;21&#10;TEREZA CRISTINA&#9;0&#9;0&#9;0&#9;0&#9;0&#9;2"></textarea>
+                <div class="btn-row">
+                  <button class="btn primary" onclick="iscProcessar()">⚡ Processar</button>
+                  <button class="btn ghost" onclick="iscLimpar()">🗑️ Limpar</button>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-title">⚙️ Configurações ISC</div>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="form-field">
+                    <label>Mês de referência</label>
+                    <select id="iscMes" style="width:100%;padding:10px 13px;border:1.5px solid var(--c-border);border-radius:12px;background:#fff;font-size:14px;color:var(--c-text);outline:none;">
+                      <option value="1">Janeiro</option><option value="2">Fevereiro</option>
+                      <option value="3" selected>Março</option><option value="4">Abril</option>
+                      <option value="5">Maio</option><option value="6">Junho</option>
+                      <option value="7">Julho</option><option value="8">Agosto</option>
+                      <option value="9">Setembro</option><option value="10">Outubro</option>
+                      <option value="11">Novembro</option><option value="12">Dezembro</option>
+                    </select>
+                  </div>
+                  <div class="form-field">
+                    <label>Ano</label>
+                    <input type="number" id="iscAno" value="2026" style="width:100%;padding:10px 13px;border:1.5px solid var(--c-border);border-radius:12px;background:#fff;font-size:14px;color:var(--c-text);outline:none;">
+                  </div>
+                </div>
+                <div class="form-field" style="margin-top:10px;">
+                  <label>Meta ISC (%)</label>
+                  <input type="number" id="iscMeta" value="82" min="0" max="100" style="width:100%;padding:10px 13px;border:1.5px solid var(--c-border);border-radius:12px;background:#fff;font-size:14px;color:var(--c-text);outline:none;">
+                  <p style="font-size:11px;color:var(--c-muted);margin-top:4px;">ISC = ((Promotores × 1) + (Neutros × 0.5)) ÷ Total</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Seletor de mês histórico -->
+            <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+              <span style="font-size:13px;font-weight:700;color:var(--c-muted);">Ver mês:</span>
+              <div id="iscMesBtns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+            </div>
+
+            <!-- KPIs ISC -->
+            <div class="grid-4" id="iscKpis" style="display:none;margin-bottom:20px;">
+              <div class="kpi blue"><h4>ISC Peugeot</h4><div class="val blue" id="iscKiPeu">—</div><div class="sub">média dos consultores</div></div>
+              <div class="kpi purple" style="--c-purple:#7c3aed;"><h4>ISC Citroën</h4><div class="val" id="iscKiCit" style="background:var(--g-b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Nunito',sans-serif;font-size:36px;font-weight:900;line-height:1;">—</div><div class="sub">média dos consultores</div></div>
+              <div class="kpi green"><h4>Melhor ISC</h4><div class="val green" id="iscKMelhor">—</div><div class="sub" id="iscKMelhorNome">—</div></div>
+              <div class="kpi pink"><h4>Precisa atenção</h4><div class="val pink" id="iscKAtencao">0</div><div class="sub">abaixo da meta</div></div>
+            </div>
+
+            <!-- Tabela ISC Peugeot -->
+            <div id="iscTabelaPeu" style="display:none;margin-bottom:20px;">
+              <div style="font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:10px;">
+                🚗 ISC por Consultor · Peugeot
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Consultor</th><th>Detratores (1-6)</th><th>Neutros (7-8)</th><th>Promotores (9-10)</th><th>Total</th><th>ISC</th><th>Tendência</th><th>Orientação</th></tr></thead>
+                  <tbody id="iscTbPeu"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tabela ISC Citroën -->
+            <div id="iscTabelaCit" style="display:none;margin-bottom:20px;">
+              <div style="font-family:'Nunito',sans-serif;font-size:17px;font-weight:800;margin-bottom:12px;">
+                ✨ ISC por Consultor · Citroën
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Consultor</th><th>Detratores (1-6)</th><th>Neutros (7-8)</th><th>Promotores (9-10)</th><th>Total</th><th>ISC</th><th>Tendência</th><th>Orientação</th></tr></thead>
+                  <tbody id="iscTbCit"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="iscVazio" style="text-align:center;padding:40px;color:var(--c-muted);">
+              Cole os dados e clique em Processar para ver o ISC por consultor.
+            </div>
+          </div>
+
+          <div class="subpage" id="p-treinamentos-pos">
+            <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+              <div style="font-size:13px;color:var(--c-muted);">Pendências de treinamento do time de pós-vendas, filtradas da base processada no módulo Treinamentos.</div>
+              <button class="btn primary" style="white-space:nowrap;" onclick="goPage('treinamentos',document.querySelector('.nav-btn:has(.icon)'));trInit()">
+                ➕ Ir para Treinamentos
+              </button>
+            </div>
+
+            <!-- KPIs resumo pós-vendas -->
+            <div class="grid-3" style="margin-bottom:18px;">
+              <div class="kpi orange"><h4>Em Sala</h4><div class="val orange" id="posTrSala">0</div><div class="sub">aguardando cronograma</div></div>
+              <div class="kpi blue"><h4>Remoto</h4><div class="val blue" id="posTrRemoto">0</div><div class="sub">fazem no computador</div></div>
+              <div class="kpi pink"><h4>Total pendências</h4><div class="val pink" id="posTrTotal">0</div><div class="sub">cursos a concluir</div></div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="toolbar" style="margin-bottom:14px;">
+              <input id="fqPosTr" oninput="renderTreinamentosPos()" placeholder="Buscar por nome..." style="padding:9px 12px;border:1.5px solid var(--c-border);border-radius:10px;font-size:13px;outline:none;background:var(--c-surface);">
+              <select id="fsPosTr" onchange="renderTreinamentosPos()" style="padding:9px 12px;border:1.5px solid var(--c-border);border-radius:10px;font-size:13px;outline:none;background:var(--c-surface);">
+                <option value="">Todas modalidades</option>
+                <option value="SALA">Sala</option>
+                <option value="REMOTO">Remoto</option>
+              </select>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nome</th><th>Função</th><th>Modalidade</th><th>🚗 Peugeot</th><th>✨ Citroën</th><th>Total</th><th>Agendamento</th></tr></thead>
+                <tbody id="tbPosTreinamentos"><tr><td colspan="7" class="empty">Processe a base no módulo Treinamentos para ver os dados aqui.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
         </div>
 
         <!-- ══ GROW ══ -->
@@ -1078,7 +1200,7 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
                 <textarea id="chatInput" placeholder="Digite sua mensagem... @Kamilly @Letícia @Laís para mencionar"></textarea>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <div class="chat-help">Enter envia · Shift+Enter nova linha</div>
-                  <button class="btn primary" onclick="sendMsg()">Enviar</button>
+                  <button class="btn primary" id="chatSendBtn" type="button">Enviar ➤</button>
                 </div>
               </div>
             </div>
@@ -1102,7 +1224,125 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
           </div>
         </div>
 
-        <!-- ══ SISTEMAS ══ -->
+        <!-- ══ TREINAMENTOS ══ -->
+        <div class="page" id="pg-treinamentos">
+          <div class="section-title">Treinamentos</div>
+          <div class="section-sub">Cole a base bruta, processe as pendências, gere o cronograma e dispare os e-mails.</div>
+
+          <div class="subnav">
+            <button class="subnav-btn active" onclick="openSub('treinamentos','tr-base',this)">📋 Base Bruta</button>
+            <button class="subnav-btn" onclick="openSub('treinamentos','tr-resumo',this)">📊 Resumo</button>
+            <button class="subnav-btn" onclick="openSub('treinamentos','tr-cronograma',this)">📅 Cronograma</button>
+            <button class="subnav-btn" onclick="openSub('treinamentos','tr-envio',this)">📧 Envio de E-mails</button>
+          </div>
+
+          <!-- BASE BRUTA -->
+          <div class="subpage active" id="tr-base">
+            <div class="grid-2" style="margin-bottom:18px;">
+              <div class="card">
+                <div class="card-title">📋 Colar Base Bruta</div>
+                <p style="font-size:13px;color:var(--c-muted);margin-bottom:12px;">
+                  Copie as linhas da planilha BASE BRUTA (com cabeçalho) e cole aqui. O sistema vai classificar automaticamente por modalidade (Sala / Remoto) e montar o cronograma.
+                </p>
+                <textarea id="trBasePaste" style="width:100%;min-height:220px;resize:vertical;border:1.5px solid var(--c-border);border-radius:12px;padding:12px;font-size:12px;font-family:monospace;background:var(--c-surface2);color:var(--c-text);outline:none;" placeholder="Cole aqui os dados da planilha BASE BRUTA (incluindo o cabeçalho)...&#10;&#10;Marca mestre	Área	Funções	ID Usuário	Usuário	E-Mail	...	Conteúdo	...	Status Conclusão"></textarea>
+                <div class="btn-row">
+                  <button class="btn primary" onclick="trProcessar()">⚡ Processar pendências</button>
+                  <button class="btn ghost" onclick="trLimpar()">🗑️ Limpar</button>
+                </div>
+                <div id="trStatus" style="display:none;margin-top:12px;padding:12px 14px;border-radius:11px;font-size:13px;font-weight:600;"></div>
+              </div>
+
+              <div class="card">
+                <div class="card-title">⚙️ Configurações do processamento</div>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="form-field"><label>Início do cronograma</label><input type="date" id="trStartDate" value="2026-04-01"></div>
+                  <div class="form-field"><label>Hora de início</label><input type="time" id="trStartTime" value="08:30"></div>
+                  <div class="form-field"><label>Duração do slot (horas)</label><input type="number" id="trSlotH" value="2" min="1" max="4"></div>
+                  <div class="form-field"><label>Prazo remoto (dias)</label><input type="number" id="trPrazoRemoto" value="7" min="1"></div>
+                  <div class="form-field"><label>Fim do expediente</label><input type="time" id="trDayEnd" value="18:00"></div>
+                  <div class="form-field"><label>Início almoço</label><input type="time" id="trLunchStart" value="12:00"></div>
+                </div>
+
+                <div class="card-title" style="margin-top:14px;margin-bottom:10px;">📧 E-mail (EmailJS)</div>
+                <div class="form-grid" style="grid-template-columns:1fr;">
+                  <div class="form-field"><label>Service ID</label><input id="trEmailService" placeholder="service_xxxxxxx" value="service_niac7qr"></div>
+                  <div class="form-field"><label>Template ID</label><input id="trEmailTemplate" placeholder="template_xxxxxxx" value="template_91s8o1c"></div>
+                  <div class="form-field"><label>Public Key</label><input id="trEmailKey" placeholder="xxxxxxxxxxxxxxxxxxxx" value="iUJAQN2111bwqq4fJ"></div>
+                  <div class="form-field"><label>E-mail remetente / Para</label><input id="trEmailFrom" placeholder="qualidade.pigallews@adtsa.com.br" value="qualidade.pigallews@adtsa.com.br"></div>
+                  <div class="form-field"><label>Cc — Gestores (separe por vírgula)</label><input id="trEmailCc" placeholder="gestor1@adtsa.com.br, gestor2@adtsa.com.br"></div>
+                </div>
+                <button class="btn ghost" style="font-size:12px;margin-top:4px;" onclick="trSalvarEmailConfig()">💾 Salvar config e-mail</button>
+              </div>
+            </div>
+
+            <!-- KPIs rápidos -->
+            <div class="grid-4" id="trKpis" style="display:none;margin-bottom:18px;">
+              <div class="kpi blue"><h4>Total pendentes</h4><div class="val blue" id="trKTotal">0</div><div class="sub">pessoas com pendência</div></div>
+              <div class="kpi orange"><h4>Modalidade Sala</h4><div class="val orange" id="trKSala">0</div><div class="sub">precisam da sala</div></div>
+              <div class="kpi green"><h4>Modalidade Remoto</h4><div class="val green" id="trKRemoto">0</div><div class="sub">fazem no computador</div></div>
+              <div class="kpi pink"><h4>Total pendências</h4><div class="val pink" id="trKPend">0</div><div class="sub">cursos a concluir</div></div>
+            </div>
+          </div>
+
+          <!-- RESUMO -->
+          <div class="subpage" id="tr-resumo">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+              <div style="font-size:13px;color:var(--c-muted);">Lista consolidada de pessoas com treinamentos pendentes.</div>
+              <div style="display:flex;gap:8px;">
+                <input id="trFiltroResumo" oninput="trFiltrarResumo()" placeholder="Buscar pessoa..." style="padding:8px 12px;border:1.5px solid var(--c-border);border-radius:10px;font-size:13px;outline:none;background:var(--c-surface);">
+                <select id="trFiltroModal" onchange="trFiltrarResumo()" style="padding:8px 12px;border:1.5px solid var(--c-border);border-radius:10px;font-size:13px;outline:none;background:var(--c-surface);">
+                  <option value="">Todas modalidades</option>
+                  <option value="SALA">Sala</option>
+                  <option value="REMOTO">Remoto</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nome</th><th>E-mail</th><th>ID</th><th>Área</th><th>Função</th><th>Modalidade</th><th>🚗 Peugeot</th><th>✨ Citroën</th><th>Total</th></tr></thead>
+                <tbody id="trTbResumo"><tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- CRONOGRAMA -->
+          <div class="subpage" id="tr-cronograma">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+              <div style="font-size:13px;color:var(--c-muted);">Agenda da sala de treinamento — 1 pessoa por vez, 2h, sem almoço.</div>
+              <input id="trFiltroCron" oninput="trFiltrarCron()" placeholder="Buscar..." style="padding:8px 12px;border:1.5px solid var(--c-border);border-radius:10px;font-size:13px;outline:none;background:var(--c-surface);">
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Data</th><th>Início</th><th>Fim</th><th>Nome</th><th>E-mail</th><th>ID</th><th>Modalidade</th><th>Observação</th></tr></thead>
+                <tbody id="trTbCron"><tr><td colspan="8" class="empty">Processe a base primeiro.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ENVIO -->
+          <div class="subpage" id="tr-envio">
+            <div class="card" style="margin-bottom:18px;">
+              <div class="card-title">📧 Disparo de E-mails</div>
+              <p style="font-size:13px;color:var(--c-muted);margin-bottom:16px;">
+                Cada pessoa recebe um e-mail personalizado com suas pendências, modalidade, cronograma (se sala) ou prazo (se remoto) e link para o portal.
+              </p>
+              <div class="btn-row">
+                <button class="btn primary" onclick="trTestarEmail()">🧪 Testar (só pra mim)</button>
+                <button class="btn success" onclick="trEnviarTodos()">📤 Enviar para todos os PENDENTES</button>
+              </div>
+              <div id="trEmailStatus" style="margin-top:12px;font-size:13px;"></div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nome</th><th>E-mail</th><th>Modalidade</th><th>🚗</th><th>✨</th><th>Total</th><th>Data</th><th>Horário</th><th>Status</th></tr></thead>
+                <tbody id="trTbEnvio"><tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+
         <div class="page" id="pg-sistemas">
           <div class="section-title">Sistemas</div>
           <div class="section-sub">Central de acessos, logins e senhas da operação.</div>
@@ -1138,7 +1378,7 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
           <div class="subnav">
             <button class="subnav-btn active" onclick="openSub('config','cfg-db',this)">Banco de Dados</button>
             <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this)">Equipe</button>
-            <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this)">Usuárias</button>
+            <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this);renderUsuarias()">Usuárias</button>
           </div>
 
           <div class="subpage active" id="cfg-db">
@@ -1194,14 +1434,40 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
 
           <div class="subpage" id="cfg-usuarios">
             <div class="card">
-              <div class="card-title">Usuárias do portal</div>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Senhas são válidas por 30 dias. Após expirar, a Kamilly precisa atualizar a data.</p>
-              <div class="table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Senha válida até</th></tr></thead>
-              <tbody>
-                <tr><td>Kamilly</td><td>kamilly.paiva@adtsa.com.br</td><td><span class="chip chip-purple">Super Admin</span></td><td id="expKamilly">—</td></tr>
-                <tr><td>Letícia</td><td>leticia.martins@adtsa.com.br</td><td><span class="chip chip-blue">Operacional</span></td><td id="expLeticia">—</td></tr>
-                <tr><td>Laís</td><td>lais.batista@adtsa.com.br</td><td><span class="chip chip-blue">Operacional</span></td><td id="expLais">—</td></tr>
-              </tbody></table></div>
+              <div class="card-title">👥 Usuárias do portal</div>
+              <p style="font-size:13px;color:var(--c-muted);margin-bottom:16px;">
+                Senhas são válidas por <strong>30 dias</strong>. Somente a Kamilly (Super Admin) pode adicionar ou renovar usuárias.
+              </p>
+
+              <div class="table-wrap" style="margin-bottom:20px;">
+                <table>
+                  <thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Senha atual</th><th>Válida até</th><th>Ação</th></tr></thead>
+                  <tbody id="tbUsuarias"></tbody>
+                </table>
+              </div>
+
+              <!-- Adicionar nova usuária — só Super Admin -->
+              <div id="addUserSection" class="hidden">
+                <div class="card-title" style="margin-bottom:14px;">➕ Adicionar nova usuária</div>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                  <div class="form-field"><label>Nome</label><input id="newUserNome" placeholder="Ex: Fernanda"></div>
+                  <div class="form-field"><label>E-mail</label><input id="newUserEmail" placeholder="email@adtsa.com.br"></div>
+                  <div class="form-field"><label>Senha inicial</label><input id="newUserSenha" placeholder="Min. 8 caracteres"></div>
+                </div>
+                <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                  <div class="form-field">
+                    <label>Perfil</label>
+                    <select id="newUserRole" style="width:100%;padding:10px 13px;border:1.5px solid var(--c-border);border-radius:12px;background:#fff;font-size:14px;color:var(--c-text);outline:none;">
+                      <option value="user">Operacional</option>
+                      <option value="superadmin">Super Admin</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="btn-row">
+                  <button class="btn primary" onclick="addNovaUsuaria()">✅ Adicionar usuária</button>
+                </div>
+                <div id="addUserFeedback" style="margin-top:10px;font-size:13px;"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1527,19 +1793,23 @@ td.empty{text-align:center;color:var(--muted);padding:32px;font-size:13px;}
     <div class="sc-email-sub">Configure o EmailJS para envio gratuito. <a href="https://www.emailjs.com" target="_blank" style="color:var(--c-blue);">Criar conta grátis</a></div>
     <div class="sc-email-field">
       <label>Service ID (EmailJS)</label>
-      <input id="scEmailServiceId" placeholder="service_xxxxxxx" value="">
+      <input id="scEmailServiceId" placeholder="service_xxxxxxx" value="service_niac7qr">
     </div>
     <div class="sc-email-field">
       <label>Template ID (EmailJS)</label>
-      <input id="scEmailTemplateId" placeholder="template_xxxxxxx" value="">
+      <input id="scEmailTemplateId" placeholder="template_xxxxxxx" value="template_a3yhtsm">
     </div>
     <div class="sc-email-field">
       <label>Public Key (EmailJS)</label>
-      <input id="scEmailPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" value="">
+      <input id="scEmailPublicKey" placeholder="xxxxxxxxxxxxxxxxxxxx" value="iUJAQN2111bwqq4fJ">
     </div>
     <div class="sc-email-field">
       <label>Destinatário</label>
       <input id="scEmailTo" placeholder="kamilly.paiva@adtsa.com.br" value="kamilly.paiva@adtsa.com.br">
+    </div>
+    <div class="sc-email-field">
+      <label>Cc — Gestores (separe por vírgula)</label>
+      <input id="scEmailCc" placeholder="gestor1@adtsa.com.br, gestor2@adtsa.com.br" value="">
     </div>
     <div class="sc-email-field">
       <label>Mensagem adicional (opcional)</label>
@@ -2378,7 +2648,7 @@ function scGetPrevEntry(mesAno){
 ════════════════════════════════ */
 function scAbrirEmail(){
   // Carrega config salva
-  ['scEmailServiceId','scEmailTemplateId','scEmailPublicKey','scEmailTo'].forEach(id => {
+  ['scEmailServiceId','scEmailTemplateId','scEmailPublicKey','scEmailTo','scEmailCc'].forEach(id => {
     const saved = localStorage.getItem('sc-email-'+id);
     if(saved) document.getElementById(id).value = saved;
   });
@@ -2386,18 +2656,20 @@ function scAbrirEmail(){
 }
 
 async function scEnviarEmail(){
-  const serviceId   = document.getElementById('scEmailServiceId').value.trim();
-  const templateId  = document.getElementById('scEmailTemplateId').value.trim();
-  const publicKey   = document.getElementById('scEmailPublicKey').value.trim();
-  const to          = document.getElementById('scEmailTo').value.trim();
-  const msg         = document.getElementById('scEmailMsg').value.trim();
-  const fb          = document.getElementById('scEmailFeedback');
+  const serviceId  = document.getElementById('scEmailServiceId').value.trim();
+  const templateId = document.getElementById('scEmailTemplateId').value.trim();
+  const publicKey  = document.getElementById('scEmailPublicKey').value.trim();
+  const to         = document.getElementById('scEmailTo').value.trim();
+  const cc         = document.getElementById('scEmailCc')?.value.trim()||'';
+  const msg        = document.getElementById('scEmailMsg').value.trim();
+  const fb         = document.getElementById('scEmailFeedback');
 
   if(!serviceId||!templateId||!publicKey||!to){ fb.textContent='Preencha todos os campos obrigatórios.'; fb.style.color='var(--c-red)'; return; }
 
   // Salva config
-  ['scEmailServiceId','scEmailTemplateId','scEmailPublicKey','scEmailTo'].forEach(id => {
-    localStorage.setItem('sc-email-'+id, document.getElementById(id).value.trim());
+  ['scEmailServiceId','scEmailTemplateId','scEmailPublicKey','scEmailTo','scEmailCc'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) localStorage.setItem('sc-email-'+id, el.value.trim());
   });
 
   // Monta o corpo do e-mail
@@ -2410,10 +2682,9 @@ async function scEnviarEmail(){
   const alertasText = alertas.map(a => `${a.icon} ${a.title}\n   ${a.desc}`).join('\n\n');
   const mes = entry ? `${MESES[entry.mes]}/${entry.ano}` : mesAno;
 
-  fb.textContent = 'Enviando...'; fb.style.color = 'var(--c-blue)';
+  fb.textContent = '📤 Enviando...'; fb.style.color = 'var(--c-blue)';
 
   try{
-    // Carrega EmailJS dinamicamente se não estiver carregado
     if(!window.emailjs){
       await new Promise((res,rej)=>{
         const s=document.createElement('script');
@@ -2425,16 +2696,16 @@ async function scEnviarEmail(){
     }
 
     await emailjs.send(serviceId, templateId, {
-      to_email: to,
-      subject: `QUALIS — Alertas Scorecard ${mes}`,
+      to_email:      to,
+      cc_email:      cc,
       mes,
-      peugeot_nota: peuCalc ? `${peuCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${peuCalc.classificacao}` : 'Não importado',
-      citroen_nota: citCalc ? `${citCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${citCalc.classificacao}` : 'Não importado',
-      alertas: alertasText || 'Nenhum alerta gerado.',
-      mensagem: msg || '',
+      peugeot_nota:  peuCalc ? `${peuCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${peuCalc.classificacao}` : 'Não importado',
+      citroen_nota:  citCalc ? `${citCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${citCalc.classificacao}` : 'Não importado',
+      alertas:       alertasText || 'Nenhum alerta gerado.',
+      mensagem:      msg || '',
       total_alertas: alertas.length,
-      quedas: alertas.filter(a=>a.piora).length,
-      evolucoes: alertas.filter(a=>!a.piora).length
+      quedas:        alertas.filter(a=>a.piora).length,
+      evolucoes:     alertas.filter(a=>!a.piora).length
     });
 
     fb.textContent = '✅ E-mail enviado com sucesso!'; fb.style.color='var(--c-green)';
@@ -2601,16 +2872,22 @@ window.bootChat = function(){
   const me = (window.currentUser||{}).name;
   if(!me){ setTimeout(window.bootChat, 400); return; }
 
-  // Garante Firebase inicializado
   if(!fbDb){ if(!initFb()){ document.getElementById('chatFirebaseWarn')?.classList.remove('hidden'); return; } }
 
   _chatBooted = true;
   const infoEl = document.getElementById('chatInfo');
-  if(infoEl) infoEl.textContent = `Mensagens visíveis para todo o grupo. Logada como ${me}.`;
+  if(infoEl) infoEl.textContent = `Grupo QUALIS · Logada como ${me}`;
   setupPresence(me);
   listenMsgs();
 
-  // Bind Enter no textarea
+  // ── Bind botão Enviar ──
+  const btn = document.getElementById('chatSendBtn');
+  if(btn && !btn.dataset.bound){
+    btn.dataset.bound = '1';
+    btn.addEventListener('click', () => doSend());
+  }
+
+  // ── Bind Enter no textarea ──
   const inp = document.getElementById('chatInput');
   if(inp && !inp.dataset.bound){
     inp.dataset.bound = '1';
@@ -2622,7 +2899,21 @@ window.bootChat = function(){
 
 // Inicializa Firebase para dados logo no boot (sem chat ainda)
 initFb();
-// Expõe fbDb globalmente para o JS principal
+
+// ── Sincronização em tempo real da config ──────────────────
+// Quando uma usuária salva a config, todas as outras veem na hora
+if(fbDb){
+  onValue(ref(fbDb, 'qualis_config'), snap => {
+    const cfg = snap.val();
+    if(!cfg) return;
+    // Salva localmente e aplica na UI se o portal estiver aberto
+    localStorage.setItem('q-cfg', JSON.stringify(cfg));
+    if(document.getElementById('app')?.style.display === 'block'){
+      if(window.applyNpsUI) window.applyNpsUI();
+    }
+  });
+}
+
 window.__fbDbReady = true;
 
 </script>
@@ -2631,12 +2922,25 @@ window.__fbDbReady = true;
    MAIN JS
 ═══════════════════════════════════════════ -->
 <script>
-/* ── Usuárias ─────────────────────────────── */
-const USERS = [
+/* ── Sistema de Usuárias ──────────────────── */
+const DEFAULT_USERS = [
   { name:'Kamilly', role:'superadmin', email:'kamilly.paiva@adtsa.com.br', password:'Capivara321@', pwdAt:'2026-03-12' },
   { name:'Letícia', role:'user',       email:'leticia.martins@adtsa.com.br', password:'Barata321@',   pwdAt:'2026-03-12' },
   { name:'Laís',    role:'user',       email:'lais.batista@adtsa.com.br',    password:'Calango321@',  pwdAt:'2026-03-12' }
 ];
+// Nota: senhas novas serão salvas com hash XOR+base64. As senhas padrão acima ficam em texto puro
+// para compatibilidade — o doLogin aceita os dois formatos.
+
+function getUsers(){
+  try{
+    const raw = localStorage.getItem('q-users');
+    return raw ? JSON.parse(raw) : [...DEFAULT_USERS];
+  }catch{ return [...DEFAULT_USERS]; }
+}
+function saveUsers(users){ localStorage.setItem('q-users', JSON.stringify(users)); }
+
+// Inicializa se não existir
+if(!localStorage.getItem('q-users')) saveUsers([...DEFAULT_USERS]);
 
 const PW_DAYS = 30;
 let currentUser = null;
@@ -2646,15 +2950,102 @@ function daysSince(d){ return Math.floor((Date.now()-new Date(d+'T00:00:00'))/86
 function doLogin(){
   const email = document.getElementById('loginEmail').value.trim();
   const pw    = document.getElementById('loginPassword').value;
-  const u = USERS.find(x=>x.email.toLowerCase()===email.toLowerCase());
-  const err = id => { document.getElementById('loginErr').textContent=id; };
+  const users = getUsers();
+  const u = users.find(x=>x.email.toLowerCase()===email.toLowerCase());
+  const err = msg => { document.getElementById('loginErr').textContent=msg; };
   if(!u) return err('Usuária não encontrada.');
-  if(u.password!==pw) return err('Senha incorreta.');
+  // Suporta senha em texto puro (legado) e hasheada
+  const pwOk = u.password === pw || unhashPw(u.password) === pw;
+  if(!pwOk) return err('Senha incorreta.');
   if(daysSince(u.pwdAt)>=PW_DAYS) return err('Senha expirada. Fale com a Kamilly.');
   document.getElementById('loginErr').textContent='';
   currentUser = u;
   localStorage.setItem('q-user',JSON.stringify(u));
   startPortal();
+}
+
+/* ── Gestão de Usuárias ───────────────────── */
+function renderUsuarias(){
+  const tb = document.getElementById('tbUsuarias');
+  if(!tb) return;
+  const users = getUsers();
+  const isSuperAdmin = currentUser?.role === 'superadmin';
+
+  // Mostra seção de adicionar só para super admin
+  document.getElementById('addUserSection')?.classList.toggle('hidden', !isSuperAdmin);
+
+  tb.innerHTML = users.map((u,i) => {
+    const exp = new Date(u.pwdAt+'T00:00:00');
+    exp.setDate(exp.getDate() + PW_DAYS);
+    const expStr = exp.toLocaleDateString('pt-BR');
+    const vencida = daysSince(u.pwdAt) >= PW_DAYS;
+    const badge = u.role==='superadmin'
+      ? '<span class="chip chip-purple">Super Admin</span>'
+      : '<span class="chip chip-blue">Operacional</span>';
+
+    const acoes = isSuperAdmin ? `
+      <button class="btn ghost" style="padding:5px 10px;font-size:11px;" onclick="renovarSenha(${i})">🔄 Renovar</button>
+      ${i>0?`<button class="btn danger" style="padding:5px 10px;font-size:11px;" onclick="removerUsuaria(${i})">🗑️</button>`:''}
+    ` : '—';
+
+    return `<tr>
+      <td><strong>${esc(u.name)}</strong></td>
+      <td style="font-size:12px;">${esc(u.email)}</td>
+      <td>${badge}</td>
+      <td><span style="font-family:monospace;font-size:12px;background:var(--c-surface2);padding:2px 8px;border-radius:6px;">${'•'.repeat(u.password.length)}</span></td>
+      <td style="color:${vencida?'var(--c-red)':'var(--c-green)'};font-weight:700;">${expStr}${vencida?' ⚠️ EXPIRADA':''}</td>
+      <td>${acoes}</td>
+    </tr>`;
+  }).join('');
+}
+
+function addNovaUsuaria(){
+  const nome  = document.getElementById('newUserNome')?.value.trim();
+  const email = document.getElementById('newUserEmail')?.value.trim();
+  const senha = document.getElementById('newUserSenha')?.value.trim();
+  const role  = document.getElementById('newUserRole')?.value || 'user';
+  const fb    = document.getElementById('addUserFeedback');
+
+  if(!nome||!email||!senha){ fb.textContent='Preencha todos os campos.'; fb.style.color='var(--c-red)'; return; }
+  if(senha.length < 6){ fb.textContent='Senha deve ter pelo menos 6 caracteres.'; fb.style.color='var(--c-red)'; return; }
+
+  const users = getUsers();
+  if(users.find(u=>u.email.toLowerCase()===email.toLowerCase())){
+    fb.textContent='Já existe uma usuária com esse e-mail.'; fb.style.color='var(--c-red)'; return;
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  users.push({ name:nome, role, email, password:hashPw(senha), pwdAt:today });
+  saveUsers(users);
+
+  document.getElementById('newUserNome').value='';
+  document.getElementById('newUserEmail').value='';
+  document.getElementById('newUserSenha').value='';
+  fb.textContent=`✅ ${nome} adicionada com sucesso!`; fb.style.color='var(--c-green)';
+  setTimeout(()=>{ fb.textContent=''; }, 3000);
+  renderUsuarias();
+}
+
+function renovarSenha(idx){
+  const users = getUsers();
+  const u = users[idx]; if(!u) return;
+  const novaSenha = prompt(`Nova senha para ${u.name} (mín. 6 caracteres):`);
+  if(!novaSenha) return;
+  if(novaSenha.length < 6){ alert('Senha muito curta.'); return; }
+  users[idx].password = hashPw(novaSenha);
+  users[idx].pwdAt    = new Date().toISOString().split('T')[0];
+  saveUsers(users);
+  alert(`✅ Senha de ${u.name} renovada! Válida por mais ${PW_DAYS} dias.`);
+  renderUsuarias();
+}
+
+function removerUsuaria(idx){
+  const users = getUsers();
+  const u = users[idx]; if(!u) return;
+  if(!confirm(`Remover ${u.name} do portal? Ela não conseguirá mais entrar.`)) return;
+  users.splice(idx,1);
+  saveUsers(users);
+  renderUsuarias();
 }
 
 function doLogout(){
@@ -2687,8 +3078,10 @@ function startPortal(){
 /* ── Navegação ────────────────────────────── */
 const PAGE_TITLES = {
   inicio:'Início', vendas:'Vendas', posvendas:'Pós-Vendas',
-  grow:'Grow Customer Care', chat:'Chat', sistemas:'Sistemas',
-  inteligencia:'Inteligência CX', config:'Configurações'
+  grow:'Grow Customer Care', treinamentos:'Treinamentos',
+  chat:'Chat', sistemas:'Sistemas',
+  inteligencia:'Inteligência CX', config:'Configurações',
+  'scorecard-pos':'Scorecard Pós-Vendas'
 };
 
 function goPage(id, btn){
@@ -2699,7 +3092,8 @@ function goPage(id, btn){
   document.getElementById('topTitle').textContent = PAGE_TITLES[id]||id;
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='inteligencia') renderInteligencia();
-  if(id==='config') { loadEquipe(); updateExpDates(); }
+  if(id==='config') { loadEquipe(); renderUsuarias(); }
+  if(id==='treinamentos') trInit();
 }
 
 function openSub(pageId, subId, btn){
@@ -2858,11 +3252,20 @@ const baseCache = {};
 const BASE_IS_POS = { VEN_PEU:false, VEN_CIT:false, POS_PEU:true, POS_CIT:true };
 const BASE_ROLE   = { VEN_PEU:'VENDEDOR', VEN_CIT:'VENDEDOR', POS_PEU:'CONSULTOR', POS_CIT:'CONSULTOR' };
 
+// Listeners ativos por base (para cancelar quando necessário)
+const baseListeners = {};
+
 async function loadBase(key){
-  if(!window._fbGet) return;
-  const snap = await window._fbGet('qualis_base_'+key.toLowerCase());
-  baseCache[key] = Object.entries(snap.val()||{}).map(([id,v])=>({id,...v}));
-  renderBase(key);
+  if(!window._fbOnValue) return;
+
+  // Se já tem listener ativo, não cria outro
+  if(baseListeners[key]) return;
+
+  // Cria listener em tempo real — todas as usuárias veem mudanças na hora
+  baseListeners[key] = window._fbOnValue('qualis_base_'+key.toLowerCase(), data => {
+    baseCache[key] = Object.entries(data||{}).map(([id,v])=>({id,...v}));
+    renderBase(key);
+  });
 }
 
 function parsePaste(text){
@@ -3033,6 +3436,7 @@ async function renderRankingVen(){
 
 /* ── GROW ─────────────────────────────────── */
 function processGrow(){
+  loadGrowConsultorCache(); // carrega consultores salvos
   const pR=parseGrow(document.getElementById('growPeu')?.value||'','Peugeot');
   const cR=parseGrow(document.getElementById('growCit')?.value||'','Citroën');
   const all=[...pR,...cR];
@@ -3073,8 +3477,29 @@ function priChip(v){ const s=String(v||'').toLowerCase(); if(s.includes('urgente
 function brandChip(m){ return m==='Peugeot'?'<span class="chip chip-blue">🚗 Peugeot</span>':'<span class="chip chip-purple">✨ Citroën</span>'; }
 function stsChip(s){ return s.toLowerCase().includes('aberto')?'<span class="chip chip-red">Aberto</span>':'<span class="chip chip-green">Fechado</span>'; }
 
-// Cache de consultores selecionados no GROW (por número do caso)
+// Cache de consultores GROW — persiste no Firebase
 const growConsultorCache = {};
+let growCacheLoaded = false;
+
+async function loadGrowConsultorCache(){
+  if(growCacheLoaded || !window._fbGet) return;
+  growCacheLoaded = true;
+  try{
+    const snap = await window._fbGet('qualis_grow_consultores');
+    const data = snap.val()||{};
+    Object.assign(growConsultorCache, data);
+  }catch(e){ console.warn('loadGrowConsultorCache:', e); }
+}
+
+async function saveGrowConsultor(caso, consultor){
+  growConsultorCache[caso] = consultor;
+  if(window._fbSet){
+    try{
+      await window._fbSet('qualis_grow_consultores/'+caso.replace(/[^a-zA-Z0-9]/g,'_'), consultor);
+    }catch(e){ console.warn('saveGrowConsultor:', e); }
+  }
+  atualizarResumoGrow();
+}
 
 function renderGrow(records){
   const tb=document.getElementById('growBody'); if(!tb) return;
@@ -3104,7 +3529,7 @@ function renderGrow(records){
       <td>${esc(r.regional)}</td>
       <td>${agingChip(r.aging)}</td>
       <td>
-        <select onchange="growConsultorCache['${r.caso}']=this.value;atualizarResumoGrow()"
+        <select onchange="saveGrowConsultor('${r.caso}',this.value)"
           style="width:140px;padding:5px 8px;border:1.5px solid var(--c-border);border-radius:8px;background:var(--c-surface);color:var(--c-text);font-size:12px;">
           ${opts}
         </select>
@@ -3302,13 +3727,759 @@ function updateExpDates(){
   });
 }
 
-/* ── Boot ─────────────────────────────────── */
+
+/* ════════════════════════════════════════
+   MÓDULO TREINAMENTOS
+════════════════════════════════════════ */
+
+// Estado global do módulo
+const trState = {
+  resumo: [],    // [{nome, email, idUsuario, area, funcao, peu, cit, total, modalidade, motivo, fridayOnly}]
+  cronograma: [], // [{data, inicio, fim, nome, email, id, modalidade, obs}]
+  envio: []      // [{...pessoa, dataStr, iniStr, fimStr, status:'PENDENTE'}]
+};
+
+// ── Helpers ─────────────────────────────────────────
+function trNorm(s){
+  return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+function trIsWeekend(d){ return d.getDay()===0||d.getDay()===6; }
+function trIsFriday(d){ return d.getDay()===5; }
+function trNextBizDay(d){
+  const x=new Date(d); x.setDate(x.getDate()+1);
+  while(trIsWeekend(x)) x.setDate(x.getDate()+1);
+  x.setHours(8,30,0,0); return x;
+}
+function trNextFriday(d){
+  const x=new Date(d); x.setHours(8,30,0,0);
+  while(!trIsFriday(x)) x.setDate(x.getDate()+1);
+  return x;
+}
+function trFmtDate(d){ return d.toLocaleDateString('pt-BR'); }
+function trFmtTime(d){ return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); }
+
+function trClassificar(area, funcao){
+  const a=trNorm(area), f=trNorm(funcao);
+  const isTec = f.includes('tecnico de servico')||f.includes('tecnico avancado')||
+                f.includes('tecnicos avancados')||f.includes('chefe de oficina')||f.includes('chefe oficina');
+  if(isTec) return {tipo:'SALA',motivo:'Oficina: treinamento em sala até a regularização.',fridayOnly:true};
+  const isVen = a.includes('vendas')||a.includes('vendas diretas')||
+                f.includes('vendedor')||f.includes('consultor de vendas')||f.includes('vendas diretas');
+  if(isVen) return {tipo:'REMOTO',motivo:'Vendas: realizar no próprio computador (sem uso da sala).',fridayOnly:false};
+  return {tipo:'SALA',motivo:'Padrão: treinamento em sala.',fridayOnly:false};
+}
+
+// ── Processar ────────────────────────────────────────
+function trProcessar(){
+  const raw = document.getElementById('trBasePaste')?.value||'';
+  if(!raw.trim()){ trShowStatus('Cole os dados da BASE BRUTA primeiro.','error'); return; }
+
+  // Parse TSV/CSV
+  const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  if(lines.length < 2){ trShowStatus('Dados insuficientes. Inclua o cabeçalho e pelo menos uma linha.','error'); return; }
+
+  // Detectar separador
+  const sep = lines[0].includes('\t') ? '\t' : ';';
+  const headers = lines[0].split(sep).map(h=>h.trim());
+
+  // Mapear colunas
+  const col = {
+    marca:    headers.findIndex(h=>h==='Marca mestre'),
+    area:     headers.findIndex(h=>h==='Área'),
+    funcao:   headers.findIndex(h=>h==='Funções'),
+    id:       headers.findIndex(h=>h==='ID Usuário'),
+    usuario:  headers.findIndex(h=>h==='Usuário'),
+    email:    headers.findIndex(h=>h==='E-Mail'||h==='E-mail'),
+    conteudo: headers.findIndex(h=>h==='Conteúdo'),
+    status:   headers.findIndex(h=>h==='Status Conclusão'),
+  };
+
+  const missing = Object.entries(col).filter(([k,v])=>v===-1&&k!=='id').map(([k])=>k);
+  if(missing.length){ trShowStatus(`Colunas não encontradas: ${missing.join(', ')}. Verifique o cabeçalho.`,'error'); return; }
+
+  // Agregar pendências por pessoa
+  const seen = new Set();
+  const agg  = new Map();
+
+  for(let i=1;i<lines.length;i++){
+    const cols = lines[i].split(sep);
+    const nome    = (cols[col.usuario]||'').trim();
+    const email   = (cols[col.email]||'').trim();
+    const idUsr   = col.id>=0?(cols[col.id]||'').trim():'';
+    const area    = (cols[col.area]||'').trim();
+    const funcao  = (cols[col.funcao]||'').trim();
+    const marca   = (cols[col.marca]||'').trim().toUpperCase();
+    const conteudo= (cols[col.conteudo]||'').trim();
+    const status  = (cols[col.status]||'').trim().toUpperCase();
+
+    if(!nome||!conteudo) continue;
+    const concluido = status.includes('CONCLU')||status.includes('FINAL')||status==='OK';
+    if(concluido) continue;
+
+    // Dedup por pessoa+marca+conteudo
+    const dk=(nome+'|'+email+'|'+marca+'|'+conteudo).toUpperCase();
+    if(seen.has(dk)) continue;
+    seen.add(dk);
+
+    const pk=(nome+'|'+email).toUpperCase();
+    if(!agg.has(pk)) agg.set(pk,{nome,email,idUsuario:idUsr,area,funcao,peu:0,cit:0});
+    const obj=agg.get(pk);
+    if(idUsr) obj.idUsuario=idUsr;
+    if(area)  obj.area=area;
+    if(funcao) obj.funcao=funcao;
+    if(marca.includes('PEUGEOT')) obj.peu++;
+    else if(marca.includes('CITRO')) obj.cit++;
+    else obj.peu++;
+  }
+
+  if(!agg.size){ trShowStatus('Nenhuma pendência encontrada. Todos os status estão como Concluído?','error'); return; }
+
+  // Classificar modalidade
+  const pessoas = [...agg.values()].map(p=>{
+    const mod = trClassificar(p.area,p.funcao);
+    return {...p, total:p.peu+p.cit, ...mod};
+  }).sort((a,b)=>b.total-a.total);
+
+  trState.resumo = pessoas;
+
+  // Montar cronograma
+  const startDate = document.getElementById('trStartDate')?.value||'2026-04-01';
+  const startTime = document.getElementById('trStartTime')?.value||'08:30';
+  const slotH     = Number(document.getElementById('trSlotH')?.value||2);
+  const dayEndT   = document.getElementById('trDayEnd')?.value||'18:00';
+  const lunchT    = document.getElementById('trLunchStart')?.value||'12:00';
+  const prazoD    = Number(document.getElementById('trPrazoRemoto')?.value||7);
+
+  const [sh,sm]  = startTime.split(':').map(Number);
+  const [eh,em]  = dayEndT.split(':').map(Number);
+  const [lh,lm]  = lunchT.split(':').map(Number);
+
+  const prazoDate = new Date();
+  prazoDate.setDate(prazoDate.getDate()+prazoD);
+  const prazoStr  = trFmtDate(prazoDate);
+
+  let cursorSala = new Date(startDate+'T'+startTime+':00');
+  let cursorTech = trNextFriday(new Date(startDate+'T'+startTime+':00'));
+
+  const cron=[], envio=[];
+  const WA='5585991288949';
+  const PORTAL='https://idfed.mpsa.com/idp/SSO.saml2';
+
+  for(const p of pessoas){
+    let dataStr='',iniStr='',fimStr='',obs='';
+
+    if(p.tipo==='REMOTO'){
+      obs=`Realizar no seu computador até ${prazoStr} (sem uso da sala).`;
+    } else {
+      let cursor = p.fridayOnly ? new Date(cursorTech) : new Date(cursorSala);
+
+      // Pula almoço
+      if(cursor.getHours()>=lh && cursor.getMinutes()>=lm && cursor.getHours()<eh){
+        cursor.setHours(lh+2,0,0,0);
+      }
+      // Técnicos só às sextas
+      if(p.fridayOnly && !trIsFriday(cursor)) cursor=trNextFriday(cursor);
+
+      const ini = new Date(cursor);
+      const fim = new Date(cursor);
+      fim.setHours(fim.getHours()+slotH);
+
+      dataStr = trFmtDate(ini);
+      iniStr  = trFmtTime(ini);
+      fimStr  = trFmtTime(fim);
+      obs     = p.fridayOnly ? 'Oficina: treinamento em sala até a regularização.' : 'Treinamento em sala (padrão).';
+
+      cron.push({data:dataStr,inicio:iniStr,fim:fimStr,nome:p.nome,email:p.email,id:p.idUsuario,modalidade:'SALA',obs});
+
+      // Avança cursor
+      let next = new Date(fim);
+      if(next.getHours()>=eh){
+        next = p.fridayOnly ? trNextFriday(trNextBizDay(next)) : trNextBizDay(next);
+      } else {
+        if(next.getHours()>=lh) next.setHours(lh+2,0,0,0);
+        if(trIsWeekend(next)) next=trNextBizDay(next);
+        if(p.fridayOnly&&!trIsFriday(next)) next=trNextFriday(next);
+      }
+      if(p.fridayOnly) cursorTech=next; else cursorSala=next;
+    }
+
+    const waMsg=encodeURIComponent(`Olá, Time de Qualidade.\nSou: ${p.nome}\nID: ${p.idUsuario||'não informado'}\nGostaria de solicitar minha senha para o portal de treinamentos.`);
+    const waLink=`https://wa.me/${WA}?text=${waMsg}`;
+
+    envio.push({
+      nome:p.nome, email:p.email, id:p.idUsuario,
+      area:p.area, funcao:p.funcao, modalidade:p.tipo,
+      peu:p.peu, cit:p.cit, total:p.total,
+      dataStr, iniStr, fimStr, obs,
+      motivo:p.motivo, prazoStr, waLink, portalUrl:PORTAL,
+      status:'PENDENTE'
+    });
+  }
+
+  trState.cronograma = cron;
+  trState.envio      = envio;
+
+  // KPIs
+  const sala   = pessoas.filter(p=>p.tipo==='SALA').length;
+  const remoto = pessoas.filter(p=>p.tipo==='REMOTO').length;
+  const totPend= pessoas.reduce((s,p)=>s+p.total,0);
+  setText('trKTotal', pessoas.length);
+  setText('trKSala',  sala);
+  setText('trKRemoto',remoto);
+  setText('trKPend',  totPend);
+  document.getElementById('trKpis').style.display='grid';
+
+  trRenderResumo();
+  trRenderCron();
+  trRenderEnvio();
+
+  trShowStatus(`✅ ${pessoas.length} pessoas processadas — ${sala} em sala, ${remoto} remoto. Veja as abas acima.`,'success');
+
+  // Vai para resumo automaticamente
+  setTimeout(()=>{
+    const btn = document.querySelector('#pg-treinamentos .subnav-btn:nth-child(2)');
+    openSub('treinamentos','tr-resumo',btn);
+  },800);
+}
+
+function trLimpar(){
+  document.getElementById('trBasePaste').value='';
+  trState.resumo=[]; trState.cronograma=[]; trState.envio=[];
+  document.getElementById('trKpis').style.display='none';
+  document.getElementById('trTbResumo').innerHTML='<tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr>';
+  document.getElementById('trTbCron').innerHTML='<tr><td colspan="8" class="empty">Processe a base primeiro.</td></tr>';
+  document.getElementById('trTbEnvio').innerHTML='<tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr>';
+  trHideStatus();
+}
+
+// ── Render Resumo ────────────────────────────────────
+function trRenderResumo(filtroNome='', filtroModal=''){
+  const tb = document.getElementById('trTbResumo');
+  let rows = trState.resumo;
+  if(filtroNome) rows=rows.filter(r=>r.nome.toLowerCase().includes(filtroNome.toLowerCase())||r.email.toLowerCase().includes(filtroNome.toLowerCase()));
+  if(filtroModal) rows=rows.filter(r=>r.tipo===filtroModal||r.modalidade===filtroModal);
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="9" class="empty">Nenhum resultado.</td></tr>'; return; }
+
+  tb.innerHTML = rows.map(r=>{
+    const modalBadge = r.tipo==='SALA'
+      ? '<span class="chip chip-orange">🏫 Sala</span>'
+      : '<span class="chip chip-blue">💻 Remoto</span>';
+    const critBg = r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';
+    return `<tr class="${critBg}">
+      <td><strong>${esc(r.nome)}</strong></td>
+      <td style="font-size:11px;">${esc(r.email)}</td>
+      <td><code style="font-size:11px;">${esc(r.idUsuario||'—')}</code></td>
+      <td style="font-size:12px;">${esc(r.area)}</td>
+      <td style="font-size:12px;">${esc(r.funcao)}</td>
+      <td>${modalBadge}</td>
+      <td style="text-align:center;font-weight:700;">${r.peu}</td>
+      <td style="text-align:center;font-weight:700;">${r.cit}</td>
+      <td style="text-align:center;"><strong style="color:${r.total>=10?'var(--c-red)':r.total>=5?'var(--c-orange)':'var(--c-text)'};">${r.total}</strong></td>
+    </tr>`;
+  }).join('');
+}
+
+function trFiltrarResumo(){
+  trRenderResumo(
+    document.getElementById('trFiltroResumo')?.value||'',
+    document.getElementById('trFiltroModal')?.value||''
+  );
+}
+
+// ── Render Cronograma ────────────────────────────────
+function trRenderCron(filtro=''){
+  const tb = document.getElementById('trTbCron');
+  let rows = trState.cronograma;
+  if(filtro) rows=rows.filter(r=>r.nome.toLowerCase().includes(filtro.toLowerCase())||r.data.includes(filtro));
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="8" class="empty">Nenhum agendamento em sala.</td></tr>'; return; }
+
+  // Agrupar por data
+  const byDate={};
+  rows.forEach(r=>{ if(!byDate[r.data]) byDate[r.data]=[]; byDate[r.data].push(r); });
+
+  let html='';
+  Object.entries(byDate).forEach(([date,items])=>{
+    html+=`<tr style="background:rgba(37,99,235,.06);"><td colspan="8" style="font-weight:800;font-size:12px;padding:8px 14px;color:var(--c-blue);">📅 ${date}</td></tr>`;
+    items.forEach(r=>{
+      html+=`<tr>
+        <td>${esc(r.data)}</td>
+        <td><strong>${esc(r.inicio)}</strong></td>
+        <td>${esc(r.fim)}</td>
+        <td>${esc(r.nome)}</td>
+        <td style="font-size:11px;">${esc(r.email)}</td>
+        <td><code style="font-size:11px;">${esc(r.id||'—')}</code></td>
+        <td><span class="chip chip-orange">🏫 Sala</span></td>
+        <td style="font-size:12px;color:var(--c-muted);">${esc(r.obs)}</td>
+      </tr>`;
+    });
+  });
+  tb.innerHTML=html;
+}
+
+function trFiltrarCron(){
+  trRenderCron(document.getElementById('trFiltroCron')?.value||'');
+}
+
+// ── Render Envio ─────────────────────────────────────
+function trRenderEnvio(){
+  const tb = document.getElementById('trTbEnvio');
+  const rows = trState.envio;
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr>'; return; }
+
+  tb.innerHTML = rows.map((r,i)=>{
+    const stBadge = r.status==='ENVIADO'
+      ? '<span class="chip chip-green">✅ Enviado</span>'
+      : r.status==='ERRO'
+      ? '<span class="chip chip-red">❌ Erro</span>'
+      : '<span class="chip chip-yellow">⏳ Pendente</span>';
+    return `<tr>
+      <td><strong>${esc(r.nome)}</strong></td>
+      <td style="font-size:11px;">${esc(r.email)}</td>
+      <td>${r.modalidade==='SALA'?'<span class="chip chip-orange">🏫 Sala</span>':'<span class="chip chip-blue">💻 Remoto</span>'}</td>
+      <td style="text-align:center;">${r.peu}</td>
+      <td style="text-align:center;">${r.cit}</td>
+      <td style="text-align:center;font-weight:700;">${r.total}</td>
+      <td style="font-size:12px;">${esc(r.dataStr)||'—'}</td>
+      <td style="font-size:12px;">${r.iniStr?esc(r.iniStr)+' – '+esc(r.fimStr):'—'}</td>
+      <td>${stBadge}</td>
+    </tr>`;
+  }).join('');
+}
+
+// ── Status helper ────────────────────────────────────
+function trShowStatus(msg, type='info'){
+  const el=document.getElementById('trStatus');
+  el.style.display='block';
+  el.textContent=msg;
+  el.style.background=type==='success'?'rgba(5,150,105,.08)':type==='error'?'rgba(220,38,38,.08)':'rgba(37,99,235,.08)';
+  el.style.color=type==='success'?'var(--c-green)':type==='error'?'var(--c-red)':'var(--c-blue)';
+  el.style.border=`1px solid ${type==='success'?'rgba(5,150,105,.2)':type==='error'?'rgba(220,38,38,.2)':'rgba(37,99,235,.2)'}`;
+}
+function trHideStatus(){ document.getElementById('trStatus').style.display='none'; }
+
+// ── Config Email ─────────────────────────────────────
+function trSalvarEmailConfig(){
+  ['trEmailService','trEmailTemplate','trEmailKey','trEmailFrom','trEmailCc'].forEach(id=>{
+    const v=document.getElementById(id)?.value||'';
+    if(v) localStorage.setItem('tr-'+id,v);
+  });
+  alert('✅ Configurações de e-mail salvas!');
+}
+
+function trCarregarEmailConfig(){
+  ['trEmailService','trEmailTemplate','trEmailKey','trEmailFrom','trEmailCc'].forEach(id=>{
+    const v=localStorage.getItem('tr-'+id);
+    const el=document.getElementById(id);
+    if(v&&el) el.value=v;
+  });
+}
+
+// ── Construir HTML do e-mail ──────────────────────────
+function trBuildHtml(p){
+  const statusLabel = p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';
+  const statusColor = p.total>=10?'#dc2626':p.total>=5?'#d97706':'#2563eb';
+  const isSala = p.modalidade==='SALA';
+  const scheduleBlock = isSala ? `
+    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fff;">
+      <div style="font-weight:800;margin-bottom:6px;font-size:14px;">📅 Cronograma (Sala de Treinamento)</div>
+      <div style="font-size:13px;color:#111;">
+        <b>Data:</b> ${p.dataStr}<br>
+        <b>Horário:</b> ${p.iniStr} às ${p.fimStr}<br>
+        <span style="color:#6b7280;font-size:12px;">Duração: 2h · 1 pessoa por vez</span>
+      </div>
+    </div>` : `
+    <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fff;">
+      <div style="font-weight:800;margin-bottom:6px;font-size:14px;">⏰ Prazo (Remoto)</div>
+      <div style="font-size:13px;color:#111;">Concluir até: <b>${p.prazoStr}</b><br>
+      <span style="color:#6b7280;font-size:12px;">Realize no seu próprio computador.</span></div>
+    </div>`;
+
+  return `<div style="font-family:Arial,sans-serif;background:#f6f7fb;padding:18px;">
+  <div style="max-width:680px;margin:0 auto;background:#fff;border:1px solid #e7e7ef;border-radius:16px;overflow:hidden;">
+    <div style="background:#111827;color:#fff;padding:18px 20px;">
+      <div style="font-size:18px;font-weight:800;">Portal de Treinamentos – Pendências</div>
+      <div style="opacity:.8;font-size:12px;margin-top:4px;">Time de Qualidade · Pigalle WS</div>
+    </div>
+    <div style="padding:20px;">
+      <p style="font-size:14px;margin:0 0 14px;">Olá, <b>${p.nome}</b>!</p>
+      <div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:99px;margin-bottom:14px;">STATUS: ${statusLabel}</div>
+      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fafafa;">
+        <div style="font-weight:800;margin-bottom:8px;font-size:14px;">📚 Pendências identificadas</div>
+        <div style="font-size:13px;display:flex;gap:16px;flex-wrap:wrap;">
+          <div>🚗 <b>Peugeot:</b> ${p.peu} curso(s)</div>
+          <div>✨ <b>Citroën:</b> ${p.cit} curso(s)</div>
+          <div>📊 <b>Total:</b> ${p.total} curso(s)</div>
+        </div>
+      </div>
+      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px;background:#fff;">
+        <div style="font-weight:800;margin-bottom:6px;font-size:14px;">🎯 Modalidade: ${p.modalidade}</div>
+        <div style="font-size:13px;color:#6b7280;">${p.motivo}</div>
+      </div>
+      ${scheduleBlock}
+      <div style="border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin-bottom:12px;background:#f9fafb;">
+        <div style="font-weight:800;margin-bottom:8px;font-size:14px;">🔗 Acesso ao portal</div>
+        <div style="font-size:13px;margin-bottom:10px;">
+          <b>Link:</b> <a href="${p.portalUrl}" style="color:#2563eb;font-weight:700;">Acessar portal de treinamentos</a><br>
+          <b>ID de acesso:</b> <span style="font-weight:800;">${p.id||'—'}</span><br>
+          <span style="color:#6b7280;font-size:12px;">Para solicitar ou recuperar sua senha, clique abaixo:</span>
+        </div>
+        <a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:800;padding:10px 16px;border-radius:10px;font-size:13px;">💬 Falar com o Time de Qualidade (WhatsApp)</a>
+      </div>
+      <div style="border:1px solid #fde68a;background:#fffbeb;border-radius:12px;padding:14px;">
+        <div style="font-weight:800;margin-bottom:4px;">⚠️ Orientação</div>
+        <div style="font-size:13px;">Regularize seus treinamentos no prazo/modalidade informados. Em caso de impedimento, avise o time com antecedência.</div>
+      </div>
+      <div style="margin-top:16px;color:#6b7280;font-size:12px;">Atenciosamente,<br><b>Time de Qualidade · Pigalle WS</b></div>
+    </div>
+  </div></div>`;
+}
+
+// ── Envio de e-mails ──────────────────────────────────
+async function trCarregarEmailJS(){
+  if(window.emailjs) return true;
+  const key = localStorage.getItem('tr-trEmailKey');
+  if(!key){ alert('Configure a chave EmailJS nas configurações.'); return false; }
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+    s.onload=()=>{ emailjs.init(key); res(true); };
+    s.onerror=()=>rej(false);
+    document.head.appendChild(s);
+  });
+}
+
+async function trTestarEmail(){
+  const fb=document.getElementById('trEmailStatus');
+  if(!trState.envio.length){ fb.textContent='⚠️ Processe a base primeiro.'; fb.style.color='var(--c-orange)'; return; }
+  const ok = await trCarregarEmailJS().catch(()=>false);
+  if(!ok) return;
+
+  const p = trState.envio[0];
+  const service  = localStorage.getItem('tr-trEmailService')||'';
+  const template = localStorage.getItem('tr-trEmailTemplate')||'';
+  const toMe     = localStorage.getItem('tr-trEmailFrom')||'mkamilly774@gmail.com';
+  const cc       = localStorage.getItem('tr-trEmailCc')||'';
+
+  if(!service||!template){ fb.textContent='⚠️ Configure Service ID e Template ID.'; fb.style.color='var(--c-orange)'; return; }
+
+  fb.textContent='📨 Enviando teste...'; fb.style.color='var(--c-blue)';
+  try{
+    await emailjs.send(service, template, {
+      to_email:   toMe,
+      cc_email:   cc,
+      subject:    `TESTE – Treinamentos pendentes | ${p.nome}`,
+      nome:       p.nome,
+      peu:        p.peu,
+      cit:        p.cit,
+      total:      p.total,
+      modalidade: p.modalidade,
+      data:       p.dataStr||'—',
+      horario:    p.iniStr?`${p.iniStr} às ${p.fimStr}`:'—',
+      prazo:      p.prazoStr||'—',
+      html_body:  trBuildHtml(p)
+    });
+    fb.textContent=`✅ Teste enviado para ${toMe}!`; fb.style.color='var(--c-green)';
+  }catch(e){
+    fb.textContent='❌ Erro: '+(e.text||e.message||JSON.stringify(e)); fb.style.color='var(--c-red)';
+  }
+}
+
+async function trEnviarTodos(){
+  const fb=document.getElementById('trEmailStatus');
+  const pendentes = trState.envio.filter(p=>p.status==='PENDENTE');
+  if(!pendentes.length){ fb.textContent='Nenhum pendente para enviar.'; fb.style.color='var(--c-muted)'; return; }
+  if(!confirm(`Enviar e-mails para ${pendentes.length} pessoa(s)?`)) return;
+
+  const ok = await trCarregarEmailJS().catch(()=>false);
+  if(!ok) return;
+
+  const service  = localStorage.getItem('tr-trEmailService')||'';
+  const template = localStorage.getItem('tr-trEmailTemplate')||'';
+  const cc       = localStorage.getItem('tr-trEmailCc')||'';
+  if(!service||!template){ fb.textContent='⚠️ Configure Service ID e Template ID.'; fb.style.color='var(--c-orange)'; return; }
+
+  let enviados=0, erros=0;
+  fb.textContent=`📤 Enviando 0/${pendentes.length}...`; fb.style.color='var(--c-blue)';
+
+  for(const p of trState.envio){
+    if(p.status!=='PENDENTE') continue;
+    try{
+      await emailjs.send(service, template, {
+        to_email:   p.email,
+        cc_email:   cc,
+        subject:    `Treinamentos pendentes | ${p.nome} | Peugeot: ${p.peu} | Citroën: ${p.cit}`,
+        nome:       p.nome,
+        peu:        p.peu,
+        cit:        p.cit,
+        total:      p.total,
+        modalidade: p.modalidade,
+        data:       p.dataStr||'—',
+        horario:    p.iniStr?`${p.iniStr} às ${p.fimStr}`:'—',
+        prazo:      p.prazoStr||'—',
+        html_body:  trBuildHtml(p)
+      });
+      p.status='ENVIADO'; enviados++;
+    }catch(e){
+      p.status='ERRO'; erros++;
+      console.error('Erro ao enviar para '+p.email, e);
+    }
+    fb.textContent=`📤 Enviando ${enviados+erros}/${pendentes.length}...`;
+    await new Promise(r=>setTimeout(r,400)); // pausa entre envios
+  }
+
+  trRenderEnvio();
+  fb.textContent=`✅ Concluído! ${enviados} enviado(s)${erros?`, ${erros} erro(s)`:'.'}`; 
+  fb.style.color=erros?'var(--c-orange)':'var(--c-green)';
+}
+
+// Carrega config ao abrir a página de treinamentos
+window._trInited = false;
+function trInit(){
+  if(window._trInited) return;
+  window._trInited = true;
+  trCarregarEmailConfig();
+  // Set default start date to next monday
+  const next = new Date();
+  next.setDate(next.getDate()+(next.getDay()===0?1:8-next.getDay()));
+  document.getElementById('trStartDate').value = next.toISOString().split('T')[0];
+}
+/* ════════════════════════════════════════
+   MÓDULO ISC CONSULTOR
+   ISC = ((Prom×1) + (Neut×0.5)) / Total
+   Meta: 82% | Tendência: ≥82% puxando pra cima
+════════════════════════════════════════ */
+
+const iscHistorico = {}; // { "2026-01": [{consultor, dPeu,nPeu,pPeu, dCit,nCit,pCit}] }
+const MESES_ISC = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function calcISC(det, neu, prom){
+  const total = det + neu + prom;
+  if(!total) return null;
+  return ((prom * 1) + (neu * 0.5)) / total;
+}
+
+function iscTendencia(isc, meta){
+  if(isc === null) return '—';
+  const pct = isc * 100;
+  if(pct >= meta)    return '<span class="chip chip-green">⬆️ Puxando pra cima</span>';
+  if(pct >= meta-1)  return '<span class="chip chip-yellow">➡️ Neutro</span>';
+  return '<span class="chip chip-red">⬇️ Puxando pra baixo</span>';
+}
+
+function iscOrientacao(det, neu, prom, isc, meta){
+  const total = det + neu + prom;
+  if(!total) return '<span style="color:var(--c-muted);font-size:12px;">Prospectar pesquisas</span>';
+  if(det > 0) return '<span style="color:var(--c-red);font-weight:700;font-size:12px;">⚠️ Atuar nos detratores</span>';
+  if(isc !== null && isc * 100 < meta) return '<span style="color:var(--c-orange);font-weight:700;font-size:12px;">🔄 Trabalhar conversão de neutros</span>';
+  return '<span style="color:var(--c-green);font-weight:700;font-size:12px;">✅ Manter padrão de excelência</span>';
+}
+
+function iscProcessar(){
+  const raw  = document.getElementById('iscPasteArea')?.value || '';
+  const mes  = Number(document.getElementById('iscMes')?.value || 3);
+  const ano  = Number(document.getElementById('iscAno')?.value || 2026);
+  const meta = Number(document.getElementById('iscMeta')?.value || 82);
+
+  if(!raw.trim()){ alert('Cole os dados antes de processar.'); return; }
+
+  const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  const sep   = lines[0].includes('\t') ? '\t' : ';';
+
+  const registros = [];
+  for(const line of lines){
+    const cols = line.split(sep).map(c=>c.trim());
+    if(cols.length < 7) continue;
+    const consultor = cols[0];
+    const dPeu = Number(cols[1])||0;
+    const nPeu = Number(cols[2])||0;
+    const pPeu = Number(cols[3])||0;
+    const dCit = Number(cols[4])||0;
+    const nCit = Number(cols[5])||0;
+    const pCit = Number(cols[6])||0;
+    if(!consultor) continue;
+    registros.push({consultor, dPeu, nPeu, pPeu, dCit, nCit, pCit});
+  }
+
+  if(!registros.length){ alert('Nenhum dado válido encontrado. Verifique o formato.'); return; }
+
+  const key = `${ano}-${String(mes).padStart(2,'0')}`;
+  iscHistorico[key] = { registros, mes, ano, meta };
+  // Salva no Firebase se disponível
+  if(window._fbSet){
+    window._fbSet('qualis_isc/'+key, {registros, mes, ano, meta}).catch(()=>{});
+  }
+
+  iscRenderMesBtns();
+  iscRenderMes(key);
+}
+
+function iscLimpar(){
+  document.getElementById('iscPasteArea').value = '';
+}
+
+function iscRenderMesBtns(){
+  const wrap = document.getElementById('iscMesBtns');
+  if(!wrap) return;
+  const keys = Object.keys(iscHistorico).sort();
+  wrap.innerHTML = keys.map(k=>{
+    const d = iscHistorico[k];
+    return `<button class="subnav-btn" onclick="iscRenderMes('${k}')" id="iscBtn-${k}">${MESES_ISC[d.mes]}/${d.ano}</button>`;
+  }).join('');
+}
+
+function iscRenderMes(key){
+  // Marca botão ativo
+  document.querySelectorAll('[id^="iscBtn-"]').forEach(b=>b.classList.remove('active'));
+  document.getElementById('iscBtn-'+key)?.classList.add('active');
+
+  const dados = iscHistorico[key];
+  if(!dados){ return; }
+
+  const { registros, meta } = dados;
+  const vazio = document.getElementById('iscVazio');
+  const kpis  = document.getElementById('iscKpis');
+  const tabPeu= document.getElementById('iscTabelaPeu');
+  const tabCit= document.getElementById('iscTabelaCit');
+
+  vazio.style.display='none';
+  kpis.style.display='grid';
+  tabPeu.style.display='block';
+  tabCit.style.display='block';
+
+  // Calcula ISC de cada consultor
+  const withISC = registros.map(r=>({
+    ...r,
+    iscPeu: calcISC(r.dPeu, r.nPeu, r.pPeu),
+    iscCit: calcISC(r.dCit, r.nCit, r.pCit)
+  }));
+
+  // KPIs gerais
+  const validPeu = withISC.filter(r=>r.iscPeu!==null);
+  const validCit = withISC.filter(r=>r.iscCit!==null);
+  const mediaPeu = validPeu.length ? validPeu.reduce((s,r)=>s+r.iscPeu,0)/validPeu.length : null;
+  const mediaCit = validCit.length ? validCit.reduce((s,r)=>s+r.iscCit,0)/validCit.length : null;
+
+  // Melhor ISC (combinado)
+  const melhor = [...withISC].sort((a,b)=>{
+    const iA = Math.max(a.iscPeu??0, a.iscCit??0);
+    const iB = Math.max(b.iscPeu??0, b.iscCit??0);
+    return iB - iA;
+  })[0];
+
+  const abaixoMeta = withISC.filter(r=>(r.iscPeu!==null&&r.iscPeu*100<meta)||(r.iscCit!==null&&r.iscCit*100<meta)).length;
+
+  setText('iscKiPeu',  mediaPeu!==null ? (mediaPeu*100).toFixed(1)+'%' : '—');
+  setText('iscKiCit',  mediaCit!==null ? (mediaCit*100).toFixed(1)+'%' : '—');
+  setText('iscKMelhor', melhor ? Math.max(melhor.iscPeu??0, melhor.iscCit??0)*100|0 + '%' : '—');
+  setText('iscKMelhorNome', melhor?.consultor||'—');
+  setText('iscKAtencao', abaixoMeta);
+
+  // Tabela Peugeot
+  const tbPeu = document.getElementById('iscTbPeu');
+  tbPeu.innerHTML = withISC.map(r=>{
+    const isc = r.iscPeu;
+    const total = r.dPeu+r.nPeu+r.pPeu;
+    const iscStr = isc!==null ? `<strong style="color:${isc*100>=meta?'var(--c-green)':'var(--c-red)'}">${(isc*100).toFixed(1)}%</strong>` : '<span style="color:var(--c-muted);">Sem dados</span>';
+    return `<tr class="${r.dPeu>0?'row-detrator':''}">
+      <td><strong>${esc(r.consultor)}</strong></td>
+      <td style="text-align:center;color:${r.dPeu>0?'var(--c-red)':'inherit'};font-weight:${r.dPeu>0?800:400};">${r.dPeu}</td>
+      <td style="text-align:center;color:var(--c-orange);">${r.nPeu}</td>
+      <td style="text-align:center;color:var(--c-green);font-weight:700;">${r.pPeu}</td>
+      <td style="text-align:center;">${total||'—'}</td>
+      <td style="text-align:center;">${iscStr}</td>
+      <td>${iscTendencia(isc, meta)}</td>
+      <td>${iscOrientacao(r.dPeu, r.nPeu, r.pPeu, isc, meta)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" class="empty">Sem dados Peugeot.</td></tr>';
+
+  // Tabela Citroën
+  const tbCit = document.getElementById('iscTbCit');
+  tbCit.innerHTML = withISC.map(r=>{
+    const isc = r.iscCit;
+    const total = r.dCit+r.nCit+r.pCit;
+    const iscStr = isc!==null ? `<strong style="color:${isc*100>=meta?'var(--c-green)':'var(--c-red)'}">${(isc*100).toFixed(1)}%</strong>` : '<span style="color:var(--c-muted);">Sem dados</span>';
+    return `<tr class="${r.dCit>0?'row-detrator':''}">
+      <td><strong>${esc(r.consultor)}</strong></td>
+      <td style="text-align:center;color:${r.dCit>0?'var(--c-red)':'inherit'};font-weight:${r.dCit>0?800:400};">${r.dCit}</td>
+      <td style="text-align:center;color:var(--c-orange);">${r.nCit}</td>
+      <td style="text-align:center;color:var(--c-green);font-weight:700;">${r.pCit}</td>
+      <td style="text-align:center;">${total||'—'}</td>
+      <td style="text-align:center;">${iscStr}</td>
+      <td>${iscTendencia(isc, meta)}</td>
+      <td>${iscOrientacao(r.dCit, r.nCit, r.pCit, isc, meta)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8" class="empty">Sem dados Citroën.</td></tr>';
+}
+
+// Carrega histórico ISC do Firebase ao abrir a aba
+async function loadIscFromFirebase(){
+  if(!window._fbGet) return;
+  try{
+    const snap = await window._fbGet('qualis_isc');
+    const data = snap.val()||{};
+    Object.entries(data).forEach(([k,v])=>{ iscHistorico[k]=v; });
+    iscRenderMesBtns();
+    // Abre o mês mais recente automaticamente
+    const keys = Object.keys(iscHistorico).sort();
+    if(keys.length) iscRenderMes(keys[keys.length-1]);
+  }catch(e){ console.warn('loadIscFromFirebase:', e); }
+}
+
+/* ── Aba Treinamentos dentro do Pós-Vendas ── */
+function renderTreinamentosPos(){
+  const tb = document.getElementById('tbPosTreinamentos');
+  if(!tb) return;
+  const todos = trState.resumo;
+  if(!todos.length){
+    tb.innerHTML='<tr><td colspan="7" class="empty">Processe a base no módulo 🎓 Treinamentos para ver os dados aqui.</td></tr>';
+    setText('posTrSala','0'); setText('posTrRemoto','0'); setText('posTrTotal','0');
+    return;
+  }
+  const posAreas=['pós','pos','oficina','garantia','assistência','assistencia','técnico','tecnico','serviço','servico'];
+  let rows = todos.filter(p=>{ const a=trNorm(p.area),f=trNorm(p.funcao); return posAreas.some(x=>a.includes(x)||f.includes(x)); });
+  if(!rows.length) rows=[...todos];
+  const fq=(document.getElementById('fqPosTr')?.value||'').toLowerCase();
+  const fm=document.getElementById('fsPosTr')?.value||'';
+  if(fq) rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));
+  if(fm) rows=rows.filter(r=>r.tipo===fm);
+  setText('posTrSala',rows.filter(r=>r.tipo==='SALA').length);
+  setText('posTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);
+  setText('posTrTotal',rows.reduce((s,r)=>s+r.total,0));
+  if(!rows.length){ tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>'; return; }
+  const cronMap={};
+  trState.cronograma.forEach(c=>{ cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`; });
+  tb.innerHTML=rows.map(r=>{
+    const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';
+    const modal=r.tipo==='SALA'?'<span class="chip chip-orange">🏫 Sala</span>':'<span class="chip chip-blue">💻 Remoto</span>';
+    const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--c-green);font-weight:700;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--c-muted);">Prazo: 7 dias</span>`:'<span style="font-size:12px;color:var(--c-muted);">—</span>';
+    return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--c-red)':r.total>=5?'var(--c-orange)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;
+  }).join('');
+}
+
+/* ── Hash simples de senha (ofuscação) ────── */
+function hashPw(pw){
+  // XOR simples + base64 — evita senha em texto puro no localStorage
+  const key='QUALIS2026';
+  let out='';
+  for(let i=0;i<pw.length;i++) out+=String.fromCharCode(pw.charCodeAt(i)^key.charCodeAt(i%key.length));
+  return btoa(out);
+}
+function unhashPw(h){
+  try{
+    const key='QUALIS2026';
+    const raw=atob(h);
+    let out='';
+    for(let i=0;i<raw.length;i++) out+=String.fromCharCode(raw.charCodeAt(i)^key.charCodeAt(i%key.length));
+    return out;
+  }catch{ return h; }
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   const stored=localStorage.getItem('q-user');
   if(stored){
     try{
       const u=JSON.parse(stored);
-      const found=USERS.find(x=>x.email===u.email);
+      const found=getUsers().find(x=>x.email===u.email);
       if(found&&daysSince(found.pwdAt)<PW_DAYS){
         currentUser=found;
         startPortal();
