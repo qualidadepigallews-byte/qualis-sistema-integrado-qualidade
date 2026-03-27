@@ -3045,7 +3045,7 @@ body.dark .password-toggle{
         return;
       }
 
-      if (daysSince(user.passwordChangedAt) >= 15){
+      if (daysSince(user.passwordChangedAt) >= 30){
         showLoginError('Senha expirada. Solicite redefinição à Administradora Master.');
         setLoginMascotMood('error');
         return;
