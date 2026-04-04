@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>QUALIS — Sistema de Qualidade · Pigalle WS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
@@ -706,7 +707,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
 
       <button class="topnav-item" onclick="goPage('grow',this)">Grow CX</button>
       <button class="topnav-item" onclick="goPage('treinamentos',this)">Treinamentos</button>
-      <button class="topnav-item" onclick="goPage('chat',this);bootChat()">Chat</button>
+      <button class="topnav-item" onclick="goPage('chat',this);setTimeout(()=>bootChat(),100)">Chat</button>
       <button class="topnav-item" onclick="goPage('sistemas',this)">Sistemas</button>
       <button class="topnav-item" onclick="goPage('inteligencia',this)">Inteligência</button>
       <button class="topnav-item" onclick="goPage('config',this)">Configurações</button>
@@ -718,6 +719,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
         <div class="topnav-user-role" id="sbRole">—</div>
       </div>
       <div class="topnav-avatar" id="topAvatar">K</div>
+      <button class="topnav-logout" onclick="exportarRelatorio()" style="margin-right:6px;">📄 PDF</button>
       <button class="topnav-logout" onclick="doLogout()">Sair</button>
     </div>
   </nav>
@@ -734,38 +736,31 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
 
         <!-- ══ INÍCIO ══ -->
         <div class="page active" id="pg-inicio">
-          <div class="hero hero-coral">
-            <h2>Bem-vinda ao QUALIS 🎉</h2>
-            <p>Seu sistema integrado de qualidade — NPS, GROW, Chat e inteligência operacional em um só lugar.</p>
+          <div class="hero hero-accent" style="background:var(--g-accent);">
+            <h2>Bem-vinda ao QUALIS</h2>
+            <p>Seu sistema integrado de qualidade — NPS, base de clientes, treinamentos e inteligência operacional.</p>
           </div>
-          <div class="grid-4">
-            <div class="kpi mint"><h4>Promotoras hoje</h4><div class="val mint" id="h-prom">12</div><div class="sub">entradas no dia</div></div>
-            <div class="kpi mint"><h4>Pesquisas respondidas</h4><div class="val mint" id="h-pesq">27</div><div class="sub">total consolidado</div></div>
-            <div class="kpi coral"><h4>Detratores hoje</h4><div class="val coral" id="h-det">3</div><div class="sub">clientes críticos</div></div>
-            <div class="kpi amber"><h4>Treinamentos pendentes</h4><div class="val amber" id="h-trein">19</div><div class="sub">regularização necessária</div></div>
+
+          <!-- KPIs principais — dados reais -->
+          <div class="grid-4" style="margin-bottom:16px;">
+            <div class="kpi teal"><h4>Promotoras (total)</h4><div class="val teal" id="h-prom">—</div><div class="sub">vendas + pós-vendas</div></div>
+            <div class="kpi red"><h4>Hot Alerts</h4><div class="val red" id="h-hot">—</div><div class="sub">detratores + neutros</div></div>
+            <div class="kpi gold"><h4>Pesquisáveis</h4><div class="val gold" id="h-pesq">—</div><div class="sub">podem ainda responder</div></div>
+            <div class="kpi accent"><h4>Treinamentos pendentes</h4><div class="val accent" id="h-trein">—</div><div class="sub">pessoas com pendência</div></div>
           </div>
-          <div class="grid-4">
-            <div class="kpi sky"><h4>RACs pendentes</h4><div class="val sky" id="h-racs">7</div></div>
-            <div class="kpi amber"><h4>Hot Alerts críticos</h4><div class="val amber" id="h-hot">3</div></div>
-            <div class="kpi purple"><h4>Auditorias pendentes</h4><div class="val purple" id="h-aud">4</div></div>
-            <div class="kpi mint"><h4>Planos de ação</h4><div class="val mint" id="h-plan">6</div></div>
+
+          <!-- NPS rápido por marca -->
+          <div class="grid-4" style="margin-bottom:16px;">
+            <div class="kpi accent"><h4>NPS Vendas Peugeot</h4><div class="val accent" id="h-nps-vp">—</div><div class="sub">meta 90%</div></div>
+            <div class="kpi purple"><h4>NPS Vendas Citroën</h4><div class="val purple" id="h-nps-vc">—</div><div class="sub">meta 90%</div></div>
+            <div class="kpi teal"><h4>NPS Pós Peugeot</h4><div class="val teal" id="h-nps-pp">—</div><div class="sub">meta 82%</div></div>
+            <div class="kpi sky"><h4>NPS Pós Citroën</h4><div class="val sky" id="h-nps-pc">—</div><div class="sub">meta 82%</div></div>
           </div>
-          <div class="card">
-            <div class="card-title">🤖 Assistente QUALIS</div>
-            <div class="assist-wrap">
-              <input class="assist-input" id="assistInput" type="text" placeholder="Ex.: Qual o NPS da Peugeot? / Quais são as prioridades do dia?" onkeydown="if(event.key==='Enter')runAssist()">
-              <button class="btn primary" onclick="runAssist()">Perguntar</button>
-            </div>
-            <div class="assist-presets">
-              <button class="assist-preset" onclick="askPreset('Qual o NPS da Peugeot?')">NPS Peugeot</button>
-              <button class="assist-preset" onclick="askPreset('Qual o NPS da Citroën?')">NPS Citroën</button>
-              <button class="assist-preset" onclick="askPreset('Quantos promotores faltam para bater a meta?')">P/ meta</button>
-              <button class="assist-preset" onclick="askPreset('Estamos em risco de não bater a meta?')">Risco</button>
-              <button class="assist-preset" onclick="askPreset('Qual marca está mais crítica?')">Marca crítica</button>
-              <button class="assist-preset" onclick="askPreset('Quais são as prioridades do dia?')">Prioridades</button>
-              <button class="assist-preset" onclick="askPreset('Faça um texto para a diretoria')">Texto diretoria</button>
-            </div>
-            <div class="assist-response" id="assistResp">Olá! Pergunte sobre NPS, metas, risco, recuperação e prioridades da operação.</div>
+
+          <!-- Alertas automáticos -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">🔔 Alertas do dia</div>
+            <div id="h-alertas" style="font-size:13.5px;color:var(--muted);line-height:1.8;">Carregando dados...</div>
           </div>
         </div>
 
@@ -781,16 +776,28 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <button class="subnav-btn" onclick="openSub('vendas','v-treinamentos-ven',this);renderTreinamentosVen()">Treinamentos</button>
           </div>
           <div class="subpage active" id="v-painel">
-            <!-- Seletor de mês -->
-            <div class="toolbar" style="margin-bottom:16px;">
-              <select id="filVenPer" onchange="renderNpsVenMes()" style="font-weight:600;">
-                <option value="TODOS">📊 Ano completo</option>
-                <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
-                <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-                <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-                <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-              </select>
-              <input id="filVenAno" type="number" value="2026" oninput="renderNpsVenMes()" style="width:85px;">
+            <!-- Filtro Mês Início / Mês Fim -->
+            <div class="toolbar" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <label style="font-size:12px;font-weight:600;color:var(--muted);">De:</label>
+                <select id="filVenIni" onchange="renderNpsVenMes()" style="font-weight:600;">
+                  <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
+                  <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+                  <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+                  <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <label style="font-size:12px;font-weight:600;color:var(--muted);">Até:</label>
+                <select id="filVenFim" onchange="renderNpsVenMes()" style="font-weight:600;">
+                  <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO" selected>Março</option>
+                  <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+                  <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+                  <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+                </select>
+              </div>
+              <input id="filVenAno" type="number" value="2026" oninput="renderNpsVenMes()" style="width:80px;">
+              <button class="btn ghost" onclick="abrirModalNpsManual('VEN')" style="font-size:12px;">+ Adicionar manual</button>
             </div>
 
             <!-- KPIs do mês selecionado -->
@@ -804,7 +811,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <!-- Painéis NPS por marca -->
             <div class="brand-panels" style="margin-bottom:20px;">
               <div class="brand-panel">
-                <div class="brand-head peugeot">🚗 NPS Vendas · Peugeot</div>
+                <div class="brand-head peugeot">Peugeot — NPS Vendas</div>
                 <div class="brand-body">
                   <div class="nps-big"><div class="nps-big-label">NPS Peugeot</div><div class="nps-big-val pos" id="npsVenPeu">—</div><div class="nps-big-meta">Meta: 90,0% · <span id="venPeuFaltaLabel">calculando...</span></div></div>
                   <div class="metrics">
@@ -815,7 +822,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                 </div>
               </div>
               <div class="brand-panel">
-                <div class="brand-head citroen">✨ NPS Vendas · Citroën</div>
+                <div class="brand-head citroen">Citroën — NPS Vendas</div>
                 <div class="brand-body">
                   <div class="nps-big"><div class="nps-big-label">NPS Citroën</div><div class="nps-big-val pos" id="npsVenCit">—</div><div class="nps-big-meta">Meta: 90,0% · <span id="venCitFaltaLabel">calculando...</span></div></div>
                   <div class="metrics">
@@ -834,7 +841,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                 <div class="card-title">📅 NPS Mensal 2026 — Vendas</div>
                 <div class="table-wrap">
                   <table id="tbNpsVenMensal">
-                    <thead><tr><th>Mês</th><th>🚗 Peu %</th><th>✨ Cit %</th><th>Status Peu</th><th>Status Cit</th></tr></thead>
+                    <thead><tr><th>Mês</th><th>Peugeot %</th><th>Citroën %</th><th>Status Peu</th><th>Status Cit</th></tr></thead>
                     <tbody id="tbodyNpsVenMensal"></tbody>
                   </table>
                 </div>
@@ -872,10 +879,10 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   <thead>
                     <tr>
                       <th>Consultor Comercial</th>
-                      <th style="color:#3b82f6;">Promotoras 🚗</th>
-                      <th style="color:#ef4444;">Hot Alert 🚗</th>
-                      <th style="color:#8b5cf6;">Promotoras ✨</th>
-                      <th style="color:#f97316;">Hot Alert ✨</th>
+                      <th style="color:#3b82f6;">Promotoras PEU</th>
+                      <th style="color:#ef4444;">Hot Alert PEU</th>
+                      <th style="color:#8b5cf6;">Promotoras CIT</th>
+                      <th style="color:#f97316;">Hot Alert CIT</th>
                       <th style="color:#10b981;">TOTAL</th>
                     </tr>
                   </thead>
@@ -929,15 +936,27 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <button class="subnav-btn" onclick="openSub('posvendas','p-treinamentos-pos',this);renderTreinamentosPos()">🎓 Treinamentos</button>
           </div>
           <div class="subpage active" id="p-painel">
-            <div class="toolbar" style="margin-bottom:16px;">
-              <select id="filPosPer" onchange="renderNpsPosMes()" style="font-weight:600;">
-                <option value="TODOS">📊 Ano completo</option>
-                <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
-                <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-                <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-                <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-              </select>
-              <input id="filPosAno" type="number" value="2026" oninput="renderNpsPosMes()" style="width:85px;">
+            <div class="toolbar" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+              <div style="display:flex;align-items:center;gap:7px;">
+                <label style="font-size:12px;font-weight:600;color:var(--muted);">De:</label>
+                <select id="filPosIni" onchange="renderNpsPosMes()" style="font-weight:600;">
+                  <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
+                  <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+                  <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+                  <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+                </select>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;">
+                <label style="font-size:12px;font-weight:600;color:var(--muted);">Até:</label>
+                <select id="filPosFim" onchange="renderNpsPosMes()" style="font-weight:600;">
+                  <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO" selected>Março</option>
+                  <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+                  <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+                  <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+                </select>
+              </div>
+              <input id="filPosAno" type="number" value="2026" oninput="renderNpsPosMes()" style="width:80px;">
+              <button class="btn ghost" onclick="abrirModalNpsManual('POS')" style="font-size:12px;">+ Adicionar manual</button>
             </div>
             <div class="grid-4" style="margin-bottom:18px;">
               <div class="kpi mint"><h4>Promotoras</h4><div class="val mint" id="phProm">0</div></div>
@@ -947,7 +966,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             </div>
             <div class="brand-panels" style="margin-bottom:20px;">
               <div class="brand-panel">
-                <div class="brand-head peugeot">🔧 Pós-Vendas · Peugeot</div>
+                <div class="brand-head peugeot">Peugeot — Pós-Vendas</div>
                 <div class="brand-body">
                   <div class="nps-big"><div class="nps-big-label">NPS Peugeot</div><div class="nps-big-val pos" id="npsPosPeu">—</div><div class="nps-big-meta">Meta: 82,0% · <span id="posPeuFaltaLabel">calculando...</span></div></div>
                   <div class="metrics">
@@ -958,7 +977,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                 </div>
               </div>
               <div class="brand-panel">
-                <div class="brand-head citroen">✨ Pós-Vendas · Citroën</div>
+                <div class="brand-head citroen">Citroën — Pós-Vendas</div>
                 <div class="brand-body">
                   <div class="nps-big"><div class="nps-big-label">NPS Citroën</div><div class="nps-big-val pos" id="npsPosCit">—</div><div class="nps-big-meta">Meta: 82,0% · <span id="posCitFaltaLabel">calculando...</span></div></div>
                   <div class="metrics">
@@ -976,7 +995,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                 <div class="card-title">📅 NPS Mensal 2026 — Pós-Vendas</div>
                 <div class="table-wrap">
                   <table>
-                    <thead><tr><th>Mês</th><th>🚗 Peu %</th><th>✨ Cit %</th><th>Status Peu</th><th>Status Cit</th></tr></thead>
+                    <thead><tr><th>Mês</th><th>Peugeot %</th><th>Citroën %</th><th>Status Peu</th><th>Status Cit</th></tr></thead>
                     <tbody id="tbodyNpsPosMensal"></tbody>
                   </table>
                 </div>
@@ -1095,10 +1114,10 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
               <div id="chatFirebaseWarn" class="hidden" style="padding:9px 15px;background:rgba(245,158,11,.08);border-bottom:1px solid rgba(245,158,11,.2);font-size:13px;color:var(--q-gold);">⚠️ Firebase não configurado.</div>
               <div class="chat-messages" id="chatMessages"><div style="text-align:center;padding:40px;color:var(--muted);">💬 Conectando ao chat...</div></div>
               <div class="chat-compose">
-                <textarea id="chatInput" placeholder="Digite sua mensagem... @Kamilly @Letícia @Laís para mencionar"></textarea>
+                <textarea id="chatInput" placeholder="Digite sua mensagem... @Kamilly @Letícia @Laís para mencionar" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();doSend();}"></textarea>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                   <div class="chat-help">Enter envia · Shift+Enter nova linha</div>
-                  <button class="btn primary" id="chatSendBtn" type="button">Enviar ➤</button>
+                  <button class="btn primary" id="chatSendBtn" type="button" onclick="doSend()">Enviar ➤</button>
                 </div>
               </div>
             </div>
@@ -1213,23 +1232,54 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
         </div>
 
         <div class="page" id="pg-inteligencia">
-          <div class="page-header"><div class="page-title">IA QUALIS</div><div class="page-sub">Inteligencia com dados reais.</div></div>
+          <div class="page-header"><div class="page-title">IA QUALIS</div><div class="page-sub">Briefing automático + inteligência artificial com dados reais do portal.</div></div>
+
+          <!-- KPIs rápidos -->
+          <div class="grid-4" style="margin-bottom:16px;">
+            <div class="kpi teal"><h4>Promotoras total</h4><div class="val teal" id="ia-prom">—</div></div>
+            <div class="kpi red"><h4>Detratores total</h4><div class="val red" id="ia-det">—</div></div>
+            <div class="kpi gold"><h4>Pesquisáveis</h4><div class="val gold" id="ia-pesq">—</div></div>
+            <div class="kpi accent"><h4>Treinamentos</h4><div class="val accent" id="ia-tr">—</div></div>
+          </div>
+
+          <!-- Alertas automáticos -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">🔔 Alertas automáticos</div>
+            <div id="ia-alertas" style="display:flex;flex-direction:column;gap:8px;">
+              <div style="color:var(--muted);font-size:13px;">Carregando alertas...</div>
+            </div>
+          </div>
+
+          <!-- Gráfico NPS por mês -->
+          <div class="grid-2" style="margin-bottom:16px;">
+            <div class="card">
+              <div class="card-title">📊 NPS Pós-Vendas por mês</div>
+              <canvas id="graficoNpsPos" height="200"></canvas>
+            </div>
+            <div class="card">
+              <div class="card-title">🎓 Treinamentos — Sala vs Remoto</div>
+              <canvas id="graficoTr" height="200"></canvas>
+            </div>
+          </div>
+
+          <!-- Chat IA -->
           <div class="card">
-            <div id="iaContexto" style="font-size:13px;color:var(--muted);margin-bottom:14px;padding:10px;background:var(--surface2);border-radius:8px;">Carregando...</div>
+            <div class="card-title">💬 Pergunte à IA QUALIS</div>
             <div class="assist-presets" style="margin-bottom:12px;">
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de vendas?';runIAQualis()">NPS Vendas</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de pos-vendas?';runIAQualis()">NPS Pos</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de pos-vendas?';runIAQualis()">NPS Pos-Vendas</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais consultores tem mais detratores?';runIAQualis()">Detratores</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Estamos em risco de nao bater a meta?';runIAQualis()">Risco meta</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quantas pessoas tem treinamento pendente?';runIAQualis()">Treinamentos</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais sao as prioridades do dia?';runIAQualis()">Prioridades</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Faca um resumo para os diretores';runIAQualis()">Resumo diretores</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Qual a probabilidade de bater a meta esse mes?';runIAQualis()">Probabilidade meta</button>
             </div>
             <div class="assist-wrap">
-              <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte sobre NPS, detratores, treinamentos..." onkeydown="if(event.key==='Enter')runIAQualis()">
+              <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte qualquer coisa sobre NPS, detratores, treinamentos, metas..." onkeydown="if(event.key==='Enter')runIAQualis()">
               <button class="btn primary" onclick="runIAQualis()">Perguntar</button>
             </div>
-            <div class="assist-response" id="iaResp" style="margin-top:12px;">Ola! Sou a IA QUALIS. Como posso ajudar?</div>
+            <div class="assist-response" id="iaResp" style="margin-top:12px;">Ola! Sou a IA QUALIS. Posso analisar os dados reais e responder qualquer pergunta. Como posso ajudar?</div>
           </div>
         </div>
 
@@ -1470,12 +1520,24 @@ function renderMsgs(msgs){
 }
 
 async function doSend(){
-  if(!fbDb)return;
-  const me=(window.currentUser||{}).name;if(!me)return;
+  // Tenta reconectar Firebase se necessario
+  if(!fbDb){
+    if(!initFb()){
+      alert('Firebase nao conectado. Verifique sua conexao e recarregue a pagina.');
+      return;
+    }
+  }
+  const me=(window.currentUser||{}).name;
+  if(!me){alert('Faca login primeiro.');return;}
   const inp=document.getElementById('chatInput');
-  const txt=(inp?.value||'').trim();if(!txt)return;
-  await push(ref(fbDb,'qualis_chat'),{usuario:me,mensagem:txt,ts:Date.now()});
-  inp.value='';
+  const txt=(inp?.value||'').trim();
+  if(!txt)return;
+  try{
+    await push(ref(fbDb,'qualis_chat'),{usuario:me,mensagem:txt,ts:Date.now()});
+    inp.value='';
+  }catch(e){
+    alert('Erro ao enviar: '+e.message);
+  }
 }
 
 async function toggleRx(msgId,emoji){
@@ -1497,18 +1559,16 @@ window._fbUpdate=(path,data)=>update(ref(fbDb,path),data);
 window._fbOnValue=(path,cb)=>onValue(ref(fbDb,path),snap=>cb(snap.val()));
 
 window.bootChat=function(){
-  if(_chatBooted)return;
   const me=(window.currentUser||{}).name;
   if(!me){setTimeout(window.bootChat,400);return;}
   if(!fbDb){if(!initFb()){document.getElementById('chatFirebaseWarn')?.classList.remove('hidden');return;}}
-  _chatBooted=true;
-  const infoEl=document.getElementById('chatInfo');
-  if(infoEl)infoEl.textContent=`Grupo QUALIS · Logada como ${me}`;
-  setupPresence(me);listenMsgs();
-  const btn=document.getElementById('chatSendBtn');
-  if(btn&&!btn.dataset.bound){btn.dataset.bound='1';btn.addEventListener('click',()=>doSend());}
-  const inp=document.getElementById('chatInput');
-  if(inp&&!inp.dataset.bound){inp.dataset.bound='1';inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doSend();}});}
+  if(!_chatBooted){
+    _chatBooted=true;
+    const infoEl=document.getElementById('chatInfo');
+    if(infoEl)infoEl.textContent='Grupo QUALIS · Logada como '+me;
+    setupPresence(me);
+    listenMsgs();
+  }
 };
 
 initFb();
@@ -1606,9 +1666,9 @@ async function scExtractPdfText(pdfBase64){
 function renderScPainel(){const selEl=document.getElementById('scPainelMes');scPopulateSelect(selEl);if(!selEl.value)return;const mesAno=selEl.value;const entry=scData.find(d=>d.mesAno===mesAno);if(!entry)return;const peuCalc=scCalcIndicadores(entry.peugeot);const citCalc=scCalcIndicadores(entry.citroen);const ov=document.getElementById('scOverview');ov.innerHTML=scBrandOverviewHTML('peugeot','Peugeot',peuCalc)+scBrandOverviewHTML('citroen','Citroën',citCalc);scRenderIndicadoresTable('scTbPeu',peuCalc,mesAno,'peugeot');scRenderIndicadoresTable('scTbCit',citCalc,mesAno,'citroen');document.getElementById('scIndPeu').style.display=peuCalc?'block':'none';document.getElementById('scIndCit').style.display=citCalc?'block':'none';const prevEntry=scGetPrevEntry(mesAno);const alertas=scGerarAlertas(peuCalc,citCalc,prevEntry);renderAlertas(alertas);document.getElementById('scEmailBtn')?.classList.toggle('hidden',alertas.length===0);}
 function scBrandOverviewHTML(brand,label,calc){if(!calc)return `<div class="sc-brand-card"><div class="sc-brand-head ${brand}">${brand==='peugeot'?'🚗':'✨'} ${label}</div><div class="sc-brand-body" style="text-align:center;padding:30px;color:var(--muted);">PDF não importado</div></div>`;const cls=calc.classificacao;const nota=calc.notaTotal.toFixed(1);const pct=(calc.notaTotal/SC_NOTA_MAX*100).toFixed(0);const barColor=scGetClassBarColor(cls);const areas={};Object.values(calc.indicadores).forEach(i=>{const a=i.ind.area;if(!areas[a])areas[a]={notaTotal:0,pesoTotal:0};areas[a].notaTotal+=i.nota;areas[a].pesoTotal+=i.ind.peso;});const areasHTML=Object.entries(areas).map(([area,d])=>`<div class="sc-bar-wrap"><div class="sc-bar-label"><span>${area}</span><span>${d.notaTotal.toFixed(1)}/${d.pesoTotal}</span></div><div class="sc-bar-track"><div class="sc-bar-fill ${barColor}" style="width:${(d.notaTotal/d.pesoTotal*100).toFixed(0)}%"></div></div></div>`).join('');return `<div class="sc-brand-card"><div class="sc-brand-head ${brand}">${brand==='peugeot'?'🚗':'✨'} ${label}</div><div class="sc-brand-body"><div class="sc-score-big"><div class="sc-class sc-class-${cls}">${cls}</div><div style="flex:1;"><div class="sc-score-label">Nota Total</div><div class="sc-score-num" style="color:${scGetClassColor(cls)}">${nota}</div><div class="sc-score-max">de ${SC_NOTA_MAX} pontos</div></div></div><div class="sc-bar-wrap"><div class="sc-bar-label"><span>Score geral</span><span>${pct}%</span></div><div class="sc-bar-track"><div class="sc-bar-fill ${barColor}" style="width:${pct}%"></div></div></div>${areasHTML}</div></div>`;}
 function scRenderIndicadoresTable(tbId,calc,mesAno,brand){const tb=document.getElementById(tbId);if(!calc||!tb){if(tb)tb.innerHTML='<tr><td colspan="8" class="empty">PDF não importado.</td></tr>';return;}const prevEntry=scGetPrevEntry(mesAno);const prevCalc=prevEntry?scCalcIndicadores(prevEntry[brand]):null;tb.innerHTML=SC_INDICATORS.map(ind=>{const d=calc.indicadores[ind.key];const valStr=d.val!==null?d.val.toFixed(1)+'%':'—';const perfStr=d.perf!==null?d.perf.toFixed(1)+'%':'—';const notaStr=d.nota.toFixed(2);let deltaHTML='<span class="sc-delta sc-delta-zero">—</span>';if(prevCalc){const prevD=prevCalc.indicadores[ind.key];if(d.nota!==null&&prevD.nota!==null){const diff=d.nota-prevD.nota;if(Math.abs(diff)<0.01)deltaHTML='<span class="sc-delta sc-delta-zero">= Igual</span>';else if(diff>0)deltaHTML=`<span class="sc-delta sc-delta-up">▲ +${diff.toFixed(2)}</span>`;else deltaHTML=`<span class="sc-delta sc-delta-down">▼ ${diff.toFixed(2)}</span>`;}}const barPct=(d.nota/ind.peso*100).toFixed(0);const barCls=d.nota===0?'sc-bar-red':d.nota>=ind.peso*.8?'sc-bar-teal':'sc-bar-amber';return `<tr><td><div class="sc-ind-name">${ind.name}</div><div class="sc-ind-area">${ind.area}</div></td><td>${ind.area}</td><td>${ind.objetivo}${ind.formato}</td><td><strong>${ind.peso}</strong></td><td>${valStr}</td><td>${perfStr}</td><td><div style="display:flex;align-items:center;gap:7px;"><strong>${notaStr}</strong><div style="flex:1;min-width:50px;"><div class="sc-bar-track" style="height:5px;"><div class="sc-bar-fill ${barCls}" style="width:${barPct}%"></div></div></div></div></td><td>${deltaHTML}</td></tr>`;}).join('');}
-function scGerarAlertas(peuCalc,citCalc,prevEntry){const alertas=[];const prevPeu=prevEntry?scCalcIndicadores(prevEntry.peugeot):null;const prevCit=prevEntry?scCalcIndicadores(prevEntry.citroen):null;function checkBrand(calc,prevCalc,brandLabel){if(!calc)return;if(prevCalc&&calc.classificacao!==prevCalc.classificacao){const piora=['A','B','C','D'].indexOf(calc.classificacao)>['A','B','C','D'].indexOf(prevCalc.classificacao);alertas.push({tipo:'class',icon:piora?'⚠️':'🎉',title:`${brandLabel}: Mudança ${prevCalc.classificacao} → ${calc.classificacao}`,desc:piora?`Caiu para ${calc.classificacao}.`:`Evoluiu para ${calc.classificacao}!`,piora});}SC_INDICATORS.forEach(ind=>{const d=calc.indicadores[ind.key];if(!d||d.nota===undefined)return;if(d.val!==null&&d.nota===0)alertas.push({tipo:'zero',icon:'🚨',title:`${brandLabel}: ${ind.name} com nota ZERO`,desc:`Valor: ${d.val!==null?d.val.toFixed(1)+'%':'—'}`,piora:true});if(prevCalc){const prevD=prevCalc.indicadores[ind.key];if(d.nota!==null&&prevD?.nota!==null){const diff=d.nota-prevD.nota;if(diff<-0.005)alertas.push({tipo:'down',icon:'🔴',title:`${brandLabel}: Queda em ${ind.name}`,desc:`${prevD.nota.toFixed(2)} → ${d.nota.toFixed(2)} (${diff.toFixed(2)} pts)`,piora:true});else if(diff>0.005)alertas.push({tipo:'up',icon:'🟢',title:`${brandLabel}: Evolução em ${ind.name}`,desc:`+${diff.toFixed(2)} pontos.`,piora:false});}}});}checkBrand(peuCalc,prevPeu,'🚗 Peugeot');checkBrand(citCalc,prevCit,'✨ Citroën');return alertas;}
+function scGerarAlertas(peuCalc,citCalc,prevEntry){const alertas=[];const prevPeu=prevEntry?scCalcIndicadores(prevEntry.peugeot):null;const prevCit=prevEntry?scCalcIndicadores(prevEntry.citroen):null;function checkBrand(calc,prevCalc,brandLabel){if(!calc)return;if(prevCalc&&calc.classificacao!==prevCalc.classificacao){const piora=['A','B','C','D'].indexOf(calc.classificacao)>['A','B','C','D'].indexOf(prevCalc.classificacao);alertas.push({tipo:'class',icon:piora?'⚠️':'🎉',title:`${brandLabel}: Mudança ${prevCalc.classificacao} → ${calc.classificacao}`,desc:piora?`Caiu para ${calc.classificacao}.`:`Evoluiu para ${calc.classificacao}!`,piora});}SC_INDICATORS.forEach(ind=>{const d=calc.indicadores[ind.key];if(!d||d.nota===undefined)return;if(d.val!==null&&d.nota===0)alertas.push({tipo:'zero',icon:'🚨',title:`${brandLabel}: ${ind.name} com nota ZERO`,desc:`Valor: ${d.val!==null?d.val.toFixed(1)+'%':'—'}`,piora:true});if(prevCalc){const prevD=prevCalc.indicadores[ind.key];if(d.nota!==null&&prevD?.nota!==null){const diff=d.nota-prevD.nota;if(diff<-0.005)alertas.push({tipo:'down',icon:'🔴',title:`${brandLabel}: Queda em ${ind.name}`,desc:`${prevD.nota.toFixed(2)} → ${d.nota.toFixed(2)} (${diff.toFixed(2)} pts)`,piora:true});else if(diff>0.005)alertas.push({tipo:'up',icon:'🟢',title:`${brandLabel}: Evolução em ${ind.name}`,desc:`+${diff.toFixed(2)} pontos.`,piora:false});}}});}checkBrand(peuCalc,prevPeu,'Peugeot');checkBrand(citCalc,prevCit,'Citroën');return alertas;}
 function renderAlertas(alertas){const el=document.getElementById('scAlertas');if(!el)return;if(!alertas.length){el.innerHTML='';return;}const quedas=alertas.filter(a=>a.piora).length;const evolucoes=alertas.filter(a=>!a.piora).length;el.innerHTML=`<div class="card"><div class="card-title">🔔 Alertas — ${quedas} queda(s) · ${evolucoes} evolução(ões)</div>${alertas.sort((a,b)=>b.piora-a.piora).map(a=>`<div class="sc-alert-item sc-alert-${a.tipo}"><div class="sc-alert-icon">${a.icon}</div><div><div class="sc-alert-title">${a.title}</div><div class="sc-alert-desc">${a.desc}</div></div></div>`).join('')}</div>`;}
-function renderScComparativo(){const sel1=document.getElementById('scCompMes1');const sel2=document.getElementById('scCompMes2');scPopulateSelect(sel1);scPopulateSelect(sel2);const content=document.getElementById('scComparativoContent');if(scData.length<2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Importe pelo menos dois meses.</div>';return;}if(sel2.options.length>=2&&!sel2.value){sel1.value=scData[scData.length-2]?.mesAno||'';sel2.value=scData[scData.length-1]?.mesAno||'';}const e1=scData.find(d=>d.mesAno===sel1.value);const e2=scData.find(d=>d.mesAno===sel2.value);if(!e1||!e2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Selecione dois meses.</div>';return;}content.innerHTML=['peugeot','citroen'].map(brand=>{const labels={peugeot:'🚗 Peugeot',citroen:'✨ Citroën'};const c1=scCalcIndicadores(e1[brand]);const c2=scCalcIndicadores(e2[brand]);if(!c1||!c2)return '';const rows=SC_INDICATORS.map(ind=>{const d1=c1.indicadores[ind.key];const d2=c2.indicadores[ind.key];const diff=(d2?.nota||0)-(d1?.nota||0);const diffStr=diff>0.005?`<span class="sc-delta sc-delta-up">▲+${diff.toFixed(2)}</span>`:diff<-0.005?`<span class="sc-delta sc-delta-down">▼${diff.toFixed(2)}</span>`:`<span class="sc-delta sc-delta-zero">—</span>`;return `<tr><td><div class="sc-ind-name">${ind.name}</div></td><td>${d1?.val!=null?d1.val.toFixed(1)+'%':'—'}</td><td>${d1?.nota?.toFixed(2)||'0.00'}</td><td>${d2?.val!=null?d2.val.toFixed(1)+'%':'—'}</td><td>${d2?.nota?.toFixed(2)||'0.00'}</td><td>${diffStr}</td></tr>`;}).join('');const totalDiff=c2.notaTotal-c1.notaTotal;const totalColor=totalDiff>0?'var(--q-teal)':totalDiff<0?'var(--red)':'var(--muted)';return `<div class="card" style="margin-bottom:14px;"><div class="card-title">${labels[brand]}</div><div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;"><div class="kpi sky" style="flex:1;min-width:120px;"><h4>${MESES[e1.mes]}/${e1.ano}</h4><div class="val sky">${c1.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c1.classificacao}</div></div><div class="kpi mint" style="flex:1;min-width:120px;"><h4>${MESES[e2.mes]}/${e2.ano}</h4><div class="val mint">${c2.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c2.classificacao}</div></div><div class="kpi" style="flex:1;min-width:120px;"><h4>Variação</h4><div class="val" style="color:${totalColor};font-size:24px;">${totalDiff>0?'▲ +':''}${totalDiff.toFixed(2)}</div></div></div><div class="table-wrap"><table class="sc-ind-table"><thead><tr><th>Indicador</th><th>${MESES[e1.mes]} Val</th><th>Nota</th><th>${MESES[e2.mes]} Val</th><th>Nota</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');}
+function renderScComparativo(){const sel1=document.getElementById('scCompMes1');const sel2=document.getElementById('scCompMes2');scPopulateSelect(sel1);scPopulateSelect(sel2);const content=document.getElementById('scComparativoContent');if(scData.length<2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Importe pelo menos dois meses.</div>';return;}if(sel2.options.length>=2&&!sel2.value){sel1.value=scData[scData.length-2]?.mesAno||'';sel2.value=scData[scData.length-1]?.mesAno||'';}const e1=scData.find(d=>d.mesAno===sel1.value);const e2=scData.find(d=>d.mesAno===sel2.value);if(!e1||!e2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Selecione dois meses.</div>';return;}content.innerHTML=['peugeot','citroen'].map(brand=>{const labels={peugeot:'Peugeot',citroen:'Citroën'};const c1=scCalcIndicadores(e1[brand]);const c2=scCalcIndicadores(e2[brand]);if(!c1||!c2)return '';const rows=SC_INDICATORS.map(ind=>{const d1=c1.indicadores[ind.key];const d2=c2.indicadores[ind.key];const diff=(d2?.nota||0)-(d1?.nota||0);const diffStr=diff>0.005?`<span class="sc-delta sc-delta-up">▲+${diff.toFixed(2)}</span>`:diff<-0.005?`<span class="sc-delta sc-delta-down">▼${diff.toFixed(2)}</span>`:`<span class="sc-delta sc-delta-zero">—</span>`;return `<tr><td><div class="sc-ind-name">${ind.name}</div></td><td>${d1?.val!=null?d1.val.toFixed(1)+'%':'—'}</td><td>${d1?.nota?.toFixed(2)||'0.00'}</td><td>${d2?.val!=null?d2.val.toFixed(1)+'%':'—'}</td><td>${d2?.nota?.toFixed(2)||'0.00'}</td><td>${diffStr}</td></tr>`;}).join('');const totalDiff=c2.notaTotal-c1.notaTotal;const totalColor=totalDiff>0?'var(--q-teal)':totalDiff<0?'var(--red)':'var(--muted)';return `<div class="card" style="margin-bottom:14px;"><div class="card-title">${labels[brand]}</div><div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;"><div class="kpi sky" style="flex:1;min-width:120px;"><h4>${MESES[e1.mes]}/${e1.ano}</h4><div class="val sky">${c1.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c1.classificacao}</div></div><div class="kpi mint" style="flex:1;min-width:120px;"><h4>${MESES[e2.mes]}/${e2.ano}</h4><div class="val mint">${c2.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c2.classificacao}</div></div><div class="kpi" style="flex:1;min-width:120px;"><h4>Variação</h4><div class="val" style="color:${totalColor};font-size:24px;">${totalDiff>0?'▲ +':''}${totalDiff.toFixed(2)}</div></div></div><div class="table-wrap"><table class="sc-ind-table"><thead><tr><th>Indicador</th><th>${MESES[e1.mes]} Val</th><th>Nota</th><th>${MESES[e2.mes]} Val</th><th>Nota</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');}
 function renderScHistorico(){const el=document.getElementById('scHistoricoList');if(!scData.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Nenhum Scorecard importado.</div>';return;}el.innerHTML=[...scData].reverse().map(entry=>{const peuCalc=scCalcIndicadores(entry.peugeot);const citCalc=scCalcIndicadores(entry.citroen);const peuBadge=peuCalc?`<div class="sc-class sc-class-${peuCalc.classificacao}" style="width:28px;height:28px;border-radius:8px;font-size:12px;">🚗${peuCalc.classificacao}</div>`:'';const citBadge=citCalc?`<div class="sc-class sc-class-${citCalc.classificacao}" style="width:28px;height:28px;border-radius:8px;font-size:12px;">✨${citCalc.classificacao}</div>`:'';return `<div class="sc-hist-item"><div onclick="scVerMes('${entry.mesAno}')" style="flex:1;"><div class="sc-hist-month">${MESES[entry.mes]} / ${entry.ano}</div><div class="sc-hist-scores">${peuCalc?`Peugeot: ${peuCalc.notaTotal.toFixed(1)} pts`:''} ${citCalc?`· Citroën: ${citCalc.notaTotal.toFixed(1)} pts`:''}</div></div><div class="sc-hist-badges">${peuBadge}${citBadge}</div><button class="btn ghost" style="padding:5px 9px;font-size:11px;" onclick="scEditarMes('${entry.mesAno}')">✏️</button><button class="btn danger" style="padding:5px 9px;font-size:11px;" onclick="scDeletarMes('${entry.mesAno}')">🗑️</button></div>`;}).join('');}
 function scEditarMes(mesAno){const entry=scData.find(d=>d.mesAno===mesAno);if(!entry)return;const novoMes=prompt(`Mês atual: ${MESES[entry.mes]}/${entry.ano}\n\nDigite o número do mês (1-12):`);if(!novoMes)return;const novoAno=prompt('Ano correto:',entry.ano);if(!novoAno)return;const mes=Number(novoMes);const ano=Number(novoAno);if(mes<1||mes>12||isNaN(ano)){alert('Inválido.');return;}const novoMesAno=`${ano}-${String(mes).padStart(2,'0')}`;if(scData.find(d=>d.mesAno===novoMesAno&&d.mesAno!==mesAno)){alert('Já existe.');return;}entry.mes=mes;entry.ano=ano;entry.mesAno=novoMesAno;scData.sort((a,b)=>a.mesAno.localeCompare(b.mesAno));scSaveState();renderScHistorico();alert(`✅ ${MESES[mes]}/${ano}`);}
 function scDeletarMes(mesAno){const entry=scData.find(d=>d.mesAno===mesAno);if(!entry)return;if(!confirm(`Deletar ${MESES[entry.mes]}/${entry.ano}?`))return;scData=scData.filter(d=>d.mesAno!==mesAno);scSaveState();renderScHistorico();}
@@ -1629,7 +1689,53 @@ async function scEnviarEmail(){
   const citNota=citCalc?`${citCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${citCalc.classificacao}`:'Não importado';
   const quedas=alertas.filter(a=>a.piora).length;const evolucoes=alertas.filter(a=>!a.piora).length;
   const alertasHtml=alertas.map(a=>`<div style="padding:9px 0;border-bottom:1px solid #f3f4f6;display:flex;gap:9px;"><span>${a.icon}</span><div><div style="font-weight:700;font-size:13px;">${a.title}</div><div style="font-size:12px;color:#6b7280;">${a.desc}</div></div></div>`).join('');
-  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">📊 Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">🚗 Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">✨ Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">💬 Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table></body></html>`;
+  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">📊 Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">💬 Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
+<!-- Modal entrada manual NPS -->
+<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
+        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
+          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
+        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`;
   fb.textContent='📤 Enviando via Resend...';fb.style.color='var(--q-red)';
   try{
     const body={from:`QUALIS Qualidade <${from}>`,to:[to],subject:`📊 Scorecard Pós-Vendas — ${mes}`,html:htmlBody};
@@ -1688,6 +1794,40 @@ function startPortal(){
   loadConfig();renderSystems();
   setTimeout(()=>{if(window.bootChat)window.bootChat();},1200);
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
+  // Carrega histórico NPS do Firebase
+  setTimeout(()=>carregarNpsDoFirebase(),2000);
+}
+
+async function carregarNpsDoFirebase(){
+  if(!window._fbGet) return;
+  try{
+    const snap = await window._fbGet('qualis_nps_manual');
+    const dados = snap.val();
+    if(!dados) return;
+    // VEN
+    if(dados.VEN){
+      NPS_HISTORICO_VENDAS = [];
+      Object.values(dados.VEN).forEach(d=>{
+        if(d.peugeot) NPS_HISTORICO_VENDAS.push({mes:d.mes,ano:d.ano,marca:'PEUGEOT',prom:d.peugeot.prom||0,neu:d.peugeot.neu||0,det:d.peugeot.det||0});
+        if(d.citroen) NPS_HISTORICO_VENDAS.push({mes:d.mes,ano:d.ano,marca:'CITROEN',prom:d.citroen.prom||0,neu:d.citroen.neu||0,det:d.citroen.det||0});
+      });
+    }
+    // POS
+    if(dados.POS){
+      NPS_HISTORICO_POS = [];
+      Object.values(dados.POS).forEach(d=>{
+        if(d.peugeot) NPS_HISTORICO_POS.push({mes:d.mes,ano:d.ano,marca:'PEUGEOT',prom:d.peugeot.prom||0,neu:d.peugeot.neu||0,det:d.peugeot.det||0});
+        if(d.citroen) NPS_HISTORICO_POS.push({mes:d.mes,ano:d.ano,marca:'CITROEN',prom:d.citroen.prom||0,neu:d.citroen.neu||0,det:d.citroen.det||0});
+      });
+    }
+    // Atualiza painéis
+    renderNpsVenMes();
+    renderNpsPosMes();
+    renderNpsMensalTabela('VEN', 90);
+    renderNpsMensalTabela('POS', 82);
+    renderNpsTrimestral('VEN', 90, 'npsVenTrimestral');
+    renderNpsTrimestral('POS', 82, 'npsPosTrimestral');
+  }catch(e){ console.error('Erro ao carregar NPS:', e); }
 }
 
 const PAGE_TITLES={inicio:'Início',vendas:'Vendas',posvendas:'Pós-Vendas',grow:'Grow Customer Care',treinamentos:'Treinamentos',chat:'Chat',sistemas:'Sistemas',inteligencia:'Inteligência CX',config:'Configurações','scorecard-pos':'Scorecard Pós-Vendas'};
@@ -1734,20 +1874,10 @@ function applyNpsUI(){
 /* ════════════════════════════════════════════
    DADOS NPS PRÉ-CARREGADOS (jan e fev fechados)
 ════════════════════════════════════════════ */
-const NPS_HISTORICO_VENDAS = [
-  {mes:'JANEIRO',  ano:2026, marca:'CITROEN',  prom:11, det:0, neu:0},
-  {mes:'JANEIRO',  ano:2026, marca:'PEUGEOT',  prom:5,  det:0, neu:2},
-  {mes:'FEVEREIRO',ano:2026, marca:'CITROEN',  prom:9,  det:0, neu:0},
-  {mes:'FEVEREIRO',ano:2026, marca:'PEUGEOT',  prom:10, det:0, neu:0},
-];
-const NPS_HISTORICO_POS = [
-  {mes:'JANEIRO',  ano:2026, marca:'CITROEN',  prom:33, det:3, neu:2},
-  {mes:'JANEIRO',  ano:2026, marca:'PEUGEOT',  prom:19, det:3, neu:2},
-  {mes:'FEVEREIRO',ano:2026, marca:'CITROEN',  prom:29, det:4, neu:1},
-  {mes:'FEVEREIRO',ano:2026, marca:'PEUGEOT',  prom:20, det:1, neu:3},
-  {mes:'MARCO',    ano:2026, marca:'CITROEN',  prom:28, det:2, neu:2},
-  {mes:'MARCO',    ano:2026, marca:'PEUGEOT',  prom:12, det:0, neu:2},
-];
+// Histórico NPS — preenchido via botão "+ Adicionar manual" e salvo no Firebase
+// Arrays iniciam vazios e são carregados do Firebase ao iniciar
+let NPS_HISTORICO_VENDAS = [];
+let NPS_HISTORICO_POS = [];
 
 const MESES_ORDEM = ['JANEIRO','FEVEREIRO','MARCO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
 const MESES_LABEL = {JANEIRO:'Janeiro',FEVEREIRO:'Fevereiro',MARCO:'Março',ABRIL:'Abril',MAIO:'Maio',JUNHO:'Junho',JULHO:'Julho',AGOSTO:'Agosto',SETEMBRO:'Setembro',OUTUBRO:'Outubro',NOVEMBRO:'Novembro',DEZEMBRO:'Dezembro'};
@@ -1788,7 +1918,16 @@ function agregaNps(tipo, periodoMes, ano) {
   let peu = {prom:0, det:0, neu:0};
   let cit = {prom:0, det:0, neu:0};
 
-  const meses = periodoMes === 'TODOS' ? MESES_ORDEM : [periodoMes];
+  const MESES_IDX2 = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
+  let meses;
+  if(periodoMes === 'TODOS') meses = MESES_ORDEM;
+  else if(periodoMes === 'RANGE'){
+    const ini2 = document.getElementById('filVenIni')?.value || document.getElementById('filPosIni')?.value || 'JANEIRO';
+    const fim2 = document.getElementById('filVenFim')?.value || document.getElementById('filPosFim')?.value || 'DEZEMBRO';
+    const i = MESES_IDX2[ini2]??0, f = MESES_IDX2[fim2]??11;
+    meses = MESES_ORDEM.slice(i, f+1);
+  }
+  else meses = [periodoMes];
 
   for(const m of meses) {
     const hPeu = historico.find(r=>r.mes===m&&r.marca==='PEUGEOT');
@@ -1808,7 +1947,11 @@ function agregaNps(tipo, periodoMes, ano) {
 }
 
 function renderNpsVenMes() {
-  const per = document.getElementById('filVenPer')?.value || 'TODOS';
+  const ini = document.getElementById('filVenIni')?.value || 'JANEIRO';
+  const fim = document.getElementById('filVenFim')?.value || 'DEZEMBRO';
+  const MESES_IDX = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
+  const idxIni = MESES_IDX[ini]??0, idxFim = MESES_IDX[fim]??11;
+  const per = ini === fim ? ini : 'RANGE';
   const {peu, cit} = agregaNps('VEN', per, 2026);
   const npsPeu = calcNps(peu.prom, peu.neu, peu.det);
   const npsCit = calcNps(cit.prom, cit.neu, cit.det);
@@ -1838,7 +1981,9 @@ function renderNpsVenMes() {
 }
 
 function renderNpsPosMes() {
-  const per = document.getElementById('filPosPer')?.value || 'TODOS';
+  const ini = document.getElementById('filPosIni')?.value || 'JANEIRO';
+  const fim = document.getElementById('filPosFim')?.value || 'DEZEMBRO';
+  const per = ini === fim ? ini : 'RANGE';
   const {peu, cit} = agregaNps('POS', per, 2026);
   const npsPeu = calcNps(peu.prom, peu.neu, peu.det);
   const npsCit = calcNps(cit.prom, cit.neu, cit.det);
@@ -1920,12 +2065,12 @@ function renderNpsTrimestral(tipo, meta, elId) {
       </div>
       <div style="display:flex;gap:10px;">
         <div style="flex:1;background:var(--surface);border-radius:9px;padding:9px;text-align:center;border:1px solid var(--border);">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">🚗 Peugeot</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Peugeot</div>
           <div style="font-size:20px;font-weight:800;color:${okPeu?'var(--q-teal)':'var(--red)'};">${fmt(npsPeu)}</div>
           <div style="font-size:11px;color:var(--muted);">meta ${meta}%</div>
         </div>
         <div style="flex:1;background:var(--surface);border-radius:9px;padding:9px;text-align:center;border:1px solid var(--border);">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">✨ Citroën</div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Citroën</div>
           <div style="font-size:20px;font-weight:800;color:${okCit?'var(--q-teal)':'var(--red)'};">${fmt(npsCit)}</div>
           <div style="font-size:11px;color:var(--muted);">meta ${meta}%</div>
         </div>
@@ -2081,7 +2226,7 @@ function processGrow(){loadGrowConsultorCache();const pR=parseGrow(document.getE
 function parseGrow(raw,marca){if(!raw.trim())return[];const ignored=new Set(['número do item','número do caso','status','data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2','chassi completo','conta nome','prioridade','responsável_nome','regional description','caoss grow customer care peugeot','casos grow customer care peugeot','casos grow customer care citroën','casos grow customer care citroen','sort','ação']);const lines=raw.split('\n').map(x=>x.trim()).filter(x=>x&&!ignored.has(x.toLowerCase()));const records=[];const isCaso=v=>/^\d{7,9}$/.test(v);const isStatus=v=>['aberto','fechado','encerrado'].includes(v.toLowerCase());const isDate=v=>/^\d{2}\/\d{2}\/\d{4}/.test(v);let i=0;while(i<lines.length){if(!isCaso(lines[i])){i++;continue;}const start=i;const caso=lines[i++]||'',status=lines[i++]||'',data=lines[i++]||'';const canal=lines[i++]||'',motivo1=lines[i++]||'',motivo2=lines[i++]||'';const chassi=lines[i++]||'',cliente=lines[i++]||'',prioridade=lines[i++]||'';const responsavel=lines[i++]||'',regional=lines[i++]||'';if(!isCaso(caso)||!isStatus(status)||!isDate(data)){i=start+1;continue;}const m=data.match(/(\d{2})\/(\d{2})\/(\d{4})/);const aging=m?Math.max(0,Math.floor((Date.now()-new Date(+m[3],+m[2]-1,+m[1]))/86400000)):0;records.push({marca,caso,status,data,canal,motivo1,motivo2,chassi,cliente,prioridade,responsavel,regional,aging});}return records;}
 function agingChip(a){const n=Number(a)||0;if(n>30)return `<span class="chip chip-red">${n}d</span>`;if(n>=15)return `<span class="chip chip-amber">${n}d</span>`;return `<span class="chip chip-green">${n}d</span>`;}
 function priChip(v){const s=String(v||'').toLowerCase();if(s.includes('urgente'))return '<span class="chip chip-red">Urgente</span>';if(s.includes('alto'))return '<span class="chip chip-amber">Alto</span>';return '<span class="chip chip-green">Normal</span>';}
-function brandChip(m){return m==='Peugeot'?'<span class="chip chip-blue">🚗 Peugeot</span>':'<span class="chip chip-purple">✨ Citroën</span>';}
+function brandChip(m){return m==='Peugeot'?'<span class="chip chip-blue">Peugeot</span>':'<span class="chip chip-purple">Citroën</span>';}
 function stsChip(s){return s.toLowerCase().includes('aberto')?'<span class="chip chip-red">Aberto</span>':'<span class="chip chip-green">Fechado</span>';}
 const growConsultorCache={};let growCacheLoaded=false;
 async function loadGrowConsultorCache(){if(growCacheLoaded||!window._fbGet)return;growCacheLoaded=true;try{const snap=await window._fbGet('qualis_grow_consultores');Object.assign(growConsultorCache,snap.val()||{});}catch(e){}}
@@ -2501,7 +2646,53 @@ async function trEnviarTodos(){
 }
 function trCarregarEmailConfig(){['trResendKey','trEmailFrom','trEmailCc'].forEach(id=>{const v=localStorage.getItem('tr-'+id);const el=document.getElementById(id);if(v&&el)el.value=v;});}
 
-function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">📅 Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">📚 Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">🔗 Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">💬 Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table></body></html>`;}
+function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">📅 Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">📚 Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">🔗 Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">💬 Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
+<!-- Modal entrada manual NPS -->
+<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
+        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
+          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
+        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+</body></html>`;}
 
 async function trTestarEmail(){
   const fb=document.getElementById('trEmailStatus');
@@ -2591,8 +2782,21 @@ async function renderIAQualis(){
   const det={};pos.filter(r=>r.STATUS==='DETRATOR').forEach(r=>{const k=r.CONSULTOR||'?';det[k]=(det[k]||0)+1;});
   c.critico=Object.entries(det).sort((a,b)=>b[1]-a[1])[0]?.[0]||'nenhum';
   window._iaCtx=c;
-  const el=document.getElementById('iaContexto');
-  if(el)el.textContent='NPS Vendas: '+(c.nv_pct!==null?c.nv_pct+'%':'sem dados')+' (meta 90%) | NPS Pos: '+(c.np_pct!==null?c.np_pct+'%':'sem dados')+' (meta 82%) | '+(ven.length+pos.length)+' clientes | '+c.tr+' pendencias';
+  setText('ia-prom',c.pv+c.pp);
+  setText('ia-det',c.dv+c.dp);
+  setText('ia-pesq',(ven.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length+pos.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length));
+  setText('ia-tr',c.tr);
+  // Alertas
+  const alertas=[];
+  if(c.dv+c.dp>0) alertas.push({cor:'var(--q-red)',icon:'🚨',msg:`${c.dv+c.dp} detrator(es) na base — atenção!`});
+  if(c.nv_pct!==null&&c.nv_pct<90) alertas.push({cor:'var(--q-gold)',icon:'📊',msg:`NPS Vendas em ${c.nv_pct}% — abaixo da meta de 90%.`});
+  if(c.np_pct!==null&&c.np_pct<82) alertas.push({cor:'var(--q-gold)',icon:'📊',msg:`NPS Pos-Vendas em ${c.np_pct}% — abaixo da meta de 82%.`});
+  if(c.tr>0) alertas.push({cor:'var(--q-accent)',icon:'🎓',msg:`${c.tr} pessoa(s) com treinamento pendente.`});
+  if(c.critico&&c.critico!=='nenhum') alertas.push({cor:'var(--q-red)',icon:'👤',msg:`${c.critico} tem detratores — prioridade!`});
+  const alertasEl=document.getElementById('ia-alertas');
+  if(alertasEl){
+    alertasEl.innerHTML=alertas.length?alertas.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;background:var(--surface2);border-left:3px solid ${a.cor};"><span style="font-size:16px;">${a.icon}</span><span style="font-size:13px;font-weight:500;">${a.msg}</span></div>`).join(''):'<div style="color:var(--muted);font-size:13px;">Nenhum alerta. Tudo tranquilo!</div>';
+  }
 }
 async function runIAQualis(){
   const input=document.getElementById('iaInput')?.value?.trim();if(!input)return;
@@ -2609,6 +2813,247 @@ async function runIAQualis(){
   }catch(e){document.getElementById('iaResp').textContent='Erro: '+e.message;}
 }
 
+
+/* ════════════════════════════════════════════
+   DASHBOARD INÍCIO — atualiza KPIs reais
+════════════════════════════════════════════ */
+function atualizarDashboardInicio(){
+  const pos=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];
+  const ven=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];
+  const prom=ven.filter(r=>r.STATUS==='PROMOTOR').length+pos.filter(r=>r.STATUS==='PROMOTOR').length;
+  const det=ven.filter(r=>r.STATUS==='DETRATOR').length+pos.filter(r=>r.STATUS==='DETRATOR').length;
+  const neu=ven.filter(r=>r.STATUS==='NEUTRO').length+pos.filter(r=>r.STATUS==='NEUTRO').length;
+  const pesq=ven.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length
+            +pos.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length;
+  const tr=trState.resumo.length;
+
+  setText('h-prom',prom);
+  setText('h-hot',det+neu);
+  setText('h-pesq',pesq);
+  setText('h-trein',tr);
+
+  // NPS por marca
+  function npsStr(pArr,dArr,nArr){
+    const p=pArr.length,d=dArr.length,n=nArr.length,t=p+d+n;
+    return t>0?fmt(calcNps(p,n,d)):'—';
+  }
+  const vp=baseCache.VEN_PEU||[],vc=baseCache.VEN_CIT||[];
+  const pp=baseCache.POS_PEU||[],pc=baseCache.POS_CIT||[];
+  setText('h-nps-vp',npsStr(vp.filter(r=>r.STATUS==='PROMOTOR'),vp.filter(r=>r.STATUS==='DETRATOR'),vp.filter(r=>r.STATUS==='NEUTRO')));
+  setText('h-nps-vc',npsStr(vc.filter(r=>r.STATUS==='PROMOTOR'),vc.filter(r=>r.STATUS==='DETRATOR'),vc.filter(r=>r.STATUS==='NEUTRO')));
+  setText('h-nps-pp',npsStr(pp.filter(r=>r.STATUS==='PROMOTOR'),pp.filter(r=>r.STATUS==='DETRATOR'),pp.filter(r=>r.STATUS==='NEUTRO')));
+  setText('h-nps-pc',npsStr(pc.filter(r=>r.STATUS==='PROMOTOR'),pc.filter(r=>r.STATUS==='DETRATOR'),pc.filter(r=>r.STATUS==='NEUTRO')));
+
+  // Alertas
+  const alertas=[];
+  if(det>0) alertas.push({tipo:'red',icon:'🚨',msg:`${det} detrator(es) na base — atenção imediata!`});
+  if(pesq>0) alertas.push({tipo:'accent',icon:'📋',msg:`${pesq} cliente(s) pesquisável(is) ainda podem responder.`});
+  if(tr>0) alertas.push({tipo:'gold',icon:'🎓',msg:`${tr} pessoa(s) com treinamento pendente.`});
+  // Consultor mais crítico
+  const detPorC={};
+  pos.filter(r=>r.STATUS==='DETRATOR').forEach(r=>{const c=r.CONSULTOR||'?';detPorC[c]=(detPorC[c]||0)+1;});
+  const critico=Object.entries(detPorC).sort((a,b)=>b[1]-a[1])[0];
+  if(critico) alertas.push({tipo:'red',icon:'👤',msg:`${critico[0]} tem ${critico[1]} detrator(es) — prioridade de contato.`});
+  // Mais promotoras
+  const promPorC={};
+  pos.filter(r=>r.STATUS==='PROMOTOR').forEach(r=>{const c=r.CONSULTOR||'?';promPorC[c]=(promPorC[c]||0)+1;});
+  const top=Object.entries(promPorC).sort((a,b)=>b[1]-a[1])[0];
+  if(top) alertas.push({tipo:'teal',icon:'🏆',msg:`${top[0]} lidera com ${top[1]} promotora(s).`});
+
+  const alertasEl=document.getElementById('h-alertas');
+  if(alertasEl){
+    if(!alertas.length){
+      alertasEl.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum alerta no momento. Tudo tranquilo!</div>';
+    } else {
+      alertasEl.innerHTML=alertas.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;background:var(--surface2);border-left:3px solid var(--q-${a.tipo==='red'?'red':a.tipo==='gold'?'gold':a.tipo==='teal'?'teal':'accent'});">
+        <span style="font-size:16px;">${a.icon}</span>
+        <span style="font-size:13px;font-weight:500;">${a.msg}</span>
+      </div>`).join('');
+    }
+  }
+}
+
+/* ════════════════════════════════════════════
+   ALERTA WHATSAPP — detrator novo
+════════════════════════════════════════════ */
+const WA_KAMILLY = '5585992073208'; // Numero WhatsApp Kamilly
+function alertarDetrator(cliente, consultor, nota, marca){
+  const msg = encodeURIComponent(
+    '🚨 *ALERTA QUALIS — NOVO DETRATOR*\n\n'+
+    '👤 Cliente: '+cliente+'\n'+
+    '🏷️ Marca: '+marca+'\n'+
+    '👥 Consultor: '+(consultor||'não informado')+'\n'+
+    '⭐ Nota NPS: '+nota+'\n\n'+
+    'Ação imediata necessária!'
+  );
+  const link = 'https://wa.me/'+WA_KAMILLY+'?text='+msg;
+  // Abre em nova aba silenciosamente
+  const a=document.createElement('a');
+  a.href=link;a.target='_blank';a.rel='noopener';
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+}
+
+/* ════════════════════════════════════════════
+   GRÁFICOS DA IA QUALIS
+════════════════════════════════════════════ */
+let _chartNpsPos=null, _chartTr=null;
+
+function renderGraficosIA(){
+  // Gráfico NPS Pós por mês
+  const ctxPos=document.getElementById('graficoNpsPos')?.getContext('2d');
+  if(ctxPos){
+    if(_chartNpsPos) _chartNpsPos.destroy();
+    const meses=NPS_HISTORICO_POS.filter(r=>r.marca==='PEUGEOT').map(r=>r.mes.substring(0,3));
+    const npsPeu=NPS_HISTORICO_POS.filter(r=>r.marca==='PEUGEOT').map(r=>{
+      const t=r.prom+r.det+r.neu;return t>0?Math.round((r.prom-r.det)/t*100):null;
+    });
+    const npsCit=NPS_HISTORICO_POS.filter(r=>r.marca==='CITROEN').map(r=>{
+      const t=r.prom+r.det+r.neu;return t>0?Math.round((r.prom-r.det)/t*100):null;
+    });
+    _chartNpsPos=new Chart(ctxPos,{
+      type:'line',
+      data:{
+        labels:meses,
+        datasets:[
+          {label:'Peugeot',data:npsPeu,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',tension:.3,fill:true,pointRadius:5},
+          {label:['Citro\u00ebn'],data:npsCit,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.1)',tension:.3,fill:true,pointRadius:5},
+          {label:'Meta 82%',data:meses.map(()=>82),borderColor:'#dc2626',borderDash:[5,5],pointRadius:0,borderWidth:1.5,fill:false}
+        ]
+      },
+      options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}}
+    });
+  }
+
+  // Gráfico Treinamentos Sala vs Remoto
+  const ctxTr=document.getElementById('graficoTr')?.getContext('2d');
+  if(ctxTr){
+    if(_chartTr) _chartTr.destroy();
+    const sala=trState.resumo.filter(p=>p.modalidade==='SALA').length;
+    const remoto=trState.resumo.filter(p=>p.modalidade==='REMOTO').length;
+    _chartTr=new Chart(ctxTr,{
+      type:'doughnut',
+      data:{
+        labels:['Sala','Remoto','Sem dados'],
+        datasets:[{data:[sala,remoto,sala+remoto===0?1:0],backgroundColor:['#2563eb','#0d9488','#e5e7eb'],borderWidth:0}]
+      },
+      options:{responsive:true,plugins:{legend:{position:'bottom'}}}
+    });
+  }
+}
+
+/* ════════════════════════════════════════════
+   NPS MANUAL — salvar
+════════════════════════════════════════════ */
+let _npsManualTipo='POS';
+function abrirModalNpsManual(tipo){
+  _npsManualTipo=tipo;
+  document.getElementById('modalNpsTitulo').textContent='Adicionar NPS '+(tipo==='VEN'?'Vendas':'Pos-Vendas')+' Manualmente';
+  document.getElementById('modalNpsManual').classList.remove('hidden');
+}
+
+function salvarNpsManual(){
+  const mes=document.getElementById('mnMes').value;
+  const ano=Number(document.getElementById('mnAno').value)||2026;
+  const peuProm=Number(document.getElementById('mnPeuProm').value)||0;
+  const peuNeu=Number(document.getElementById('mnPeuNeu').value)||0;
+  const peuDet=Number(document.getElementById('mnPeuDet').value)||0;
+  const citProm=Number(document.getElementById('mnCitProm').value)||0;
+  const citNeu=Number(document.getElementById('mnCitNeu').value)||0;
+  const citDet=Number(document.getElementById('mnCitDet').value)||0;
+
+  const historico=_npsManualTipo==='VEN'?NPS_HISTORICO_VENDAS:NPS_HISTORICO_POS;
+
+  // Atualiza ou insere Peugeot
+  const idxPeu=historico.findIndex(r=>r.mes===mes&&r.marca==='PEUGEOT'&&r.ano===ano);
+  if(idxPeu>-1){historico[idxPeu]={mes,ano,marca:'PEUGEOT',prom:peuProm,neu:peuNeu,det:peuDet};}
+  else{historico.push({mes,ano,marca:'PEUGEOT',prom:peuProm,neu:peuNeu,det:peuDet});}
+
+  // Atualiza ou insere Citroen
+  const idxCit=historico.findIndex(r=>r.mes===mes&&r.marca==='CITROEN'&&r.ano===ano);
+  if(idxCit>-1){historico[idxCit]={mes,ano,marca:'CITROEN',prom:citProm,neu:citNeu,det:citDet};}
+  else{historico.push({mes,ano,marca:'CITROEN',prom:citProm,neu:citNeu,det:citDet});}
+
+  // Salva no Firebase
+  if(window._fbSet){
+    window._fbSet('qualis_nps_manual/'+_npsManualTipo+'/'+ano+'_'+mes,{
+      peugeot:{prom:peuProm,neu:peuNeu,det:peuDet},
+      citroen:{prom:citProm,neu:citNeu,det:citDet},
+      tipo:_npsManualTipo,mes,ano
+    }).catch(()=>{});
+  }
+
+  document.getElementById('modalNpsManual').classList.add('hidden');
+
+  // Renderiza tudo na hora
+  renderNpsVenMes();
+  renderNpsPosMes();
+  renderNpsMensalTabela('VEN', 90);
+  renderNpsMensalTabela('POS', 82);
+  renderNpsTrimestral('VEN', 90, 'npsVenTrimestral');
+  renderNpsTrimestral('POS', 82, 'npsPosTrimestral');
+  atualizarDashboardInicio();
+
+  alert('Dados de '+mes+'/'+ano+' salvos e atualizados!');
+}
+
+/* ════════════════════════════════════════════
+   EXPORTAR PDF — relatório mensal
+════════════════════════════════════════════ */
+function exportarRelatorio(){
+  const pos=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];
+  const ven=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];
+  const promVen=ven.filter(r=>r.STATUS==='PROMOTOR').length;
+  const detVen=ven.filter(r=>r.STATUS==='DETRATOR').length;
+  const neuVen=ven.filter(r=>r.STATUS==='NEUTRO').length;
+  const promPos=pos.filter(r=>r.STATUS==='PROMOTOR').length;
+  const detPos=pos.filter(r=>r.STATUS==='DETRATOR').length;
+  const neuPos=pos.filter(r=>r.STATUS==='NEUTRO').length;
+  const tvVen=promVen+detVen+neuVen,tvPos=promPos+detPos+neuPos;
+  const npsVen=tvVen>0?Math.round((promVen-detVen)/tvVen*100):0;
+  const npsPos=tvPos>0?Math.round((promPos-detPos)/tvPos*100):0;
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
+
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Relatorio QUALIS</title>
+  <style>body{font-family:Arial,sans-serif;padding:30px;color:#111;}
+  h1{color:#1a56db;border-bottom:2px solid #1a56db;padding-bottom:8px;}
+  h2{color:#374151;margin-top:24px;}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0;}
+  .kpi{border:1px solid #e5e7eb;border-radius:8px;padding:14px;text-align:center;}
+  .kpi .num{font-size:28px;font-weight:700;color:#1a56db;}
+  .kpi .lbl{font-size:11px;color:#6b7280;margin-top:4px;}
+  table{width:100%;border-collapse:collapse;margin-top:12px;}
+  th{background:#1a56db;color:#fff;padding:8px 12px;text-align:left;font-size:12px;}
+  td{padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:12px;}
+  .verde{color:#057a55;font-weight:700;} .vermelho{color:#e02424;font-weight:700;}
+  @media print{body{padding:10px;}}</style></head><body>
+  <h1>QUALIS — Relatorio de Qualidade</h1>
+  <p><strong>Pigalle WS · Peugeot | Citroen</strong> &nbsp;|&nbsp; ${hoje} &nbsp;|&nbsp; Competencia: ${mes}</p>
+  <h2>NPS do Periodo</h2>
+  <div class="kpis">
+    <div class="kpi"><div class="num ${npsVen>=90?'verde':'vermelho'}">${npsVen}%</div><div class="lbl">NPS Vendas (meta 90%)</div></div>
+    <div class="kpi"><div class="num ${npsPos>=82?'verde':'vermelho'}">${npsPos}%</div><div class="lbl">NPS Pos-Vendas (meta 82%)</div></div>
+    <div class="kpi"><div class="num">${promVen+promPos}</div><div class="lbl">Total Promotoras</div></div>
+    <div class="kpi"><div class="num vermelho">${detVen+detPos}</div><div class="lbl">Total Detratores</div></div>
+  </div>
+  <h2>Detalhamento</h2>
+  <table><thead><tr><th>Setor</th><th>Promotoras</th><th>Neutras</th><th>Detratoras</th><th>NPS</th></tr></thead>
+  <tbody>
+    <tr><td>Vendas</td><td class="verde">${promVen}</td><td>${neuVen}</td><td class="vermelho">${detVen}</td><td class="${npsVen>=90?'verde':'vermelho'}">${npsVen}%</td></tr>
+    <tr><td>Pos-Vendas</td><td class="verde">${promPos}</td><td>${neuPos}</td><td class="vermelho">${detPos}</td><td class="${npsPos>=82?'verde':'vermelho'}">${npsPos}%</td></tr>
+  </tbody></table>
+  <h2>Treinamentos</h2>
+  <p>Pessoas com pendencia: <strong>${trState.resumo.length}</strong> &nbsp;|&nbsp; Em sala: <strong>${trState.resumo.filter(p=>p.modalidade==='SALA').length}</strong> &nbsp;|&nbsp; Remoto: <strong>${trState.resumo.filter(p=>p.modalidade==='REMOTO').length}</strong></p>
+  <p style="margin-top:30px;font-size:11px;color:#9ca3af;">Gerado pelo portal QUALIS · ${hoje}</p>
+  <scr'+'ipt>window.print();</scr'+'ipt></body></html>`;
+
+  const w=window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
   if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
@@ -2621,5 +3066,51 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('loginScreen').style.display='flex';
 });
 </script>
+
+<!-- Modal entrada manual NPS -->
+<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
+        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
+          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
+        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
