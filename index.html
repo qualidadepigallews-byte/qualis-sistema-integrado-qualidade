@@ -880,14 +880,16 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="v-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Vendedor;Data Convite..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button></div></div>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Vendedor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_PEU" onchange="renderBase('VEN_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_PEU" oninput="renderBase('VEN_PEU')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th></tr></thead><tbody id="tb_VEN_PEU"><tr><td colspan="8" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="v-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pasteVenCit" placeholder="Cole os dados aqui..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBase('VEN_CIT','pasteVenCit')">Importar</button></div></div>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pasteVenCit" placeholder="Cole os dados aqui..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn primary" onclick="importBase('VEN_CIT','pasteVenCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_CIT" onchange="renderBase('VEN_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_CIT" oninput="renderBase('VEN_CIT')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th></tr></thead><tbody id="tb_VEN_CIT"><tr><td colspan="8" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
@@ -1033,14 +1035,16 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="p-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button></div></div>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_PEU" onchange="renderBase('POS_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_PEU" oninput="renderBase('POS_PEU')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tb_POS_PEU"><tr><td colspan="9" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button></div></div>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_CIT" onchange="renderBase('POS_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_CIT" oninput="renderBase('POS_CIT')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>SYONET</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tb_POS_CIT"><tr><td colspan="9" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
@@ -1049,7 +1053,31 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Consultor</th><th>Nota</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tbHotPos"><tr><td colspan="6" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-conversoes">
-            <div class="table-wrap"><table><thead><tr><th>Responsável</th><th>Conversões</th></tr></thead><tbody id="tbConv"><tr><td colspan="2" class="empty">Nenhuma conversão.</td></tr></tbody></table></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Consultor</th>
+                    <th colspan="4" style="background:#1a3a6b;color:#fff;text-align:center;">Peugeot</th>
+                    <th colspan="4" style="background:#3d1a7a;color:#fff;text-align:center;">Citroën</th>
+                    <th>Total</th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th style="background:#1e4080;color:#fff;">Prom.</th>
+                    <th style="background:#1e4080;color:#fff;">Neu.</th>
+                    <th style="background:#1e4080;color:#fff;">Det.</th>
+                    <th style="background:#1e4080;color:#fff;">ISC</th>
+                    <th style="background:#4a1f8f;color:#fff;">Prom.</th>
+                    <th style="background:#4a1f8f;color:#fff;">Neu.</th>
+                    <th style="background:#4a1f8f;color:#fff;">Det.</th>
+                    <th style="background:#4a1f8f;color:#fff;">ISC</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tbConv"><tr><td colspan="10" class="empty">Carregando...</td></tr></tbody>
+              </table>
+            </div>
           </div>
 
           <!-- ISC CONSULTOR -->
@@ -1144,25 +1172,6 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
               <div style="text-align:right;">
                 <div id="countdownTrimestreInfo" style="font-size:13px;color:rgba(255,255,255,.85);">—</div>
               </div>
-            </div>
-          </div>
-
-          <!-- Mural de Avisos -->
-          <div class="card" style="margin-bottom:16px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <div class="card-title" style="margin:0;">📌 Mural de Avisos</div>
-              <button class="btn ghost" onclick="abrirModalAviso()" style="font-size:12px;">+ Novo aviso</button>
-            </div>
-            <div id="muralAvisos" style="display:flex;flex-direction:column;gap:8px;">
-              <div style="color:var(--muted);font-size:13px;">Nenhum aviso. Clique em "+ Novo aviso" para adicionar.</div>
-            </div>
-          </div>
-
-          <!-- Aniversariantes -->
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">🎂 Aniversariantes do Mês</div>
-            <div id="aniversariantesLista" style="display:flex;flex-direction:column;gap:8px;">
-              <div style="color:var(--muted);font-size:13px;">Configure os aniversariantes em Configurações.</div>
             </div>
           </div>
 
@@ -1917,7 +1926,7 @@ async function scEnviarEmail(){
       </select>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAviso').classList.add('hidden')">Cancelar</button>
+      <button class="btn ghost" onclick="document.getElementById('modalAviso').style.display='none'">Cancelar</button>
       <button class="btn primary" onclick="salvarAviso()">Publicar</button>
     </div>
   </div>
@@ -1941,7 +1950,7 @@ async function scEnviarEmail(){
       <input id="anivSetor" type="text" placeholder="Ex: Qualidade · SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').classList.add('hidden')">Cancelar</button>
+      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').style.display='none'">Cancelar</button>
       <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
     </div>
   </div>
@@ -2008,8 +2017,8 @@ function startPortal(){
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
   setTimeout(()=>carregarNpsDoFirebase(),2000);
-  setTimeout(()=>{carregarGroqKey();bootMural();renderAniversariantes();},1500);
-  setTimeout(()=>limparBasePosVendasPeugeot(),3000);
+  setTimeout(()=>{carregarGroqKey();bootMural();renderAniversariantes();atualizarCountdown();},1500);
+  setTimeout(()=>{limparBasePosVendasPeugeot();limparBasePosCitAuto();},3000);
 }
 
 async function carregarNpsDoFirebase(){
@@ -2371,14 +2380,72 @@ function calcIscDaBase() {
   });
 }
 
-/* Conversões automáticas da base */
-function renderConversoesAuto() {
-  const rows = [...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])].filter(r=>String(r.CONVERTIDA_POR||'').trim());
-  const grp = {};
-  rows.forEach(r=>{ const k=r.CONVERTIDA_POR; grp[k]=(grp[k]||0)+1; });
-  const tb = document.getElementById('tbConv'); if(!tb) return;
-  const entries = Object.entries(grp).sort((a,b)=>b[1]-a[1]);
-  tb.innerHTML = entries.length ? entries.map(([k,v])=>`<tr><td>${esc(k)}</td><td><strong>${v}</strong></td></tr>`).join('') : '<tr><td colspan="2" class="empty">Nenhuma conversão ainda.</td></tr>';
+/* ISC por Consultor — automático da base pós-vendas */
+function renderConversoesAuto(){
+  const peu=baseCache.POS_PEU||[], cit=baseCache.POS_CIT||[];
+  const tb=document.getElementById('tbConv'); if(!tb)return;
+
+  const nomes=new Set([
+    ...peu.map(r=>r.CONSULTOR||'').filter(Boolean),
+    ...cit.map(r=>r.CONSULTOR||'').filter(Boolean)
+  ]);
+
+  if(!nomes.size){
+    tb.innerHTML='<tr><td colspan="10" class="empty">Nenhum dado ainda. Adicione notas na base.</td></tr>';
+    return;
+  }
+
+  function cnt(arr,nome,st){
+    return arr.filter(r=>
+      String(r.CONSULTOR||'').toUpperCase()===String(nome).toUpperCase()&&
+      String(r.STATUS||'').toUpperCase()===st
+    ).length;
+  }
+
+  function isc(p,n,d){
+    const t=p+n+d; if(!t)return '—';
+    return Math.round(((p)+(n*0.5))/t*100)+'%';
+  }
+  function corIsc(p,n,d){
+    const t=p+n+d; if(!t)return '';
+    return ((p+(n*0.5))/t)>=0.82?'color:var(--q-teal);font-weight:700':'color:var(--q-red);font-weight:700';
+  }
+
+  const dados=[...nomes].sort().map(c=>({
+    c,
+    pp:cnt(peu,c,'PROMOTOR'), np:cnt(peu,c,'NEUTRO'), dp:cnt(peu,c,'DETRATOR'),
+    pc:cnt(cit,c,'PROMOTOR'), nc:cnt(cit,c,'NEUTRO'), dc:cnt(cit,c,'DETRATOR'),
+  })).map(r=>({...r, total:r.pp+r.np+r.dp+r.pc+r.nc+r.dc}))
+    .sort((a,b)=>b.total-a.total);
+
+  const tot=dados.reduce((s,r)=>({
+    pp:s.pp+r.pp,np:s.np+r.np,dp:s.dp+r.dp,
+    pc:s.pc+r.pc,nc:s.nc+r.nc,dc:s.dc+r.dc,total:s.total+r.total
+  }),{pp:0,np:0,dp:0,pc:0,nc:0,dc:0,total:0});
+
+  tb.innerHTML=dados.map(r=>`<tr>
+    <td style="font-weight:600;">${esc(r.c)}</td>
+    <td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pp}</td>
+    <td style="text-align:center;color:var(--q-gold);">${r.np}</td>
+    <td style="text-align:center;color:var(--q-red);font-weight:700;">${r.dp}</td>
+    <td style="text-align:center;${corIsc(r.pp,r.np,r.dp)}">${isc(r.pp,r.np,r.dp)}</td>
+    <td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pc}</td>
+    <td style="text-align:center;color:var(--q-gold);">${r.nc}</td>
+    <td style="text-align:center;color:var(--q-red);font-weight:700;">${r.dc}</td>
+    <td style="text-align:center;${corIsc(r.pc,r.nc,r.dc)}">${isc(r.pc,r.nc,r.dc)}</td>
+    <td style="text-align:center;font-weight:700;">${r.total}</td>
+  </tr>`).join('')+`<tr style="background:var(--surface2);font-weight:800;border-top:2px solid var(--border);">
+    <td>TOTAL</td>
+    <td style="text-align:center;color:var(--q-teal);">${tot.pp}</td>
+    <td style="text-align:center;color:var(--q-gold);">${tot.np}</td>
+    <td style="text-align:center;color:var(--q-red);">${tot.dp}</td>
+    <td style="text-align:center;${corIsc(tot.pp,tot.np,tot.dp)}">${isc(tot.pp,tot.np,tot.dp)}</td>
+    <td style="text-align:center;color:var(--q-teal);">${tot.pc}</td>
+    <td style="text-align:center;color:var(--q-gold);">${tot.nc}</td>
+    <td style="text-align:center;color:var(--q-red);">${tot.dc}</td>
+    <td style="text-align:center;${corIsc(tot.pc,tot.nc,tot.dc)}">${isc(tot.pc,tot.nc,tot.dc)}</td>
+    <td style="text-align:center;">${tot.total}</td>
+  </tr>`;
 }
 
 let npsVenCache=[],npsPosCache=[];
@@ -2392,39 +2459,61 @@ async function loadEquipeGlobal(){if(!window._fbGet)return;try{const[vs,cs]=awai
 const baseCache={};const BASE_IS_POS={VEN_PEU:false,VEN_CIT:false,POS_PEU:true,POS_CIT:true};const BASE_ROLE={VEN_PEU:'VENDEDOR',VEN_CIT:'VENDEDOR',POS_PEU:'CONSULTOR',POS_CIT:'CONSULTOR'};const baseListeners={};
 async function loadBase(key){if(!window._fbOnValue)return;if(baseListeners[key])return;baseListeners[key]=window._fbOnValue('qualis_base_'+key.toLowerCase(),data=>{baseCache[key]=Object.entries(data||{}).map(([id,v])=>({id,...v}));renderBase(key);});}
 function parsePaste(text){return String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>l.split(/\t|;/).map(v=>v.trim())).filter(c=>c.length>=4&&c[0]);}
-async function importBase(key,taId){const text=document.getElementById(taId)?.value||'';const lines=parsePaste(text);if(!lines.length){alert('Cole os dados antes.');return;}const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const rows=lines.map(c=>({VIN:c[0]||'',CLIENTE:c[1]||'',EMAIL:c[2]||'',TELEFONE:c[3]||'',[role]:c[4]||'',DATA_CONVITE:c[5]||'',NOTA_NPS:'',STATUS:'VAI RECEBER',SYONET:'',TRATATIVA:'',...(isPos?{CONVERTIDA_POR:''}:{})}));if(!window._fbGet){alert('Firebase não conectado.');return;}for(const row of rows){await window._fbPush('qualis_base_'+key.toLowerCase(),row);}document.getElementById(taId).value='';alert(`${rows.length} importado(s)!`);}
+async function importBase(key,taId){const text=document.getElementById(taId)?.value||'';const lines=parsePaste(text);if(!lines.length){alert('Cole os dados antes.');return;}const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const rows=lines.map(c=>{const dc=c[5]||'';return{VIN:c[0]||'',CLIENTE:c[1]||'',EMAIL:c[2]||'',TELEFONE:c[3]||'',[role]:c[4]||'',DATA_CONVITE:dc,NOTA_NPS:'',STATUS:calcStatus('',dc),SYONET:c[6]||'',TRATATIVA:c[7]||'',...(isPos?{CONVERTIDA_POR:''}:{})};});if(!window._fbGet){alert('Firebase não conectado.');return;}for(const row of rows){await window._fbPush('qualis_base_'+key.toLowerCase(),row);}document.getElementById(taId).value='';alert(`${rows.length} importado(s)!`);}
+function calcStatus(nota,data){
+  const n=Number(nota);
+  if(nota!==''&&nota!==null&&nota!==undefined&&String(nota).trim()!==''&&!isNaN(n)){
+    if(n>=9)return 'PROMOTOR';if(n>=7)return 'NEUTRO';return 'DETRATOR';
+  }
+  if(!data||String(data).trim()==='')return 'VAI RECEBER';
+  let dt;const s=String(data).trim();
+  if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){const p=s.split('/');dt=new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));}
+  else{dt=new Date(s);}
+  if(isNaN(dt.getTime()))return 'VAI RECEBER';
+  const hoje=new Date();hoje.setHours(0,0,0,0);dt.setHours(0,0,0,0);
+  const diff=Math.floor((hoje-dt)/86400000);
+  if(diff<0)return 'VAI RECEBER';
+  if(diff<=29)return 'PESQUISAVEL';
+  return 'EXPIRADO';
+}
 function statusClass(s){const m={PROMOTOR:'row-promotor',DETRATOR:'row-detrator',NEUTRO:'row-neutro',EXPIRADO:'row-expirado'};return m[String(s||'').toUpperCase()]||'';}
 function statusChip(s){const m={PROMOTOR:'chip-green',DETRATOR:'chip-red',NEUTRO:'chip-orange',PESQUISAVEL:'chip-blue','VAI RECEBER':'chip-purple',EXPIRADO:'chip-amber'};return `<span class="chip ${m[String(s||'').toUpperCase()]||'chip-blue'}">${s||'—'}</span>`;}
-function renderBase(key){const tbody=document.getElementById('tb_'+key);if(!tbody)return;let rows=(baseCache[key]||[]).slice();const fs=document.getElementById('fs'+key)?.value||'';const fq=(document.getElementById('fq'+key)?.value||'').toLowerCase();if(fs)rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()===fs.toUpperCase());if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?9:8}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','TRATATIVA',this.value)">${esc(row.TRATATIVA||'')}</textarea></td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
+function renderBase(key){const tbody=document.getElementById('tb_'+key);if(!tbody)return;let rows=(baseCache[key]||[]).slice().map(r=>{if(!['PROMOTOR','NEUTRO','DETRATOR'].includes(String(r.STATUS||'').toUpperCase()))r.STATUS=calcStatus(r.NOTA_NPS,r.DATA_CONVITE);return r;});
+  // Ocultar expirados por padrão (a menos que o filtro selecione expirado explicitamente)
+  const fs=document.getElementById('fs'+key)?.value||'';const fq=(document.getElementById('fq'+key)?.value||'').toLowerCase();
+  if(fs.toUpperCase()==='EXPIRADO'){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()==='EXPIRADO');}
+  else if(fs){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()===fs.toUpperCase());}
+  else{rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');}if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?9:8}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','TRATATIVA',this.value)">${esc(row.TRATATIVA||'')}</textarea></td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
 async function updateBaseField(key,id,field,value){
   if(baseCache[key]){
     const idx=baseCache[key].findIndex(r=>r.id===id);
     if(idx>-1){
       baseCache[key][idx][field]=value;
-      if(field==='NOTA_NPS'&&value!==''){
-        const nota=Number(value);
-        let st='';
-        if(nota>=9)st='PROMOTOR';
-        else if(nota>=7)st='NEUTRO';
-        else if(nota>=0)st='DETRATOR';
-        if(st)baseCache[key][idx]['STATUS']=st;
-      }
+      const r=baseCache[key][idx];
+      const novoStatus=calcStatus(r.NOTA_NPS,r.DATA_CONVITE);
+      baseCache[key][idx]['STATUS']=novoStatus;
     }
   }
   if(window._fbUpdate&&id){
-    const updates={[field]:value};
-    if(field==='NOTA_NPS'&&value!==''){
-      const nota=Number(value);
-      if(nota>=9)updates.STATUS='PROMOTOR';
-      else if(nota>=7)updates.STATUS='NEUTRO';
-      else if(nota>=0)updates.STATUS='DETRATOR';
-    }
-    await window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,updates);
+    const r=baseCache[key]?.find(x=>x.id===id);
+    const novoStatus=r?calcStatus(r.NOTA_NPS,r.DATA_CONVITE):'PESQUISAVEL';
+    await window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,{[field]:value,STATUS:novoStatus});
   }
   renderBase(key);
-  // Atualiza painéis automaticamente
-  if(key.startsWith('VEN')){ renderNpsVenMes(); renderRankingVen(); }
-  if(key.startsWith('POS')){ renderNpsPosMes(); renderConversoesAuto(); }
+  if(key.startsWith('VEN')){renderNpsVenMes();renderRankingVen();}
+  if(key.startsWith('POS')){renderNpsPosMes();renderConversoesAuto();}
+  atualizarDashboardInicio();
+  // Alerta WA se nota detratora
+  if(field==='NOTA_NPS'&&value!==''){
+    const nota=Number(value);
+    if(!isNaN(nota)&&nota>=0&&nota<=6){
+      const r=baseCache[key]?.find(x=>x.id===id);
+      if(r&&confirm('DETRATOR detectado!\nCliente: '+(r.CLIENTE||'?')+'\nNota: '+nota+'\n\nEnviar alerta no WhatsApp?')){
+        const marca=key.includes('PEU')?'Peugeot':'Citroen';
+        alertarDetrator(r.CLIENTE||'?',r.CONSULTOR||r.VENDEDOR||'?',nota,marca);
+      }
+    }
+  }
 }
 
 async function renderHotAlertsVen(){if(!baseCache.VEN_PEU)await loadBase('VEN_PEU');if(!baseCache.VEN_CIT)await loadBase('VEN_CIT');const rows=[...(baseCache.VEN_PEU||[]).map(r=>({...r,MARCA:'Peugeot'})),...(baseCache.VEN_CIT||[]).map(r=>({...r,MARCA:'Citroën'}))].filter(r=>['DETRATOR','NEUTRO'].includes(String(r.STATUS||'').toUpperCase()));const tb=document.getElementById('tbHotVen');if(!tb)return;tb.innerHTML=rows.length?rows.map(r=>`<tr><td>${esc(r.MARCA)}</td><td>${esc(r.CLIENTE||'')}</td><td>${esc(r.VENDEDOR||'')}</td><td>${esc(r.NOTA_NPS||'')}</td><td>${statusChip(r.STATUS)}</td><td>${esc(r.TRATATIVA||'')}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhum hot alert.</td></tr>';}
@@ -3353,7 +3442,7 @@ async function salvarAviso(){
     _avisos.push({id:'local'+Date.now(),...aviso});
     renderMural();
   }
-  document.getElementById('modalAviso').classList.add('hidden');
+  document.getElementById('modalAviso').style.display='none';
 }
 
 let _avisos=[];
@@ -3444,27 +3533,7 @@ function carregarGroqKey(){
   if(key && document.getElementById('scApiKey')) document.getElementById('scApiKey').value = key;
 }
 
-/* ════ MODAL AVISO — CORRIGIDO ════ */
-function abrirModalAviso(){
-  const el = document.getElementById('modalAviso');
-  if(!el){console.error('Modal aviso não encontrado');return;}
-  document.getElementById('avisoTitulo').value='';
-  document.getElementById('avisoMensagem').value='';
-  document.getElementById('avisoTipo').value='info';
-  el.classList.remove('hidden');
-  el.style.display='flex';
-}
-
-/* ════ ANIVERSARIANTES ════ */
-function abrirModalAniversariante(){
-  const el = document.getElementById('modalAniversariante');
-  if(!el)return;
-  document.getElementById('anivNome').value='';
-  document.getElementById('anivData').value='';
-  document.getElementById('anivSetor').value='';
-  el.classList.remove('hidden');
-  el.style.display='flex';
-}
+/* funcoes de modal consolidadas abaixo */
 
 function salvarAniversariante(){
   const nome = document.getElementById('anivNome')?.value?.trim();
@@ -3474,7 +3543,7 @@ function salvarAniversariante(){
   const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
   lista.push({id:'aniv'+Date.now(), nome, data, setor});
   localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
-  document.getElementById('modalAniversariante').classList.add('hidden');
+  document.getElementById('modalAniversariante').style.display='none';
   renderAniversariantes();
 }
 
@@ -3496,6 +3565,33 @@ async function limparBasePosVendasPeugeot(){
     localStorage.setItem('q-limpeza-pos-peu-done','1');
     console.log('Base Pós-Vendas Peugeot limpa com sucesso!');
   }catch(e){console.error('Erro ao limpar base:',e);}
+}
+
+
+/* ════ LIMPAR BASE ════ */
+async function limparBase(key){
+  const labels={POS_PEU:'Pós-Vendas Peugeot',POS_CIT:'Pós-Vendas Citroën',VEN_PEU:'Vendas Peugeot',VEN_CIT:'Vendas Citroën'};
+  const label=labels[key]||key;
+  if(!confirm('Tem certeza que quer limpar toda a base de '+label+'?\nEssa ação não pode ser desfeita.'))return;
+  if(!window._fbSet){alert('Firebase não conectado.');return;}
+  await window._fbSet('qualis_base_'+key.toLowerCase(),null);
+  baseCache[key]=[];
+  renderBase(key);
+  renderConversoesAuto();
+  atualizarDashboardInicio();
+  alert('Base '+label+' limpa!');
+}
+
+/* ════ LIMPAR BASE POS_CIT (executar uma vez nessa versão) ════ */
+async function limparBasePosCitAuto(){
+  if(!window._fbSet)return;
+  if(localStorage.getItem('q-limpeza-pos-cit-v24'))return;
+  try{
+    await window._fbSet('qualis_base_pos_cit',null);
+    baseCache.POS_CIT=[];
+    localStorage.setItem('q-limpeza-pos-cit-v24','1');
+    console.log('Base Pós-Vendas Citroën limpa!');
+  }catch(e){console.error(e);}
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
