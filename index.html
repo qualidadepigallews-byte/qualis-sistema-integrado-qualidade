@@ -707,7 +707,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
 
       <button class="topnav-item" onclick="goPage('grow',this)">Grow CX</button>
       <button class="topnav-item" onclick="goPage('treinamentos',this)">Treinamentos</button>
-      <button class="topnav-item" onclick="goPage('chat',this);setTimeout(()=>bootChat(),100)">Chat</button>
+      <button class="topnav-item" onclick="goPage('simulador',this)">Simulador</button>
       <button class="topnav-item" onclick="goPage('sistemas',this)">Sistemas</button>
       <button class="topnav-item" onclick="goPage('inteligencia',this)">Inteligência</button>
       <button class="topnav-item" onclick="goPage('config',this)">Configurações</button>
@@ -1102,28 +1102,151 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Caso</th><th>Status</th><th>Data</th><th>Canal</th><th>Motivo 1</th><th>Motivo 2</th><th>Chassi</th><th>Cliente</th><th>Prioridade</th><th>Resp. Grow</th><th>Regional</th><th>Aging</th><th>Consultor</th></tr></thead><tbody id="growBody"><tr><td colspan="14" class="empty">Nenhum caso analisado ainda.</td></tr></tbody></table></div>
         </div>
 
-        <!-- ══ CHAT ══ -->
-        <div class="page" id="pg-chat">
-          <div class="page-header"><div class="page-title">Chat</div><div class="page-sub">Grupo interno em tempo real — Kamilly, Letícia e Laís.</div></div>
-          <div class="chat-layout">
-            <div class="chat-main">
-              <div class="chat-header">
-                <div><h3>💬 Grupo QUALIS</h3><div style="font-size:11.5px;color:var(--muted);margin-top:2px;" id="chatInfo">Conectando...</div></div>
-                <div id="onlineBadges" style="display:flex;gap:7px;flex-wrap:wrap;"></div>
+        <!-- ══ SIMULADOR NPS ══ -->
+        <div class="page" id="pg-simulador">
+          <div class="page-header">
+            <div class="page-title">Simulador NPS</div>
+            <div class="page-sub">Simule cenários e descubra quantas promotoras faltam para bater a meta.</div>
+          </div>
+
+          <!-- Contador regressivo trimestre -->
+          <div class="card" style="margin-bottom:16px;background:var(--g-accent);border:none;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px;">⏱️ Countdown do Trimestre Stellantis</div>
+                <div id="countdownTrimestre" style="font-size:28px;font-weight:800;color:#fff;">Calculando...</div>
               </div>
-              <div id="chatFirebaseWarn" class="hidden" style="padding:9px 15px;background:rgba(245,158,11,.08);border-bottom:1px solid rgba(245,158,11,.2);font-size:13px;color:var(--q-gold);">⚠️ Firebase não configurado.</div>
-              <div class="chat-messages" id="chatMessages"><div style="text-align:center;padding:40px;color:var(--muted);">💬 Conectando ao chat...</div></div>
-              <div class="chat-compose">
-                <textarea id="chatInput" placeholder="Digite sua mensagem... @Kamilly @Letícia @Laís para mencionar" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();doSend();}"></textarea>
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                  <div class="chat-help">Enter envia · Shift+Enter nova linha</div>
-                  <button class="btn primary" id="chatSendBtn" type="button" onclick="doSend()">Enviar ➤</button>
+              <div style="text-align:right;">
+                <div id="countdownTrimestreInfo" style="font-size:13px;color:rgba(255,255,255,.85);">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mural de Avisos -->
+          <div class="card" style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div class="card-title" style="margin:0;">📌 Mural de Avisos</div>
+              <button class="btn ghost" onclick="abrirModalAviso()" style="font-size:12px;">+ Novo aviso</button>
+            </div>
+            <div id="muralAvisos" style="display:flex;flex-direction:column;gap:8px;">
+              <div style="color:var(--muted);font-size:13px;">Nenhum aviso. Clique em "+ Novo aviso" para adicionar.</div>
+            </div>
+          </div>
+
+          <!-- Aniversariantes -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">🎂 Aniversariantes do Mês</div>
+            <div id="aniversariantesLista" style="display:flex;flex-direction:column;gap:8px;">
+              <div style="color:var(--muted);font-size:13px;">Configure os aniversariantes em Configurações.</div>
+            </div>
+          </div>
+
+          <!-- Simulador NPS Pós-Vendas -->
+          <div class="grid-2" style="margin-bottom:16px;">
+            <!-- Citroën -->
+            <div class="card">
+              <div class="card-title" style="color:var(--purple);">✨ Simulador Pós-Vendas · Citroën</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label>
+                  <input id="simCitProm" type="number" min="0" value="0" oninput="calcSimulador('cit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Neutras</label>
+                  <input id="simCitNeu" type="number" min="0" value="0" oninput="calcSimulador('cit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Detratoras</label>
+                  <input id="simCitDet" type="number" min="0" value="0" oninput="calcSimulador('cit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">Objetivo:</label>
+                <input id="simCitObj" type="number" min="0" max="100" value="82" oninput="calcSimulador('cit')" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-weight:700;text-align:center;">
+                <span style="font-size:15px;font-weight:700;">%</span>
+              </div>
+              <div style="padding:14px;border-radius:10px;background:var(--surface2);">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                  <span style="font-size:13px;color:var(--muted);">NPS Atual</span>
+                  <span id="simCitNps" style="font-size:20px;font-weight:800;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <span style="font-size:13px;color:var(--muted);">Necessidade p/ objetivo</span>
+                  <span id="simCitNec" style="font-size:16px;font-weight:700;">—</span>
                 </div>
               </div>
             </div>
-            <div class="chat-side">
-              <div class="card"><div class="card-title" style="font-size:13px;">Online agora</div><div id="onlineSide" style="display:flex;flex-direction:column;gap:7px;"><div style="font-size:13px;color:var(--muted);">Verificando...</div></div></div>
-              <div class="card"><div class="card-title" style="font-size:13px;">Atalhos</div><div style="font-size:12px;color:var(--muted);line-height:1.9;"><div>@Kamilly · @Letícia · @Laís</div><div>😊 ← reações</div><div>Enter → enviar</div></div></div>
+
+            <!-- Peugeot -->
+            <div class="card">
+              <div class="card-title" style="color:var(--q-accent);">🚗 Simulador Pós-Vendas · Peugeot</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label>
+                  <input id="simPeuProm" type="number" min="0" value="0" oninput="calcSimulador('peu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Neutras</label>
+                  <input id="simPeuNeu" type="number" min="0" value="0" oninput="calcSimulador('peu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+                <div>
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Detratoras</label>
+                  <input id="simPeuDet" type="number" min="0" value="0" oninput="calcSimulador('peu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);">
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">Objetivo:</label>
+                <input id="simPeuObj" type="number" min="0" max="100" value="82" oninput="calcSimulador('peu')" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-weight:700;text-align:center;">
+                <span style="font-size:15px;font-weight:700;">%</span>
+              </div>
+              <div style="padding:14px;border-radius:10px;background:var(--surface2);">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                  <span style="font-size:13px;color:var(--muted);">NPS Atual</span>
+                  <span id="simPeuNps" style="font-size:20px;font-weight:800;">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <span style="font-size:13px;color:var(--muted);">Necessidade p/ objetivo</span>
+                  <span id="simPeuNec" style="font-size:16px;font-weight:700;">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Simulador Vendas -->
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-title" style="color:var(--purple);">✨ Simulador Vendas · Citroën</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label><input id="simVCitProm" type="number" min="0" value="0" oninput="calcSimulador('vcit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Neutras</label><input id="simVCitNeu" type="number" min="0" value="0" oninput="calcSimulador('vcit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Detratoras</label><input id="simVCitDet" type="number" min="0" value="0" oninput="calcSimulador('vcit')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">Objetivo:</label>
+                <input id="simVCitObj" type="number" min="0" max="100" value="90" oninput="calcSimulador('vcit')" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-weight:700;text-align:center;">
+                <span style="font-size:15px;font-weight:700;">%</span>
+              </div>
+              <div style="padding:14px;border-radius:10px;background:var(--surface2);">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;color:var(--muted);">NPS Atual</span><span id="simVCitNps" style="font-size:20px;font-weight:800;">—</span></div>
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:13px;color:var(--muted);">Necessidade p/ objetivo</span><span id="simVCitNec" style="font-size:16px;font-weight:700;">—</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title" style="color:var(--q-accent);">🚗 Simulador Vendas · Peugeot</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label><input id="simVPeuProm" type="number" min="0" value="0" oninput="calcSimulador('vpeu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Neutras</label><input id="simVPeuNeu" type="number" min="0" value="0" oninput="calcSimulador('vpeu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+                <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Detratoras</label><input id="simVPeuDet" type="number" min="0" value="0" oninput="calcSimulador('vpeu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <label style="font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap;">Objetivo:</label>
+                <input id="simVPeuObj" type="number" min="0" max="100" value="90" oninput="calcSimulador('vpeu')" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:8px;font-size:15px;font-weight:700;text-align:center;">
+                <span style="font-size:15px;font-weight:700;">%</span>
+              </div>
+              <div style="padding:14px;border-radius:10px;background:var(--surface2);">
+                <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><span style="font-size:13px;color:var(--muted);">NPS Atual</span><span id="simVPeuNps" style="font-size:20px;font-weight:800;">—</span></div>
+                <div style="display:flex;justify-content:space-between;"><span style="font-size:13px;color:var(--muted);">Necessidade p/ objetivo</span><span id="simVPeuNec" style="font-size:16px;font-weight:700;">—</span></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1731,6 +1854,35 @@ async function scEnviarEmail(){
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
       <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal novo aviso -->
+<div id="modalAviso" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">📌 Novo Aviso</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Título</label>
+      <input id="avisoTitulo" type="text" placeholder="Ex: Reunião amanhã às 14h" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mensagem</label>
+      <textarea id="avisoMensagem" rows="3" placeholder="Detalhes do aviso..." style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;resize:vertical;"></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Tipo</label>
+      <select id="avisoTipo" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+        <option value="info">ℹ️ Informação</option>
+        <option value="alert">⚠️ Atenção</option>
+        <option value="success">✅ Positivo</option>
+        <option value="urgent">🚨 Urgente</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAviso').classList.add('hidden')">Cancelar</button>
+      <button class="btn primary" onclick="salvarAviso()">Publicar</button>
     </div>
   </div>
 </div>
@@ -3051,6 +3203,159 @@ function exportarRelatorio(){
   const w=window.open('','_blank');
   w.document.write(html);
   w.document.close();
+}
+
+
+
+/* ════ SIMULADOR NPS ════ */
+function calcSimulador(tipo){
+  const ids = {
+    cit:  {prom:'simCitProm',  neu:'simCitNeu',  det:'simCitDet',  obj:'simCitObj',  nps:'simCitNps',  nec:'simCitNec'},
+    peu:  {prom:'simPeuProm',  neu:'simPeuNeu',  det:'simPeuDet',  obj:'simPeuObj',  nps:'simPeuNps',  nec:'simPeuNec'},
+    vcit: {prom:'simVCitProm', neu:'simVCitNeu', det:'simVCitDet', obj:'simVCitObj', nps:'simVCitNps', nec:'simVCitNec'},
+    vpeu: {prom:'simVPeuProm', neu:'simVPeuNeu', det:'simVPeuDet', obj:'simVPeuObj', nps:'simVPeuNps', nec:'simVPeuNec'},
+  };
+  const id = ids[tipo]; if(!id) return;
+  const p=Number(document.getElementById(id.prom)?.value)||0;
+  const n=Number(document.getElementById(id.neu)?.value)||0;
+  const d=Number(document.getElementById(id.det)?.value)||0;
+  const obj=(Number(document.getElementById(id.obj)?.value)||82)/100;
+  const total=p+n+d;
+  const npsEl=document.getElementById(id.nps);
+  const necEl=document.getElementById(id.nec);
+  if(total===0){if(npsEl)npsEl.textContent='—';if(necEl)necEl.textContent='—';return;}
+  const npsAtual=(p-d)/total;
+  const pct=Math.round(npsAtual*100);
+  if(npsEl){
+    npsEl.textContent=pct+'%';
+    npsEl.style.color=npsAtual>=obj?'var(--q-teal)':'var(--q-red)';
+  }
+  // Necessidade: quantas promotoras a mais (como promotor puro) para atingir obj
+  // (p+x - d)/(total+x) >= obj → x >= (obj*(total) - p + d)/(1-obj)
+  if(npsAtual>=obj){
+    if(necEl){necEl.textContent='✅ Meta atingida!';necEl.style.color='var(--q-teal)';}
+  } else {
+    const nec=Math.ceil((obj*total - p + d)/(1-obj));
+    if(necEl){necEl.textContent='Faltam '+nec+' promotora(s)';necEl.style.color='var(--q-red)';}
+  }
+}
+
+/* ════ COUNTDOWN TRIMESTRE STELLANTIS ════ */
+function atualizarCountdown(){
+  const el=document.getElementById('countdownTrimestre');
+  const info=document.getElementById('countdownTrimestreInfo');
+  if(!el)return;
+  const hoje=new Date();
+  const ano=hoje.getFullYear();
+  // Trimestres: T1=jan-mar, T2=abr-jun, T3=jul-set, T4=out-dez
+  const trimestres=[
+    {nome:'T1',fim:new Date(ano,2,31,23,59,59)},
+    {nome:'T2',fim:new Date(ano,5,30,23,59,59)},
+    {nome:'T3',fim:new Date(ano,8,30,23,59,59)},
+    {nome:'T4',fim:new Date(ano,11,31,23,59,59)},
+  ];
+  const atual=trimestres.find(t=>hoje<=t.fim)||trimestres[3];
+  const diff=atual.fim-hoje;
+  const dias=Math.floor(diff/86400000);
+  const horas=Math.floor((diff%86400000)/3600000);
+  const mins=Math.floor((diff%3600000)/60000);
+  el.textContent=dias+'d '+horas+'h '+mins+'m';
+  if(info) info.textContent='Fechamento '+atual.nome+' em '+atual.fim.toLocaleDateString('pt-BR');
+  setTimeout(atualizarCountdown, 60000);
+}
+
+/* ════ MURAL DE AVISOS ════ */
+const TIPO_AVISO = {
+  info:    {cor:'var(--q-accent)', bg:'rgba(37,99,235,.08)', icon:'ℹ️'},
+  alert:   {cor:'var(--q-gold)',   bg:'rgba(245,158,11,.08)', icon:'⚠️'},
+  success: {cor:'var(--q-teal)',   bg:'rgba(13,148,136,.08)', icon:'✅'},
+  urgent:  {cor:'var(--q-red)',    bg:'rgba(220,38,38,.08)',  icon:'🚨'},
+};
+
+function abrirModalAviso(){
+  document.getElementById('avisoTitulo').value='';
+  document.getElementById('avisoMensagem').value='';
+  document.getElementById('avisoTipo').value='info';
+  document.getElementById('modalAviso').classList.remove('hidden');
+}
+
+async function salvarAviso(){
+  const titulo=document.getElementById('avisoTitulo').value.trim();
+  const msg=document.getElementById('avisoMensagem').value.trim();
+  const tipo=document.getElementById('avisoTipo').value;
+  if(!titulo){alert('Digite um título.');return;}
+  const aviso={titulo,mensagem:msg,tipo,autor:(window.currentUser||{}).name||'?',ts:Date.now()};
+  if(window._fbPush) await window._fbPush('qualis_avisos', aviso).catch(()=>{});
+  else {
+    // Fallback local
+    _avisos.push({id:'local'+Date.now(),...aviso});
+    renderMural();
+  }
+  document.getElementById('modalAviso').classList.add('hidden');
+}
+
+let _avisos=[];
+function renderMural(){
+  const el=document.getElementById('muralAvisos');if(!el)return;
+  if(!_avisos.length){el.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum aviso. Clique em "+ Novo aviso" para adicionar.</div>';return;}
+  el.innerHTML=[..._avisos].reverse().map(a=>{
+    const t=TIPO_AVISO[a.tipo]||TIPO_AVISO.info;
+    const data=new Date(a.ts).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return `<div style="padding:12px 14px;border-radius:10px;background:${t.bg};border-left:3px solid ${t.cor};display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:18px;flex-shrink:0;">${t.icon}</span>
+      <div style="flex:1;">
+        <div style="font-weight:700;font-size:14px;margin-bottom:3px;">${esc(a.titulo)}</div>
+        ${a.mensagem?`<div style="font-size:13px;color:var(--muted);margin-bottom:4px;">${esc(a.mensagem)}</div>`:''}
+        <div style="font-size:11px;color:var(--muted);">${esc(a.autor||'?')} · ${data}</div>
+      </div>
+      <button onclick="excluirAviso('${a.id}')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;" title="Remover">×</button>
+    </div>`;
+  }).join('');
+}
+
+async function excluirAviso(id){
+  if(!confirm('Remover este aviso?'))return;
+  if(window._fbSet) await window._fbSet('qualis_avisos/'+id,null).catch(()=>{});
+  _avisos=_avisos.filter(a=>a.id!==id);
+  renderMural();
+}
+
+function bootMural(){
+  if(window._fbOnValue){
+    window._fbOnValue('qualis_avisos', data=>{
+      _avisos=Object.entries(data||{}).map(([id,v])=>({id,...v}));
+      renderMural();
+    });
+  }
+}
+
+/* ════ ANIVERSARIANTES ════ */
+function renderAniversariantes(){
+  const el=document.getElementById('aniversariantesLista');if(!el)return;
+  const aniversariantes=JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+  const mesAtual=new Date().getMonth()+1;
+  const doMes=aniversariantes.filter(a=>{
+    const d=new Date(a.data+'T00:00:00');
+    return d.getMonth()+1===mesAtual;
+  }).sort((a,b)=>new Date(a.data)-new Date(b.data));
+
+  if(!doMes.length){
+    el.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês. Adicione em Configurações.</div>';
+    return;
+  }
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  el.innerHTML=doMes.map(a=>{
+    const d=new Date(a.data+'T00:00:00');
+    const dia=d.getDate();
+    const isHoje=d.getDate()===hoje.getDate()&&d.getMonth()===hoje.getMonth();
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:${isHoje?'rgba(13,148,136,.1)':'var(--surface2)'};border:1px solid ${isHoje?'var(--q-teal)':'var(--border)'};">
+      <span style="font-size:24px;">${isHoje?'🎂':'🎁'}</span>
+      <div>
+        <div style="font-weight:700;font-size:14px;">${esc(a.nome)}${isHoje?' 🎉 Hoje!':''}</div>
+        <div style="font-size:12px;color:var(--muted);">Dia ${dia} · ${esc(a.cargo||'')}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 
