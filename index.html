@@ -1948,6 +1948,7 @@ function startPortal(){
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
   setTimeout(()=>carregarNpsDoFirebase(),2000);
+  setTimeout(()=>atualizarCountdown(),2500);
 }
 
 async function carregarNpsDoFirebase(){
@@ -2359,6 +2360,17 @@ async function updateBaseField(key,id,field,value){
     }
     await window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,updates);
   }
+  
+  // Dispara alerta se for detrator (nota 0-6)
+  if(field === 'NOTA_NPS' && value !== '' && Number(value) <= 6) {
+    const row = baseCache[key].find(r => r.id === id);
+    if(row) {
+      const consultor = row.CONSULTOR || row.VENDEDOR || 'não informado';
+      const marca = key.includes('PEU') ? 'Peugeot' : 'Citroën';
+      alertarDetrator(row.CLIENTE, consultor, value, marca, row.DATA_CONVITE, key);
+    }
+  }
+
   renderBase(key);
   // Atualiza painéis automaticamente
   if(key.startsWith('VEN')){ renderNpsVenMes(); renderRankingVen(); }
@@ -3028,22 +3040,31 @@ function atualizarDashboardInicio(){
 /* ════════════════════════════════════════════
    ALERTA WHATSAPP — detrator novo
 ════════════════════════════════════════════ */
-const WA_KAMILLY = '5585992073208'; // Numero WhatsApp Kamilly
-function alertarDetrator(cliente, consultor, nota, marca){
+const WA_KAMILLY = '5585991288949'; // Numero WhatsApp Qualis Atualizado
+function alertarDetrator(cliente, consultor, nota, marca, dataConvite, key){
+  const isPos = key.startsWith('POS');
+  const meta = isPos ? 82 : 90;
+  const {peu, cit} = agregaNps(isPos ? 'POS' : 'VEN', 'TODOS', 2026);
+  const dados = marca.toUpperCase().includes('PEUGEOT') ? peu : cit;
+  const npsAtual = calcNps(dados.prom, dados.neu, dados.det);
+  const falta = calcFalta(meta, dados.prom, dados.neu, dados.det);
+  const statusMeta = npsAtual >= meta ? '✅ Meta atingida' : '❌ Abaixo da meta';
+
   const msg = encodeURIComponent(
     '🚨 *ALERTA QUALIS — NOVO DETRATOR*\n\n'+
-    '👤 Cliente: '+cliente+'\n'+
-    '🏷️ Marca: '+marca+'\n'+
-    '👥 Consultor: '+(consultor||'não informado')+'\n'+
-    '⭐ Nota NPS: '+nota+'\n\n'+
-    'Ação imediata necessária!'
+    '👤 *Cliente:* ' + cliente + '\n'+
+    '🏷️ *Marca:* ' + marca + '\n'+
+    '👥 *Consultor:* ' + (consultor || 'não informado') + '\n'+
+    '⭐ *Nota NPS:* ' + nota + '\n'+
+    '📅 *Data Pesquisa:* ' + (dataConvite || 'não informada') + '\n\n'+
+    '📊 *Status Atual (' + marca + '):*\n'+
+    '• NPS: ' + npsAtual.toFixed(1) + '% (Meta: ' + meta + '%)\n'+
+    '• Objetivo: ' + statusMeta + '\n'+
+    (falta > 0 ? '• *Necessário:* ' + falta + ' promotoras para reverter\n\n' : '\n')+
+    '⚠️ *Ação imediata necessária!*'
   );
   const link = 'https://wa.me/'+WA_KAMILLY+'?text='+msg;
-  // Abre em nova aba silenciosamente
-  const a=document.createElement('a');
-  a.href=link;a.target='_blank';a.rel='noopener';
-  document.body.appendChild(a);a.click();
-  document.body.removeChild(a);
+  window.open(link, '_blank');
 }
 
 /* ════════════════════════════════════════════
