@@ -959,7 +959,6 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <button class="subnav-btn" onclick="openSub('posvendas','p-citroen',this);loadBase('POS_CIT')">Base Citroën</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-hotalerts',this);renderHotAlertsPos()">Hot Alerts</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-conversoes',this);renderConversoes()">Conversões</button>
-            <button class="subnav-btn" onclick="openSub('posvendas','p-isc',this);loadIscFromFirebase()">📈 ISC Consultor</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-treinamentos-pos',this);renderTreinamentosPos()">🎓 Treinamentos</button>
           </div>
           <div class="subpage active" id="p-painel">
@@ -1053,17 +1052,23 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Consultor</th><th>Nota</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tbHotPos"><tr><td colspan="6" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-conversoes">
+            <div style="padding:12px 16px;margin-bottom:16px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+              <span style="font-size:13px;font-weight:700;">💰 Premiacao por pesquisa:</span>
+              <span style="font-size:13px;">🟢 Promotora = <strong style="color:#0d9488">+R$ 25,00</strong></span>
+              <span style="font-size:13px;">🟡 Neutra = <strong style="color:#d97706">-R$ 25,00</strong></span>
+              <span style="font-size:13px;">🔴 Detratora = <strong style="color:#dc2626">-R$ 50,00</strong></span>
+            </div>
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>Consultor</th>
+                    <th rowspan="2">Consultor</th>
                     <th colspan="4" style="background:#1a3a6b;color:#fff;text-align:center;">Peugeot</th>
-                    <th colspan="4" style="background:#3d1a7a;color:#fff;text-align:center;">Citroën</th>
-                    <th>Total</th>
+                    <th colspan="4" style="background:#3d1a7a;color:#fff;text-align:center;">Citroen</th>
+                    <th rowspan="2" style="text-align:center;">Total</th>
+                    <th rowspan="2" style="background:#065f46;color:#fff;text-align:center;">💰 Premiacao</th>
                   </tr>
                   <tr>
-                    <th></th>
                     <th style="background:#1e4080;color:#fff;">Prom.</th>
                     <th style="background:#1e4080;color:#fff;">Neu.</th>
                     <th style="background:#1e4080;color:#fff;">Det.</th>
@@ -1072,53 +1077,14 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                     <th style="background:#4a1f8f;color:#fff;">Neu.</th>
                     <th style="background:#4a1f8f;color:#fff;">Det.</th>
                     <th style="background:#4a1f8f;color:#fff;">ISC</th>
-                    <th></th>
                   </tr>
                 </thead>
-                <tbody id="tbConv"><tr><td colspan="10" class="empty">Carregando...</td></tr></tbody>
+                <tbody id="tbConv"><tr><td colspan="11" class="empty">Carregando...</td></tr></tbody>
               </table>
             </div>
           </div>
 
           <!-- ISC CONSULTOR -->
-          <div class="subpage" id="p-isc">
-            <div class="grid-2" style="margin-bottom:16px;">
-              <div class="card">
-                <div class="card-title">📋 Colar dados ISC</div>
-                <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Formato: <strong>Consultor | Det.Peu | Neu.Peu | Prom.Peu | Det.Cit | Neu.Cit | Prom.Cit</strong></p>
-                <textarea id="iscPasteArea" style="width:100%;min-height:110px;resize:vertical;border:1.5px solid var(--border);border-radius:11px;padding:11px;font-size:12px;font-family:monospace;background:var(--surface2);color:var(--text);outline:none;" placeholder="FRANCISCO ADRIANO&#9;0&#9;0&#9;0&#9;2&#9;0&#9;10&#10;VIVIANE BRAGA&#9;0&#9;0&#9;0&#9;1&#9;2&#9;21&#10;TEREZA CRISTINA&#9;0&#9;0&#9;0&#9;0&#9;0&#9;2"></textarea>
-                <div class="btn-row"><button class="btn primary" onclick="iscProcessar()">⚡ Processar</button><button class="btn ghost" onclick="iscLimpar()">🗑️ Limpar</button></div>
-              </div>
-              <div class="card">
-                <div class="card-title">⚙️ Configurações ISC</div>
-                <div class="form-grid" style="grid-template-columns:1fr 1fr;">
-                  <div class="form-field"><label>Mês</label><select id="iscMes" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;color:var(--text);outline:none;"><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3" selected>Março</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
-                  <div class="form-field"><label>Ano</label><input type="number" id="iscAno" value="2026" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;color:var(--text);outline:none;"></div>
-                </div>
-                <div class="form-field" style="margin-top:10px;"><label>Meta ISC (%)</label><input type="number" id="iscMeta" value="82" min="0" max="100" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;color:var(--text);outline:none;"><p style="font-size:11px;color:var(--muted);margin-top:4px;">ISC = ((Promotores × 1) + (Neutros × 0.5)) ÷ Total</p></div>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
-              <span style="font-size:13px;font-weight:600;color:var(--muted);">Ver mês:</span>
-              <div id="iscMesBtns" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-            </div>
-            <div class="grid-4" id="iscKpis" style="display:none;margin-bottom:18px;">
-              <div class="kpi sky"><h4>ISC Peugeot</h4><div class="val sky" id="iscKiPeu">—</div><div class="sub">média consultores</div></div>
-              <div class="kpi purple"><h4>ISC Citroën</h4><div class="val purple" id="iscKiCit">—</div><div class="sub">média consultores</div></div>
-              <div class="kpi mint"><h4>Melhor ISC</h4><div class="val mint" id="iscKMelhor">—</div><div class="sub" id="iscKMelhorNome">—</div></div>
-              <div class="kpi coral"><h4>Precisa atenção</h4><div class="val coral" id="iscKAtencao">0</div><div class="sub">abaixo da meta</div></div>
-            </div>
-            <div id="iscTabelaPeu" style="display:none;margin-bottom:18px;">
-              <div class="sc-ind-title">🚗 ISC por Consultor · Peugeot</div>
-              <div class="table-wrap"><table><thead><tr><th>Consultor</th><th>Det.</th><th>Neu.</th><th>Prom.</th><th>Total</th><th>ISC</th><th>Tendência</th><th>Orientação</th></tr></thead><tbody id="iscTbPeu"></tbody></table></div>
-            </div>
-            <div id="iscTabelaCit" style="display:none;margin-bottom:18px;">
-              <div class="sc-ind-title">✨ ISC por Consultor · Citroën</div>
-              <div class="table-wrap"><table><thead><tr><th>Consultor</th><th>Det.</th><th>Neu.</th><th>Prom.</th><th>Total</th><th>ISC</th><th>Tendência</th><th>Orientação</th></tr></thead><tbody id="iscTbCit"></tbody></table></div>
-            </div>
-            <div id="iscVazio" style="text-align:center;padding:40px;color:var(--muted);">Cole os dados e clique em Processar para ver o ISC por consultor.</div>
-          </div>
-
           <div class="subpage" id="p-treinamentos-pos">
             <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
               <div style="font-size:13px;color:var(--muted);flex:1;">Pendências de treinamento do time de pós-vendas.</div>
@@ -1507,6 +1473,14 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
               <div class="card"><div class="card-title">Consultores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbCons"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div class="btn-row" style="margin-top:11px;"><input id="newConsNome" placeholder="Nome do consultor" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;outline:none;"><button class="btn primary" onclick="addEquipe('consultores','newConsNome')">+</button></div></div>
               <div class="card"><div class="card-title">Gestores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Área</th></tr></thead><tbody id="tbGest"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div class="btn-row" style="margin-top:11px;"><input id="newGestNome" placeholder="Nome do gestor" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;outline:none;"><button class="btn primary" onclick="addEquipe('gestores','newGestNome')">+</button></div></div>
             </div>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <div class="card-title" style="font-size:13px;">👥 Vendedores cadastrados</div>
+            <div id="listaVendedoresConfig" style="margin-top:8px;"></div>
+          </div>
+          <div class="card" style="margin-top:12px;">
+            <div class="card-title" style="font-size:13px;">👥 Consultores cadastrados</div>
+            <div id="listaConsultoresConfig" style="margin-top:8px;"></div>
           </div>
           <div class="subpage" id="cfg-usuarios">
             <div class="card">
@@ -2382,70 +2356,64 @@ function calcIscDaBase() {
 
 /* ISC por Consultor — automático da base pós-vendas */
 function renderConversoesAuto(){
-  const peu=baseCache.POS_PEU||[], cit=baseCache.POS_CIT||[];
-  const tb=document.getElementById('tbConv'); if(!tb)return;
-
-  const nomes=new Set([
-    ...peu.map(r=>r.CONSULTOR||'').filter(Boolean),
-    ...cit.map(r=>r.CONSULTOR||'').filter(Boolean)
-  ]);
-
-  if(!nomes.size){
-    tb.innerHTML='<tr><td colspan="10" class="empty">Nenhum dado ainda. Adicione notas na base.</td></tr>';
-    return;
-  }
+  var peu=baseCache.POS_PEU||[], cit=baseCache.POS_CIT||[];
+  var tb=document.getElementById('tbConv'); if(!tb)return;
+  var nomesSet=new Set();
+  peu.forEach(function(r){if(r.CONSULTOR)nomesSet.add(r.CONSULTOR);if(r.CONVERTIDA_POR)nomesSet.add(r.CONVERTIDA_POR);});
+  cit.forEach(function(r){if(r.CONSULTOR)nomesSet.add(r.CONSULTOR);if(r.CONVERTIDA_POR)nomesSet.add(r.CONVERTIDA_POR);});
+  if(!nomesSet.size){tb.innerHTML='<tr><td colspan="11" class="empty">Nenhum dado ainda.</td></tr>';return;}
 
   function cnt(arr,nome,st){
-    return arr.filter(r=>
-      String(r.CONSULTOR||'').toUpperCase()===String(nome).toUpperCase()&&
-      String(r.STATUS||'').toUpperCase()===st
-    ).length;
+    return arr.filter(function(r){
+      var resp=String(r.CONSULTOR||r.CONVERTIDA_POR||'').toUpperCase();
+      return resp===String(nome).toUpperCase()&&String(r.STATUS||'').toUpperCase()===st;
+    }).length;
+  }
+  function isc(p,n,d){var t=p+n+d;if(!t)return'—';return Math.round(((p)+(n*.5))/t*100)+'%';}
+  function corIsc(p,n,d){var t=p+n+d;if(!t)return'';return((p+(n*.5))/t)>=.82?'color:#0d9488;font-weight:700':'color:#dc2626;font-weight:700';}
+  function calcPrem(pp,np,dp,pc,nc,dc){
+    var v=(pp+pc)*25-(np+nc)*25-(dp+dc)*50;
+    var cor=v>=0?'#0d9488':'#dc2626';
+    var sinal=v>=0?'+':'-';
+    return '<span style="font-weight:800;font-size:14px;color:'+cor+'">'+sinal+'R$'+Math.abs(v).toFixed(2).replace('.',',')+'</span>';
   }
 
-  function isc(p,n,d){
-    const t=p+n+d; if(!t)return '—';
-    return Math.round(((p)+(n*0.5))/t*100)+'%';
-  }
-  function corIsc(p,n,d){
-    const t=p+n+d; if(!t)return '';
-    return ((p+(n*0.5))/t)>=0.82?'color:var(--q-teal);font-weight:700':'color:var(--q-red);font-weight:700';
-  }
+  var nomes=[...nomesSet].sort();
+  var rows=nomes.map(function(c){
+    var pp=cnt(peu,c,'PROMOTOR'),np=cnt(peu,c,'NEUTRO'),dp=cnt(peu,c,'DETRATOR');
+    var pc=cnt(cit,c,'PROMOTOR'),nc=cnt(cit,c,'NEUTRO'),dc=cnt(cit,c,'DETRATOR');
+    return{c:c,pp:pp,np:np,dp:dp,pc:pc,nc:nc,dc:dc,total:pp+np+dp+pc+nc+dc};
+  }).sort(function(a,b){return b.total-a.total;});
 
-  const dados=[...nomes].sort().map(c=>({
-    c,
-    pp:cnt(peu,c,'PROMOTOR'), np:cnt(peu,c,'NEUTRO'), dp:cnt(peu,c,'DETRATOR'),
-    pc:cnt(cit,c,'PROMOTOR'), nc:cnt(cit,c,'NEUTRO'), dc:cnt(cit,c,'DETRATOR'),
-  })).map(r=>({...r, total:r.pp+r.np+r.dp+r.pc+r.nc+r.dc}))
-    .sort((a,b)=>b.total-a.total);
+  var tot={pp:0,np:0,dp:0,pc:0,nc:0,dc:0,total:0};
+  rows.forEach(function(r){tot.pp+=r.pp;tot.np+=r.np;tot.dp+=r.dp;tot.pc+=r.pc;tot.nc+=r.nc;tot.dc+=r.dc;tot.total+=r.total;});
 
-  const tot=dados.reduce((s,r)=>({
-    pp:s.pp+r.pp,np:s.np+r.np,dp:s.dp+r.dp,
-    pc:s.pc+r.pc,nc:s.nc+r.nc,dc:s.dc+r.dc,total:s.total+r.total
-  }),{pp:0,np:0,dp:0,pc:0,nc:0,dc:0,total:0});
-
-  tb.innerHTML=dados.map(r=>`<tr>
-    <td style="font-weight:600;">${esc(r.c)}</td>
-    <td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pp}</td>
-    <td style="text-align:center;color:var(--q-gold);">${r.np}</td>
-    <td style="text-align:center;color:var(--q-red);font-weight:700;">${r.dp}</td>
-    <td style="text-align:center;${corIsc(r.pp,r.np,r.dp)}">${isc(r.pp,r.np,r.dp)}</td>
-    <td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pc}</td>
-    <td style="text-align:center;color:var(--q-gold);">${r.nc}</td>
-    <td style="text-align:center;color:var(--q-red);font-weight:700;">${r.dc}</td>
-    <td style="text-align:center;${corIsc(r.pc,r.nc,r.dc)}">${isc(r.pc,r.nc,r.dc)}</td>
-    <td style="text-align:center;font-weight:700;">${r.total}</td>
-  </tr>`).join('')+`<tr style="background:var(--surface2);font-weight:800;border-top:2px solid var(--border);">
-    <td>TOTAL</td>
-    <td style="text-align:center;color:var(--q-teal);">${tot.pp}</td>
-    <td style="text-align:center;color:var(--q-gold);">${tot.np}</td>
-    <td style="text-align:center;color:var(--q-red);">${tot.dp}</td>
-    <td style="text-align:center;${corIsc(tot.pp,tot.np,tot.dp)}">${isc(tot.pp,tot.np,tot.dp)}</td>
-    <td style="text-align:center;color:var(--q-teal);">${tot.pc}</td>
-    <td style="text-align:center;color:var(--q-gold);">${tot.nc}</td>
-    <td style="text-align:center;color:var(--q-red);">${tot.dc}</td>
-    <td style="text-align:center;${corIsc(tot.pc,tot.nc,tot.dc)}">${isc(tot.pc,tot.nc,tot.dc)}</td>
-    <td style="text-align:center;">${tot.total}</td>
-  </tr>`;
+  tb.innerHTML=rows.map(function(r){return '<tr>'+
+    '<td style="font-weight:600;">'+esc(r.c)+'</td>'+
+    '<td style="text-align:center;color:#0d9488;font-weight:700;">'+r.pp+'</td>'+
+    '<td style="text-align:center;color:#d97706;">'+r.np+'</td>'+
+    '<td style="text-align:center;color:#dc2626;font-weight:700;">'+r.dp+'</td>'+
+    '<td style="text-align:center;'+corIsc(r.pp,r.np,r.dp)+'">'+isc(r.pp,r.np,r.dp)+'</td>'+
+    '<td style="text-align:center;color:#0d9488;font-weight:700;">'+r.pc+'</td>'+
+    '<td style="text-align:center;color:#d97706;">'+r.nc+'</td>'+
+    '<td style="text-align:center;color:#dc2626;font-weight:700;">'+r.dc+'</td>'+
+    '<td style="text-align:center;'+corIsc(r.pc,r.nc,r.dc)+'">'+isc(r.pc,r.nc,r.dc)+'</td>'+
+    '<td style="text-align:center;font-weight:700;">'+r.total+'</td>'+
+    '<td style="text-align:center;">'+calcPrem(r.pp,r.np,r.dp,r.pc,r.nc,r.dc)+'</td>'+
+  '</tr>';}).join('')+
+  '<tr style="background:var(--surface2);font-weight:800;border-top:2px solid var(--border);">'+
+    '<td>TOTAL</td>'+
+    '<td style="text-align:center;color:#0d9488;">'+tot.pp+'</td>'+
+    '<td style="text-align:center;color:#d97706;">'+tot.np+'</td>'+
+    '<td style="text-align:center;color:#dc2626;">'+tot.dp+'</td>'+
+    '<td style="text-align:center;'+corIsc(tot.pp,tot.np,tot.dp)+'">'+isc(tot.pp,tot.np,tot.dp)+'</td>'+
+    '<td style="text-align:center;color:#0d9488;">'+tot.pc+'</td>'+
+    '<td style="text-align:center;color:#d97706;">'+tot.nc+'</td>'+
+    '<td style="text-align:center;color:#dc2626;">'+tot.dc+'</td>'+
+    '<td style="text-align:center;'+corIsc(tot.pc,tot.nc,tot.dc)+'">'+isc(tot.pc,tot.nc,tot.dc)+'</td>'+
+    '<td style="text-align:center;">'+tot.total+'</td>'+
+    '<td style="text-align:center;">'+calcPrem(tot.pp,tot.np,tot.dp,tot.pc,tot.nc,tot.dc)+'</td>'+
+  '</tr>';
 }
 
 let npsVenCache=[],npsPosCache=[];
