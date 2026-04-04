@@ -762,6 +762,31 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="card-title">🔔 Alertas do dia</div>
             <div id="h-alertas" style="font-size:13.5px;color:var(--muted);line-height:1.8;">Carregando dados...</div>
           </div>
+
+          <!-- Mural de Avisos + Aniversariantes -->
+          <div class="grid-2" style="margin-bottom:16px;">
+            <!-- Mural -->
+            <div class="card">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div class="card-title" style="margin:0;">📌 Mural de Avisos</div>
+                <button class="btn primary" onclick="abrirModalAviso()" style="font-size:12px;padding:6px 14px;">+ Novo aviso</button>
+              </div>
+              <div id="muralAvisos" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;">
+                <div style="color:var(--muted);font-size:13px;">Carregando avisos...</div>
+              </div>
+            </div>
+
+            <!-- Aniversariantes -->
+            <div class="card">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <div class="card-title" style="margin:0;">🎂 Aniversariantes do Mês</div>
+                <button class="btn ghost" onclick="abrirModalAniversariante()" style="font-size:12px;">+ Adicionar</button>
+              </div>
+              <div id="aniversariantesLista" style="display:flex;flex-direction:column;gap:8px;max-height:230px;overflow-y:auto;">
+                <div style="color:var(--muted);font-size:13px;">Nenhum aniversariante cadastrado.</div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- ══ VENDAS ══ -->
@@ -1410,11 +1435,22 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
         <div class="page" id="pg-config">
           <div class="page-header"><div class="page-title">Configurações</div><div class="page-sub">Banco de dados, metas e equipe.</div></div>
           <div class="subnav">
-            <button class="subnav-btn active" onclick="openSub('config','cfg-db',this)">Banco de Dados</button>
+            <button class="subnav-btn active" onclick="openSub('config','cfg-geral',this)">Geral</button>
             <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this)">Equipe</button>
             <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this);renderUsuarias()">Usuárias</button>
           </div>
-          <div class="subpage active" id="cfg-db">
+          <div class="subpage active" id="cfg-geral">
+            <!-- API Key Groq -->
+            <div class="card" style="margin-bottom:16px;border:2px solid var(--q-accent);">
+              <div class="card-title">🤖 API Key Groq — IA QUALIS</div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Necessária para usar a IA QUALIS. Acesse <a href="https://console.groq.com" target="_blank" style="color:var(--q-accent);font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
+              <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
+                <input type="password" id="groqApiKeyInput" placeholder="gsk_..." style="flex:1;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;outline:none;min-width:240px;">
+                <button class="btn primary" onclick="salvarGroqKey()">Salvar chave</button>
+                <span id="groqKeyStatus" style="font-size:12px;"></span>
+              </div>
+            </div>
+
             <div class="card">
               <div class="card-title">Indicadores do Início</div>
               <div class="form-grid">
@@ -1860,7 +1896,7 @@ async function scEnviarEmail(){
 
 
 <!-- Modal novo aviso -->
-<div id="modalAviso" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalAviso" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">📌 Novo Aviso</div>
     <div style="margin-bottom:12px;">
@@ -1883,6 +1919,30 @@ async function scEnviarEmail(){
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn ghost" onclick="document.getElementById('modalAviso').classList.add('hidden')">Cancelar</button>
       <button class="btn primary" onclick="salvarAviso()">Publicar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal aniversariante -->
+<div id="modalAniversariante" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">🎂 Adicionar Aniversariante</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
+      <input id="anivNome" type="text" placeholder="Ex: Kamilly Paiva" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
+      <input id="anivData" type="date" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor / Cargo</label>
+      <input id="anivSetor" type="text" placeholder="Ex: Qualidade · SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').classList.add('hidden')">Cancelar</button>
+      <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
     </div>
   </div>
 </div>
@@ -1948,7 +2008,8 @@ function startPortal(){
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
   setTimeout(()=>carregarNpsDoFirebase(),2000);
-  setTimeout(()=>atualizarCountdown(),2500);
+  setTimeout(()=>{carregarGroqKey();bootMural();renderAniversariantes();},1500);
+  setTimeout(()=>limparBasePosVendasPeugeot(),3000);
 }
 
 async function carregarNpsDoFirebase(){
@@ -2360,17 +2421,6 @@ async function updateBaseField(key,id,field,value){
     }
     await window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,updates);
   }
-  
-  // Dispara alerta se for detrator (nota 0-6)
-  if(field === 'NOTA_NPS' && value !== '' && Number(value) <= 6) {
-    const row = baseCache[key].find(r => r.id === id);
-    if(row) {
-      const consultor = row.CONSULTOR || row.VENDEDOR || 'não informado';
-      const marca = key.includes('PEU') ? 'Peugeot' : 'Citroën';
-      alertarDetrator(row.CLIENTE, consultor, value, marca, row.DATA_CONVITE, key);
-    }
-  }
-
   renderBase(key);
   // Atualiza painéis automaticamente
   if(key.startsWith('VEN')){ renderNpsVenMes(); renderRankingVen(); }
@@ -3040,31 +3090,22 @@ function atualizarDashboardInicio(){
 /* ════════════════════════════════════════════
    ALERTA WHATSAPP — detrator novo
 ════════════════════════════════════════════ */
-const WA_KAMILLY = '5585991288949'; // Numero WhatsApp Qualis Atualizado
-function alertarDetrator(cliente, consultor, nota, marca, dataConvite, key){
-  const isPos = key.startsWith('POS');
-  const meta = isPos ? 82 : 90;
-  const {peu, cit} = agregaNps(isPos ? 'POS' : 'VEN', 'TODOS', 2026);
-  const dados = marca.toUpperCase().includes('PEUGEOT') ? peu : cit;
-  const npsAtual = calcNps(dados.prom, dados.neu, dados.det);
-  const falta = calcFalta(meta, dados.prom, dados.neu, dados.det);
-  const statusMeta = npsAtual >= meta ? '✅ Meta atingida' : '❌ Abaixo da meta';
-
-  const msg = encodeURIComponent(
-    '🚨 *ALERTA QUALIS — NOVO DETRATOR*\n\n'+
-    '👤 *Cliente:* ' + cliente + '\n'+
-    '🏷️ *Marca:* ' + marca + '\n'+
-    '👥 *Consultor:* ' + (consultor || 'não informado') + '\n'+
-    '⭐ *Nota NPS:* ' + nota + '\n'+
-    '📅 *Data Pesquisa:* ' + (dataConvite || 'não informada') + '\n\n'+
-    '📊 *Status Atual (' + marca + '):*\n'+
-    '• NPS: ' + npsAtual.toFixed(1) + '% (Meta: ' + meta + '%)\n'+
-    '• Objetivo: ' + statusMeta + '\n'+
-    (falta > 0 ? '• *Necessário:* ' + falta + ' promotoras para reverter\n\n' : '\n')+
-    '⚠️ *Ação imediata necessária!*'
-  );
-  const link = 'https://wa.me/'+WA_KAMILLY+'?text='+msg;
-  window.open(link, '_blank');
+const WA_KAMILLY = '5585992073208';
+function alertarDetrator(cliente, consultor, nota, marca){
+  // Monta mensagem sem emojis problemáticos na URL
+  const linhas = [
+    '*ALERTA QUALIS - NOVO DETRATOR*',
+    '',
+    'Cliente: ' + (cliente||'?'),
+    'Marca: ' + (marca||'?'),
+    'Consultor: ' + (consultor||'nao informado'),
+    'Nota NPS: ' + nota,
+    '',
+    'Acao imediata necessaria!'
+  ];
+  const msg = encodeURIComponent(linhas.join('\n'));
+  const link = 'https://wa.me/' + WA_KAMILLY + '?text=' + msg;
+  window.open(link, '_blank', 'noopener');
 }
 
 /* ════════════════════════════════════════════
@@ -3353,15 +3394,16 @@ function bootMural(){
 /* ════ ANIVERSARIANTES ════ */
 function renderAniversariantes(){
   const el=document.getElementById('aniversariantesLista');if(!el)return;
-  const aniversariantes=JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+  const todos=JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
   const mesAtual=new Date().getMonth()+1;
-  const doMes=aniversariantes.filter(a=>{
+  const doMes=todos.filter(a=>{
+    if(!a.data)return false;
     const d=new Date(a.data+'T00:00:00');
     return d.getMonth()+1===mesAtual;
-  }).sort((a,b)=>new Date(a.data)-new Date(b.data));
+  }).sort((a,b)=>new Date(a.data+'T00:00:00').getDate()-new Date(b.data+'T00:00:00').getDate());
 
   if(!doMes.length){
-    el.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês. Adicione em Configurações.</div>';
+    el.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês. Clique em "+ Adicionar".</div>';
     return;
   }
   const hoje=new Date(); hoje.setHours(0,0,0,0);
@@ -3369,16 +3411,92 @@ function renderAniversariantes(){
     const d=new Date(a.data+'T00:00:00');
     const dia=d.getDate();
     const isHoje=d.getDate()===hoje.getDate()&&d.getMonth()===hoje.getMonth();
+    const anoNasc=d.getFullYear();
+    const idade=hoje.getFullYear()-anoNasc;
     return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:${isHoje?'rgba(13,148,136,.1)':'var(--surface2)'};border:1px solid ${isHoje?'var(--q-teal)':'var(--border)'};">
-      <span style="font-size:24px;">${isHoje?'🎂':'🎁'}</span>
-      <div>
+      <div style="font-size:28px;flex-shrink:0;">${isHoje?'🎂':'🎁'}</div>
+      <div style="flex:1;">
         <div style="font-weight:700;font-size:14px;">${esc(a.nome)}${isHoje?' 🎉 Hoje!':''}</div>
-        <div style="font-size:12px;color:var(--muted);">Dia ${dia} · ${esc(a.cargo||'')}</div>
+        <div style="font-size:12px;color:var(--muted);">Dia ${String(dia).padStart(2,'0')}/${String(mesAtual).padStart(2,'0')} · ${esc(a.setor||a.cargo||'')} · ${idade} anos</div>
       </div>
+      <button onclick="excluirAniversariante('${a.id}')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;" title="Remover">×</button>
     </div>`;
   }).join('');
 }
 
+
+
+/* ════ GROQ API KEY ════ */
+function salvarGroqKey(){
+  const key = document.getElementById('groqApiKeyInput')?.value?.trim();
+  if(!key){alert('Cole a API Key primeiro.');return;}
+  localStorage.setItem('sc-apikey', key);
+  // Sincroniza com scApiKey se existir
+  if(document.getElementById('scApiKey')) document.getElementById('scApiKey').value = key;
+  const st = document.getElementById('groqKeyStatus');
+  if(st){st.textContent='✅ Chave salva!';st.style.color='var(--q-teal)';}
+  setTimeout(()=>{if(st)st.textContent='';},3000);
+}
+
+function carregarGroqKey(){
+  const key = localStorage.getItem('sc-apikey')||'';
+  if(key && document.getElementById('groqApiKeyInput')) document.getElementById('groqApiKeyInput').value = key;
+  if(key && document.getElementById('scApiKey')) document.getElementById('scApiKey').value = key;
+}
+
+/* ════ MODAL AVISO — CORRIGIDO ════ */
+function abrirModalAviso(){
+  const el = document.getElementById('modalAviso');
+  if(!el){console.error('Modal aviso não encontrado');return;}
+  document.getElementById('avisoTitulo').value='';
+  document.getElementById('avisoMensagem').value='';
+  document.getElementById('avisoTipo').value='info';
+  el.classList.remove('hidden');
+  el.style.display='flex';
+}
+
+/* ════ ANIVERSARIANTES ════ */
+function abrirModalAniversariante(){
+  const el = document.getElementById('modalAniversariante');
+  if(!el)return;
+  document.getElementById('anivNome').value='';
+  document.getElementById('anivData').value='';
+  document.getElementById('anivSetor').value='';
+  el.classList.remove('hidden');
+  el.style.display='flex';
+}
+
+function salvarAniversariante(){
+  const nome = document.getElementById('anivNome')?.value?.trim();
+  const data = document.getElementById('anivData')?.value;
+  const setor = document.getElementById('anivSetor')?.value?.trim();
+  if(!nome||!data){alert('Preencha nome e data.');return;}
+  const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+  lista.push({id:'aniv'+Date.now(), nome, data, setor});
+  localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
+  document.getElementById('modalAniversariante').classList.add('hidden');
+  renderAniversariantes();
+}
+
+function excluirAniversariante(id){
+  if(!confirm('Remover aniversariante?'))return;
+  const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]').filter(a=>a.id!==id);
+  localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
+  renderAniversariantes();
+}
+
+
+
+/* ════ LIMPEZA BASE POS_PEU (executar uma vez) ════ */
+async function limparBasePosVendasPeugeot(){
+  if(!window._fbSet){console.log('Firebase não pronto para limpeza');return;}
+  if(localStorage.getItem('q-limpeza-pos-peu-done')){return;}
+  try{
+    await window._fbSet('qualis_base_pos_peu', null);
+    localStorage.setItem('q-limpeza-pos-peu-done','1');
+    console.log('Base Pós-Vendas Peugeot limpa com sucesso!');
+  }catch(e){console.error('Erro ao limpar base:',e);}
+}
 
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
