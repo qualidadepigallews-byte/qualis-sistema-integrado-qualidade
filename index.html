@@ -1445,7 +1445,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="page-header"><div class="page-title">Configurações</div><div class="page-sub">Banco de dados, metas e equipe.</div></div>
           <div class="subnav">
             <button class="subnav-btn active" onclick="openSub('config','cfg-geral',this)">Geral</button>
-            <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this)">Equipe</button>
+            <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this);setTimeout(renderEquipeConfig,200)">Equipe</button>
             <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this);renderUsuarias()">Usuárias</button>
           </div>
           <div class="subpage active" id="cfg-geral">
@@ -1859,7 +1859,7 @@ async function scEnviarEmail(){
   const alertasHtml=alertas.map(a=>`<div style="padding:9px 0;border-bottom:1px solid #f3f4f6;display:flex;gap:9px;"><span>${a.icon}</span><div><div style="font-weight:700;font-size:13px;">${a.title}</div><div style="font-size:12px;color:#6b7280;">${a.desc}</div></div></div>`).join('');
   const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">📊 Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">💬 Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
 <!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
@@ -1897,7 +1897,7 @@ async function scEnviarEmail(){
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
       <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
     </div>
   </div>
@@ -1905,7 +1905,7 @@ async function scEnviarEmail(){
 
 
 <!-- Modal novo aviso -->
-<div id="modalAviso" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">📌 Novo Aviso</div>
     <div style="margin-bottom:12px;">
@@ -1926,7 +1926,7 @@ async function scEnviarEmail(){
       </select>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAviso').style.display='none'">Cancelar</button>
+      <button class="btn ghost" onclick="fecharModalAviso()">Cancelar</button>
       <button class="btn primary" onclick="salvarAviso()">Publicar</button>
     </div>
   </div>
@@ -1934,7 +1934,7 @@ async function scEnviarEmail(){
 
 
 <!-- Modal aniversariante -->
-<div id="modalAniversariante" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">🎂 Adicionar Aniversariante</div>
     <div style="margin-bottom:12px;">
@@ -1950,7 +1950,7 @@ async function scEnviarEmail(){
       <input id="anivSetor" type="text" placeholder="Ex: Qualidade · SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').style.display='none'">Cancelar</button>
+      <button class="btn ghost" onclick="fecharModalAniversariante()">Cancelar</button>
       <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
     </div>
   </div>
@@ -2951,7 +2951,7 @@ function trCarregarEmailConfig(){['trResendKey','trEmailFrom','trEmailCc'].forEa
 
 function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">📅 Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">📚 Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">🔗 Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">💬 Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
 <!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
@@ -2989,7 +2989,7 @@ function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATE
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
       <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
     </div>
   </div>
@@ -3286,7 +3286,7 @@ function salvarNpsManual(){
     }).catch(()=>{});
   }
 
-  document.getElementById('modalNpsManual').classList.add('hidden');
+  document.getElementById('modalNpsManual').style.display='none';
 
   // Renderiza tudo na hora
   renderNpsVenMes();
@@ -3423,12 +3423,7 @@ const TIPO_AVISO = {
   urgent:  {cor:'var(--q-red)',    bg:'rgba(220,38,38,.08)',  icon:'🚨'},
 };
 
-function abrirModalAviso(){
-  document.getElementById('avisoTitulo').value='';
-  document.getElementById('avisoMensagem').value='';
-  document.getElementById('avisoTipo').value='info';
-  document.getElementById('modalAviso').classList.remove('hidden');
-}
+
 
 async function salvarAviso(){
   const titulo=document.getElementById('avisoTitulo').value.trim();
@@ -3442,7 +3437,7 @@ async function salvarAviso(){
     _avisos.push({id:'local'+Date.now(),...aviso});
     renderMural();
   }
-  document.getElementById('modalAviso').style.display='none';
+  fecharModalAviso();
 }
 
 let _avisos=[];
@@ -3533,7 +3528,7 @@ function carregarGroqKey(){
   if(key && document.getElementById('scApiKey')) document.getElementById('scApiKey').value = key;
 }
 
-/* funcoes de modal consolidadas abaixo */
+
 
 function salvarAniversariante(){
   const nome = document.getElementById('anivNome')?.value?.trim();
@@ -3543,7 +3538,7 @@ function salvarAniversariante(){
   const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
   lista.push({id:'aniv'+Date.now(), nome, data, setor});
   localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
-  document.getElementById('modalAniversariante').style.display='none';
+  fecharModalAniversariante();
   renderAniversariantes();
 }
 
@@ -3594,6 +3589,52 @@ async function limparBasePosCitAuto(){
   }catch(e){console.error(e);}
 }
 
+
+function abrirModalAviso(){
+  var m=document.getElementById('modalAviso');
+  if(!m)return;
+  document.getElementById('avisoTitulo').value='';
+  document.getElementById('avisoMensagem').value='';
+  document.getElementById('avisoTipo').value='info';
+  m.style.display='flex';
+}
+function fecharModalAviso(){
+  var m=document.getElementById('modalAviso');
+  if(m)m.style.display='none';
+}
+function abrirModalAniversariante(){
+  var m=document.getElementById('modalAniversariante');
+  if(!m)return;
+  document.getElementById('anivNome').value='';
+  document.getElementById('anivData').value='';
+  document.getElementById('anivSetor').value='';
+  m.style.display='flex';
+}
+function fecharModalAniversariante(){
+  var m=document.getElementById('modalAniversariante');
+  if(m)m.style.display='none';
+}
+
+
+function renderEquipeConfig(){
+  var vs=equipeGlobal.vendedores||[], cs=equipeGlobal.consultores||[];
+  var elV=document.getElementById('listaVendedoresConfig');
+  var elC=document.getElementById('listaConsultoresConfig');
+  if(elV) elV.innerHTML=vs.length?vs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'vendedor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:var(--q-red);font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum vendedor.</p>';
+  if(elC) elC.innerHTML=cs.length?cs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'consultor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:var(--q-red);font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum consultor.</p>';
+}
+async function excluirMembro(tipo,nome){
+  if(!confirm('Remover '+nome+' da equipe?'))return;
+  if(tipo==='vendedor'){
+    equipeGlobal.vendedores=equipeGlobal.vendedores.filter(function(n){return n!==nome;});
+    if(window._fbSet) await window._fbSet('qualis_equipe_vendedores',Object.fromEntries(equipeGlobal.vendedores.map(function(n,i){return['v'+i,{nome:n}];}))).catch(function(){});
+  }else{
+    equipeGlobal.consultores=equipeGlobal.consultores.filter(function(n){return n!==nome;});
+    if(window._fbSet) await window._fbSet('qualis_equipe_consultores',Object.fromEntries(equipeGlobal.consultores.map(function(n,i){return['c'+i,{nome:n}];}))).catch(function(){});
+  }
+  renderEquipeConfig();
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
   if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
@@ -3608,7 +3649,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
@@ -3646,7 +3687,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').classList.add('hidden')">Cancelar</button>
+      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
       <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
     </div>
   </div>
