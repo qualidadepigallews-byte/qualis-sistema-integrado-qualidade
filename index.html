@@ -64,6 +64,7 @@
 html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
 button,input,textarea,select{font-family:inherit;}
 .hidden{display:none!important;}
+.modal-overlay.show{display:flex!important;}
 
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -1879,7 +1880,7 @@ async function scEnviarEmail(){
 
 
 <!-- Modal novo aviso -->
-<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);" class="modal-overlay">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">📌 Novo Aviso</div>
     <div style="margin-bottom:12px;">
@@ -1908,7 +1909,7 @@ async function scEnviarEmail(){
 
 
 <!-- Modal aniversariante -->
-<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);" class="modal-overlay">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">🎂 Adicionar Aniversariante</div>
     <div style="margin-bottom:12px;">
@@ -1926,6 +1927,23 @@ async function scEnviarEmail(){
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn ghost" onclick="fecharModalAniversariante()">Cancelar</button>
       <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
+    <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
+    <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
+    <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">O que aconteceu?</label>
+      <textarea id="waDescricao" rows="3" placeholder="Ex: Cliente veio a loja e avaliou pessoalmente..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAlertaWA').style.display='none'">Cancelar</button>
+      <button onclick="enviarAlertaWA()" style="background:#25D366;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Enviar no grupo</button>
     </div>
   </div>
 </div>
@@ -2471,14 +2489,15 @@ async function updateBaseField(key,id,field,value){
   if(key.startsWith('VEN')){renderNpsVenMes();renderRankingVen();}
   if(key.startsWith('POS')){renderNpsPosMes();renderConversoesAuto();}
   atualizarDashboardInicio();
-  // Alerta WA se nota detratora
+  // Alerta WA para qualquer nota
   if(field==='NOTA_NPS'&&value!==''){
     const nota=Number(value);
-    if(!isNaN(nota)&&nota>=0&&nota<=6){
+    if(!isNaN(nota)&&nota>=0&&nota<=10){
       const r=baseCache[key]?.find(x=>x.id===id);
-      if(r&&confirm('DETRATOR detectado!\nCliente: '+(r.CLIENTE||'?')+'\nNota: '+nota+'\n\nEnviar alerta no WhatsApp?')){
+      if(r){
         const marca=key.includes('PEU')?'Peugeot':'Citroen';
-        alertarDetrator(r.CLIENTE||'?',r.CONSULTOR||r.VENDEDOR||'?',nota,marca);
+        const setor=key.startsWith('POS')?'Pos-Vendas':'Vendas';
+        abrirModalAlertaWA(r.CLIENTE||'?',nota,r.DATA_CONVITE||'',marca,setor,key);
       }
     }
   }
@@ -3147,22 +3166,108 @@ function atualizarDashboardInicio(){
 /* ════════════════════════════════════════════
    ALERTA WHATSAPP — detrator novo
 ════════════════════════════════════════════ */
-const WA_KAMILLY = '5585992073208';
-function alertarDetrator(cliente, consultor, nota, marca){
-  // Monta mensagem sem emojis problemáticos na URL
-  const linhas = [
-    '*ALERTA QUALIS - NOVO DETRATOR*',
+const WA_GRUPO = 'https://chat.whatsapp.com/DMmE0NYsLitCgSVw3PsKeh';
+var _waTemp = {};
+
+function abrirModalAlertaWA(cliente, nota, dataConvite, marca, setor, key){
+  _waTemp = {cliente:cliente,nota:nota,dataConvite:dataConvite,marca:marca,setor:setor,key:key};
+  var titulo, corBorda;
+  if(nota>=9){titulo='Promotora registrada';corBorda='#0d9488';}
+  else if(nota>=7){titulo='Neutra registrada';corBorda='#d97706';}
+  else{titulo='Detratora - acao necessaria';corBorda='#dc2626';}
+  var arr=(key.startsWith('POS')?(marca==='Peugeot'?baseCache.POS_PEU:baseCache.POS_CIT):(marca==='Peugeot'?baseCache.VEN_PEU:baseCache.VEN_CIT))||[];
+  var meta=key.startsWith('POS')?82:90;
+  var prom=arr.filter(function(r){return r.STATUS==='PROMOTOR';}).length;
+  var neu=arr.filter(function(r){return r.STATUS==='NEUTRO';}).length;
+  var det=arr.filter(function(r){return r.STATUS==='DETRATOR';}).length;
+  var total=prom+neu+det;
+  var nps=total>0?Math.round((prom-det)/total*100):0;
+  var abaixo=nps<meta;
+  var faltam=0;
+  if(abaixo&&total>0){faltam=Math.ceil((meta/100*total-prom+det)/(1-meta/100));if(faltam<0)faltam=0;}
+  _waTemp.nps=nps;_waTemp.meta=meta;_waTemp.abaixo=abaixo;_waTemp.faltam=faltam;_waTemp.titulo=titulo;
+  var el=document.getElementById('modalAlertaWA');
+  if(!el)return;
+  document.getElementById('waTitulo').textContent=titulo;
+  document.getElementById('waTitulo').style.color=corBorda;
+  document.getElementById('waSub').textContent=marca+' | '+setor+' | Nota: '+nota;
+  document.getElementById('waResumo').innerHTML=
+    '<b>Cliente:</b> '+esc(cliente)+'<br>'+
+    '<b>Data da pesquisa:</b> '+(dataConvite||'nao informada')+'<br>'+
+    '<b>NPS atual '+marca+':</b> '+nps+'% (meta '+meta+'%)<br>'+
+    (abaixo?'<b style="color:#dc2626">Abaixo da meta - faltam '+faltam+' promotora(s) para reverter</b>':'<b style="color:#0d9488">Meta atingida!</b>');
+  document.getElementById('waDescricao').value='';
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
+}
+
+function enviarAlertaWA(){
+  var d=_waTemp;
+  var obs=(document.getElementById('waDescricao').value||'').trim();
+  var em=d.nota>=9?'[PROM]':d.nota>=7?'[NEU]':'[DET]';
+  var linhas=[
+    em+' *'+d.titulo.toUpperCase()+'*','',
+    'Cliente: '+d.cliente,
+    'Marca: '+d.marca+' | '+d.setor,
+    'Nota NPS: '+d.nota,
+    'Data da pesquisa: '+(d.dataConvite||'nao informada'),'',
+    'NPS atual '+d.marca+': '+d.nps+'% (meta '+d.meta+'%)',
+    d.abaixo?'Situacao: ABAIXO DA META - faltam '+d.faltam+' promotora(s)':'Situacao: META ATINGIDA',
+  ];
+  if(obs){linhas.push('');linhas.push('Obs: '+obs);}
+  linhas.push('');linhas.push('-- QUALIS | Pigalle WS --');
+  var msg=encodeURIComponent(linhas.join('\n'));
+  document.getElementById('modalAlertaWA').style.display='none';
+  window.open('https://api.whatsapp.com/send?text='+msg,'_blank','noopener');
+}
+
+function alertarDetrator(cliente, nota, dataConvite, marca){
+  // Calcular NPS atual da base e quantos faltam para reverter
+  var peu = baseCache.POS_PEU || [], cit = baseCache.POS_CIT || [];
+  var base = marca === 'Peugeot' ? peu : cit;
+  var meta = 82;
+
+  var prom = base.filter(function(r){ return r.STATUS === 'PROMOTOR'; }).length;
+  var neu  = base.filter(function(r){ return r.STATUS === 'NEUTRO'; }).length;
+  var det  = base.filter(function(r){ return r.STATUS === 'DETRATOR'; }).length;
+  var total = prom + neu + det;
+
+  var npsAtual = total > 0 ? Math.round((prom - det) / total * 100) : 0;
+  var abaixo = npsAtual < meta;
+
+  // Quantas promotoras faltam para reverter: (meta*total - prom + det) / (1 - meta)
+  var faltam = 0;
+  if(abaixo && total > 0){
+    faltam = Math.ceil((meta/100 * total - prom + det) / (1 - meta/100));
+    if(faltam < 0) faltam = 0;
+  }
+
+  // Formatar data
+  var dataStr = dataConvite || '?';
+
+  var linhas = [
+    'ALERTA QUALIS - NOVO DETRATOR',
     '',
-    'Cliente: ' + (cliente||'?'),
-    'Marca: ' + (marca||'?'),
-    'Consultor: ' + (consultor||'nao informado'),
+    'Cliente: ' + (cliente || '?'),
+    'Marca: ' + marca,
     'Nota NPS: ' + nota,
+    'Data da pesquisa: ' + dataStr,
+    '',
+    'NPS atual ' + marca + ': ' + npsAtual + '% (meta ' + meta + '%)',
+    abaixo
+      ? 'Objetivo: ABAIXO - faltam ' + faltam + ' promotora(s) para reverter'
+      : 'Objetivo: ATINGIDO',
     '',
     'Acao imediata necessaria!'
   ];
-  const msg = encodeURIComponent(linhas.join('\n'));
-  const link = 'https://wa.me/' + WA_KAMILLY + '?text=' + msg;
-  window.open(link, '_blank', 'noopener');
+
+  var msg = encodeURIComponent(linhas.join('\n'));
+  // Link do grupo — abre o grupo diretamente
+  window.open(WA_GRUPO, '_blank', 'noopener');
+  // Pequeno delay para tentar abrir com mensagem pre-preenchida
+  setTimeout(function(){
+    var linkMsg = 'https://api.whatsapp.com/send?text=' + msg;
+    window.open(linkMsg, '_blank', 'noopener');
+  }, 500);
 }
 
 /* ════════════════════════════════════════════
@@ -3560,27 +3665,33 @@ async function limparBasePosCitAuto(){
 
 function abrirModalAviso(){
   var m=document.getElementById('modalAviso');
-  if(!m)return;
-  document.getElementById('avisoTitulo').value='';
-  document.getElementById('avisoMensagem').value='';
-  document.getElementById('avisoTipo').value='info';
-  m.style.display='flex';
+  if(!m){alert('Erro: modal nao encontrado');return;}
+  var t=document.getElementById('avisoTitulo');
+  var ms=document.getElementById('avisoMensagem');
+  var tp=document.getElementById('avisoTipo');
+  if(t)t.value='';
+  if(ms)ms.value='';
+  if(tp)tp.value='info';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
 }
 function fecharModalAviso(){
   var m=document.getElementById('modalAviso');
-  if(m)m.style.display='none';
+  if(m)m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
 }
 function abrirModalAniversariante(){
   var m=document.getElementById('modalAniversariante');
-  if(!m)return;
-  document.getElementById('anivNome').value='';
-  document.getElementById('anivData').value='';
-  document.getElementById('anivSetor').value='';
-  m.style.display='flex';
+  if(!m){alert('Erro: modal nao encontrado');return;}
+  var n=document.getElementById('anivNome');
+  var d=document.getElementById('anivData');
+  var s=document.getElementById('anivSetor');
+  if(n)n.value='';
+  if(d)d.value='';
+  if(s)s.value='';
+  m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
 }
 function fecharModalAniversariante(){
   var m=document.getElementById('modalAniversariante');
-  if(m)m.style.display='none';
+  if(m)m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
 }
 
 
