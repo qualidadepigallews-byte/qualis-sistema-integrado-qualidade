@@ -964,7 +964,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
     <div class="topnav-brand">
       <div class="topnav-q">Q</div>
       <div class="topnav-name">QUALIS</div>
-      <span class="topnav-ver">v19</span>
+      <span class="topnav-ver">v24</span>
     </div>
 
     <div class="topnav-nav">
@@ -1019,11 +1019,17 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
 
           <!-- KPIs principais — dados reais -->
+          <div class="grid-4" style="margin-bottom:12px;">
+            <div class="kpi teal"><h4>Promotoras Pós-Vendas</h4><div class="val teal" id="h-prom-pos">—</div><div class="sub">Peugeot + Citroën</div></div>
+            <div class="kpi sky"><h4>Promotoras Vendas</h4><div class="val sky" id="h-prom-ven">—</div><div class="sub">Peugeot + Citroën</div></div>
+            <div class="kpi gold"><h4>Pesquisáveis Pós</h4><div class="val gold" id="h-pesq-pos">—</div><div class="sub">podem responder</div></div>
+            <div class="kpi purple"><h4>Pesquisáveis Vendas</h4><div class="val purple" id="h-pesq-ven">—</div><div class="sub">podem responder</div></div>
+          </div>
           <div class="grid-4" style="margin-bottom:16px;">
-            <div class="kpi teal"><h4>Promotoras (total)</h4><div class="val teal" id="h-prom">—</div><div class="sub">vendas + pós-vendas</div></div>
             <div class="kpi red"><h4>Hot Alerts</h4><div class="val red" id="h-hot">—</div><div class="sub">detratores + neutros</div></div>
-            <div class="kpi gold"><h4>Pesquisáveis</h4><div class="val gold" id="h-pesq">—</div><div class="sub">podem ainda responder</div></div>
-            <div class="kpi accent"><h4>Treinamentos pendentes</h4><div class="val accent" id="h-trein">—</div><div class="sub">pessoas com pendência</div></div>
+            <div class="kpi accent"><h4>Treinamentos</h4><div class="val accent" id="h-trein">—</div><div class="sub">pessoas com pendência</div></div>
+            <div class="kpi teal" style="opacity:0.5"><h4>Promotoras total</h4><div class="val teal" id="h-prom">—</div><div class="sub">vendas + pós</div></div>
+            <div class="kpi gold" style="opacity:0.5"><h4>Pesquisáveis total</h4><div class="val gold" id="h-pesq">—</div><div class="sub">total geral</div></div>
           </div>
 
           <!-- NPS rápido por marca -->
@@ -1696,15 +1702,15 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <!-- Gráficos NPS -->
           <div class="card" style="margin-bottom:16px;">
             <div class="card-title">📊 Evolução NPS Pós-Vendas</div>
-            <canvas id="graficoNpsPos" height="120"></canvas>
+            <canvas id="graficoNpsPos" height="80"></canvas>
           </div>
           <div class="card" style="margin-bottom:16px;">
             <div class="card-title">📊 Evolução NPS Vendas</div>
-            <canvas id="graficoNpsVen" height="120"></canvas>
+            <canvas id="graficoNpsVen" height="80"></canvas>
           </div>
           <div class="card" style="margin-bottom:16px;">
             <div class="card-title">🎓 Treinamentos — Sala vs Remoto</div>
-            <canvas id="graficoTr" height="120"></canvas>
+            <canvas id="graficoTr" height="80"></canvas>
           </div>
 
 
@@ -2134,13 +2140,16 @@ if(fbDb){
   });
 }
 window.__fbDbReady=true;
-// Firebase pronto — carregar bases imediatamente se já logada
+// Firebase pronto — carregar equipe e bases imediatamente
 setTimeout(function(){
   if(window.currentUser){
-    loadBase('VEN_PEU');
-    loadBase('VEN_CIT');
-    loadBase('POS_PEU');
-    loadBase('POS_CIT');
+    // Carrega equipe primeiro, depois as bases
+    loadEquipeGlobal().then(function(){
+      loadBase('VEN_PEU');
+      loadBase('VEN_CIT');
+      loadBase('POS_PEU');
+      loadBase('POS_CIT');
+    });
   }
 }, 200);
 </script>
@@ -2316,7 +2325,7 @@ function startPortal(){
     loadBase('POS_CIT');
   }, 1500);
   setTimeout(()=>{if(window.bootChat)window.bootChat();},1200);
-  setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
+  setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},500);
   // Carrega histórico NPS do Firebase
   setTimeout(()=>carregarNpsDoFirebase(),2000);
   setTimeout(()=>{carregarGroqKey();bootMural();renderAniversariantes();atualizarCountdown();},1500);
@@ -2789,7 +2798,21 @@ async function renderNpsPos(){if(!npsPosCache.length&&window._fbGet){const snap=
 function normalizeMonth(v){return String(v||'').normalize('NFD').replace(/[^\w]/g,'').toUpperCase().replace('MARÇO','MARCO');}
 
 const equipeGlobal={vendedores:[],consultores:[]};
-async function loadEquipeGlobal(){if(!window._fbGet)return;try{const[vs,cs]=await Promise.all([window._fbGet('qualis_equipe_vendedores'),window._fbGet('qualis_equipe_consultores')]);equipeGlobal.vendedores=Object.values(vs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();equipeGlobal.consultores=Object.values(cs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();}catch(e){console.warn(e);}}
+async function loadEquipeGlobal(){
+  if(!window._fbGet)return;
+  try{
+    const[vs,cs]=await Promise.all([
+      window._fbGet('qualis_equipe_vendedores'),
+      window._fbGet('qualis_equipe_consultores')
+    ]);
+    equipeGlobal.vendedores=Object.values(vs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();
+    equipeGlobal.consultores=Object.values(cs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();
+    // Re-renderizar bases para aparecer os nomes no dropdown
+    ['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT'].forEach(k=>{
+      if(baseCache[k]) renderBase(k);
+    });
+  }catch(e){console.warn(e);}
+}
 
 const baseCache={};const BASE_IS_POS={VEN_PEU:false,VEN_CIT:false,POS_PEU:true,POS_CIT:true};const BASE_ROLE={VEN_PEU:'VENDEDOR',VEN_CIT:'VENDEDOR',POS_PEU:'CONSULTOR',POS_CIT:'CONSULTOR'};const baseListeners={};
 async function loadBase(key){
@@ -3414,10 +3437,13 @@ async function renderIAQualis(){
   const det={};pos.filter(r=>r.STATUS==='DETRATOR').forEach(r=>{const k=r.CONSULTOR||'?';det[k]=(det[k]||0)+1;});
   c.critico=Object.entries(det).sort((a,b)=>b[1]-a[1])[0]?.[0]||'nenhum';
   window._iaCtx=c;
-  setText('ia-prom',c.pv+c.pp);
-  setText('ia-det',c.dv+c.dp);
-  setText('ia-pesq',(ven.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length+pos.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length));
-  setText('ia-tr',c.tr);
+  // Recalcular status na hora para garantir pesquisáveis corretos
+  const pesqVenIA = ven.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL').length;
+  const pesqPosIA = pos.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL').length;
+  setText('ia-prom', c.pv+c.pp);
+  setText('ia-det',  c.dv+c.dp);
+  setText('ia-pesq', pesqVenIA+pesqPosIA);
+  setText('ia-tr',   c.tr);
   // Alertas
   const alertas=[];
   if(c.dv+c.dp>0) alertas.push({cor:'var(--q-red)',icon:'🚨',msg:`${c.dv+c.dp} detrator(es) na base — atenção!`});
@@ -3463,25 +3489,29 @@ async function runIAQualis(){
   // Conversoes da Lais
   const lais=pos.filter(r=>String(r.CONVERTIDA_POR||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().includes('LAIS')).length;
 
-  const sys=`Voce e a IA QUALIS da concessionaria Pigalle WS (Peugeot e Citroen).
-Dados ATUAIS do portal:
+  // NPS separado por marca e setor
+  const vpPeu=baseCache.VEN_PEU||[], vpCit=baseCache.VEN_CIT||[];
+  const posPeu2=baseCache.POS_PEU||[], posCit2=baseCache.POS_CIT||[];
+  function npsArr(arr){const p=arr.filter(r=>r.STATUS==='PROMOTOR').length,d=arr.filter(r=>r.STATUS==='DETRATOR').length,n=arr.filter(r=>r.STATUS==='NEUTRO').length,t=p+d+n;return t>0?Math.round((p-d)/t*100)+'%':'sem dados';}
 
-VENDAS:
-- Promotoras: ${pv} | Neutras: ${nv} | Detratoras: ${dv}
-- NPS Vendas: ${nv_pct!==null?nv_pct+'%':'sem dados'} (meta: 90%)
-- Pesquisaveis: ${pesqV}
+  const sys=`Voce e a IA QUALIS da concessionaria Pigalle WS (Peugeot e Citroen).
+Dados ATUAIS e SEPARADOS do portal:
 
 POS-VENDAS:
-- Promotoras: ${pp} | Neutras: ${np} | Detratoras: ${dp}
-- NPS Pos-Vendas: ${np_pct!==null?np_pct+'%':'sem dados'} (meta: 82%)
-- Pesquisaveis: ${pesqP}
+- NPS Peugeot Pos: ${npsArr(posPeu2)} (meta 82%) | Promotoras:${posPeu2.filter(r=>r.STATUS==='PROMOTOR').length} Det:${posPeu2.filter(r=>r.STATUS==='DETRATOR').length} Neu:${posPeu2.filter(r=>r.STATUS==='NEUTRO').length}
+- NPS Citroen Pos: ${npsArr(posCit2)} (meta 82%) | Promotoras:${posCit2.filter(r=>r.STATUS==='PROMOTOR').length} Det:${posCit2.filter(r=>r.STATUS==='DETRATOR').length} Neu:${posCit2.filter(r=>r.STATUS==='NEUTRO').length}
+- Pesquisaveis Pos: ${pesqP}
 - Consultores com detratores: ${detTop}
 - Conversoes pela Lais: ${lais}
 
+VENDAS:
+- NPS Peugeot Vendas: ${npsArr(vpPeu)} (meta 90%) | Promotoras:${vpPeu.filter(r=>r.STATUS==='PROMOTOR').length} Det:${vpPeu.filter(r=>r.STATUS==='DETRATOR').length} Neu:${vpPeu.filter(r=>r.STATUS==='NEUTRO').length}
+- NPS Citroen Vendas: ${npsArr(vpCit)} (meta 90%) | Promotoras:${vpCit.filter(r=>r.STATUS==='PROMOTOR').length} Det:${vpCit.filter(r=>r.STATUS==='DETRATOR').length} Neu:${vpCit.filter(r=>r.STATUS==='NEUTRO').length}
+- Pesquisaveis Vendas: ${pesqV}
+
 TREINAMENTOS: ${tr} pessoa(s) com pendencia
 
-Responda de forma direta e objetiva em portugues brasileiro.
-Use os dados acima para responder. Se perguntarem sobre metas, use 90% para vendas e 82% para pos-vendas.`;
+Responda de forma direta e objetiva em portugues brasileiro, separando sempre Peugeot de Citroen e Vendas de Pos-Vendas quando relevante.`;
 
   try{
     const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:input}],max_tokens:800,temperature:0.3})});
@@ -3496,19 +3526,34 @@ Use os dados acima para responder. Se perguntarem sobre metas, use 90% para vend
    DASHBOARD INÍCIO — atualiza KPIs reais
 ════════════════════════════════════════════ */
 function atualizarDashboardInicio(){
-  const pos=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];
-  const ven=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];
-  const prom=ven.filter(r=>r.STATUS==='PROMOTOR').length+pos.filter(r=>r.STATUS==='PROMOTOR').length;
-  const det=ven.filter(r=>r.STATUS==='DETRATOR').length+pos.filter(r=>r.STATUS==='DETRATOR').length;
-  const neu=ven.filter(r=>r.STATUS==='NEUTRO').length+pos.filter(r=>r.STATUS==='NEUTRO').length;
-  const pesq=ven.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length
-            +pos.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length;
+  const posPeu=baseCache.POS_PEU||[], posCit=baseCache.POS_CIT||[];
+  const venPeu=baseCache.VEN_PEU||[], venCit=baseCache.VEN_CIT||[];
+  const pos=[...posPeu,...posCit];
+  const ven=[...venPeu,...venCit];
+
+  // Calcular recalculando status na hora (garante que pesquisáveis estão corretos)
+  function st(r){ return calcStatus(r.NOTA_NPS, r.DATA_CONVITE); }
+
+  const promPos = pos.filter(r=>st(r)==='PROMOTOR').length;
+  const promVen = ven.filter(r=>st(r)==='PROMOTOR').length;
+  const prom = promPos + promVen;
+  const det = ven.filter(r=>st(r)==='DETRATOR').length + pos.filter(r=>st(r)==='DETRATOR').length;
+  const neu = ven.filter(r=>st(r)==='NEUTRO').length   + pos.filter(r=>st(r)==='NEUTRO').length;
+
+  const pesqPos = pos.filter(r=>st(r)==='PESQUISAVEL').length;
+  const pesqVen = ven.filter(r=>st(r)==='PESQUISAVEL').length;
+  const pesq = pesqPos + pesqVen;
+
   const tr=trState.resumo.length;
 
-  setText('h-prom',prom);
-  setText('h-hot',det+neu);
-  setText('h-pesq',pesq);
-  setText('h-trein',tr);
+  setText('h-prom', prom);
+  setText('h-prom-pos', promPos);
+  setText('h-prom-ven', promVen);
+  setText('h-hot', det+neu);
+  setText('h-pesq', pesq);
+  setText('h-pesq-pos', pesqPos);
+  setText('h-pesq-ven', pesqVen);
+  setText('h-trein', tr);
 
   // NPS por marca
   function npsStr(pArr,dArr,nArr){
