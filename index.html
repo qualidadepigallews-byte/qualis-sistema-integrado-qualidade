@@ -1151,7 +1151,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="v-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_PEU" onchange="renderBase('VEN_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_PEU" oninput="renderBase('VEN_PEU')" placeholder="Buscar..."></div></div>
@@ -1307,7 +1307,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="p-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_PEU" onchange="renderBase('POS_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_PEU" oninput="renderBase('POS_PEU')" placeholder="Buscar..."></div></div>
@@ -1316,7 +1316,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="p-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_CIT')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_CIT" onchange="renderBase('POS_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_CIT" oninput="renderBase('POS_CIT')" placeholder="Buscar..."></div></div>
@@ -2765,27 +2765,29 @@ async function importBase(key,taId){
   const isPos=BASE_IS_POS[key];
   const role=BASE_ROLE[key];
   const rows=lines.map(function(c){
-    // Novo formato: VIN | Cliente | Telefone | Data Convite
-    // Consultor/Vendedor fica em branco — selecionado na tabela depois
-    var dc=c[3]||'';
+    // Formato: VIN(0) | Cliente(1) | Email(2) | Telefone(3) | Data Convite(4) | Consultor/Vendedor(5) | ...
+    var dc=c[4]||'';
     var row={
-      VIN:c[0]||'',
-      CLIENTE:c[1]||'',
-      TELEFONE:c[2]||'',
-      DATA_CONVITE:dc,
-      NOTA_NPS:'',
-      STATUS:calcStatus('',dc),
-      SYONET:'',
+      VIN:      c[0]||'',
+      CLIENTE:  c[1]||'',
+      EMAIL:    c[2]||'',
+      TELEFONE: c[3]||'',
+      DATA_CONVITE: dc,
+      NOTA_NPS: '',
+      STATUS:   calcStatus('',dc),
+      SYONET:   '',
       TRATATIVA:''
     };
-    row[role]=''; // Consultor/Vendedor vazio — selecionar na tabela
+    row[role]=c[5]||''; // Consultor ou Vendedor
     if(isPos) row.CONVERTIDA_POR='';
     return row;
   });
   if(!window._fbGet){alert('Firebase não conectado.');return;}
-  for(var i=0;i<rows.length;i++){await window._fbPush('qualis_base_'+key.toLowerCase(),rows[i]);}
+  for(var i=0;i<rows.length;i++){
+    await window._fbPush('qualis_base_'+key.toLowerCase(),rows[i]);
+  }
   document.getElementById(taId).value='';
-  alert(rows.length+' cliente(s) importado(s)! Selecione os consultores na tabela.');
+  alert(rows.length+' cliente(s) importado(s)!');
 }
 function calcStatus(nota,data){
   const n=Number(nota);
