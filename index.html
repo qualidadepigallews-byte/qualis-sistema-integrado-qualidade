@@ -3882,20 +3882,6 @@ function exportarRelatorio(){
   <p>Pessoas com pendencia: <strong>${trState.resumo.length}</strong> &nbsp;|&nbsp; Em sala: <strong>${trState.resumo.filter(p=>p.modalidade==='SALA').length}</strong> &nbsp;|&nbsp; Remoto: <strong>${trState.resumo.filter(p=>p.modalidade==='REMOTO').length}</strong></p>
   <p style="margin-top:30px;font-size:11px;color:#9ca3af;">Gerado pelo portal QUALIS · ${hoje}</p>
   <scr'+'ipt>window.print();</scr'+'ipt>
-<div id="modalNotificacoes" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);">
-      <div style="font-size:16px;font-weight:700;">🔔 Notificações</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button onclick="limparNotificacoes()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;">Limpar tudo</button>
-        <button onclick="var m=document.getElementById('modalNotificacoes');if(m)m.style.display='none';" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
-      </div>
-    </div>
-    <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-      <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>
-    </div>
-  </div>
-</div>
 
 
 </div>
@@ -4355,6 +4341,22 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('loginScreen').style.display='flex';
 });
 </script>
+
+
+<div id="modalNotificacoes" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);">
+      <div style="font-size:16px;font-weight:700;">🔔 Notificações</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="limparNotificacoes()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;">Limpar tudo</button>
+        <button onclick="var m=document.getElementById('modalNotificacoes');if(m)m.style.display='none';" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
+      </div>
+    </div>
+    <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+      <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
