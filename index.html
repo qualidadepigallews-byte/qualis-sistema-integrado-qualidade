@@ -1630,7 +1630,27 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
         </div>
 
         <div class="page" id="pg-inteligencia">
-          <div class="page-header"><div class="page-title">IA QUALIS</div><div class="page-sub">Briefing automático + inteligência artificial com dados reais do portal.</div></div>
+          <div class="page-header"><div class="page-title">IA QUALIS</div><div class="page-sub">Inteligência artificial com dados reais do portal.</div></div>
+
+          <!-- Chat IA — topo -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">💬 Pergunte à IA QUALIS</div>
+            <div class="assist-presets" style="margin-bottom:12px;">
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de vendas?';runIAQualis()">NPS Vendas</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de pos-vendas?';runIAQualis()">NPS Pos-Vendas</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais consultores tem mais detratores?';runIAQualis()">Detratores</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Estamos em risco de nao bater a meta?';runIAQualis()">Risco meta</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais sao as prioridades do dia?';runIAQualis()">Prioridades</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Faca um resumo para os diretores';runIAQualis()">Resumo diretores</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quantas promotoras faltam para bater a meta?';runIAQualis()">Faltam promotoras</button>
+              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Qual a probabilidade de bater a meta esse mes?';runIAQualis()">Probabilidade meta</button>
+            </div>
+            <div class="assist-wrap">
+              <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte sobre NPS, detratores, metas, conversões..." onkeydown="if(event.key==='Enter')runIAQualis()">
+              <button class="btn primary" onclick="runIAQualis()">Perguntar</button>
+            </div>
+            <div class="assist-response" id="iaResp" style="margin-top:12px;">Olá! Sou a IA QUALIS. Analiso os dados reais do portal e respondo qualquer pergunta. Como posso ajudar?</div>
+          </div>
 
           <!-- KPIs rápidos -->
           <div class="grid-4" style="margin-bottom:16px;">
@@ -1693,25 +1713,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <canvas id="graficoTr" height="120"></canvas>
           </div>
 
-          <!-- Chat IA -->
-          <div class="card">
-            <div class="card-title">💬 Pergunte à IA QUALIS</div>
-            <div class="assist-presets" style="margin-bottom:12px;">
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de vendas?';runIAQualis()">NPS Vendas</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de pos-vendas?';runIAQualis()">NPS Pos-Vendas</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais consultores tem mais detratores?';runIAQualis()">Detratores</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Estamos em risco de nao bater a meta?';runIAQualis()">Risco meta</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quantas pessoas tem treinamento pendente?';runIAQualis()">Treinamentos</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Quais sao as prioridades do dia?';runIAQualis()">Prioridades</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Faca um resumo para os diretores';runIAQualis()">Resumo diretores</button>
-              <button class="assist-preset" onclick="document.getElementById('iaInput').value='Qual a probabilidade de bater a meta esse mes?';runIAQualis()">Probabilidade meta</button>
-            </div>
-            <div class="assist-wrap">
-              <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte qualquer coisa sobre NPS, detratores, treinamentos, metas..." onkeydown="if(event.key==='Enter')runIAQualis()">
-              <button class="btn primary" onclick="runIAQualis()">Perguntar</button>
-            </div>
-            <div class="assist-response" id="iaResp" style="margin-top:12px;">Ola! Sou a IA QUALIS. Posso analisar os dados reais e responder qualquer pergunta. Como posso ajudar?</div>
-          </div>
+
         </div>
 
         <!-- ══ CONFIG ══ -->
@@ -3356,10 +3358,56 @@ async function runIAQualis(){
   const apiKey=localStorage.getItem('sc-apikey')||'';
   if(!apiKey){document.getElementById('iaResp').textContent='Configure a API Key do Groq em Configuracoes.';return;}
   document.getElementById('iaResp').textContent='Analisando...';
-  const c=window._iaCtx||{};
-  const sys='Voce e a IA QUALIS da Pigalle WS. Dados: Vendas Prom='+c.pv+' Det='+c.dv+' Neu='+c.nv+' NPS='+(c.nv_pct!==null?c.nv_pct+'%':'sd')+' Meta90%. Pos Prom='+c.pp+' Det='+c.dp+' Neu='+c.np+' NPS='+(c.np_pct!==null?c.np_pct+'%':'sd')+' Meta82%. Critico:'+c.critico+'. Treinamentos:'+c.tr+'. Responda direto em portugues.';
+
+  // Sempre recalcula o contexto com dados atuais da base
+  for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){
+    if(!baseCache[k]) await loadBase(k).catch(()=>{});
+  }
+  const pos=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];
+  const ven=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];
+  const pv=ven.filter(r=>r.STATUS==='PROMOTOR').length;
+  const dv=ven.filter(r=>r.STATUS==='DETRATOR').length;
+  const nv=ven.filter(r=>r.STATUS==='NEUTRO').length;
+  const pp=pos.filter(r=>r.STATUS==='PROMOTOR').length;
+  const dp=pos.filter(r=>r.STATUS==='DETRATOR').length;
+  const np=pos.filter(r=>r.STATUS==='NEUTRO').length;
+  const tv=pv+dv+nv, tp=pp+dp+np;
+  const nv_pct=tv>0?Math.round((pv-dv)/tv*100):null;
+  const np_pct=tp>0?Math.round((pp-dp)/tp*100):null;
+  const pesqV=ven.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length;
+  const pesqP=pos.filter(r=>['PESQUISAVEL','PESQUISÁVEL'].includes(String(r.STATUS||'').toUpperCase())).length;
+  const det={};pos.filter(r=>r.STATUS==='DETRATOR').forEach(r=>{const k=r.CONSULTOR||'?';det[k]=(det[k]||0)+1;});
+  const critico=Object.entries(det).sort((a,b)=>b[1]-a[1])[0]?.[0]||'nenhum';
+  const tr=trState.resumo.length;
+
+  // Consultores com mais detratores
+  const detTop=Object.entries(det).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>k+':'+v).join(', ')||'nenhum';
+
+  // Conversoes da Lais
+  const lais=pos.filter(r=>String(r.CONVERTIDA_POR||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().includes('LAIS')).length;
+
+  const sys=`Voce e a IA QUALIS da concessionaria Pigalle WS (Peugeot e Citroen).
+Dados ATUAIS do portal:
+
+VENDAS:
+- Promotoras: ${pv} | Neutras: ${nv} | Detratoras: ${dv}
+- NPS Vendas: ${nv_pct!==null?nv_pct+'%':'sem dados'} (meta: 90%)
+- Pesquisaveis: ${pesqV}
+
+POS-VENDAS:
+- Promotoras: ${pp} | Neutras: ${np} | Detratoras: ${dp}
+- NPS Pos-Vendas: ${np_pct!==null?np_pct+'%':'sem dados'} (meta: 82%)
+- Pesquisaveis: ${pesqP}
+- Consultores com detratores: ${detTop}
+- Conversoes pela Lais: ${lais}
+
+TREINAMENTOS: ${tr} pessoa(s) com pendencia
+
+Responda de forma direta e objetiva em portugues brasileiro.
+Use os dados acima para responder. Se perguntarem sobre metas, use 90% para vendas e 82% para pos-vendas.`;
+
   try{
-    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:input}],max_tokens:600,temperature:0.3})});
+    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:input}],max_tokens:800,temperature:0.3})});
     const d=await r.json();if(!r.ok)throw new Error(d.error?.message||'Erro');
     document.getElementById('iaResp').textContent=d.choices?.[0]?.message?.content||'Sem resposta';
     document.getElementById('iaInput').value='';
