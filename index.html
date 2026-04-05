@@ -650,12 +650,285 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
   .form-grid{grid-template-columns:1fr;}
   .topnav-item .label{display:none;}
 }
+
+/* ════ EVA — Robô animada na tela de login ════ */
+.eva-container{
+  position:absolute;right:8%;top:50%;transform:translateY(-50%);
+  z-index:1;pointer-events:none;
+  animation:evaFloat 3.5s ease-in-out infinite;
+}
+@keyframes evaFloat{
+  0%,100%{transform:translateY(-50%) translateY(0px);}
+  50%{transform:translateY(-50%) translateY(-18px);}
+}
+.eva-wrap{position:relative;width:160px;}
+
+/* Corpo da EVA */
+.eva-body{
+  width:90px;height:110px;
+  background:linear-gradient(160deg,#f0f4ff 0%,#d8e4ff 40%,#b8ccff 100%);
+  border-radius:50% 50% 42% 42% / 55% 55% 45% 45%;
+  margin:0 auto;position:relative;
+  box-shadow:0 8px 32px rgba(100,140,255,.35),inset 0 2px 8px rgba(255,255,255,.8);
+}
+
+/* Cabeça */
+.eva-head{
+  width:72px;height:72px;
+  background:linear-gradient(135deg,#f5f8ff 0%,#dde8ff 50%,#c5d5ff 100%);
+  border-radius:50%;
+  position:absolute;top:-42px;left:50%;transform:translateX(-50%);
+  box-shadow:0 4px 20px rgba(100,140,255,.3),inset 0 2px 6px rgba(255,255,255,.9);
+}
+
+/* Olhos da EVA — ovais azuis brilhantes */
+.eva-eyes{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);
+  display:flex;gap:12px;
+}
+.eva-eye{
+  width:18px;height:10px;
+  background:linear-gradient(180deg,#60a5fa,#1d4ed8);
+  border-radius:50%;
+  box-shadow:0 0 8px rgba(96,165,250,.8),0 0 16px rgba(96,165,250,.4);
+  animation:evaBlink 4s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+.eva-eye::after{
+  content:'';position:absolute;top:1px;left:2px;
+  width:5px;height:4px;
+  background:rgba(255,255,255,.6);border-radius:50%;
+}
+@keyframes evaBlink{
+  0%,45%,55%,100%{transform:scaleY(1);}
+  50%{transform:scaleY(0.05);}
+}
+
+/* Brilho na cabeça */
+.eva-head-shine{
+  position:absolute;top:12px;left:14px;
+  width:22px;height:14px;
+  background:rgba(255,255,255,.5);
+  border-radius:50%;transform:rotate(-30deg);
+  filter:blur(3px);
+}
+
+/* Pescoço */
+.eva-neck{
+  width:22px;height:14px;
+  background:linear-gradient(180deg,#cdd9ff,#b0c4ff);
+  border-radius:4px;margin:0 auto;position:relative;z-index:1;
+}
+
+/* Braços */
+.eva-arms{position:absolute;top:18px;width:100%;}
+.eva-arm-left{
+  position:absolute;left:-22px;top:0;
+  width:18px;height:52px;
+  background:linear-gradient(180deg,#dde8ff,#b8ccff);
+  border-radius:9px;
+  transform-origin:top center;
+  animation:evaArmLeft 3.5s ease-in-out infinite;
+  box-shadow:inset 0 1px 4px rgba(255,255,255,.7);
+}
+.eva-arm-right{
+  position:absolute;right:-22px;top:0;
+  width:18px;height:62px;
+  background:linear-gradient(180deg,#dde8ff,#b8ccff);
+  border-radius:9px;
+  transform-origin:top center;
+  animation:evaArmRight 3.5s ease-in-out infinite;
+  box-shadow:inset 0 1px 4px rgba(255,255,255,.7);
+}
+@keyframes evaArmLeft{
+  0%,100%{transform:rotate(-15deg);}
+  50%{transform:rotate(-25deg);}
+}
+@keyframes evaArmRight{
+  0%,100%{transform:rotate(35deg);}
+  40%{transform:rotate(42deg);}
+  60%{transform:rotate(28deg);}
+}
+
+/* Mãozinha direita */
+.eva-hand{
+  position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);
+  width:14px;height:14px;
+  background:linear-gradient(135deg,#e8f0ff,#c5d5ff);
+  border-radius:50%;
+  box-shadow:0 2px 6px rgba(100,140,255,.3);
+}
+
+/* Tablet holográfico */
+.eva-tablet{
+  position:absolute;right:-95px;top:-10px;
+  width:80px;height:90px;
+  background:linear-gradient(135deg,rgba(10,20,50,.85),rgba(5,15,40,.95));
+  border:1.5px solid rgba(96,165,250,.6);
+  border-radius:8px;
+  box-shadow:0 0 20px rgba(96,165,250,.3),0 0 40px rgba(96,165,250,.15),inset 0 0 20px rgba(96,165,250,.05);
+  padding:8px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.eva-tablet::before{
+  content:'QUALIS';
+  font-size:6px;font-weight:700;letter-spacing:.1em;
+  color:rgba(96,165,250,.7);text-align:center;
+  display:block;margin-bottom:2px;
+}
+
+/* Barras do gráfico no tablet */
+.tab-bars{display:flex;align-items:flex-end;gap:4px;height:32px;margin-bottom:4px;}
+.tab-bar{
+  flex:1;border-radius:2px 2px 0 0;
+  background:linear-gradient(180deg,#60a5fa,#1d4ed8);
+  box-shadow:0 0 6px rgba(96,165,250,.5);
+}
+.tab-bar:nth-child(1){animation:barGrow1 2.8s ease-in-out infinite;}
+.tab-bar:nth-child(2){animation:barGrow2 2.8s ease-in-out infinite .2s;}
+.tab-bar:nth-child(3){animation:barGrow3 2.8s ease-in-out infinite .4s;}
+.tab-bar:nth-child(4){animation:barGrow4 2.8s ease-in-out infinite .1s;}
+.tab-bar:nth-child(5){background:linear-gradient(180deg,#34d399,#059669);animation:barGrow5 2.8s ease-in-out infinite .3s;box-shadow:0 0 6px rgba(52,211,153,.5);}
+
+@keyframes barGrow1{0%,100%{height:55%;}50%{height:75%;}}
+@keyframes barGrow2{0%,100%{height:70%;}50%{height:45%;}}
+@keyframes barGrow3{0%,100%{height:40%;}50%{height:80%;}}
+@keyframes barGrow4{0%,100%{height:80%;}50%{height:55%;}}
+@keyframes barGrow5{0%,100%{height:60%;}50%{height:90%;}}
+
+/* Linha de porcentagem no tablet */
+.tab-pct{
+  font-size:9px;font-weight:700;
+  color:#60a5fa;text-align:center;
+  animation:pctChange 2.8s ease-in-out infinite;
+  text-shadow:0 0 8px rgba(96,165,250,.8);
+}
+@keyframes pctChange{
+  0%,30%{opacity:1;}
+  35%,45%{opacity:0;}
+  50%{opacity:1;}
+  80%,90%{opacity:0;}
+  100%{opacity:1;}
+}
+
+/* Linha NPS no tablet */
+.tab-nps{
+  height:18px;border-radius:4px;overflow:hidden;
+  background:rgba(255,255,255,.05);border:1px solid rgba(96,165,250,.2);
+  position:relative;
+}
+.tab-nps-fill{
+  position:absolute;left:0;top:0;bottom:0;
+  background:linear-gradient(90deg,#1d4ed8,#60a5fa);
+  border-radius:3px;
+  box-shadow:0 0 8px rgba(96,165,250,.5);
+  animation:npsFill 2.8s ease-in-out infinite;
+}
+@keyframes npsFill{
+  0%,100%{width:72%;}
+  50%{width:88%;}
+}
+.tab-nps-label{
+  position:absolute;right:4px;top:50%;transform:translateY(-50%);
+  font-size:7px;font-weight:700;color:rgba(255,255,255,.6);
+}
+
+/* Partículas ao redor da EVA */
+.eva-particles{position:absolute;inset:-30px;pointer-events:none;}
+.eva-particle{
+  position:absolute;width:3px;height:3px;
+  background:#60a5fa;border-radius:50%;
+  box-shadow:0 0 6px rgba(96,165,250,.8);
+  animation:particleFloat 4s ease-in-out infinite;
+}
+.eva-particle:nth-child(1){top:20%;left:5%;animation-delay:0s;animation-duration:3.8s;}
+.eva-particle:nth-child(2){top:70%;left:95%;animation-delay:.8s;animation-duration:4.2s;}
+.eva-particle:nth-child(3){top:10%;left:85%;animation-delay:1.6s;animation-duration:3.5s;}
+.eva-particle:nth-child(4){top:80%;left:10%;animation-delay:2.4s;animation-duration:4.5s;}
+.eva-particle:nth-child(5){top:40%;left:100%;animation-delay:.4s;animation-duration:3.2s;}
+@keyframes particleFloat{
+  0%,100%{transform:translate(0,0);opacity:.7;}
+  33%{transform:translate(8px,-12px);opacity:1;}
+  66%{transform:translate(-5px,8px);opacity:.5;}
+}
+
+/* Halo brilhante atrás da EVA */
+.eva-halo{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:160px;height:160px;
+  background:radial-gradient(ellipse,rgba(96,165,250,.12) 0%,transparent 70%);
+  border-radius:50%;
+  animation:haloBreath 3.5s ease-in-out infinite;
+}
+@keyframes haloBreath{
+  0%,100%{transform:translate(-50%,-50%) scale(1);}
+  50%{transform:translate(-50%,-50%) scale(1.15);}
+}
+
+/* Esconder EVA em telas pequenas */
+@media(max-width:768px){.eva-container{display:none;}}
+
+/* Ajustar card de login quando EVA está presente */
+@media(min-width:769px){
+  #loginScreen{justify-content:center;}
+  .login-card{margin-right:120px;}
+}
+
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <section id="loginScreen">
+
+  <!-- EVA — Robozinha animada -->
+  <div class="eva-container">
+    <div class="eva-halo"></div>
+    <div class="eva-particles">
+      <div class="eva-particle"></div>
+      <div class="eva-particle"></div>
+      <div class="eva-particle"></div>
+      <div class="eva-particle"></div>
+      <div class="eva-particle"></div>
+    </div>
+    <div class="eva-wrap">
+      <!-- Cabeça -->
+      <div class="eva-head">
+        <div class="eva-head-shine"></div>
+        <div class="eva-eyes">
+          <div class="eva-eye"></div>
+          <div class="eva-eye"></div>
+        </div>
+      </div>
+      <!-- Pescoço -->
+      <div class="eva-neck"></div>
+      <!-- Corpo -->
+      <div class="eva-body">
+        <div class="eva-arms">
+          <div class="eva-arm-left"></div>
+          <div class="eva-arm-right">
+            <div class="eva-hand"></div>
+            <!-- Tablet holográfico -->
+            <div class="eva-tablet">
+              <div class="tab-bars">
+                <div class="tab-bar"></div>
+                <div class="tab-bar"></div>
+                <div class="tab-bar"></div>
+                <div class="tab-bar"></div>
+                <div class="tab-bar"></div>
+              </div>
+              <div class="tab-pct" id="eva-pct">NPS 82%</div>
+              <div class="tab-nps">
+                <div class="tab-nps-fill"></div>
+                <div class="tab-nps-label">meta</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="login-card">
     <div class="login-wordmark">
       <div class="login-q">Q</div>
@@ -721,6 +994,9 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
       </div>
       <div class="topnav-avatar" id="topAvatar">K</div>
       <button class="topnav-logout" onclick="exportarRelatorio()" style="margin-right:6px;">📄 PDF</button>
+      <button class="topnav-logout" onclick="abrirCentralNotif()" style="margin-right:6px;background:none;border:1px solid var(--border);color:var(--text);position:relative;" title="Notificações">
+      🔔 <span id="notif-badge" style="display:none;position:absolute;top:-4px;right:-4px;background:#dc2626;color:#fff;font-size:10px;font-weight:700;border-radius:99px;width:16px;height:16px;line-height:16px;text-align:center;">0</span>
+      </button>
       <button class="topnav-logout" onclick="doLogout()">Sair</button>
     </div>
   </nav>
@@ -756,12 +1032,6 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="kpi purple"><h4>NPS Vendas Citroën</h4><div class="val purple" id="h-nps-vc">—</div><div class="sub">meta 90%</div></div>
             <div class="kpi teal"><h4>NPS Pós Peugeot</h4><div class="val teal" id="h-nps-pp">—</div><div class="sub">meta 82%</div></div>
             <div class="kpi sky"><h4>NPS Pós Citroën</h4><div class="val sky" id="h-nps-pc">—</div><div class="sub">meta 82%</div></div>
-          </div>
-
-          <!-- Alertas automáticos -->
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">🔔 Alertas do dia</div>
-            <div id="h-alertas" style="font-size:13.5px;color:var(--muted);line-height:1.8;">Carregando dados...</div>
           </div>
 
           <!-- Mural de Avisos + Aniversariantes -->
@@ -882,6 +1152,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="subpage" id="v-peugeot">
             <div class="import-grid">
               <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Vendedor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_PEU" onchange="renderBase('VEN_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_PEU" oninput="renderBase('VEN_PEU')" placeholder="Buscar..."></div></div>
             </div>
@@ -890,6 +1161,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="subpage" id="v-citroen">
             <div class="import-grid">
               <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pasteVenCit" placeholder="Cole os dados aqui..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_CIT')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('VEN_CIT','pasteVenCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_CIT" onchange="renderBase('VEN_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_CIT" oninput="renderBase('VEN_CIT')" placeholder="Buscar..."></div></div>
             </div>
@@ -1036,6 +1308,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="subpage" id="p-peugeot">
             <div class="import-grid">
               <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_PEU" onchange="renderBase('POS_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_PEU" oninput="renderBase('POS_PEU')" placeholder="Buscar..."></div></div>
             </div>
@@ -1044,6 +1317,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           <div class="subpage" id="p-citroen">
             <div class="import-grid">
               <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_CIT')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_CIT" onchange="renderBase('POS_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_CIT" oninput="renderBase('POS_CIT')" placeholder="Buscar..."></div></div>
             </div>
@@ -1374,16 +1648,49 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             </div>
           </div>
 
-          <!-- Gráfico NPS por mês -->
-          <div class="grid-2" style="margin-bottom:16px;">
-            <div class="card">
-              <div class="card-title">📊 NPS Pós-Vendas por mês</div>
-              <canvas id="graficoNpsPos" height="200"></canvas>
+          <!-- Meta do Mês -->
+          <div class="card" style="margin-bottom:16px;" id="ia-meta-card">
+            <div class="card-title">🎯 Meta do Mês — Abril 2026</div>
+            <div id="ia-metas-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="border-radius:10px;padding:14px;background:var(--surface2);border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">🚗 Pós Peugeot</div>
+                <div id="ia-meta-pp" style="font-size:22px;font-weight:800;">—</div>
+                <div id="ia-meta-pp-sub" style="font-size:12px;color:var(--muted);margin-top:3px;">meta 82%</div>
+                <div id="ia-meta-pp-falta" style="font-size:12px;font-weight:700;margin-top:4px;"></div>
+              </div>
+              <div style="border-radius:10px;padding:14px;background:var(--surface2);border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">✨ Pós Citroën</div>
+                <div id="ia-meta-pc" style="font-size:22px;font-weight:800;">—</div>
+                <div id="ia-meta-pc-sub" style="font-size:12px;color:var(--muted);margin-top:3px;">meta 82%</div>
+                <div id="ia-meta-pc-falta" style="font-size:12px;font-weight:700;margin-top:4px;"></div>
+              </div>
+              <div style="border-radius:10px;padding:14px;background:var(--surface2);border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">🚗 Vendas Peugeot</div>
+                <div id="ia-meta-vp" style="font-size:22px;font-weight:800;">—</div>
+                <div id="ia-meta-vp-sub" style="font-size:12px;color:var(--muted);margin-top:3px;">meta 90%</div>
+                <div id="ia-meta-vp-falta" style="font-size:12px;font-weight:700;margin-top:4px;"></div>
+              </div>
+              <div style="border-radius:10px;padding:14px;background:var(--surface2);border:1px solid var(--border);">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">✨ Vendas Citroën</div>
+                <div id="ia-meta-vc" style="font-size:22px;font-weight:800;">—</div>
+                <div id="ia-meta-vc-sub" style="font-size:12px;color:var(--muted);margin-top:3px;">meta 90%</div>
+                <div id="ia-meta-vc-falta" style="font-size:12px;font-weight:700;margin-top:4px;"></div>
+              </div>
             </div>
-            <div class="card">
-              <div class="card-title">🎓 Treinamentos — Sala vs Remoto</div>
-              <canvas id="graficoTr" height="200"></canvas>
-            </div>
+          </div>
+
+          <!-- Gráficos NPS -->
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">📊 Evolução NPS Pós-Vendas</div>
+            <canvas id="graficoNpsPos" height="120"></canvas>
+          </div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">📊 Evolução NPS Vendas</div>
+            <canvas id="graficoNpsVen" height="120"></canvas>
+          </div>
+          <div class="card" style="margin-bottom:16px;">
+            <div class="card-title">🎓 Treinamentos — Sala vs Remoto</div>
+            <canvas id="graficoTr" height="120"></canvas>
           </div>
 
           <!-- Chat IA -->
@@ -1582,7 +1889,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="sc-email-field"><label>Mensagem adicional (opcional)</label><textarea id="scEmailMsg" placeholder="Observações..."></textarea></div>
             <div class="btn-row">
               <button class="btn primary" onclick="scEnviarEmail()">Enviar agora</button>
-              <button class="btn ghost" onclick="document.getElementById('scEmailModal').classList.add('hidden')">Cancelar</button>
+              <button class="btn ghost" onclick="if(document.getElementById('scEmailModal'))document.getElementById('scEmailModal').style.display='none'">Cancelar</button>
             </div>
             <div id="scEmailFeedback" style="margin-top:11px;font-size:13px;"></div>
           </div>
@@ -1591,6 +1898,114 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
       </div><!-- /pages -->
   </div><!-- /content-area -->
 </div><!-- /app -->
+
+<!-- ══ MODAIS ══ -->
+<div id="modalNpsManual" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mes fechado.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mes</label>
+        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Marco</option>
+          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+        </select></div>
+      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
+        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Peugeot</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Citroen</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="var _m=document.getElementById('modalNpsManual');if(_m)_m.style.display='none';">Cancelar</button>
+      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Novo Aviso</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Titulo</label>
+      <input id="avisoTitulo" type="text" placeholder="Ex: Reuniao amanha as 14h" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mensagem</label>
+      <textarea id="avisoMensagem" rows="3" placeholder="Detalhes do aviso..." style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Tipo</label>
+      <select id="avisoTipo" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+        <option value="info">Informacao</option>
+        <option value="alert">Atencao</option>
+        <option value="success">Positivo</option>
+        <option value="urgent">Urgente</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAviso').style.display='none'">Cancelar</button>
+      <button class="btn primary" onclick="salvarAviso()">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Adicionar Aniversariante</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
+      <input id="anivNome" type="text" placeholder="Ex: Kamilly Paiva" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
+      <input id="anivData" type="text" placeholder="DD/MM/AAAA (ex: 15/03/1985)" maxlength="10" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;" oninput="mascaraData(this)">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor / Cargo</label>
+      <input id="anivSetor" type="text" placeholder="Ex: Qualidade - SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').style.display='none'">Cancelar</button>
+      <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
+    <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
+    <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
+    <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Conversão</label>
+      <textarea id="waDescricao" rows="3" placeholder="Ex: Convertido pelo consultor Adriano / Convertido pela Laís / Cliente viu o e-mail e respondeu por conta própria..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAlertaWA').style.display='none'">Cancelar</button>
+      <button onclick="enviarAlertaWA()" style="background:#25D366;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Enviar no grupo</button>
+    </div>
+  </div>
+</div>
+
+
     </div><!-- /main -->
   </div><!-- /shell -->
 </div><!-- /app -->
@@ -1818,7 +2233,7 @@ function scDeletarMes(mesAno){const entry=scData.find(d=>d.mesAno===mesAno);if(!
 function scVerMes(mesAno){const selEl=document.getElementById('scPainelMes');if(selEl)selEl.value=mesAno;openSub('scorecard-pos','sc-painel',document.querySelector('#pg-scorecard-pos .subnav-btn:nth-child(2)'));renderScPainel();}
 function scPopulateSelect(sel){if(!sel)return;const curr=sel.value;sel.innerHTML=scData.map(d=>`<option value="${d.mesAno}">${MESES[d.mes]} / ${d.ano}</option>`).join('');if(curr&&scData.find(d=>d.mesAno===curr))sel.value=curr;else if(scData.length)sel.value=scData[scData.length-1].mesAno;}
 function scGetPrevEntry(mesAno){const idx=scData.findIndex(d=>d.mesAno===mesAno);return idx>0?scData[idx-1]:null;}
-function scAbrirEmail(){['scResendKey','scEmailFrom','scEmailTo','scEmailCc'].forEach(id=>{const saved=localStorage.getItem('sc-email-'+id);if(saved)document.getElementById(id).value=saved;});document.getElementById('scEmailModal').classList.remove('hidden');}
+function scAbrirEmail(){['scResendKey','scEmailFrom','scEmailTo','scEmailCc'].forEach(id=>{const saved=localStorage.getItem('sc-email-'+id);if(saved)document.getElementById(id).value=saved;});var _sem=document.getElementById('scEmailModal');if(_sem)_sem.style.display='flex';}
 
 async function scEnviarEmail(){
   const resendKey=document.getElementById('scResendKey').value.trim();const from=document.getElementById('scEmailFrom').value.trim();const to=document.getElementById('scEmailTo').value.trim();const cc=document.getElementById('scEmailCc')?.value.trim()||'';const msg=document.getElementById('scEmailMsg').value.trim();const fb=document.getElementById('scEmailFeedback');
@@ -1832,132 +2247,15 @@ async function scEnviarEmail(){
   const citNota=citCalc?`${citCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${citCalc.classificacao}`:'Não importado';
   const quedas=alertas.filter(a=>a.piora).length;const evolucoes=alertas.filter(a=>!a.piora).length;
   const alertasHtml=alertas.map(a=>`<div style="padding:9px 0;border-bottom:1px solid #f3f4f6;display:flex;gap:9px;"><span>${a.icon}</span><div><div style="font-weight:700;font-size:13px;">${a.title}</div><div style="font-size:12px;color:#6b7280;">${a.desc}</div></div></div>`).join('');
-  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">📊 Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">💬 Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
-<!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
-        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
-          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
-        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
-      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
-    </div>
-  </div>
-</div>
+  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">📊 Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">💬 Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>`;
 
-
-<!-- Modal novo aviso -->
-<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);" class="modal-overlay">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">📌 Novo Aviso</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Título</label>
-      <input id="avisoTitulo" type="text" placeholder="Ex: Reunião amanhã às 14h" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mensagem</label>
-      <textarea id="avisoMensagem" rows="3" placeholder="Detalhes do aviso..." style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;resize:vertical;"></textarea>
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Tipo</label>
-      <select id="avisoTipo" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-        <option value="info">ℹ️ Informação</option>
-        <option value="alert">⚠️ Atenção</option>
-        <option value="success">✅ Positivo</option>
-        <option value="urgent">🚨 Urgente</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="fecharModalAviso()">Cancelar</button>
-      <button class="btn primary" onclick="salvarAviso()">Publicar</button>
-    </div>
-  </div>
-</div>
-
-
-<!-- Modal aniversariante -->
-<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);" class="modal-overlay">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">🎂 Adicionar Aniversariante</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
-      <input id="anivNome" type="text" placeholder="Ex: Kamilly Paiva" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
-      <input id="anivData" type="date" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor / Cargo</label>
-      <input id="anivSetor" type="text" placeholder="Ex: Qualidade · SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="fecharModalAniversariante()">Cancelar</button>
-      <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-
-<div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
-    <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
-    <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
-    <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">O que aconteceu?</label>
-      <textarea id="waDescricao" rows="3" placeholder="Ex: Cliente veio a loja e avaliou pessoalmente..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAlertaWA').style.display='none'">Cancelar</button>
-      <button onclick="enviarAlertaWA()" style="background:#25D366;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Enviar no grupo</button>
-    </div>
-  </div>
-</div>
-
-</body></html>`;
-  fb.textContent='📤 Enviando via Resend...';fb.style.color='var(--q-red)';
+  // enviar email via Resend
   try{
-    const body={from:`QUALIS Qualidade <${from}>`,to:[to],subject:`📊 Scorecard Pós-Vendas — ${mes}`,html:htmlBody};
-    if(cc)body.cc=cc.split(',').map(x=>x.trim()).filter(Boolean);
-    const resp=await fetch('https://api.resend.com/emails',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${resendKey}`},body:JSON.stringify(body)});
-    const data=await resp.json();if(!resp.ok)throw new Error(data.message||'Erro');
-    fb.textContent='✅ E-mail enviado com sucesso via Resend!';fb.style.color='var(--q-teal)';
-    setTimeout(()=>{document.getElementById('scEmailModal').classList.add('hidden');fb.textContent='';},2500);
-  }catch(err){fb.textContent='❌ Erro: '+err.message;fb.style.color='var(--red)';}
+    const resp=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+resendKey},body:JSON.stringify({from:from,to:to,cc:cc||undefined,subject:"QUALIS - Relatorio Scorecard",html:htmlBody})});
+    const data=await resp.json();
+    if(resp.ok){fb.textContent="Email enviado!";fb.style.color="var(--q-teal)";setTimeout(()=>{document.getElementById("scEmailModal").classList.add("hidden");fb.textContent="";},2500);}
+    else{fb.textContent="Erro: "+(data.message||resp.status);fb.style.color="var(--red)";}
+  }catch(err){fb.textContent="Erro: "+err.message;fb.style.color="var(--red)";}
 }
 
 /* ══ AUTH & USUÁRIAS ══ */
@@ -2004,13 +2302,13 @@ function startPortal(){
   document.getElementById('sbRole').textContent=currentUser.role==='superadmin'?'Super Admin':'Operacional';
   const av=document.getElementById('topAvatar');
   if(av) av.textContent=currentUser.name.charAt(0).toUpperCase();
-  loadConfig();renderSystems();
+  loadConfig();renderSystems();setTimeout(atualizarBadge,500);
   setTimeout(()=>{if(window.bootChat)window.bootChat();},1200);
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
   setTimeout(()=>carregarNpsDoFirebase(),2000);
   setTimeout(()=>{carregarGroqKey();bootMural();renderAniversariantes();atualizarCountdown();},1500);
-  setTimeout(()=>{limparBasePosVendasPeugeot();limparBasePosCitAuto();},3000);
+  setTimeout(()=>{limparBasePosVendasPeugeot();limparBasePosCitAuto();},8000);
 }
 
 async function carregarNpsDoFirebase(){
@@ -2048,7 +2346,7 @@ async function carregarNpsDoFirebase(){
 const PAGE_TITLES={inicio:'Início',vendas:'Vendas',posvendas:'Pós-Vendas',grow:'Grow Customer Care',treinamentos:'Treinamentos',chat:'Chat',sistemas:'Sistemas',inteligencia:'Inteligência CX',config:'Configurações','scorecard-pos':'Scorecard Pós-Vendas'};
 function goPage(id,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('pg-'+id)?.classList.add('active');
+  var _pg=document.getElementById('pg-'+id);if(_pg)_pg.classList.add('active');
   // Atualiza topnav items e dropdown items
   document.querySelectorAll('.topnav-item,.topnav-dd-item').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
@@ -2151,12 +2449,24 @@ function agregaNps(tipo, periodoMes, ano) {
     if(hCit){ cit.prom+=hCit.prom; cit.det+=hCit.det; cit.neu+=hCit.neu; }
   }
 
-  // Adiciona dados da base em tempo real (mês atual/aberto)
-  const mesAtual = periodoMes === 'TODOS' || !historico.find(r=>r.mes===periodoMes&&r.marca==='PEUGEOT');
-  if(mesAtual || periodoMes === 'TODOS') {
-    baseKeysPeu.forEach(k=>{(baseCache[k]||[]).forEach(r=>{if(r.STATUS==='PROMOTOR')peu.prom++;else if(r.STATUS==='DETRATOR')peu.det++;else if(r.STATUS==='NEUTRO')peu.neu++;});});
-    baseKeysCit.forEach(k=>{(baseCache[k]||[]).forEach(r=>{if(r.STATUS==='PROMOTOR')cit.prom++;else if(r.STATUS==='DETRATOR')cit.det++;else if(r.STATUS==='NEUTRO')cit.neu++;});});
-  }
+  // Sempre soma a base em tempo real (notas digitadas na base de clientes)
+  // Recalcula o status na hora para garantir que a nota recém digitada já conta
+  baseKeysPeu.forEach(k=>{
+    (baseCache[k]||[]).forEach(r=>{
+      const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+      if(st==='PROMOTOR') peu.prom++;
+      else if(st==='DETRATOR') peu.det++;
+      else if(st==='NEUTRO') peu.neu++;
+    });
+  });
+  baseKeysCit.forEach(k=>{
+    (baseCache[k]||[]).forEach(r=>{
+      const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+      if(st==='PROMOTOR') cit.prom++;
+      else if(st==='DETRATOR') cit.det++;
+      else if(st==='NEUTRO') cit.neu++;
+    });
+  });
 
   return {peu, cit};
 }
@@ -2389,10 +2699,17 @@ function renderConversoesAuto(){
   }
   function isc(p,n,d){var t=p+n+d;if(!t)return'—';return Math.round(((p)+(n*.5))/t*100)+'%';}
   function corIsc(p,n,d){var t=p+n+d;if(!t)return'';return((p+(n*.5))/t)>=.82?'color:#0d9488;font-weight:700':'color:#dc2626;font-weight:700';}
-  function calcPrem(pp,np,dp,pc,nc,dc){
-    var v=(pp+pc)*25-(np+nc)*25-(dp+dc)*50;
-    var cor=v>=0?'#0d9488':'#dc2626';
-    var sinal=v>=0?'+':'-';
+  function calcPrem(pp,np,dp,pc,nc,dc,nome){
+    // Laís tem bônus fixo de R$400,00
+    if(nome && String(nome).toUpperCase().includes('LA')) {
+      var nomeU = String(nome).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+      if(nomeU.includes('LAIS') || nomeU.includes('LAÍS')) {
+        return '<span style="font-weight:800;font-size:14px;color:#0d9488">+R$400,00 🌟</span>';
+      }
+    }
+    var v=Math.max(0,(pp+pc)*25-(np+nc)*25-(dp+dc)*50);
+    var cor=v>0?'#0d9488':'#6b7280';
+    var sinal=v>0?'+':'';
     return '<span style="font-weight:800;font-size:14px;color:'+cor+'">'+sinal+'R$'+Math.abs(v).toFixed(2).replace('.',',')+'</span>';
   }
 
@@ -2417,7 +2734,7 @@ function renderConversoesAuto(){
     '<td style="text-align:center;color:#dc2626;font-weight:700;">'+r.dc+'</td>'+
     '<td style="text-align:center;'+corIsc(r.pc,r.nc,r.dc)+'">'+isc(r.pc,r.nc,r.dc)+'</td>'+
     '<td style="text-align:center;font-weight:700;">'+r.total+'</td>'+
-    '<td style="text-align:center;">'+calcPrem(r.pp,r.np,r.dp,r.pc,r.nc,r.dc)+'</td>'+
+    '<td style="text-align:center;">'+calcPrem(r.pp,r.np,r.dp,r.pc,r.nc,r.dc,r.c)+'</td>'+
   '</tr>';}).join('')+
   '<tr style="background:var(--surface2);font-weight:800;border-top:2px solid var(--border);">'+
     '<td>TOTAL</td>'+
@@ -2464,27 +2781,58 @@ function calcStatus(nota,data){
 }
 function statusClass(s){const m={PROMOTOR:'row-promotor',DETRATOR:'row-detrator',NEUTRO:'row-neutro',EXPIRADO:'row-expirado'};return m[String(s||'').toUpperCase()]||'';}
 function statusChip(s){const m={PROMOTOR:'chip-green',DETRATOR:'chip-red',NEUTRO:'chip-orange',PESQUISAVEL:'chip-blue','VAI RECEBER':'chip-purple',EXPIRADO:'chip-amber'};return `<span class="chip ${m[String(s||'').toUpperCase()]||'chip-blue'}">${s||'—'}</span>`;}
+
+function exportarBaseExcel(key){
+  const rows = (baseCache[key]||[]).filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');
+  if(!rows.length){alert('Nenhum dado para exportar.');return;}
+  const isPos = BASE_IS_POS[key];
+  const role = BASE_ROLE[key];
+  const headers = isPos
+    ? ['VIN','Cliente','Consultor','Data Convite','Nota NPS','Status','Syonet','Tratativa','Convertida Por']
+    : ['VIN','Cliente','Vendedor','Data Convite','Nota NPS','Status','Syonet','Tratativa'];
+
+  const csvRows = [headers.join(';')];
+  rows.forEach(r=>{
+    const cols = isPos
+      ? [r.VIN,r.CLIENTE,r.CONSULTOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA,r.CONVERTIDA_POR]
+      : [r.VIN,r.CLIENTE,r.VENDEDOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA];
+    csvRows.push(cols.map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"').join(';'));
+  });
+
+  const bom = '\uFEFF';
+  const blob = new Blob([bom+csvRows.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'QUALIS_'+key+'_'+new Date().toLocaleDateString('pt-BR').replace(/\//g,'-')+'.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function renderBase(key){const tbody=document.getElementById('tb_'+key);if(!tbody)return;let rows=(baseCache[key]||[]).slice().map(r=>{if(!['PROMOTOR','NEUTRO','DETRATOR'].includes(String(r.STATUS||'').toUpperCase()))r.STATUS=calcStatus(r.NOTA_NPS,r.DATA_CONVITE);return r;});
   // Ocultar expirados por padrão (a menos que o filtro selecione expirado explicitamente)
   const fs=document.getElementById('fs'+key)?.value||'';const fq=(document.getElementById('fq'+key)?.value||'').toLowerCase();
   if(fs.toUpperCase()==='EXPIRADO'){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()==='EXPIRADO');}
   else if(fs){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()===fs.toUpperCase());}
-  else{rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');}if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?9:8}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','TRATATIVA',this.value)">${esc(row.TRATATIVA||'')}</textarea></td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
+  else{rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');}if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?9:8}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')} ${(()=>{if(!row.DATA_CONVITE)return '';const s=String(row.DATA_CONVITE).trim();let dt;if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){const p=s.split('/');dt=new Date(+p[2],+p[1]-1,+p[0]);}else{dt=new Date(s);}if(isNaN(dt))return '';const diff=Math.floor((dt.getTime()-Date.now())/86400000)+30;if(diff<0)return '';if(diff<=3)return '<span class="chip chip-red">⚠️ '+diff+'d</span>';if(diff<=10)return '<span class="chip chip-amber">'+diff+'d</span>';return '<span class="chip chip-green">'+diff+'d</span>';})()}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','TRATATIVA',this.value)">${esc(row.TRATATIVA||'')}</textarea></td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
 async function updateBaseField(key,id,field,value){
+  // Atualiza cache local imediatamente antes de qualquer render
   if(baseCache[key]){
     const idx=baseCache[key].findIndex(r=>r.id===id);
     if(idx>-1){
       baseCache[key][idx][field]=value;
+      // Recalcula status com a nova nota já aplicada
       const r=baseCache[key][idx];
-      const novoStatus=calcStatus(r.NOTA_NPS,r.DATA_CONVITE);
-      baseCache[key][idx]['STATUS']=novoStatus;
+      r['STATUS']=calcStatus(r.NOTA_NPS,r.DATA_CONVITE);
     }
   }
+  // Salva no Firebase em paralelo (nao bloqueia o render)
   if(window._fbUpdate&&id){
     const r=baseCache[key]?.find(x=>x.id===id);
-    const novoStatus=r?calcStatus(r.NOTA_NPS,r.DATA_CONVITE):'PESQUISAVEL';
-    await window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,{[field]:value,STATUS:novoStatus});
+    const novoStatus=r?r['STATUS']:'PESQUISAVEL';
+    window._fbUpdate('qualis_base_'+key.toLowerCase()+'/'+id,{[field]:value,STATUS:novoStatus}).catch(()=>{});
   }
+  // Renderiza tudo imediatamente com os dados atualizados
   renderBase(key);
   if(key.startsWith('VEN')){renderNpsVenMes();renderRankingVen();}
   if(key.startsWith('POS')){renderNpsPosMes();renderConversoesAuto();}
@@ -2533,7 +2881,44 @@ const CAT_COLORS={Treinamento:'chip-blue',Rede:'chip-green','Operação':'chip-p
 function renderSystems(){const grid=document.getElementById('systemsGrid');if(!grid)return;grid.innerHTML=SYSTEMS.map((s,i)=>`<div class="system-card"><div class="system-card-head"><div class="system-card-name">${esc(s.nome)}</div><span class="chip ${CAT_COLORS[s.cat]||CAT_COLORS.default}">${esc(s.cat)}</span></div><div class="system-field"><div class="system-field-label">Login</div><div class="system-field-val">${esc(s.login||'—')}</div></div><div class="system-field"><div class="system-field-label">Senha</div><div class="system-field-val" id="sysPw${i}" data-raw="${esc(s.senha||'')}">••••••••</div></div><div class="system-actions"><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.login||'')}').then(()=>alert('Login copiado!'))">Copiar login</button><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.senha||'')}').then(()=>alert('Senha copiada!'))">Copiar senha</button><button class="sys-btn" onclick="toggleSysPw(${i})">Ver</button>${s.url?`<button class="sys-btn open" onclick="window.open('${jsEsc(s.url)}','_blank')">Abrir</button>`:''}</div></div>`).join('');}
 function toggleSysPw(i){const el=document.getElementById('sysPw'+i);if(!el)return;el.textContent=el.textContent==='••••••••'?el.dataset.raw:'••••••••';}
 
-async function renderInteligencia(){for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){if(!baseCache[k])await loadBase(k).catch(()=>{});}const posRows=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];const venRows=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];const pend=posRows.filter(r=>r.STATUS==='PESQUISAVEL').length+venRows.filter(r=>r.STATUS==='PESQUISAVEL').length;const dets=posRows.filter(r=>r.STATUS==='DETRATOR');const grpDet={};dets.forEach(r=>{const k=r.CONSULTOR||'Sem consultor';grpDet[k]=(grpDet[k]||0)+1;});const critico=Object.entries(grpDet).sort((a,b)=>b[1]-a[1])[0];setText('ins-resumo',`${venRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em vendas, ${posRows.filter(r=>r.STATUS==='PROMOTOR').length} em pós-vendas e ${dets.length} detratores.`);setText('ins-pend',`${pend} clientes pesquisáveis podem ainda responder.`);setText('ins-critico',critico?`${critico[0]} tem ${critico[1]} detratores.`:'Nenhum crítico.');const conv={};posRows.filter(r=>String(r.CONVERTIDA_POR||'').trim()).forEach(r=>{const k=r.CONVERTIDA_POR;conv[k]=(conv[k]||0)+1;});setText('ins-conv',Object.entries(conv).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v}`).join('\n')||'Sem conversões.');const sm={};venRows.forEach(r=>{if(!r.VENDEDOR)return;if(!sm[r.VENDEDOR])sm[r.VENDEDOR]=0;if(r.STATUS==='PROMOTOR')sm[r.VENDEDOR]++;});const top=Object.entries(sm).sort((a,b)=>b[1]-a[1])[0];setText('ins-rank',top?`${top[0]} lidera com ${top[1]} promotoras.`:'Sem dados.');}
+async function renderInteligencia(){for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){if(!baseCache[k])await loadBase(k).catch(()=>{});}const posRows=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];const venRows=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];const pend=posRows.filter(r=>r.STATUS==='PESQUISAVEL').length+venRows.filter(r=>r.STATUS==='PESQUISAVEL').length;const dets=posRows.filter(r=>r.STATUS==='DETRATOR');const grpDet={};dets.forEach(r=>{const k=r.CONSULTOR||'Sem consultor';grpDet[k]=(grpDet[k]||0)+1;});const critico=Object.entries(grpDet).sort((a,b)=>b[1]-a[1])[0];setText('ins-resumo',`${venRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em vendas, ${posRows.filter(r=>r.STATUS==='PROMOTOR').length} em pós-vendas e ${dets.length} detratores.`);setText('ins-pend',`${pend} clientes pesquisáveis podem ainda responder.`);setText('ins-critico',critico?`${critico[0]} tem ${critico[1]} detratores.`:'Nenhum crítico.');const conv={};posRows.filter(r=>String(r.CONVERTIDA_POR||'').trim()).forEach(r=>{const k=r.CONVERTIDA_POR;conv[k]=(conv[k]||0)+1;});setText('ins-conv',Object.entries(conv).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v}`).join('\n')||'Sem conversões.');const sm={};venRows.forEach(r=>{if(!r.VENDEDOR)return;if(!sm[r.VENDEDOR])sm[r.VENDEDOR]=0;if(r.STATUS==='PROMOTOR')sm[r.VENDEDOR]++;});const top=Object.entries(sm).sort((a,b)=>b[1]-a[1])[0];setText('ins-rank',top?`${top[0]} lidera com ${top[1]} promotoras.`:'Sem dados.');
+  // Meta do mês
+  function metaCard(elVal, elFalta, arr_peu_key, arr_cit_key, metaNum, isPou){
+    const arr = isPou ? (baseCache[arr_peu_key]||[]) : (baseCache[arr_cit_key]||[]);
+    const prom = arr.filter(r=>r.STATUS==='PROMOTOR').length;
+    const det  = arr.filter(r=>r.STATUS==='DETRATOR').length;
+    const neu  = arr.filter(r=>r.STATUS==='NEUTRO').length;
+    const total = prom+det+neu;
+    const nps = total>0?Math.round((prom-det)/total*100):null;
+    const elV = document.getElementById(elVal);
+    const elF = document.getElementById(elFalta);
+    if(elV){
+      elV.textContent = nps!==null ? nps+'%' : '—';
+      elV.style.color = nps===null?'var(--muted)':nps>=metaNum?'var(--q-teal)':'var(--q-red)';
+    }
+    if(elF){
+      if(nps===null){elF.textContent='Sem dados ainda';}
+      else if(nps>=metaNum){elF.textContent='✅ Meta atingida!';elF.style.color='var(--q-teal)';}
+      else{
+        const faltam=calcFalta(metaNum,prom,neu,det);
+        elF.textContent='Faltam '+faltam+' promotora(s)';
+        elF.style.color='var(--q-red)';
+      }
+    }
+  }
+  metaCard('ia-meta-pp','ia-meta-pp-falta','POS_PEU','POS_PEU',82,true);
+  metaCard('ia-meta-pc','ia-meta-pc-falta','POS_CIT','POS_CIT',82,true);
+  metaCard('ia-meta-vp','ia-meta-vp-falta','VEN_PEU','VEN_PEU',90,true);
+  metaCard('ia-meta-vc','ia-meta-vc-falta','VEN_CIT','VEN_CIT',90,true);
+
+  // Titulo com mes atual
+  const mesesNomes=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const cardTitulo = document.querySelector('#ia-meta-card .card-title');
+  if(cardTitulo) cardTitulo.textContent = '🎯 Meta do Mês — '+mesesNomes[new Date().getMonth()]+' '+new Date().getFullYear();
+
+  // Renderizar gráficos
+  setTimeout(()=>renderGraficosIA(), 300);
+}
 function runAssistCx(){const q=(document.getElementById('assistCxInput')?.value||'').toLowerCase();const posRows=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];let ans='Tente: "detrator", "conversão", "pendentes".';if(q.includes('detrat')){const m={};posRows.filter(r=>r.STATUS==='DETRATOR').forEach(r=>{const k=r.CONSULTOR||'Sem consultor';m[k]=(m[k]||0)+1;});const top=Object.entries(m).sort((a,b)=>b[1]-a[1])[0];ans=top?`${top[0]}: ${top[1]} detratores.`:'Nenhum.';}else if(q.includes('pendent'))ans=document.getElementById('ins-pend')?.textContent||'';else if(q.includes('convers'))ans=document.getElementById('ins-conv')?.textContent||'';else if(q.includes('critic'))ans=document.getElementById('ins-critico')?.textContent||'';setText('assistCxResp',ans);}
 
 function askPreset(t){document.getElementById('assistInput').value=t;runAssist();}
@@ -2936,130 +3321,8 @@ async function trEnviarTodos(){
 }
 function trCarregarEmailConfig(){['trResendKey','trEmailFrom','trEmailCc'].forEach(id=>{const v=localStorage.getItem('tr-'+id);const el=document.getElementById(id);if(v&&el)el.value=v;});}
 
-function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">📅 Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">📚 Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">🔗 Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">💬 Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>
-<!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
-        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
-          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
-        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
-      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-</body></html>`;}
-
-async function trTestarEmail(){
-  const fb=document.getElementById('trEmailStatus');
-  if(!trState.envio.length){fb.textContent='⚠️ Processe a base primeiro.';fb.style.color='var(--q-gold)';return;}
-  const p=trState.envio[0];
-  const testeTo=currentUser?.email||'kamilly.paiva@adtsa.com.br';
-  fb.textContent='📨 Enviando teste...';fb.style.color='var(--q-accent)';
-  try{
-    const resp=await fetch('https://script.google.com/macros/s/AKfycbxN4HpBdgO8fnFTRkOVJXQsyYzvi1ITKaM12jUAz1jkgdW6oCzltFmkmjnwgkDkpcnM4A/exec',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:testeTo,subject:'🎓 TESTE — Treinamentos: '+p.nome,html:trBuildHtml(p),cc:''})});
-    const data=await resp.json();
-    if(!data.success)throw new Error(data.error||'Erro');
-    fb.textContent='✅ Teste enviado para '+testeTo+'!';fb.style.color='var(--q-teal)';
-  }catch(e){fb.textContent='❌ '+e.message;fb.style.color='var(--q-red)';}
+function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">📅 Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">📚 Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">🔗 Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">💬 Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>`;
 }
-
-async function trEnviarTodos2(){} // placeholder
-
-function renderTreinamentosPos(){const tb=document.getElementById('tbPosTreinamentos');if(!tb)return;const todos=trState.resumo;if(!todos.length){tb.innerHTML='<tr><td colspan="7" class="empty">Processe no módulo Treinamentos.</td></tr>';setText('posTrSala','0');setText('posTrRemoto','0');setText('posTrTotal','0');return;}const posAreas=['pós','pos','oficina','garantia','assistência','assistencia','técnico','tecnico','serviço','servico'];let rows=todos.filter(p=>{const a=trNorm(p.area),f=trNorm(p.funcao);return posAreas.some(x=>a.includes(x)||f.includes(x));});if(!rows.length)rows=[...todos];const fq=(document.getElementById('fqPosTr')?.value||'').toLowerCase();const fm=document.getElementById('fsPosTr')?.value||'';if(fq)rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));if(fm)rows=rows.filter(r=>r.tipo===fm);setText('posTrSala',rows.filter(r=>r.tipo==='SALA').length);setText('posTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);setText('posTrTotal',rows.reduce((s,r)=>s+r.total,0));if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});tb.innerHTML=rows.map(r=>{const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';const modal=r.tipo==='SALA'?'<span class="chip chip-amber">🏫 Sala</span>':'<span class="chip chip-blue">💻 Remoto</span>';const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:700;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: 7 dias</span>`:'—';return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;}).join('');}
-
-/* Treinamentos filtrados para área de VENDAS */
-function renderTreinamentosVen(){
-  const tb=document.getElementById('tbVenTreinamentos');if(!tb)return;
-  const todos=trState.resumo;
-  if(!todos.length){
-    tb.innerHTML='<tr><td colspan="7" class="empty">Processe a base no módulo Treinamentos para ver os dados aqui.</td></tr>';
-    setText('venTrSala','0');setText('venTrRemoto','0');setText('venTrTotal','0');return;
-  }
-  // Filtra área de vendas
-  const venAreas=['vendas','sal-','consultor de vendas','vendas diretas','entregador'];
-  let rows=todos.filter(p=>{
-    const a=trNorm(p.area),f=trNorm(p.funcao),pos=trNorm(p.posicao||'');
-    return venAreas.some(x=>a.includes(x)||f.includes(x)||pos.includes(x));
-  });
-  if(!rows.length) rows=[...todos]; // se não filtrou nada, mostra todos
-  const fq=(document.getElementById('fqVenTr')?.value||'').toLowerCase();
-  const fm=document.getElementById('fsVenTr')?.value||'';
-  if(fq) rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));
-  if(fm) rows=rows.filter(r=>r.tipo===fm);
-  setText('venTrSala',rows.filter(r=>r.tipo==='SALA').length);
-  setText('venTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);
-  setText('venTrTotal',rows.reduce((s,r)=>s+r.total,0));
-  if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}
-  const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});
-  tb.innerHTML=rows.map(r=>{
-    const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';
-    const modal=r.tipo==='SALA'?'<span class="chip chip-accent">Sala</span>':'<span class="chip chip-teal">Remoto</span>';
-    const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:600;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: ${r.prazoStr||'7 dias'}</span>`:'—';
-    return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:600;">${r.peu}</td><td style="text-align:center;font-weight:600;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--q-red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;
-  }).join('');
-}
-
-window._trInited=false;
-function trInit(){
-  if(window._trInited)return;
-  window._trInited=true;
-  trCarregarEmailConfig();
-  const next=new Date();
-  next.setDate(next.getDate()+(next.getDay()===0?1:8-next.getDay()));
-  const el=document.getElementById('trStartDate');
-  if(el)el.value=next.toISOString().split('T')[0];
-  // Atualiza status Gmail no painel de envio
-  setTimeout(()=>{
-    const statusEnvio=document.getElementById('gmailStatusEnvio');
-    if(statusEnvio){
-      if(gmailToken){
-        statusEnvio.textContent='✅ Gmail conectado — pronto para enviar!';
-        statusEnvio.style.color='var(--q-teal)';
-        statusEnvio.style.borderColor='rgba(13,148,136,.2)';
-      } else {
-        statusEnvio.innerHTML='⚠️ Gmail não conectado. Vá em <strong>Base Bruta → E-mail via Gmail</strong> e clique em Conectar Gmail.';
-        statusEnvio.style.color='var(--q-gold)';
-      }
-    }
-  }, 500);
-}
-
-// Pré-carrega chave Resend no localStorage
 
 async function renderIAQualis(){
   for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){if(!baseCache[k])await loadBase(k).catch(()=>{});}
@@ -3166,6 +3429,84 @@ function atualizarDashboardInicio(){
 /* ════════════════════════════════════════════
    ALERTA WHATSAPP — detrator novo
 ════════════════════════════════════════════ */
+
+async function trTestarEmail(){
+  const fb=document.getElementById('trEmailStatus');
+  if(!trState.envio.length){fb.textContent='⚠️ Processe a base primeiro.';fb.style.color='var(--q-gold)';return;}
+  const p=trState.envio[0];
+  const testeTo=currentUser?.email||'kamilly.paiva@adtsa.com.br';
+  fb.textContent='📨 Enviando teste...';fb.style.color='var(--q-accent)';
+  try{
+    const resp=await fetch('https://script.google.com/macros/s/AKfycbxN4HpBdgO8fnFTRkOVJXQsyYzvi1ITKaM12jUAz1jkgdW6oCzltFmkmjnwgkDkpcnM4A/exec',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:testeTo,subject:'🎓 TESTE — Treinamentos: '+p.nome,html:trBuildHtml(p),cc:''})});
+    const data=await resp.json();
+    if(!data.success)throw new Error(data.error||'Erro');
+    fb.textContent='✅ Teste enviado para '+testeTo+'!';fb.style.color='var(--q-teal)';
+  }catch(e){fb.textContent='❌ '+e.message;fb.style.color='var(--q-red)';}
+}
+
+async function trEnviarTodos2(){} // placeholder
+
+function renderTreinamentosPos(){const tb=document.getElementById('tbPosTreinamentos');if(!tb)return;const todos=trState.resumo;if(!todos.length){tb.innerHTML='<tr><td colspan="7" class="empty">Processe no módulo Treinamentos.</td></tr>';setText('posTrSala','0');setText('posTrRemoto','0');setText('posTrTotal','0');return;}const posAreas=['pós','pos','oficina','garantia','assistência','assistencia','técnico','tecnico','serviço','servico'];let rows=todos.filter(p=>{const a=trNorm(p.area),f=trNorm(p.funcao);return posAreas.some(x=>a.includes(x)||f.includes(x));});if(!rows.length)rows=[...todos];const fq=(document.getElementById('fqPosTr')?.value||'').toLowerCase();const fm=document.getElementById('fsPosTr')?.value||'';if(fq)rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));if(fm)rows=rows.filter(r=>r.tipo===fm);setText('posTrSala',rows.filter(r=>r.tipo==='SALA').length);setText('posTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);setText('posTrTotal',rows.reduce((s,r)=>s+r.total,0));if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});tb.innerHTML=rows.map(r=>{const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';const modal=r.tipo==='SALA'?'<span class="chip chip-amber">🏫 Sala</span>':'<span class="chip chip-blue">💻 Remoto</span>';const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:700;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: 7 dias</span>`:'—';return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;}).join('');}
+
+/* Treinamentos filtrados para área de VENDAS */
+function renderTreinamentosVen(){
+  const tb=document.getElementById('tbVenTreinamentos');if(!tb)return;
+  const todos=trState.resumo;
+  if(!todos.length){
+    tb.innerHTML='<tr><td colspan="7" class="empty">Processe a base no módulo Treinamentos para ver os dados aqui.</td></tr>';
+    setText('venTrSala','0');setText('venTrRemoto','0');setText('venTrTotal','0');return;
+  }
+  // Filtra área de vendas
+  const venAreas=['vendas','sal-','consultor de vendas','vendas diretas','entregador'];
+  let rows=todos.filter(p=>{
+    const a=trNorm(p.area),f=trNorm(p.funcao),pos=trNorm(p.posicao||'');
+    return venAreas.some(x=>a.includes(x)||f.includes(x)||pos.includes(x));
+  });
+  if(!rows.length) rows=[...todos]; // se não filtrou nada, mostra todos
+  const fq=(document.getElementById('fqVenTr')?.value||'').toLowerCase();
+  const fm=document.getElementById('fsVenTr')?.value||'';
+  if(fq) rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));
+  if(fm) rows=rows.filter(r=>r.tipo===fm);
+  setText('venTrSala',rows.filter(r=>r.tipo==='SALA').length);
+  setText('venTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);
+  setText('venTrTotal',rows.reduce((s,r)=>s+r.total,0));
+  if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}
+  const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});
+  tb.innerHTML=rows.map(r=>{
+    const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';
+    const modal=r.tipo==='SALA'?'<span class="chip chip-accent">Sala</span>':'<span class="chip chip-teal">Remoto</span>';
+    const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:600;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: ${r.prazoStr||'7 dias'}</span>`:'—';
+    return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:600;">${r.peu}</td><td style="text-align:center;font-weight:600;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--q-red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;
+  }).join('');
+}
+
+window._trInited=false;
+function trInit(){
+  if(window._trInited)return;
+  window._trInited=true;
+  trCarregarEmailConfig();
+  const next=new Date();
+  next.setDate(next.getDate()+(next.getDay()===0?1:8-next.getDay()));
+  const el=document.getElementById('trStartDate');
+  if(el)el.value=next.toISOString().split('T')[0];
+  // Atualiza status Gmail no painel de envio
+  setTimeout(()=>{
+    const statusEnvio=document.getElementById('gmailStatusEnvio');
+    if(statusEnvio){
+      if(gmailToken){
+        statusEnvio.textContent='✅ Gmail conectado — pronto para enviar!';
+        statusEnvio.style.color='var(--q-teal)';
+        statusEnvio.style.borderColor='rgba(13,148,136,.2)';
+      } else {
+        statusEnvio.innerHTML='⚠️ Gmail não conectado. Vá em <strong>Base Bruta → E-mail via Gmail</strong> e clique em Conectar Gmail.';
+        statusEnvio.style.color='var(--q-gold)';
+      }
+    }
+  }, 500);
+}
+
+// Pré-carrega chave Resend no localStorage
+
 const WA_GRUPO = 'https://chat.whatsapp.com/DMmE0NYsLitCgSVw3PsKeh';
 var _waTemp = {};
 
@@ -3198,6 +3539,8 @@ function abrirModalAlertaWA(cliente, nota, dataConvite, marca, setor, key){
     (abaixo?'<b style="color:#dc2626">Abaixo da meta - faltam '+faltam+' promotora(s) para reverter</b>':'<b style="color:#0d9488">Meta atingida!</b>');
   document.getElementById('waDescricao').value='';
   el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
+  // Registrar na central de notificações + som
+  adicionarNotificacao('nps', cliente, nota, marca, setor);
 }
 
 function enviarAlertaWA(){
@@ -3206,14 +3549,14 @@ function enviarAlertaWA(){
   var em=d.nota>=9?'[PROM]':d.nota>=7?'[NEU]':'[DET]';
   var linhas=[
     em+' *'+d.titulo.toUpperCase()+'*','',
-    'Cliente: '+d.cliente,
-    'Marca: '+d.marca+' | '+d.setor,
-    'Nota NPS: '+d.nota,
-    'Data da pesquisa: '+(d.dataConvite||'nao informada'),'',
-    'NPS atual '+d.marca+': '+d.nps+'% (meta '+d.meta+'%)',
-    d.abaixo?'Situacao: ABAIXO DA META - faltam '+d.faltam+' promotora(s)':'Situacao: META ATINGIDA',
+    '*Cliente:* '+d.cliente,
+    '*Marca:* '+d.marca+' | '+d.setor,
+    '*Nota NPS:* '+d.nota,
+    '*Data da pesquisa:* '+(d.dataConvite||'nao informada'),'',
+    '*NPS atual '+d.marca+':* '+d.nps+'% (meta '+d.meta+'%)',
+    d.abaixo?'*Situacao:* ABAIXO DA META - faltam '+d.faltam+' promotora(s)':'*Situacao:* META ATINGIDA',
   ];
-  if(obs){linhas.push('');linhas.push('Obs: '+obs);}
+  if(obs){linhas.push('');linhas.push('*Conversao:* '+obs);}
   linhas.push('');linhas.push('-- QUALIS | Pigalle WS --');
   var msg=encodeURIComponent(linhas.join('\n'));
   document.getElementById('modalAlertaWA').style.display='none';
@@ -3273,48 +3616,83 @@ function alertarDetrator(cliente, nota, dataConvite, marca){
 /* ════════════════════════════════════════════
    GRÁFICOS DA IA QUALIS
 ════════════════════════════════════════════ */
-let _chartNpsPos=null, _chartTr=null;
+let _chartNpsPos=null, _chartNpsVen=null, _chartTr=null;
+
+function buildNpsSeriesMes(historico, base_peu_key, base_cit_key){
+  const mesesSet=new Set(historico.map(r=>r.mes));
+  const basePeu=baseCache[base_peu_key]||[];
+  const baseCit=baseCache[base_cit_key]||[];
+  if(basePeu.length||baseCit.length){
+    const mn=['JANEIRO','FEVEREIRO','MARCO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'][new Date().getMonth()];
+    mesesSet.add(mn);
+  }
+  const ordem=['JANEIRO','FEVEREIRO','MARCO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
+  const meses=ordem.filter(m=>mesesSet.has(m));
+  const abrev={JANEIRO:'Jan',FEVEREIRO:'Fev',MARCO:'Mar',ABRIL:'Abr',MAIO:'Mai',JUNHO:'Jun',JULHO:'Jul',AGOSTO:'Ago',SETEMBRO:'Set',OUTUBRO:'Out',NOVEMBRO:'Nov',DEZEMBRO:'Dez'};
+  const labels=meses.map(m=>abrev[m]||m);
+
+  function calcH(marca,mes){
+    const h=historico.find(r=>r.marca===marca&&r.mes===mes);
+    if(h){const t=h.prom+h.det+h.neu;return t>0?Math.round((h.prom-h.det)/t*100):null;}
+    return null;
+  }
+  function calcBase(arr){
+    const p=arr.filter(r=>r.STATUS==='PROMOTOR').length;
+    const d=arr.filter(r=>r.STATUS==='DETRATOR').length;
+    const n=arr.filter(r=>r.STATUS==='NEUTRO').length;
+    const t=p+d+n;return t>0?Math.round((p-d)/t*100):null;
+  }
+  const mesAtualNome=ordem[new Date().getMonth()];
+  const npsPeu=meses.map(m=>{const v=calcH('PEUGEOT',m);return v!==null?v:(m===mesAtualNome?calcBase(basePeu):null);});
+  const npsCit=meses.map(m=>{const v=calcH('CITROEN',m);return v!==null?v:(m===mesAtualNome?calcBase(baseCit):null);});
+  return{labels,npsPeu,npsCit};
+}
 
 function renderGraficosIA(){
-  // Gráfico NPS Pós por mês
+  if(typeof Chart==='undefined')return;
+
+  // NPS Pos-Vendas
   const ctxPos=document.getElementById('graficoNpsPos')?.getContext('2d');
   if(ctxPos){
-    if(_chartNpsPos) _chartNpsPos.destroy();
-    const meses=NPS_HISTORICO_POS.filter(r=>r.marca==='PEUGEOT').map(r=>r.mes.substring(0,3));
-    const npsPeu=NPS_HISTORICO_POS.filter(r=>r.marca==='PEUGEOT').map(r=>{
-      const t=r.prom+r.det+r.neu;return t>0?Math.round((r.prom-r.det)/t*100):null;
-    });
-    const npsCit=NPS_HISTORICO_POS.filter(r=>r.marca==='CITROEN').map(r=>{
-      const t=r.prom+r.det+r.neu;return t>0?Math.round((r.prom-r.det)/t*100):null;
-    });
-    _chartNpsPos=new Chart(ctxPos,{
-      type:'line',
-      data:{
-        labels:meses,
-        datasets:[
-          {label:'Peugeot',data:npsPeu,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',tension:.3,fill:true,pointRadius:5},
-          {label:['Citro\u00ebn'],data:npsCit,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.1)',tension:.3,fill:true,pointRadius:5},
-          {label:'Meta 82%',data:meses.map(()=>82),borderColor:'#dc2626',borderDash:[5,5],pointRadius:0,borderWidth:1.5,fill:false}
-        ]
-      },
-      options:{responsive:true,plugins:{legend:{position:'bottom'}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}}}}
-    });
+    if(_chartNpsPos){_chartNpsPos.destroy();_chartNpsPos=null;}
+    const{labels,npsPeu,npsCit}=buildNpsSeriesMes(NPS_HISTORICO_POS,'POS_PEU','POS_CIT');
+    if(labels.length){
+      _chartNpsPos=new Chart(ctxPos,{type:'line',data:{labels,datasets:[
+        {label:'Peugeot',data:npsPeu,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',tension:.35,fill:true,pointRadius:5,spanGaps:true},
+        {label:'Citroën',data:npsCit,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',tension:.35,fill:true,pointRadius:5,spanGaps:true},
+        {label:'Meta 82%',data:labels.map(()=>82),borderColor:'#dc2626',borderDash:[6,4],pointRadius:0,borderWidth:1.5,fill:false}
+      ]},options:{responsive:true,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
+        scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+    }
   }
 
-  // Gráfico Treinamentos Sala vs Remoto
+  // NPS Vendas
+  const ctxVen=document.getElementById('graficoNpsVen')?.getContext('2d');
+  if(ctxVen){
+    if(_chartNpsVen){_chartNpsVen.destroy();_chartNpsVen=null;}
+    const{labels,npsPeu,npsCit}=buildNpsSeriesMes(NPS_HISTORICO_VENDAS,'VEN_PEU','VEN_CIT');
+    if(labels.length){
+      _chartNpsVen=new Chart(ctxVen,{type:'line',data:{labels,datasets:[
+        {label:'Peugeot',data:npsPeu,borderColor:'#0284c7',backgroundColor:'rgba(2,132,199,.08)',tension:.35,fill:true,pointRadius:5,spanGaps:true},
+        {label:'Citroën',data:npsCit,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,.08)',tension:.35,fill:true,pointRadius:5,spanGaps:true},
+        {label:'Meta 90%',data:labels.map(()=>90),borderColor:'#dc2626',borderDash:[6,4],pointRadius:0,borderWidth:1.5,fill:false}
+      ]},options:{responsive:true,interaction:{mode:'index',intersect:false},
+        plugins:{legend:{position:'bottom'},tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y+'%'}}},
+        scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%'}},x:{grid:{display:false}}}}});
+    }
+  }
+
+  // Treinamentos
   const ctxTr=document.getElementById('graficoTr')?.getContext('2d');
   if(ctxTr){
-    if(_chartTr) _chartTr.destroy();
-    const sala=trState.resumo.filter(p=>p.modalidade==='SALA').length;
-    const remoto=trState.resumo.filter(p=>p.modalidade==='REMOTO').length;
-    _chartTr=new Chart(ctxTr,{
-      type:'doughnut',
-      data:{
-        labels:['Sala','Remoto','Sem dados'],
-        datasets:[{data:[sala,remoto,sala+remoto===0?1:0],backgroundColor:['#2563eb','#0d9488','#e5e7eb'],borderWidth:0}]
-      },
-      options:{responsive:true,plugins:{legend:{position:'bottom'}}}
-    });
+    if(_chartTr){_chartTr.destroy();_chartTr=null;}
+    const sala=trState.resumo.filter(p=>p.tipo==='SALA').length;
+    const remoto=trState.resumo.filter(p=>p.tipo==='REMOTO').length;
+    _chartTr=new Chart(ctxTr,{type:'doughnut',data:{
+      labels:['Sala','Remoto',...(sala+remoto===0?['Sem dados']:[])],
+      datasets:[{data:[sala,remoto,...(sala+remoto===0?[1]:[])],backgroundColor:['#2563eb','#0d9488','#e5e7eb'],borderWidth:0}]
+    },options:{responsive:true,plugins:{legend:{position:'bottom'}}}});
   }
 }
 
@@ -3325,7 +3703,7 @@ let _npsManualTipo='POS';
 function abrirModalNpsManual(tipo){
   _npsManualTipo=tipo;
   document.getElementById('modalNpsTitulo').textContent='Adicionar NPS '+(tipo==='VEN'?'Vendas':'Pos-Vendas')+' Manualmente';
-  document.getElementById('modalNpsManual').classList.remove('hidden');
+  var _mnm=document.getElementById('modalNpsManual');if(_mnm)_mnm.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);';
 }
 
 function salvarNpsManual(){
@@ -3422,7 +3800,26 @@ function exportarRelatorio(){
   <h2>Treinamentos</h2>
   <p>Pessoas com pendencia: <strong>${trState.resumo.length}</strong> &nbsp;|&nbsp; Em sala: <strong>${trState.resumo.filter(p=>p.modalidade==='SALA').length}</strong> &nbsp;|&nbsp; Remoto: <strong>${trState.resumo.filter(p=>p.modalidade==='REMOTO').length}</strong></p>
   <p style="margin-top:30px;font-size:11px;color:#9ca3af;">Gerado pelo portal QUALIS · ${hoje}</p>
-  <scr'+'ipt>window.print();</scr'+'ipt></body></html>`;
+  <scr'+'ipt>window.print();</scr'+'ipt>
+<div id="modalNotificacoes" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);">
+      <div style="font-size:16px;font-weight:700;">🔔 Notificações</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="limparNotificacoes()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;">Limpar tudo</button>
+        <button onclick="document.getElementById('modalNotificacoes').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
+      </div>
+    </div>
+    <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+      <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+
+</body></html>`;
 
   const w=window.open('','_blank');
   w.document.write(html);
@@ -3603,13 +4000,27 @@ function carregarGroqKey(){
 
 
 
+function mascaraData(el){
+  var v=el.value.replace(/\D/g,'');
+  if(v.length>2) v=v.slice(0,2)+'/'+v.slice(2);
+  if(v.length>5) v=v.slice(0,5)+'/'+v.slice(5);
+  el.value=v.slice(0,10);
+}
+
 function salvarAniversariante(){
   const nome = document.getElementById('anivNome')?.value?.trim();
-  const data = document.getElementById('anivData')?.value;
+  const dataRaw = (document.getElementById('anivData')?.value||'').trim();
   const setor = document.getElementById('anivSetor')?.value?.trim();
-  if(!nome||!data){alert('Preencha nome e data.');return;}
+  if(!nome||!dataRaw){alert('Preencha nome e data.');return;}
+  // Validar formato DD/MM/AAAA
+  const partes = dataRaw.split('/');
+  if(partes.length!==3||partes[0].length!==2||partes[1].length!==2||partes[2].length!==4){
+    alert('Data inválida. Use o formato DD/MM/AAAA\nEx: 15/03/1985');return;
+  }
+  // Converter para AAAA-MM-DD para compatibilidade com o filtro de mês
+  const dataISO = partes[2]+'-'+partes[1]+'-'+partes[0];
   const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
-  lista.push({id:'aniv'+Date.now(), nome, data, setor});
+  lista.push({id:'aniv'+Date.now(), nome, data:dataISO, setor});
   localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
   fecharModalAniversariante();
   renderAniversariantes();
@@ -3626,7 +4037,11 @@ function excluirAniversariante(id){
 
 /* ════ LIMPEZA BASE POS_PEU (executar uma vez) ════ */
 async function limparBasePosVendasPeugeot(){
-  if(!window._fbSet){console.log('Firebase não pronto para limpeza');return;}
+  if(!window._fbSet){
+    // Tenta novamente em 5s se Firebase ainda nao estiver pronto
+    setTimeout(()=>limparBasePosVendasPeugeot(),5000);
+    return;
+  }
   if(localStorage.getItem('q-limpeza-pos-peu-done')){return;}
   try{
     await window._fbSet('qualis_base_pos_peu', null);
@@ -3714,6 +4129,119 @@ async function excluirMembro(tipo,nome){
   renderEquipeConfig();
 }
 
+
+/* ════ CENTRAL DE NOTIFICAÇÕES ════ */
+var _notificacoes = JSON.parse(localStorage.getItem('q-notificacoes')||'[]');
+
+function adicionarNotificacao(tipo, cliente, nota, marca, setor){
+  var icone = nota>=9?'🏆':nota>=7?'📋':'🚨';
+  var titulo = nota>=9?'Promotora registrada':nota>=7?'Neutra registrada':'Detratora — ação necessária';
+  var cor = nota>=9?'var(--q-teal)':nota>=7?'var(--q-gold)':'var(--q-red)';
+  var notif = {
+    id: Date.now(),
+    icone, titulo, cor,
+    cliente: cliente,
+    nota: nota,
+    marca: marca,
+    setor: setor,
+    hora: new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})
+  };
+  _notificacoes.unshift(notif);
+  if(_notificacoes.length > 50) _notificacoes = _notificacoes.slice(0,50);
+  localStorage.setItem('q-notificacoes', JSON.stringify(_notificacoes));
+  atualizarBadge();
+  tocarSom(nota);
+}
+
+function atualizarBadge(){
+  var badge = document.getElementById('notif-badge');
+  if(!badge) return;
+  var n = _notificacoes.length;
+  badge.textContent = n > 99 ? '99+' : n;
+  badge.style.display = n > 0 ? 'block' : 'none';
+}
+
+function abrirCentralNotif(){
+  renderNotificacoes();
+  document.getElementById('modalNotificacoes').style.display='flex';
+}
+
+function renderNotificacoes(){
+  var el = document.getElementById('notif-lista');
+  if(!el) return;
+  if(!_notificacoes.length){
+    el.innerHTML='<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>';
+    return;
+  }
+  el.innerHTML = _notificacoes.map(function(n){
+    return '<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px;background:var(--surface2);border-left:3px solid '+n.cor+';">'+
+      '<span style="font-size:20px;flex-shrink:0;">'+n.icone+'</span>'+
+      '<div style="flex:1;">'+
+        '<div style="font-size:13px;font-weight:700;color:'+n.cor+';">'+n.titulo+'</div>'+
+        '<div style="font-size:12px;margin-top:2px;">'+esc(n.cliente)+' — Nota '+n.nota+'</div>'+
+        '<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+esc(n.marca)+' | '+esc(n.setor)+' · '+n.hora+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function limparNotificacoes(){
+  _notificacoes = [];
+  localStorage.setItem('q-notificacoes','[]');
+  atualizarBadge();
+  renderNotificacoes();
+}
+
+function tocarSom(nota){
+  try{
+    var ctx = new (window.AudioContext||window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    if(nota >= 9){
+      // Som alegre — promotora
+      osc.frequency.setValueAtTime(523, ctx.currentTime);
+      osc.frequency.setValueAtTime(659, ctx.currentTime+0.1);
+      osc.frequency.setValueAtTime(784, ctx.currentTime+0.2);
+    } else if(nota >= 7){
+      // Som neutro
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.setValueAtTime(440, ctx.currentTime+0.15);
+    } else {
+      // Som alerta — detratora
+      osc.frequency.setValueAtTime(330, ctx.currentTime);
+      osc.frequency.setValueAtTime(220, ctx.currentTime+0.15);
+      osc.frequency.setValueAtTime(165, ctx.currentTime+0.3);
+    }
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime+0.5);
+  }catch(e){}
+}
+
+
+
+/* ════ EVA — anima o número NPS no tablet ════ */
+(function(){
+  var valores = ['NPS 72%','NPS 85%','NPS 91%','NPS 78%','NPS 88%','NPS 82%'];
+  var cores = ['#f59e0b','#34d399','#60a5fa','#f87171','#34d399','#60a5fa'];
+  var idx = 0;
+  setInterval(function(){
+    idx = (idx+1) % valores.length;
+    var el = document.getElementById('eva-pct');
+    if(el){
+      el.style.opacity='0';
+      el.style.transition='opacity 0.3s';
+      setTimeout(function(){
+        el.textContent = valores[idx];
+        el.style.color = cores[idx];
+        el.style.opacity='1';
+      }, 300);
+    }
+  }, 2800);
+})();
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
   if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
@@ -3726,51 +4254,6 @@ window.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('loginScreen').style.display='flex';
 });
 </script>
-
-<!-- Modal entrada manual NPS -->
-<div id="modalNpsManual" style="display:none;" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mês fechado.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mês</label>
-        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Março</option>
-          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-        </select>
-      </div>
-      <div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
-        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--q-accent);">Peugeot</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--purple);">Citroën</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalNpsManual').style.display='none'">Cancelar</button>
-      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
