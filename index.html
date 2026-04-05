@@ -2134,6 +2134,15 @@ if(fbDb){
   });
 }
 window.__fbDbReady=true;
+// Firebase pronto — carregar bases imediatamente se já logada
+setTimeout(function(){
+  if(window.currentUser){
+    loadBase('VEN_PEU');
+    loadBase('VEN_CIT');
+    loadBase('POS_PEU');
+    loadBase('POS_CIT');
+  }
+}, 200);
 </script>
 
 <script>
@@ -2299,6 +2308,13 @@ function startPortal(){
   const av=document.getElementById('topAvatar');
   if(av) av.textContent=currentUser.name.charAt(0).toUpperCase();
   carregarSenhasSistemas();loadConfig();renderSystems();setTimeout(atualizarBadge,500);
+  // Carregar todas as bases automaticamente ao logar — painel atualiza em tempo real
+  setTimeout(function(){
+    loadBase('VEN_PEU');
+    loadBase('VEN_CIT');
+    loadBase('POS_PEU');
+    loadBase('POS_CIT');
+  }, 1500);
   setTimeout(()=>{if(window.bootChat)window.bootChat();},1200);
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
@@ -2564,6 +2580,13 @@ function renderNpsMensalTabela(tipo, meta) {
 function renderNpsTrimestral(tipo, meta, elId) {
   const el = document.getElementById(elId); if(!el) return;
   const historico = tipo === 'VEN' ? NPS_HISTORICO_VENDAS : NPS_HISTORICO_POS;
+  const basePeuKey = tipo === 'VEN' ? 'VEN_PEU' : 'POS_PEU';
+  const baseCitKey = tipo === 'VEN' ? 'VEN_CIT' : 'POS_CIT';
+  const basePeu = baseCache[basePeuKey] || [];
+  const baseCit = baseCache[baseCitKey] || [];
+  // Mês atual para saber qual mês da base usar
+  const mesAtualIdx = new Date().getMonth(); // 0=jan
+  const mesAtualNome = MESES_ORDEM[mesAtualIdx];
 
   el.innerHTML = TRIMESTRES.map(tri => {
     let pprom=0,pdet=0,pneu=0,cprom=0,cdet=0,cneu=0,temDados=false;
@@ -2572,6 +2595,19 @@ function renderNpsTrimestral(tipo, meta, elId) {
       const hCit = historico.find(r=>r.mes===m&&r.marca==='CITROEN');
       if(hPeu){ pprom+=hPeu.prom; pdet+=hPeu.det; pneu+=hPeu.neu; temDados=true; }
       if(hCit){ cprom+=hCit.prom; cdet+=hCit.det; cneu+=hCit.neu; temDados=true; }
+      // Se é o mês atual e não tem historico, usa a base em tempo real
+      if(m === mesAtualNome && !hPeu && basePeu.length){
+        pprom += basePeu.filter(r=>r.STATUS==='PROMOTOR').length;
+        pdet  += basePeu.filter(r=>r.STATUS==='DETRATOR').length;
+        pneu  += basePeu.filter(r=>r.STATUS==='NEUTRO').length;
+        temDados = true;
+      }
+      if(m === mesAtualNome && !hCit && baseCit.length){
+        cprom += baseCit.filter(r=>r.STATUS==='PROMOTOR').length;
+        cdet  += baseCit.filter(r=>r.STATUS==='DETRATOR').length;
+        cneu  += baseCit.filter(r=>r.STATUS==='NEUTRO').length;
+        temDados = true;
+      }
     });
     if(!temDados) return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;"><span style="font-weight:700;">${tri.nome}</span><span style="font-size:12px;color:var(--muted);">Sem dados ainda</span></div>`;
     const npsPeu = calcNps(pprom,pneu,pdet);
@@ -2756,7 +2792,24 @@ const equipeGlobal={vendedores:[],consultores:[]};
 async function loadEquipeGlobal(){if(!window._fbGet)return;try{const[vs,cs]=await Promise.all([window._fbGet('qualis_equipe_vendedores'),window._fbGet('qualis_equipe_consultores')]);equipeGlobal.vendedores=Object.values(vs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();equipeGlobal.consultores=Object.values(cs.val()||{}).map(r=>r.nome||r.NOME||'').filter(Boolean).sort();}catch(e){console.warn(e);}}
 
 const baseCache={};const BASE_IS_POS={VEN_PEU:false,VEN_CIT:false,POS_PEU:true,POS_CIT:true};const BASE_ROLE={VEN_PEU:'VENDEDOR',VEN_CIT:'VENDEDOR',POS_PEU:'CONSULTOR',POS_CIT:'CONSULTOR'};const baseListeners={};
-async function loadBase(key){if(!window._fbOnValue)return;if(baseListeners[key])return;baseListeners[key]=window._fbOnValue('qualis_base_'+key.toLowerCase(),data=>{baseCache[key]=Object.entries(data||{}).map(([id,v])=>({id,...v}));renderBase(key);});}
+async function loadBase(key){
+  if(!window._fbOnValue)return;
+  if(baseListeners[key])return;
+  baseListeners[key]=window._fbOnValue('qualis_base_'+key.toLowerCase(),data=>{
+    baseCache[key]=Object.entries(data||{}).map(([id,v])=>({id,...v}));
+    renderBase(key);
+    // Atualizar painel NPS e dashboard sempre que a base mudar (inclui reload da página)
+    if(key.startsWith('VEN')){
+      renderNpsVenMes();
+      renderRankingVen();
+    }
+    if(key.startsWith('POS')){
+      renderNpsPosMes();
+      renderConversoesAuto();
+    }
+    atualizarDashboardInicio();
+  });
+}
 function parsePaste(text){return String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>l.split(/\t|;/).map(v=>v.trim())).filter(c=>c.length>=2&&c[0]);}
 async function importBase(key,taId){
   const text=document.getElementById(taId)?.value||'';
