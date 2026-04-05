@@ -1151,7 +1151,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="v-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Vendedor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_PEU" onchange="renderBase('VEN_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_PEU" oninput="renderBase('VEN_PEU')" placeholder="Buscar..."></div></div>
@@ -1307,7 +1307,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="p-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_PEU')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_PEU" onchange="renderBase('POS_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_PEU" oninput="renderBase('POS_PEU')" placeholder="Buscar..."></div></div>
@@ -1316,7 +1316,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="subpage" id="p-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Consultor;Data Convite..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Telefone;Data Convite (ex: 935CNFC51SB500365;João Silva;85999999999;10/03/2026)"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_CIT')">📥 Excel</button>
               <button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_CIT" onchange="renderBase('POS_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_CIT" oninput="renderBase('POS_CIT')" placeholder="Buscar..."></div></div>
@@ -1660,13 +1660,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
             <div class="kpi accent"><h4>Treinamentos</h4><div class="val accent" id="ia-tr">—</div></div>
           </div>
 
-          <!-- Alertas automáticos -->
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">🔔 Alertas automáticos</div>
-            <div id="ia-alertas" style="display:flex;flex-direction:column;gap:8px;">
-              <div style="color:var(--muted);font-size:13px;">Carregando alertas...</div>
-            </div>
-          </div>
+
 
           <!-- Meta do Mês -->
           <div class="card" style="margin-bottom:16px;" id="ia-meta-card">
@@ -2304,7 +2298,7 @@ function startPortal(){
   document.getElementById('sbRole').textContent=currentUser.role==='superadmin'?'Super Admin':'Operacional';
   const av=document.getElementById('topAvatar');
   if(av) av.textContent=currentUser.name.charAt(0).toUpperCase();
-  loadConfig();renderSystems();setTimeout(atualizarBadge,500);
+  carregarSenhasSistemas();loadConfig();renderSystems();setTimeout(atualizarBadge,500);
   setTimeout(()=>{if(window.bootChat)window.bootChat();},1200);
   setTimeout(()=>{if(window._fbGet)loadEquipeGlobal();},1500);
   // Carrega histórico NPS do Firebase
@@ -2763,8 +2757,36 @@ async function loadEquipeGlobal(){if(!window._fbGet)return;try{const[vs,cs]=awai
 
 const baseCache={};const BASE_IS_POS={VEN_PEU:false,VEN_CIT:false,POS_PEU:true,POS_CIT:true};const BASE_ROLE={VEN_PEU:'VENDEDOR',VEN_CIT:'VENDEDOR',POS_PEU:'CONSULTOR',POS_CIT:'CONSULTOR'};const baseListeners={};
 async function loadBase(key){if(!window._fbOnValue)return;if(baseListeners[key])return;baseListeners[key]=window._fbOnValue('qualis_base_'+key.toLowerCase(),data=>{baseCache[key]=Object.entries(data||{}).map(([id,v])=>({id,...v}));renderBase(key);});}
-function parsePaste(text){return String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>l.split(/\t|;/).map(v=>v.trim())).filter(c=>c.length>=4&&c[0]);}
-async function importBase(key,taId){const text=document.getElementById(taId)?.value||'';const lines=parsePaste(text);if(!lines.length){alert('Cole os dados antes.');return;}const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const rows=lines.map(c=>{const dc=c[5]||'';return{VIN:c[0]||'',CLIENTE:c[1]||'',EMAIL:c[2]||'',TELEFONE:c[3]||'',[role]:c[4]||'',DATA_CONVITE:dc,NOTA_NPS:'',STATUS:calcStatus('',dc),SYONET:c[6]||'',TRATATIVA:c[7]||'',...(isPos?{CONVERTIDA_POR:''}:{})};});if(!window._fbGet){alert('Firebase não conectado.');return;}for(const row of rows){await window._fbPush('qualis_base_'+key.toLowerCase(),row);}document.getElementById(taId).value='';alert(`${rows.length} importado(s)!`);}
+function parsePaste(text){return String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>l.split(/\t|;/).map(v=>v.trim())).filter(c=>c.length>=2&&c[0]);}
+async function importBase(key,taId){
+  const text=document.getElementById(taId)?.value||'';
+  const lines=parsePaste(text);
+  if(!lines.length){alert('Cole os dados antes.');return;}
+  const isPos=BASE_IS_POS[key];
+  const role=BASE_ROLE[key];
+  const rows=lines.map(function(c){
+    // Novo formato: VIN | Cliente | Telefone | Data Convite
+    // Consultor/Vendedor fica em branco — selecionado na tabela depois
+    var dc=c[3]||'';
+    var row={
+      VIN:c[0]||'',
+      CLIENTE:c[1]||'',
+      TELEFONE:c[2]||'',
+      DATA_CONVITE:dc,
+      NOTA_NPS:'',
+      STATUS:calcStatus('',dc),
+      SYONET:'',
+      TRATATIVA:''
+    };
+    row[role]=''; // Consultor/Vendedor vazio — selecionar na tabela
+    if(isPos) row.CONVERTIDA_POR='';
+    return row;
+  });
+  if(!window._fbGet){alert('Firebase não conectado.');return;}
+  for(var i=0;i<rows.length;i++){await window._fbPush('qualis_base_'+key.toLowerCase(),rows[i]);}
+  document.getElementById(taId).value='';
+  alert(rows.length+' cliente(s) importado(s)! Selecione os consultores na tabela.');
+}
 function calcStatus(nota,data){
   const n=Number(nota);
   if(nota!==''&&nota!==null&&nota!==undefined&&String(nota).trim()!==''&&!isNaN(n)){
@@ -2880,7 +2902,7 @@ async function addEquipe(tipo,inputId){const nome=(document.getElementById(input
 
 const SYSTEMS=[{nome:'Portal de Treinamentos',cat:'Treinamento',url:'https://psa.csod.com/samldefault.aspx?ouid=2',login:'DN89492',senha:'Piga2070'},{nome:'DealerNet',cat:'Rede',url:'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html',login:'KAMILLY.PAIVA',senha:'Adtsa@2032'},{nome:'Holmes',cat:'Operação',url:'',login:'kamilly.paiva@adtsa.com.br',senha:'Adtsa@2025'},{nome:'Syonet',cat:'CRM',url:'https://adtsa.syonet.com/portal/app.do?modulo=login#/login',login:'KAMILLY.PAIVA',senha:'K10092018m@'},{nome:'Grow – Peugeot',cat:'Grow',url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',login:'DN89494',senha:'Piga2050'},{nome:'Grow – Citroën',cat:'Grow',url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',login:'DN89492',senha:'Piga2407'},{nome:'Snap On – Auditoria',cat:'Auditoria',url:'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092',login:'DN89492',senha:'Piga2407'},{nome:'Focus – Peugeot',cat:'Focus',url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',login:'DN89494',senha:'Piga2050'},{nome:'Focus – Citroën',cat:'Focus',url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',login:'DM62286',senha:'Piga2060'},{nome:'Trilogo',cat:'Portal',url:'https://entrar.trilogo.app/',login:'kamilly.paiva@adtsa.com.br',senha:'K10092018m@'},{nome:'Reclame Aqui',cat:'Atendimento',url:'https://www.reclameaqui.com.br/',login:'kamilly.paiva@adtsa.com.br',senha:'Adtsa@2025'},{nome:'Webmail Qualidade',cat:'E-mail',url:'https://mail.google.com/mail/u/0/',login:'qualidade.pigallews@adtsa.com.br',senha:'Citroen@2026'},{nome:'Gmail Qualidade',cat:'E-mail',url:'https://mail.google.com/mail/u/0/',login:'qualidadepigallews@gmail.com',senha:'Adtsa@2025'},{nome:'CSPS – Peugeot',cat:'Pesquisa',url:'',login:'CA00064P',senha:'Piga2033'},{nome:'CSPS – Citroën',cat:'Pesquisa',url:'',login:'CA00013C',senha:'Piga2033'}];
 const CAT_COLORS={Treinamento:'chip-blue',Rede:'chip-green','Operação':'chip-purple',CRM:'chip-amber',Grow:'chip-red',Auditoria:'chip-teal',Focus:'chip-blue',Portal:'chip-purple',Atendimento:'chip-green','E-mail':'chip-orange',Pesquisa:'chip-blue',default:'chip-blue'};
-function renderSystems(){const grid=document.getElementById('systemsGrid');if(!grid)return;grid.innerHTML=SYSTEMS.map((s,i)=>`<div class="system-card"><div class="system-card-head"><div class="system-card-name">${esc(s.nome)}</div><span class="chip ${CAT_COLORS[s.cat]||CAT_COLORS.default}">${esc(s.cat)}</span></div><div class="system-field"><div class="system-field-label">Login</div><div class="system-field-val">${esc(s.login||'—')}</div></div><div class="system-field"><div class="system-field-label">Senha</div><div class="system-field-val" id="sysPw${i}" data-raw="${esc(s.senha||'')}">••••••••</div></div><div class="system-actions"><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.login||'')}').then(()=>alert('Login copiado!'))">Copiar login</button><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.senha||'')}').then(()=>alert('Senha copiada!'))">Copiar senha</button><button class="sys-btn" onclick="toggleSysPw(${i})">Ver</button>${s.url?`<button class="sys-btn open" onclick="window.open('${jsEsc(s.url)}','_blank')">Abrir</button>`:''}</div></div>`).join('');}
+function renderSystems(){const grid=document.getElementById('systemsGrid');if(!grid)return;grid.innerHTML=SYSTEMS.map((s,i)=>`<div class="system-card"><div class="system-card-head"><div class="system-card-name">${esc(s.nome)}</div><span class="chip ${CAT_COLORS[s.cat]||CAT_COLORS.default}">${esc(s.cat)}</span></div><div class="system-field"><div class="system-field-label">Login</div><div class="system-field-val">${esc(s.login||'—')}</div></div><div class="system-field"><div class="system-field-label">Senha</div><div style="display:flex;align-items:center;gap:6px;"><div class="system-field-val" id="sysPw${i}" data-raw="${esc(s.senha||'')}">••••••••</div><button class="sys-btn" onclick="editarSenhaSistema(${i},'${jsEsc(s.nome||'')}')" style="padding:2px 7px;font-size:10px;">✏️</button></div></div><div class="system-actions"><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.login||'')}').then(()=>alert('Login copiado!'))">Copiar login</button><button class="sys-btn" onclick="navigator.clipboard.writeText(SYSTEMS[${i}].senha||'').then(()=>alert('Senha copiada!'))">Copiar senha</button><button class="sys-btn" onclick="toggleSysPw(${i})">Ver</button>${s.url?`<button class="sys-btn open" onclick="window.open('${jsEsc(s.url)}','_blank')">Abrir</button>`:''}</div></div>`).join('');}
 function toggleSysPw(i){const el=document.getElementById('sysPw'+i);if(!el)return;el.textContent=el.textContent==='••••••••'?el.dataset.raw:'••••••••';}
 
 async function renderInteligencia(){for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){if(!baseCache[k])await loadBase(k).catch(()=>{});}const posRows=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];const venRows=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];const pend=posRows.filter(r=>r.STATUS==='PESQUISAVEL').length+venRows.filter(r=>r.STATUS==='PESQUISAVEL').length;const dets=posRows.filter(r=>r.STATUS==='DETRATOR');const grpDet={};dets.forEach(r=>{const k=r.CONSULTOR||'Sem consultor';grpDet[k]=(grpDet[k]||0)+1;});const critico=Object.entries(grpDet).sort((a,b)=>b[1]-a[1])[0];setText('ins-resumo',`${venRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em vendas, ${posRows.filter(r=>r.STATUS==='PROMOTOR').length} em pós-vendas e ${dets.length} detratores.`);setText('ins-pend',`${pend} clientes pesquisáveis podem ainda responder.`);setText('ins-critico',critico?`${critico[0]} tem ${critico[1]} detratores.`:'Nenhum crítico.');const conv={};posRows.filter(r=>String(r.CONVERTIDA_POR||'').trim()).forEach(r=>{const k=r.CONVERTIDA_POR;conv[k]=(conv[k]||0)+1;});setText('ins-conv',Object.entries(conv).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v}`).join('\n')||'Sem conversões.');const sm={};venRows.forEach(r=>{if(!r.VENDEDOR)return;if(!sm[r.VENDEDOR])sm[r.VENDEDOR]=0;if(r.STATUS==='PROMOTOR')sm[r.VENDEDOR]++;});const top=Object.entries(sm).sort((a,b)=>b[1]-a[1])[0];setText('ins-rank',top?`${top[0]} lidera com ${top[1]} promotoras.`:'Sem dados.');
@@ -3461,17 +3483,7 @@ function atualizarDashboardInicio(){
   const top=Object.entries(promPorC).sort((a,b)=>b[1]-a[1])[0];
   if(top) alertas.push({tipo:'teal',icon:'🏆',msg:`${top[0]} lidera com ${top[1]} promotora(s).`});
 
-  const alertasEl=document.getElementById('h-alertas');
-  if(alertasEl){
-    if(!alertas.length){
-      alertasEl.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum alerta no momento. Tudo tranquilo!</div>';
-    } else {
-      alertasEl.innerHTML=alertas.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;background:var(--surface2);border-left:3px solid var(--q-${a.tipo==='red'?'red':a.tipo==='gold'?'gold':a.tipo==='teal'?'teal':'accent'});">
-        <span style="font-size:16px;">${a.icon}</span>
-        <span style="font-size:13px;font-weight:500;">${a.msg}</span>
-      </div>`).join('');
-    }
-  }
+
 }
 
 /* ════════════════════════════════════════════
@@ -3566,9 +3578,12 @@ function abrirModalAlertaWA(cliente, nota, dataConvite, marca, setor, key){
   else{titulo='Detratora - acao necessaria';corBorda='#dc2626';}
   var arr=(key.startsWith('POS')?(marca==='Peugeot'?baseCache.POS_PEU:baseCache.POS_CIT):(marca==='Peugeot'?baseCache.VEN_PEU:baseCache.VEN_CIT))||[];
   var meta=key.startsWith('POS')?82:90;
-  var prom=arr.filter(function(r){return r.STATUS==='PROMOTOR';}).length;
-  var neu=arr.filter(function(r){return r.STATUS==='NEUTRO';}).length;
-  var det=arr.filter(function(r){return r.STATUS==='DETRATOR';}).length;
+  // Usar todos os registros com nota (mês atual da base ativa)
+  var comNota=arr.filter(function(r){return r.NOTA_NPS!==''&&r.NOTA_NPS!==null&&r.NOTA_NPS!==undefined;});
+  var useArr=comNota.length>0?comNota:arr;
+  var prom=useArr.filter(function(r){return r.STATUS==='PROMOTOR';}).length;
+  var neu=useArr.filter(function(r){return r.STATUS==='NEUTRO';}).length;
+  var det=useArr.filter(function(r){return r.STATUS==='DETRATOR';}).length;
   var total=prom+neu+det;
   var nps=total>0?Math.round((prom-det)/total*100):0;
   var abaixo=nps<meta;
@@ -3600,15 +3615,31 @@ function enviarAlertaWA(){
     '*Cliente:* '+d.cliente,
     '*Marca:* '+d.marca+' | '+d.setor,
     '*Nota NPS:* '+d.nota,
-    '*Data da pesquisa:* '+(d.dataConvite||'nao informada'),'',
+    (function(){
+    var dt=d.dataConvite||'';
+    if(!dt||dt==='nao informada')return '*Data da pesquisa:* nao informada';
+    // Converter YYYY-MM-DD para DD/MM/YYYY se necessario
+    if(/^\d{4}-\d{2}-\d{2}$/.test(dt)){var p=dt.split('-');dt=p[2]+'/'+p[1]+'/'+p[0];}
+    return '*Data da pesquisa:* '+dt;
+  })(),'',
     '*NPS atual '+d.marca+':* '+d.nps+'% (meta '+d.meta+'%)',
     d.abaixo?'*Situacao:* ABAIXO DA META - faltam '+d.faltam+' promotora(s)':'*Situacao:* META ATINGIDA',
   ];
   if(obs){linhas.push('');linhas.push('*Conversao:* '+obs);}
   linhas.push('');linhas.push('-- QUALIS | Pigalle WS --');
-  var msg=encodeURIComponent(linhas.join('\n'));
+  var msg=linhas.join('\n');
   document.getElementById('modalAlertaWA').style.display='none';
-  window.open('https://api.whatsapp.com/send?text='+msg,'_blank','noopener');
+  // Copia mensagem e abre o grupo
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(msg).then(function(){
+      window.open(WA_GRUPO,'_blank','noopener');
+      setTimeout(function(){alert('Mensagem copiada! Cole no grupo com Ctrl+V ou segure e cole.');},500);
+    }).catch(function(){
+      window.open(WA_GRUPO,'_blank','noopener');
+    });
+  } else {
+    window.open(WA_GRUPO,'_blank','noopener');
+  }
 }
 
 function alertarDetrator(cliente, nota, dataConvite, marca){
@@ -3855,7 +3886,7 @@ function exportarRelatorio(){
       <div style="font-size:16px;font-weight:700;">🔔 Notificações</div>
       <div style="display:flex;gap:8px;align-items:center;">
         <button onclick="limparNotificacoes()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;">Limpar tudo</button>
-        <button onclick="document.getElementById('modalNotificacoes').style.display='none'" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
+        <button onclick="var m=document.getElementById('modalNotificacoes');if(m)m.style.display='none';" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
       </div>
     </div>
     <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
@@ -4211,7 +4242,8 @@ function atualizarBadge(){
 
 function abrirCentralNotif(){
   renderNotificacoes();
-  document.getElementById('modalNotificacoes').style.display='flex';
+  var m=document.getElementById('modalNotificacoes');
+  if(m) m.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;';
 }
 
 function renderNotificacoes(){
@@ -4289,6 +4321,25 @@ function tocarSom(nota){
     }
   }, 2800);
 })();
+
+
+function editarSenhaSistema(i, nome){
+  var novaSenha = prompt('Editar senha de '+nome+':\n(deixe vazio para cancelar)');
+  if(novaSenha===null||novaSenha==='') return;
+  SYSTEMS[i].senha = novaSenha;
+  // Salvar no localStorage
+  var senhasSalvas = JSON.parse(localStorage.getItem('q-sys-senhas')||'{}');
+  senhasSalvas[i] = novaSenha;
+  localStorage.setItem('q-sys-senhas', JSON.stringify(senhasSalvas));
+  renderSystems();
+  alert('Senha de '+nome+' atualizada!');
+}
+function carregarSenhasSistemas(){
+  var senhasSalvas = JSON.parse(localStorage.getItem('q-sys-senhas')||'{}');
+  Object.keys(senhasSalvas).forEach(function(i){
+    if(SYSTEMS[i]) SYSTEMS[i].senha = senhasSalvas[i];
+  });
+}
 
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
