@@ -4126,9 +4126,15 @@ async function excluirAviso(id){
 
 function bootMural(){
   if(window._fbOnValue){
+    // Listener de avisos
     window._fbOnValue('qualis_avisos', data=>{
       _avisos=Object.entries(data||{}).map(([id,v])=>({id,...v}));
       renderMural();
+    });
+    // Listener de aniversariantes — todas as usuárias veem o mesmo
+    window._fbOnValue('qualis_aniversariantes', data=>{
+      window._aniversariantes = Object.entries(data||{}).map(([fbKey,v])=>({...v, _fbKey:fbKey}));
+      renderAniversariantes();
     });
   }
 }
@@ -4136,7 +4142,7 @@ function bootMural(){
 /* ════ ANIVERSARIANTES ════ */
 function renderAniversariantes(){
   const el=document.getElementById('aniversariantesLista');if(!el)return;
-  const todos=JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+  const todos=window._aniversariantes||JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
   const mesAtual=new Date().getMonth()+1;
   const doMes=todos.filter(a=>{
     if(!a.data)return false;
@@ -4195,27 +4201,42 @@ function mascaraData(el){
   el.value=v.slice(0,10);
 }
 
-function salvarAniversariante(){
+async function salvarAniversariante(){
   const nome = document.getElementById('anivNome')?.value?.trim();
   const dataRaw = (document.getElementById('anivData')?.value||'').trim();
   const setor = document.getElementById('anivSetor')?.value?.trim();
   if(!nome||!dataRaw){alert('Preencha nome e data.');return;}
-  // Validar formato DD/MM/AAAA
   const partes = dataRaw.split('/');
   if(partes.length!==3||partes[0].length!==2||partes[1].length!==2||partes[2].length!==4){
     alert('Data inválida. Use o formato DD/MM/AAAA\nEx: 15/03/1985');return;
   }
-  // Converter para AAAA-MM-DD para compatibilidade com o filtro de mês
   const dataISO = partes[2]+'-'+partes[1]+'-'+partes[0];
-  const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
-  lista.push({id:'aniv'+Date.now(), nome, data:dataISO, setor});
-  localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
+  const aniv = {id:'aniv'+Date.now(), nome, data:dataISO, setor};
+  // Salvar no Firebase para todas verem
+  if(window._fbPush){
+    await window._fbPush('qualis_aniversariantes', aniv).catch(()=>{});
+  } else {
+    // Fallback localStorage
+    const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+    lista.push(aniv);
+    localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
+  }
   fecharModalAniversariante();
-  renderAniversariantes();
 }
 
-function excluirAniversariante(id){
+async function excluirAniversariante(id){
   if(!confirm('Remover aniversariante?'))return;
+  // Remover do Firebase
+  if(window._fbSet){
+    // Achar a key no Firebase
+    const lista = window._aniversariantes||[];
+    const item = lista.find(a=>a.id===id);
+    if(item && item._fbKey){
+      await window._fbSet('qualis_aniversariantes/'+item._fbKey, null).catch(()=>{});
+      return; // listener vai atualizar automaticamente
+    }
+  }
+  // Fallback localStorage
   const lista = JSON.parse(localStorage.getItem('q-aniversariantes')||'[]').filter(a=>a.id!==id);
   localStorage.setItem('q-aniversariantes', JSON.stringify(lista));
   renderAniversariantes();
