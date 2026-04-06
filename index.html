@@ -2387,7 +2387,7 @@ function goPage(id,btn){
 }
 function openSub(pageId,subId,btn){const pg=document.getElementById('pg-'+pageId);pg?.querySelectorAll('.subpage').forEach(s=>s.classList.remove('active'));document.getElementById(subId)?.classList.add('active');const nav=pg?.querySelector('.subnav');nav?.querySelectorAll('.subnav-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 
-const CFG_KEYS=['h-prom','h-det','h-pesq','h-trein','h-racs','h-hot','h-aud','h-plan','metaVenPeu','venPeuProm','venPeuNeut','venPeuDet','venPeuBase','metaVenCit','venCitProm','venCitNeut','venCitDet','venCitBase','metaPosPeu','posPeuProm','posPeuNeut','posPeuDet','posPeuBase','metaPosCit','posCitProm','posCitNeut','posCitDet','posCitBase'];
+const CFG_KEYS=['h-racs','h-aud','h-plan','metaVenPeu','venPeuProm','venPeuNeut','venPeuDet','venPeuBase','metaVenCit','venCitProm','venCitNeut','venCitDet','venCitBase','metaPosPeu','posPeuProm','posPeuNeut','posPeuDet','posPeuBase','metaPosCit','posCitProm','posCitNeut','posCitDet','posCitBase'];
 function getConfig(){try{const r=localStorage.getItem('q-cfg');return r?JSON.parse(r):{};}catch{return{};}}
 function loadConfig(){const cfg=getConfig();CFG_KEYS.forEach(k=>{const el=document.getElementById(k);if(el&&cfg[k]!==undefined)el.textContent=cfg[k];const fel=document.getElementById('c_'+k);if(fel&&cfg[k]!==undefined)fel.value=cfg[k];});applyNpsUI();}
 function loadConfigToForm(){const cfg=getConfig();CFG_KEYS.forEach(k=>{const el=document.getElementById('c_'+k);if(el&&cfg[k]!==undefined)el.value=cfg[k];});}
@@ -2398,7 +2398,7 @@ function fmt(v){return Number(v).toFixed(1).replace('.',',')+"%";}
 
 function applyNpsUI(){
   const cfg=getConfig();const get=(k,def)=>Number(cfg[k]??def)||0;
-  ['h-prom','h-det','h-pesq','h-trein','h-racs','h-hot','h-aud','h-plan'].forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=get(k,el.textContent);});
+  ['h-racs','h-aud','h-plan'].forEach(k=>{const el=document.getElementById(k);if(el)el.textContent=get(k,el.textContent);});
   const vpp=get('venPeuProm',45),vpn=get('venPeuNeut',12),vpd=get('venPeuDet',5);setText('npsVenPeu',fmt(calcNps(vpp,vpn,vpd)));setText('metaVenPeu',fmt(get('metaVenPeu',85)));setText('venPeuProm',vpp);setText('venPeuNeut',vpn);setText('venPeuDet',vpd);setText('venPeuResp',vpp+vpn+vpd);setText('venPeuBase',get('venPeuBase',410));setText('venPeuFalta',calcFalta(get('metaVenPeu',85),vpp,vpn,vpd));
   const vcp=get('venCitProm',28),vcn=get('venCitNeut',9),vcd=get('venCitDet',7);setText('npsVenCit',fmt(calcNps(vcp,vcn,vcd)));setText('metaVenCit',fmt(get('metaVenCit',85)));setText('venCitProm',vcp);setText('venCitNeut',vcn);setText('venCitDet',vcd);setText('venCitResp',vcp+vcn+vcd);setText('venCitBase',get('venCitBase',295));setText('venCitFalta',calcFalta(get('metaVenCit',85),vcp,vcn,vcd));
   const ppp=get('posPeuProm',58),ppn=get('posPeuNeut',10),ppd=get('posPeuDet',3);setText('npsPosPeu',fmt(calcNps(ppp,ppn,ppd)));setText('metaPosPeu',fmt(get('metaPosPeu',85)));setText('posPeuProm',ppp);setText('posPeuNeut',ppn);setText('posPeuDet',ppd);setText('posPeuResp',ppp+ppn+ppd);setText('posPeuBase',get('posPeuBase',455));setText('posPeuFalta',calcFalta(get('metaPosPeu',85),ppp,ppn,ppd));
@@ -2962,14 +2962,37 @@ async function renderConversoes(){
 }
 async function renderRankingVen(){if(!baseCache.VEN_PEU)await loadBase('VEN_PEU');if(!baseCache.VEN_CIT)await loadBase('VEN_CIT');const nomes=new Set();[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])].forEach(r=>{if(r.VENDEDOR)nomes.add(r.VENDEDOR);});const wrap=document.getElementById('rankVenWrap');if(!wrap)return;const p=baseCache.VEN_PEU||[],c=baseCache.VEN_CIT||[];const rows=[...nomes].map(name=>{const pp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;const pc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;return{name,pp,hp,pc,hc,total:pp+pc};}).sort((a,b)=>b.total-a.total);wrap.innerHTML=rows.map((r,i)=>`<div class="rank-row"><div class="rank-pos ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div><div class="rank-name">${esc(r.name)}</div><div class="rank-stats"><span class="rank-stat" style="background:rgba(16,185,129,.1);color:var(--q-teal);">P🚗${r.pp}</span><span class="rank-stat" style="background:rgba(239,68,68,.1);color:var(--red);">H🚗${r.hp}</span><span class="rank-stat" style="background:rgba(139,92,246,.1);color:var(--purple);">P✨${r.pc}</span><span class="rank-stat" style="background:rgba(249,115,22,.1);color:var(--orange);">H✨${r.hc}</span><span class="rank-stat" style="background:var(--surface2);color:var(--muted);">T:${r.total}</span></div></div>`).join('')||'<div style="color:var(--muted);padding:20px;">Sem dados.</div>';}
 
-function processGrow(){loadGrowConsultorCache();const pR=parseGrow(document.getElementById('growPeu')?.value||'','Peugeot');const cR=parseGrow(document.getElementById('growCit')?.value||'','Citroën');const all=[...pR,...cR];setText('gTotal',all.length);setText('gOpen',all.filter(r=>r.status.toLowerCase().includes('aberto')).length);setText('gOver30',all.filter(r=>r.aging>30).length);setText('gReserve',all.filter(r=>(r.motivo1+r.motivo2).toLowerCase().includes('reserva')).length);setText('gPeu',pR.length);setText('gCit',cR.length);renderGrow(all);}
+var _growRecords = [];
+function processGrow(){
+  loadGrowConsultorCache();
+  const pR=parseGrow(document.getElementById('growPeu')?.value||'','Peugeot');
+  const cR=parseGrow(document.getElementById('growCit')?.value||'','Citroën');
+  const all=[...pR,...cR];
+  _growRecords = all; // salvar para re-renderizar após cache carregar
+  setText('gTotal',all.length);
+  setText('gOpen',all.filter(r=>r.status.toLowerCase().includes('aberto')).length);
+  setText('gOver30',all.filter(r=>r.aging>30).length);
+  setText('gReserve',all.filter(r=>(r.motivo1+r.motivo2).toLowerCase().includes('reserva')).length);
+  setText('gPeu',pR.length);
+  setText('gCit',cR.length);
+  renderGrow(all);
+}
 function parseGrow(raw,marca){if(!raw.trim())return[];const ignored=new Set(['número do item','número do caso','status','data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2','chassi completo','conta nome','prioridade','responsável_nome','regional description','caoss grow customer care peugeot','casos grow customer care peugeot','casos grow customer care citroën','casos grow customer care citroen','sort','ação']);const lines=raw.split('\n').map(x=>x.trim()).filter(x=>x&&!ignored.has(x.toLowerCase()));const records=[];const isCaso=v=>/^\d{7,9}$/.test(v);const isStatus=v=>['aberto','fechado','encerrado'].includes(v.toLowerCase());const isDate=v=>/^\d{2}\/\d{2}\/\d{4}/.test(v);let i=0;while(i<lines.length){if(!isCaso(lines[i])){i++;continue;}const start=i;const caso=lines[i++]||'',status=lines[i++]||'',data=lines[i++]||'';const canal=lines[i++]||'',motivo1=lines[i++]||'',motivo2=lines[i++]||'';const chassi=lines[i++]||'',cliente=lines[i++]||'',prioridade=lines[i++]||'';const responsavel=lines[i++]||'',regional=lines[i++]||'';if(!isCaso(caso)||!isStatus(status)||!isDate(data)){i=start+1;continue;}const m=data.match(/(\d{2})\/(\d{2})\/(\d{4})/);const aging=m?Math.max(0,Math.floor((Date.now()-new Date(+m[3],+m[2]-1,+m[1]))/86400000)):0;records.push({marca,caso,status,data,canal,motivo1,motivo2,chassi,cliente,prioridade,responsavel,regional,aging});}return records;}
 function agingChip(a){const n=Number(a)||0;if(n>30)return `<span class="chip chip-red">${n}d</span>`;if(n>=15)return `<span class="chip chip-amber">${n}d</span>`;return `<span class="chip chip-green">${n}d</span>`;}
 function priChip(v){const s=String(v||'').toLowerCase();if(s.includes('urgente'))return '<span class="chip chip-red">Urgente</span>';if(s.includes('alto'))return '<span class="chip chip-amber">Alto</span>';return '<span class="chip chip-green">Normal</span>';}
 function brandChip(m){return m==='Peugeot'?'<span class="chip chip-blue">Peugeot</span>':'<span class="chip chip-purple">Citroën</span>';}
 function stsChip(s){return s.toLowerCase().includes('aberto')?'<span class="chip chip-red">Aberto</span>':'<span class="chip chip-green">Fechado</span>';}
 const growConsultorCache={};let growCacheLoaded=false;
-async function loadGrowConsultorCache(){if(growCacheLoaded||!window._fbGet)return;growCacheLoaded=true;try{const snap=await window._fbGet('qualis_grow_consultores');Object.assign(growConsultorCache,snap.val()||{});}catch(e){}}
+async function loadGrowConsultorCache(){
+  if(growCacheLoaded||!window._fbGet)return;
+  growCacheLoaded=true;
+  try{
+    const snap=await window._fbGet('qualis_grow_consultores');
+    Object.assign(growConsultorCache,snap.val()||{});
+    // Re-renderizar grow se já tiver dados
+    if(_growRecords && _growRecords.length) renderGrow(_growRecords);
+  }catch(e){}
+}
 async function saveGrowConsultor(caso,consultor){growConsultorCache[caso]=consultor;if(window._fbSet){try{await window._fbSet('qualis_grow_consultores/'+caso.replace(/[^a-zA-Z0-9]/g,'_'),consultor);}catch(e){}}}
 function renderGrow(records){const tb=document.getElementById('growBody');if(!tb)return;if(!records.length){tb.innerHTML='<tr><td colspan="14" class="empty">Nenhum caso.</td></tr>';return;}const consultores=equipeGlobal.consultores.length?equipeGlobal.consultores:['Kamilly','Letícia','Laís'];tb.innerHTML=records.map(r=>{const currentCons=growConsultorCache[r.caso]||'';const opts=['',...consultores].map(n=>`<option value="${esc(n)}" ${n===currentCons?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<tr><td>${brandChip(r.marca)}</td><td><strong>${esc(r.caso)}</strong></td><td>${stsChip(r.status)}</td><td>${esc(r.data)}</td><td>${esc(r.canal)}</td><td>${esc(r.motivo1)}</td><td>${esc(r.motivo2)}</td><td>${esc(r.chassi)}</td><td>${esc(r.cliente)}</td><td>${priChip(r.prioridade)}</td><td>${esc(r.responsavel)}</td><td>${esc(r.regional)}</td><td>${agingChip(r.aging)}</td><td><select onchange="saveGrowConsultor('${r.caso}',this.value)" style="width:130px;padding:5px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;">${opts}</select></td></tr>`;}).join('');}
 function loadGrowEx(brand){if(brand==='peugeot')document.getElementById('growPeu').value=`15725953\nAberto\n05/11/2025 15:15\nTelefone\nVeículo Reserva\nVeículo na concessionária\n8ADUAFCA1SG576844\nTHICIANE ARAUJO CHAVES\nUrgente\nPâmela Souza Lopes\nNNE - NORDESTE`;else document.getElementById('growCit').value=`16316483\nAberto\n11/03/2026 09:10\nWhatsApp\nCampanha Recall\nBaixa Detração\n9V7VBBHXGLA001448\nEMILIO CAVALCANTE\nUrgente\nPâmela Souza Lopes\nNNE - NORDESTE`;processGrow();}
