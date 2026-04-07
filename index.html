@@ -2273,7 +2273,7 @@ async function scEnviarEmail(){
 }
 
 /* ══ AUTH & USUÁRIAS ══ */
-const DEFAULT_USERS=[{name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},{name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},{name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'}];
+const DEFAULT_USERS=[{name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},{name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},{name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'},{name:'Liana',role:'user',email:'liana.silva@adtsa.com.br',password:'Adtsa2025@',pwdAt:'2026-03-12'}];
 function getUsers(){try{const raw=localStorage.getItem('q-users');return raw?JSON.parse(raw):[...DEFAULT_USERS];}catch{return[...DEFAULT_USERS];}}
 function saveUsers(users){localStorage.setItem('q-users',JSON.stringify(users));}
 if(!localStorage.getItem('q-users'))saveUsers([...DEFAULT_USERS]);
