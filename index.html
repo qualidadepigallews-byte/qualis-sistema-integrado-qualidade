@@ -2836,12 +2836,45 @@ async function loadBase(key){
 function parsePaste(text){
   var lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
   if(!lines.length) return [];
+
   // Detectar separador automaticamente
-  var first = lines[0];
-  var sep = /\t/.test(first) ? /\t/ : /;/.test(first) ? /;/ : /,/.test(first) ? /,/ : /;/;
-  var rows = lines.map(l=>l.split(sep).map(v=>v.trim())).filter(c=>c.length>=2&&c[0]);
-  console.log('parsePaste: '+lines.length+' linhas, sep='+sep+', rows válidos='+rows.length);
-  return rows;
+  var sep = /\t/;
+  for(var i=0;i<lines.length;i++){
+    if(/\t/.test(lines[i])){sep=/\t/;break;}
+    if(/;/.test(lines[i])){sep=/;/;break;}
+  }
+
+  // Verificar se há linhas de data separadas (formato: data sozinha, depois VIN na linha seguinte)
+  // Ex: "25/03/2026\n935CEFC...\tWESLEY..."
+  var merged = [];
+  var pendingDate = null;
+  for(var i=0;i<lines.length;i++){
+    var l = lines[i];
+    // Linha é só uma data? (DD/MM/YYYY ou YYYY-MM-DD)
+    if(/^\d{2}\/\d{2}\/\d{4}$/.test(l) || /^\d{4}-\d{2}-\d{2}$/.test(l)){
+      pendingDate = l;
+    } else {
+      // Linha com dados — juntar com a data pendente se existir
+      var cols = l.split(sep).map(function(v){return v.trim();});
+      if(pendingDate && cols.length >= 2){
+        // Inserir data convite — detectar posição correta
+        // Formato esperado: VIN | Cliente | Email | Telefone | DataConvite | Consultor
+        // Se só tem VIN, Cliente, Email, Telefone (4 colunas) — adicionar data
+        if(cols.length <= 4){
+          cols.push(pendingDate);
+        } else if(cols.length === 5 && !(/\d{2}\/\d{2}\/\d{4}/.test(cols[4]))){
+          // Tem 5 colunas mas a 5a não é data — inserir data na posição 4
+          cols.splice(4, 0, pendingDate);
+        }
+      }
+      pendingDate = null;
+      if(cols.length >= 2 && cols[0]) merged.push(cols);
+    }
+  }
+
+  console.log('parsePaste: '+lines.length+' linhas brutas → '+merged.length+' registros');
+  if(merged.length > 0) console.log('Exemplo primeiro registro:', JSON.stringify(merged[0]));
+  return merged;
 }
 async function importBase(key,taId){
   const text=document.getElementById(taId)?.value||'';
