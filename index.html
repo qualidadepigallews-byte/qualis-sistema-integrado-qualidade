@@ -1562,6 +1562,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   <div class="form-field"><label>Prazo remoto (dias)</label><input type="number" id="trPrazoRemoto" value="7" min="1"></div>
                   <div class="form-field"><label>Fim do expediente</label><input type="time" id="trDayEnd" value="18:00"></div>
                   <div class="form-field"><label>Início almoço</label><input type="time" id="trLunchStart" value="12:00"></div>
+                  <div class="form-field"><label>Fim almoço</label><input type="time" id="trLunchEnd" value="14:00"></div>
                 </div>
                 <div class="card-title" style="margin-top:14px;margin-bottom:10px;">📧 Envio por Gmail</div>
                 <div style="background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--q-teal);margin-bottom:12px;">
@@ -1710,7 +1711,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
           </div>
           <div class="card" style="margin-bottom:16px;">
             <div class="card-title">🎓 Treinamentos — Sala vs Remoto</div>
-            <canvas id="graficoTr" height="80"></canvas>
+            <canvas id="graficoTr" height="60"></canvas>
           </div>
 
 
@@ -2273,9 +2274,29 @@ async function scEnviarEmail(){
 }
 
 /* ══ AUTH & USUÁRIAS ══ */
-const DEFAULT_USERS=[{name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},{name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},{name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'},{name:'Liana',role:'user',email:'liana.silva@adtsa.com.br',password:'Adtsa2025@',pwdAt:'2026-03-12'}];
+const DEFAULT_USERS=[{name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},{name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},{name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'}];
 function getUsers(){try{const raw=localStorage.getItem('q-users');return raw?JSON.parse(raw):[...DEFAULT_USERS];}catch{return[...DEFAULT_USERS];}}
-function saveUsers(users){localStorage.setItem('q-users',JSON.stringify(users));}
+
+async function sincronizarUsuarias(){
+  if(!window._fbGet) return;
+  try{
+    const snap = await window._fbGet('qualis_usuarios');
+    const dados = snap.val();
+    if(dados && Array.isArray(dados) && dados.length > 0){
+      // Firebase tem usuárias — usar essas (mais atualizadas)
+      localStorage.setItem('q-users', JSON.stringify(dados));
+    } else if(dados && typeof dados === 'object'){
+      // Converter objeto para array
+      const arr = Object.values(dados).sort(function(a,b){return (a._idx||0)-(b._idx||0);});
+      if(arr.length > 0) localStorage.setItem('q-users', JSON.stringify(arr));
+    }
+  } catch(e){ console.warn('Erro ao sincronizar usuárias:', e); }
+}
+function saveUsers(users){
+  localStorage.setItem('q-users',JSON.stringify(users));
+  // Salvar no Firebase para sincronizar entre todos os computadores
+  if(window._fbSet) window._fbSet('qualis_usuarios', users.map(function(u,i){return{...u, _idx:i};})).catch(function(){});
+}
 if(!localStorage.getItem('q-users'))saveUsers([...DEFAULT_USERS]);
 const PW_DAYS=30;let currentUser=null;
 function daysSince(d){return Math.floor((Date.now()-new Date(d+'T00:00:00'))/86400000);}
@@ -2285,7 +2306,9 @@ function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function jsEsc(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 function setText(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 
-function doLogin(){
+async function doLogin(){
+  // Sincronizar usuárias do Firebase antes de validar login
+  await sincronizarUsuarias().catch(()=>{});
   const email=document.getElementById('loginEmail').value.trim();const pw=document.getElementById('loginPassword').value;
   const users=getUsers();const u=users.find(x=>x.email.toLowerCase()===email.toLowerCase());
   const err=msg=>{document.getElementById('loginErr').textContent=msg;};
@@ -2834,47 +2857,40 @@ async function loadBase(key){
   });
 }
 function parsePaste(text){
-  var lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  var lines = String(text||'').split(/\r?\n/).map(function(l){return l.trim();}).filter(Boolean);
   if(!lines.length) return [];
 
-  // Detectar separador automaticamente
-  var sep = /\t/;
-  for(var i=0;i<lines.length;i++){
-    if(/\t/.test(lines[i])){sep=/\t/;break;}
-    if(/;/.test(lines[i])){sep=/;/;break;}
-  }
+  // Detectar o melhor separador analisando todas as linhas
+  var tabCount=0, semiCount=0, spaceCount=0;
+  lines.forEach(function(l){
+    if(/\t/.test(l)) tabCount++;
+    if(/;/.test(l)) semiCount++;
+    if(/  +/.test(l)) spaceCount++;
+  });
 
-  // Verificar se há linhas de data separadas (formato: data sozinha, depois VIN na linha seguinte)
-  // Ex: "25/03/2026\n935CEFC...\tWESLEY..."
-  var merged = [];
-  var pendingDate = null;
+  var rows = [];
   for(var i=0;i<lines.length;i++){
     var l = lines[i];
-    // Linha é só uma data? (DD/MM/YYYY ou YYYY-MM-DD)
-    if(/^\d{2}\/\d{2}\/\d{4}$/.test(l) || /^\d{4}-\d{2}-\d{2}$/.test(l)){
-      pendingDate = l;
+    var cols;
+
+    if(tabCount >= semiCount && tabCount >= spaceCount){
+      // Tab é o separador dominante
+      cols = l.split(/\t/);
+    } else if(semiCount >= tabCount && semiCount >= spaceCount){
+      // Ponto e vírgula
+      cols = l.split(/;/);
     } else {
-      // Linha com dados — juntar com a data pendente se existir
-      var cols = l.split(sep).map(function(v){return v.trim();});
-      if(pendingDate && cols.length >= 2){
-        // Inserir data convite — detectar posição correta
-        // Formato esperado: VIN | Cliente | Email | Telefone | DataConvite | Consultor
-        // Se só tem VIN, Cliente, Email, Telefone (4 colunas) — adicionar data
-        if(cols.length <= 4){
-          cols.push(pendingDate);
-        } else if(cols.length === 5 && !(/\d{2}\/\d{2}\/\d{4}/.test(cols[4]))){
-          // Tem 5 colunas mas a 5a não é data — inserir data na posição 4
-          cols.splice(4, 0, pendingDate);
-        }
-      }
-      pendingDate = null;
-      if(cols.length >= 2 && cols[0]) merged.push(cols);
+      // Múltiplos espaços (relatório copiado)
+      cols = l.split(/  +/);
     }
+
+    cols = cols.map(function(v){return v.trim();}).filter(function(v){return v!=='';});
+    if(cols.length >= 2 && cols[0]) rows.push(cols);
   }
 
-  console.log('parsePaste: '+lines.length+' linhas brutas → '+merged.length+' registros');
-  if(merged.length > 0) console.log('Exemplo primeiro registro:', JSON.stringify(merged[0]));
-  return merged;
+  console.log('parsePaste: sep='+(tabCount>=semiCount&&tabCount>=spaceCount?'TAB':semiCount>=spaceCount?'SEMICOLON':'SPACES')+' | '+lines.length+' linhas → '+rows.length+' registros');
+  if(rows.length>0) console.log('Primeiro registro:', JSON.stringify(rows[0]));
+  return rows;
 }
 async function importBase(key,taId){
   const text=document.getElementById(taId)?.value||'';
@@ -2886,17 +2902,18 @@ async function importBase(key,taId){
     // Formato: VIN(0) | Cliente(1) | Email(2) | Telefone(3) | Data Convite(4) | Consultor/Vendedor(5) | ...
     var dc=c[4]||'';
     var row={
-      VIN:      c[0]||'',
-      CLIENTE:  c[1]||'',
-      EMAIL:    c[2]||'',
-      TELEFONE: c[3]||'',
+      VIN:          c[0]||'',
+      CLIENTE:      c[1]||'',
+      EMAIL:        c[2]||'',
+      TELEFONE:     c[3]||'',
       DATA_CONVITE: dc,
-      NOTA_NPS: '',
-      STATUS:   calcStatus('',dc),
-      SYONET:   '',
-      TRATATIVA:''
+      NOTA_NPS:     '',
+      STATUS:       calcStatus('',dc),
+      SYONET:       '',
+      TRATATIVA:    ''
     };
-    row[role]=c[5]||''; // Consultor ou Vendedor
+    // Consultor/Vendedor: pode vir na col 5 ou ser selecionado depois na tabela
+    row[role]=c[5]||'';
     if(isPos) row.CONVERTIDA_POR='';
     return row;
   });
@@ -2958,7 +2975,12 @@ function renderBase(key){const tbody=document.getElementById('tb_'+key);if(!tbod
   const fs=document.getElementById('fs'+key)?.value||'';const fq=(document.getElementById('fq'+key)?.value||'').toLowerCase();
   if(fs.toUpperCase()==='EXPIRADO'){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()==='EXPIRADO');}
   else if(fs){rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()===fs.toUpperCase());}
-  else{rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');}if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?11:10}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td style="font-size:11px;">${esc(row.EMAIL||'')}</td><td style="font-size:11px;">${esc(row.TELEFONE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')} ${(()=>{if(!row.DATA_CONVITE)return '';const s=String(row.DATA_CONVITE).trim();let dt;if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){const p=s.split('/');dt=new Date(+p[2],+p[1]-1,+p[0]);}else{dt=new Date(s);}if(isNaN(dt))return '';const diff=Math.floor((dt.getTime()-Date.now())/86400000)+30;if(diff<0)return '';if(diff<=3)return '<span class="chip chip-red">⚠️ '+diff+'d</span>';if(diff<=10)return '<span class="chip chip-amber">'+diff+'d</span>';return '<span class="chip chip-green">'+diff+'d</span>';})()}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','TRATATIVA',this.value)">${esc(row.TRATATIVA||'')}</textarea></td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
+  else{rows=rows.filter(r=>String(r.STATUS||'').toUpperCase()!=='EXPIRADO');}if(fq)rows=rows.filter(r=>[r.CLIENTE,r.VIN,r.VENDEDOR,r.CONSULTOR].join(' ').toLowerCase().includes(fq));const isPos=BASE_IS_POS[key];const role=BASE_ROLE[key];const nomes=isPos?equipeGlobal.consultores:equipeGlobal.vendedores;if(!rows.length){tbody.innerHTML=`<tr><td colspan="${isPos?11:10}" class="empty">Nenhum cliente.</td></tr>`;return;}const makeSelect=(currentVal,rowId)=>{const opts=['', ...nomes].map(n=>`<option value="${esc(n)}" ${n===currentVal?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<select onchange="updateBaseField('${key}','${rowId}','${role}',this.value)" style="width:100%;padding:4px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:12px;">${opts}</select>`;};tbody.innerHTML=rows.map(row=>`<tr class="${statusClass(row.STATUS)}"><td>${esc(row.VIN||'')}</td><td>${esc(row.CLIENTE||'')}</td><td style="font-size:11px;">${esc(row.EMAIL||'')}</td><td style="font-size:11px;">${esc(row.TELEFONE||'')}</td><td class="editable">${makeSelect(row[role]||'',row.id)}</td><td>${esc(row.DATA_CONVITE||'')} ${(()=>{if(!row.DATA_CONVITE)return '';const s=String(row.DATA_CONVITE).trim();let dt;if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){const p=s.split('/');dt=new Date(+p[2],+p[1]-1,+p[0]);}else{dt=new Date(s);}if(isNaN(dt))return '';const diff=Math.floor((dt.getTime()-Date.now())/86400000)+30;if(diff<0)return '';if(diff<=3)return '<span class="chip chip-red">⚠️ '+diff+'d</span>';if(diff<=10)return '<span class="chip chip-amber">'+diff+'d</span>';return '<span class="chip chip-green">'+diff+'d</span>';})()}</td><td class="editable"><input value="${esc(row.NOTA_NPS||'')}" onchange="updateBaseField('${key}','${row.id}','NOTA_NPS',this.value)" style="width:50px;"></td><td>${statusChip(row.STATUS)}</td><td class="editable"><textarea onchange="updateBaseField('${key}','${row.id}','SYONET',this.value)">${esc(row.SYONET||'')}</textarea></td><td style="text-align:center;">
+  <button onclick="abrirHistoricoTratativa('${key}','${row.id}','${esc(row.CLIENTE||'')}')" 
+    style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:4px 10px;cursor:pointer;font-size:12px;white-space:nowrap;">
+    ${(row.HISTORICO_TRATATIVA&&row.HISTORICO_TRATATIVA.length)?'📋 '+(typeof row.HISTORICO_TRATATIVA==='string'?JSON.parse(row.HISTORICO_TRATATIVA||'[]'):row.HISTORICO_TRATATIVA).length+' registro(s)':'+ Tratativa'}
+  </button>
+</td>${isPos?`<td class="editable"><input value="${esc(row.CONVERTIDA_POR||'')}" onchange="updateBaseField('${key}','${row.id}','CONVERTIDA_POR',this.value)" style="width:100%;"></td>`:''}</tr>`).join('');}
 async function updateBaseField(key,id,field,value){
   // Atualiza cache local imediatamente antes de qualquer render
   if(baseCache[key]){
@@ -3263,25 +3285,52 @@ function trProcessar(){
   const dayEndT=document.getElementById('trDayEnd')?.value||'18:00';
   const lunchT=document.getElementById('trLunchStart')?.value||'12:00';
   const prazoD=Number(document.getElementById('trPrazoRemoto')?.value||7);
-  const [lh]=lunchT.split(':').map(Number);const [eh]=dayEndT.split(':').map(Number);
+  const [lh,lm]=lunchT.split(':').map(Number);
+  const lunchEndT=document.getElementById('trLunchEnd')?.value||'14:00';
+  const [leh,lem]=lunchEndT.split(':').map(Number);
+  const [eh]=dayEndT.split(':').map(Number);
   const prazoDate=new Date();prazoDate.setDate(prazoDate.getDate()+prazoD);const prazoStr=trFmtDate(prazoDate);
   let cursorSala=new Date(startDate+'T'+startTime+':00');let cursorTech=trNextFriday(new Date(startDate+'T'+startTime+':00'));
   const cron=[],envio=[];const WA='5585991288949';const PORTAL='https://idfed.mpsa.com/idp/SSO.saml2';
 
+  function ajustarAlmoco(cursor){
+    // Se o cursor está no horário de almoço, pular para fim do almoço
+    const h=cursor.getHours(),m=cursor.getMinutes();
+    const minCursor=h*60+m;
+    const minAlmocoIni=lh*60+lm;
+    const minAlmocoFim=leh*60+lem;
+    if(minCursor>=minAlmocoIni && minCursor<minAlmocoFim){
+      cursor.setHours(leh,lem,0,0);
+    }
+    return cursor;
+  }
+
+  function slotUltrapassaAlmoco(ini){
+    // Verifica se um slot de slotH horas começando em ini passa pelo almoço
+    const fimSlot=new Date(ini); fimSlot.setHours(fimSlot.getHours()+slotH);
+    const minIni=ini.getHours()*60+ini.getMinutes();
+    const minFim=fimSlot.getHours()*60+fimSlot.getMinutes();
+    const minAlmocoIni=lh*60+lm;
+    return minIni<minAlmocoIni && minFim>minAlmocoIni;
+  }
+
   for(const p of pessoas){
     let dataStr='',iniStr='',fimStr='',obs='';
-    if(p.tipo==='REMOTO'){obs=`Realizar até ${prazoStr}.`;}
+    if(p.tipo==='REMOTO'){obs=`Realizar até ${prazoStr}`;}
     else{
       let cursor=p.fridayOnly?new Date(cursorTech):new Date(cursorSala);
-      if(cursor.getHours()>=lh&&cursor.getHours()<eh)cursor.setHours(lh+2,0,0,0);
+      ajustarAlmoco(cursor);
+      // Se slot ultrapassa almoço, mover para depois do almoço
+      if(slotUltrapassaAlmoco(cursor)) cursor.setHours(leh,lem,0,0);
       if(p.fridayOnly&&!trIsFriday(cursor))cursor=trNextFriday(cursor);
       const ini=new Date(cursor);const fim=new Date(cursor);fim.setHours(fim.getHours()+slotH);
       dataStr=trFmtDate(ini);iniStr=trFmtTime(ini);fimStr=trFmtTime(fim);
       obs=p.fridayOnly?'Oficina: treinamento em sala às sextas.':'Treinamento em sala.';
       cron.push({data:dataStr,inicio:iniStr,fim:fimStr,nome:p.nome,email:p.email,id:p.idUsuario,modalidade:'SALA',obs});
       let next=new Date(fim);
+      ajustarAlmoco(next);
       if(next.getHours()>=eh){next=p.fridayOnly?trNextFriday(trNextBizDay(next)):trNextBizDay(next);}
-      else{if(next.getHours()>=lh)next.setHours(lh+2,0,0,0);if(trIsWeekend(next))next=trNextBizDay(next);if(p.fridayOnly&&!trIsFriday(next))next=trNextFriday(next);}
+      else{if(trIsWeekend(next))next=trNextBizDay(next);if(p.fridayOnly&&!trIsFriday(next))next=trNextFriday(next);}
       if(p.fridayOnly)cursorTech=next;else cursorSala=next;
     }
     const waMsg=encodeURIComponent(`Olá, Time de Qualidade.\nSou: ${p.nome}\nID: ${p.idUsuario||'não informado'}\nGostaria de solicitar minha senha para o portal de treinamentos.`);
@@ -4498,6 +4547,73 @@ function carregarSenhasSistemas(){
   });
 }
 
+
+/* ════ HISTÓRICO DE TRATATIVA ════ */
+var _histKey = '', _histId = '', _histCliente = '';
+
+function abrirHistoricoTratativa(key, id, cliente){
+  _histKey = key; _histId = id; _histCliente = cliente;
+  document.getElementById('histClienteNome').textContent = cliente;
+  document.getElementById('histNovaEntrada').value = '';
+  renderHistorico();
+  var m = document.getElementById('modalHistoricoTratativa');
+  if(m) m.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+}
+
+function fecharHistoricoTratativa(){
+  var m = document.getElementById('modalHistoricoTratativa');
+  if(m) m.style.display = 'none';
+}
+
+function getHistorico(){
+  var r = (baseCache[_histKey]||[]).find(function(x){return x.id===_histId;});
+  if(!r) return [];
+  var h = r.HISTORICO_TRATATIVA;
+  if(!h) return [];
+  if(typeof h === 'string'){try{return JSON.parse(h);}catch{return[];}}
+  if(Array.isArray(h)) return h;
+  return [];
+}
+
+function renderHistorico(){
+  var el = document.getElementById('histLista');
+  if(!el) return;
+  var lista = getHistorico();
+  if(!lista.length){
+    el.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma tratativa registrada ainda.</div>';
+    return;
+  }
+  el.innerHTML = lista.slice().reverse().map(function(e){
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;">'+
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">'+
+        '<span style="font-size:11px;font-weight:700;color:var(--q-accent);">'+esc(e.data)+'</span>'+
+        '<span style="font-size:11px;color:var(--muted);">'+esc(e.hora)+'</span>'+
+        '<span style="font-size:11px;font-weight:700;color:var(--q-teal);">'+esc(e.usuario)+'</span>'+
+      '</div>'+
+      '<div style="font-size:13px;line-height:1.5;">'+esc(e.texto)+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+async function salvarEntradaTratativa(){
+  var texto = (document.getElementById('histNovaEntrada')?.value||'').trim();
+  if(!texto){alert('Digite a tratativa antes de registrar.');return;}
+  var agora = new Date();
+  var entrada = {
+    data: agora.toLocaleDateString('pt-BR'),
+    hora: agora.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
+    usuario: (window.currentUser||{}).name || '?',
+    texto: texto
+  };
+  var lista = getHistorico();
+  lista.push(entrada);
+  var novoHistorico = JSON.stringify(lista);
+  // Salvar no Firebase
+  await updateBaseField(_histKey, _histId, 'HISTORICO_TRATATIVA', novoHistorico);
+  document.getElementById('histNovaEntrada').value = '';
+  renderHistorico();
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
   if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
@@ -4523,6 +4639,28 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
     <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
       <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Histórico de Tratativa -->
+<div id="modalHistoricoTratativa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(520px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div>
+        <div style="font-size:15px;font-weight:700;">📋 Histórico de Tratativa</div>
+        <div id="histClienteNome" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
+      </div>
+      <button onclick="fecharHistoricoTratativa()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);">×</button>
+    </div>
+    <div id="histLista" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;min-height:80px;"></div>
+    <div style="padding:16px;border-top:1px solid var(--border);flex-shrink:0;">
+      <textarea id="histNovaEntrada" placeholder="Descreva a tratativa realizada..." 
+        style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;resize:vertical;min-height:70px;box-sizing:border-box;margin-bottom:10px;"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="fecharHistoricoTratativa()" class="btn ghost">Fechar</button>
+        <button onclick="salvarEntradaTratativa()" class="btn primary">💾 Registrar</button>
+      </div>
     </div>
   </div>
 </div>
