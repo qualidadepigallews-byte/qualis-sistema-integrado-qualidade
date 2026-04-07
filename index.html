@@ -3718,6 +3718,19 @@ async function runIAQualis(){
   const posPeu2=baseCache.POS_PEU||[], posCit2=baseCache.POS_CIT||[];
   function npsArr(arr){const p=arr.filter(r=>r.STATUS==='PROMOTOR').length,d=arr.filter(r=>r.STATUS==='DETRATOR').length,n=arr.filter(r=>r.STATUS==='NEUTRO').length,t=p+d+n;return t>0?Math.round((p-d)/t*100)+'%':'sem dados';}
 
+  // Dados do Grow
+  const growRecords = _growRecords || [];
+  const growAbertos = growRecords.filter(r=>r.status.toLowerCase().includes('aberto')).length;
+  const growOver30 = growRecords.filter(r=>r.aging>30).length;
+  const growPeu = growRecords.filter(r=>r.marca==='Peugeot').length;
+  const growCit = growRecords.filter(r=>r.marca==='Citroën').length;
+  const growUrgentes = growRecords.filter(r=>String(r.prioridade||'').toLowerCase().includes('urgente')).length;
+  const growMotivos = {};
+  growRecords.forEach(r=>{
+    [r.motivo1,r.motivo2].forEach(m=>{if(m){growMotivos[m]=(growMotivos[m]||0)+1;}});
+  });
+  const growTopMotivos = Object.entries(growMotivos).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>k+':'+v).join(', ')||'sem dados';
+
   const sys=`Voce e a IA QUALIS da concessionaria Pigalle WS (Peugeot e Citroen).
 Dados ATUAIS e SEPARADOS do portal:
 
@@ -3733,9 +3746,18 @@ VENDAS:
 - NPS Citroen Vendas: ${npsArr(vpCit)} (meta 90%) | Promotoras:${vpCit.filter(r=>r.STATUS==='PROMOTOR').length} Det:${vpCit.filter(r=>r.STATUS==='DETRATOR').length} Neu:${vpCit.filter(r=>r.STATUS==='NEUTRO').length}
 - Pesquisaveis Vendas: ${pesqV}
 
+GROW CUSTOMER CARE:
+- Total de casos: ${growRecords.length} (${growPeu} Peugeot | ${growCit} Citroen)
+- Casos abertos: ${growAbertos}
+- Casos com aging acima de 30 dias: ${growOver30}
+- Casos urgentes: ${growUrgentes}
+- Principais motivos: ${growTopMotivos}
+
 TREINAMENTOS: ${tr} pessoa(s) com pendencia
 
-Responda de forma direta e objetiva em portugues brasileiro, separando sempre Peugeot de Citroen e Vendas de Pos-Vendas quando relevante.`;
+Responda de forma direta e objetiva em portugues brasileiro.
+Separe sempre Peugeot de Citroen e Vendas de Pos-Vendas quando relevante.
+Quando perguntarem sobre Grow, use os dados de GROW CUSTOMER CARE acima.`;
 
   try{
     const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:input}],max_tokens:800,temperature:0.3})});
