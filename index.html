@@ -2274,7 +2274,12 @@ async function scEnviarEmail(){
 }
 
 /* ══ AUTH & USUÁRIAS ══ */
-const DEFAULT_USERS=[{name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},{name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},{name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'}];
+const DEFAULT_USERS=[
+  {name:'Kamilly',role:'superadmin',email:'kamilly.paiva@adtsa.com.br',password:'Capivara321@',pwdAt:'2026-03-12'},
+  {name:'Letícia',role:'user',email:'leticia.martins@adtsa.com.br',password:'Barata321@',pwdAt:'2026-03-12'},
+  {name:'Laís',role:'user',email:'lais.batista@adtsa.com.br',password:'Calango321@',pwdAt:'2026-03-12'},
+  {name:'Liana',role:'user',email:'liana.silva@adtsa.com.br',password:'Adtsa2025@',pwdAt:'2026-04-07'}
+];
 function getUsers(){try{const raw=localStorage.getItem('q-users');return raw?JSON.parse(raw):[...DEFAULT_USERS];}catch{return[...DEFAULT_USERS];}}
 
 async function sincronizarUsuarias(){
@@ -2282,22 +2287,44 @@ async function sincronizarUsuarias(){
   try{
     const snap = await window._fbGet('qualis_usuarios');
     const dados = snap.val();
-    if(dados && Array.isArray(dados) && dados.length > 0){
-      // Firebase tem usuárias — usar essas (mais atualizadas)
-      localStorage.setItem('q-users', JSON.stringify(dados));
-    } else if(dados && typeof dados === 'object'){
-      // Converter objeto para array
-      const arr = Object.values(dados).sort(function(a,b){return (a._idx||0)-(b._idx||0);});
-      if(arr.length > 0) localStorage.setItem('q-users', JSON.stringify(arr));
+    var fbUsers = [];
+    if(dados && typeof dados === 'object' && !Array.isArray(dados)){
+      fbUsers = Object.values(dados).filter(function(u){return u && u.email;});
+    } else if(Array.isArray(dados)){
+      fbUsers = dados.filter(function(u){return u && u.email;});
+    }
+    if(fbUsers.length > 0){
+      // Mesclar Firebase com DEFAULT_USERS (garantir que defaults sempre existem)
+      var merged = [...fbUsers];
+      DEFAULT_USERS.forEach(function(du){
+        var exists = merged.find(function(u){return u.email.toLowerCase()===du.email.toLowerCase();});
+        if(!exists) merged.push(du);
+      });
+      localStorage.setItem('q-users', JSON.stringify(merged));
     }
   } catch(e){ console.warn('Erro ao sincronizar usuárias:', e); }
 }
 function saveUsers(users){
-  localStorage.setItem('q-users',JSON.stringify(users));
-  // Salvar no Firebase para sincronizar entre todos os computadores
-  if(window._fbSet) window._fbSet('qualis_usuarios', users.map(function(u,i){return{...u, _idx:i};})).catch(function(){});
+  localStorage.setItem('q-users', JSON.stringify(users));
+  // Salvar no Firebase — usar índice como chave
+  if(window._fbSet){
+    var obj = {};
+    users.forEach(function(u,i){ obj['u'+i] = u; });
+    window._fbSet('qualis_usuarios', obj).catch(function(){});
+  }
 }
-if(!localStorage.getItem('q-users'))saveUsers([...DEFAULT_USERS]);
+// Sempre garantir que todos os DEFAULT_USERS existem no localStorage
+(function(){
+  try{
+    var stored = JSON.parse(localStorage.getItem('q-users')||'[]');
+    var updated = false;
+    DEFAULT_USERS.forEach(function(du){
+      var exists = stored.find(function(u){return u.email.toLowerCase()===du.email.toLowerCase();});
+      if(!exists){ stored.push(du); updated=true; }
+    });
+    if(updated || !stored.length) localStorage.setItem('q-users', JSON.stringify(stored.length?stored:DEFAULT_USERS));
+  } catch(e){ localStorage.setItem('q-users', JSON.stringify(DEFAULT_USERS)); }
+})();
 const PW_DAYS=30;let currentUser=null;
 function daysSince(d){return Math.floor((Date.now()-new Date(d+'T00:00:00'))/86400000);}
 function hashPw(pw){const key='QUALIS2026';let out='';for(let i=0;i<pw.length;i++)out+=String.fromCharCode(pw.charCodeAt(i)^key.charCodeAt(i%key.length));return btoa(out);}
