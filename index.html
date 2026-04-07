@@ -2833,7 +2833,16 @@ async function loadBase(key){
     atualizarDashboardInicio();
   });
 }
-function parsePaste(text){return String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>l.split(/\t|;/).map(v=>v.trim())).filter(c=>c.length>=2&&c[0]);}
+function parsePaste(text){
+  var lines = String(text||'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  if(!lines.length) return [];
+  // Detectar separador automaticamente
+  var first = lines[0];
+  var sep = /\t/.test(first) ? /\t/ : /;/.test(first) ? /;/ : /,/.test(first) ? /,/ : /;/;
+  var rows = lines.map(l=>l.split(sep).map(v=>v.trim())).filter(c=>c.length>=2&&c[0]);
+  console.log('parsePaste: '+lines.length+' linhas, sep='+sep+', rows válidos='+rows.length);
+  return rows;
+}
 async function importBase(key,taId){
   const text=document.getElementById(taId)?.value||'';
   const lines=parsePaste(text);
