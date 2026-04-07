@@ -2367,6 +2367,8 @@ function startPortal(){
   const av=document.getElementById('topAvatar');
   if(av) av.textContent=currentUser.name.charAt(0).toUpperCase();
   carregarSenhasSistemas();loadConfig();renderSystems();setTimeout(atualizarBadge,500);
+  // Carregar Grow do Firebase ao iniciar
+  setTimeout(carregarGrowDoFirebase, 2000);
   // Carregar todas as bases automaticamente ao logar — painel atualiza em tempo real
   setTimeout(function(){
     loadBase('VEN_PEU');
@@ -3059,16 +3061,92 @@ function processGrow(){
   const pR=parseGrow(document.getElementById('growPeu')?.value||'','Peugeot');
   const cR=parseGrow(document.getElementById('growCit')?.value||'','Citroën');
   const all=[...pR,...cR];
-  _growRecords = all; // salvar para re-renderizar após cache carregar
+  _growRecords = all;
+  atualizarKpisGrow(all);
+  renderGrow(all);
+  // Salvar no Firebase para persistir entre recarregamentos e sincronizar
+  if(window._fbSet && all.length>0){
+    const obj={};
+    all.forEach(function(r,i){obj['caso_'+i]={...r};});
+    obj._timestamp = Date.now();
+    obj._textosPeu = document.getElementById('growPeu')?.value||'';
+    obj._textosCit = document.getElementById('growCit')?.value||'';
+    window._fbSet('qualis_grow_casos', obj).catch(function(){});
+  }
+}
+
+function atualizarKpisGrow(all){
   setText('gTotal',all.length);
   setText('gOpen',all.filter(r=>r.status.toLowerCase().includes('aberto')).length);
   setText('gOver30',all.filter(r=>r.aging>30).length);
   setText('gReserve',all.filter(r=>(r.motivo1+r.motivo2).toLowerCase().includes('reserva')).length);
-  setText('gPeu',pR.length);
-  setText('gCit',cR.length);
-  renderGrow(all);
+  setText('gPeu',all.filter(r=>r.marca==='Peugeot').length);
+  setText('gCit',all.filter(r=>r.marca==='Citroën').length);
 }
-function parseGrow(raw,marca){if(!raw.trim())return[];const ignored=new Set(['número do item','número do caso','status','data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2','chassi completo','conta nome','prioridade','responsável_nome','regional description','caoss grow customer care peugeot','casos grow customer care peugeot','casos grow customer care citroën','casos grow customer care citroen','sort','ação']);const lines=raw.split('\n').map(x=>x.trim()).filter(x=>x&&!ignored.has(x.toLowerCase()));const records=[];const isCaso=v=>/^\d{7,9}$/.test(v);const isStatus=v=>['aberto','fechado','encerrado'].includes(v.toLowerCase());const isDate=v=>/^\d{2}\/\d{2}\/\d{4}/.test(v);let i=0;while(i<lines.length){if(!isCaso(lines[i])){i++;continue;}const start=i;const caso=lines[i++]||'',status=lines[i++]||'',data=lines[i++]||'';const canal=lines[i++]||'',motivo1=lines[i++]||'',motivo2=lines[i++]||'';const chassi=lines[i++]||'',cliente=lines[i++]||'',prioridade=lines[i++]||'';const responsavel=lines[i++]||'',regional=lines[i++]||'';if(!isCaso(caso)||!isStatus(status)||!isDate(data)){i=start+1;continue;}const m=data.match(/(\d{2})\/(\d{2})\/(\d{4})/);const aging=m?Math.max(0,Math.floor((Date.now()-new Date(+m[3],+m[2]-1,+m[1]))/86400000)):0;records.push({marca,caso,status,data,canal,motivo1,motivo2,chassi,cliente,prioridade,responsavel,regional,aging});}return records;}
+
+async function carregarGrowDoFirebase(){
+  if(!window._fbGet) return;
+  try{
+    const snap = await window._fbGet('qualis_grow_casos');
+    const dados = snap.val();
+    if(!dados) return;
+    // Restaurar textos nos textareas
+    if(dados._textosPeu){const el=document.getElementById('growPeu');if(el)el.value=dados._textosPeu;}
+    if(dados._textosCit){const el=document.getElementById('growCit');if(el)el.value=dados._textosCit;}
+    // Restaurar casos
+    const casos = Object.keys(dados)
+      .filter(k=>k.startsWith('caso_'))
+      .sort()
+      .map(k=>dados[k])
+      .filter(r=>r&&r.caso);
+    if(casos.length>0){
+      _growRecords = casos;
+      await loadGrowConsultorCache();
+      atualizarKpisGrow(casos);
+      renderGrow(casos);
+    }
+  }catch(e){console.warn('Erro ao carregar Grow:', e);}
+}
+function parseGrow(raw,marca){
+  if(!raw.trim())return[];
+  const ignored=new Set(['número do item','número do caso','status','data/hora de abertura','canal de entrada','motivo de contato 1','motivo de contato 2','chassi completo','conta nome','prioridade','responsável_nome','regional description','caoss grow customer care peugeot','casos grow customer care peugeot','casos grow customer care citroën','casos grow customer care citroen','sort','ação','casos grow customer care']);
+  const lines=raw.split('\n').map(x=>x.trim()).filter(x=>x&&!ignored.has(x.toLowerCase()));
+  const records=[];
+  const isCaso=v=>/^\d{7,9}$/.test(v);
+  const isStatus=v=>['aberto','fechado','encerrado'].includes(v.toLowerCase());
+  const isDate=v=>/^\d{2}\/\d{2}\/\d{4}/.test(v);
+
+  // Encontrar todos os índices de início de caso
+  const starts=[];
+  for(let i=0;i<lines.length;i++){
+    if(isCaso(lines[i]) && i+2<lines.length && isStatus(lines[i+1]) && isDate(lines[i+2])){
+      starts.push(i);
+    }
+  }
+
+  // Para cada caso, pegar os campos até o próximo caso
+  for(let s=0;s<starts.length;s++){
+    const i=starts[s];
+    const next=starts[s+1]||lines.length;
+    const chunk=lines.slice(i,Math.min(i+11,next));
+    const caso=chunk[0]||'';
+    const status=chunk[1]||'';
+    const data=chunk[2]||'';
+    const canal=chunk[3]||'';
+    const motivo1=chunk[4]||'';
+    const motivo2=chunk[5]||'';
+    const chassi=chunk[6]||'';
+    const cliente=chunk[7]||'';
+    const prioridade=chunk[8]||'';
+    const responsavel=chunk[9]||'';
+    const regional=chunk[10]||'';
+    const m=data.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    const aging=m?Math.max(0,Math.floor((Date.now()-new Date(+m[3],+m[2]-1,+m[1]))/86400000)):0;
+    records.push({marca,caso,status,data,canal,motivo1,motivo2,chassi,cliente,prioridade,responsavel,regional,aging});
+  }
+  console.log('parseGrow '+marca+': '+records.length+' casos encontrados de '+lines.length+' linhas');
+  return records;
+}
 function agingChip(a){const n=Number(a)||0;if(n>30)return `<span class="chip chip-red">${n}d</span>`;if(n>=15)return `<span class="chip chip-amber">${n}d</span>`;return `<span class="chip chip-green">${n}d</span>`;}
 function priChip(v){const s=String(v||'').toLowerCase();if(s.includes('urgente'))return '<span class="chip chip-red">Urgente</span>';if(s.includes('alto'))return '<span class="chip chip-amber">Alto</span>';return '<span class="chip chip-green">Normal</span>';}
 function brandChip(m){return m==='Peugeot'?'<span class="chip chip-blue">Peugeot</span>':'<span class="chip chip-purple">Citroën</span>';}
@@ -3084,7 +3162,12 @@ async function loadGrowConsultorCache(){
     if(_growRecords && _growRecords.length) renderGrow(_growRecords);
   }catch(e){}
 }
-async function saveGrowConsultor(caso,consultor){growConsultorCache[caso]=consultor;if(window._fbSet){try{await window._fbSet('qualis_grow_consultores/'+caso.replace(/[^a-zA-Z0-9]/g,'_'),consultor);}catch(e){}}}
+async function saveGrowConsultor(caso,consultor){
+  growConsultorCache[caso]=consultor;
+  if(window._fbSet){
+    window._fbSet('qualis_grow_consultores/'+caso.replace(/[^a-zA-Z0-9]/g,'_'),consultor).catch(function(){});
+  }
+}
 function renderGrow(records){const tb=document.getElementById('growBody');if(!tb)return;if(!records.length){tb.innerHTML='<tr><td colspan="14" class="empty">Nenhum caso.</td></tr>';return;}const consultores=equipeGlobal.consultores.length?equipeGlobal.consultores:['Kamilly','Letícia','Laís'];tb.innerHTML=records.map(r=>{const currentCons=growConsultorCache[r.caso]||'';const opts=['',...consultores].map(n=>`<option value="${esc(n)}" ${n===currentCons?'selected':''}>${n||'— Selecionar —'}</option>`).join('');return `<tr><td>${brandChip(r.marca)}</td><td><strong>${esc(r.caso)}</strong></td><td>${stsChip(r.status)}</td><td>${esc(r.data)}</td><td>${esc(r.canal)}</td><td>${esc(r.motivo1)}</td><td>${esc(r.motivo2)}</td><td>${esc(r.chassi)}</td><td>${esc(r.cliente)}</td><td>${priChip(r.prioridade)}</td><td>${esc(r.responsavel)}</td><td>${esc(r.regional)}</td><td>${agingChip(r.aging)}</td><td><select onchange="saveGrowConsultor('${r.caso}',this.value)" style="width:130px;padding:5px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);font-size:12px;">${opts}</select></td></tr>`;}).join('');}
 function loadGrowEx(brand){if(brand==='peugeot')document.getElementById('growPeu').value=`15725953\nAberto\n05/11/2025 15:15\nTelefone\nVeículo Reserva\nVeículo na concessionária\n8ADUAFCA1SG576844\nTHICIANE ARAUJO CHAVES\nUrgente\nPâmela Souza Lopes\nNNE - NORDESTE`;else document.getElementById('growCit').value=`16316483\nAberto\n11/03/2026 09:10\nWhatsApp\nCampanha Recall\nBaixa Detração\n9V7VBBHXGLA001448\nEMILIO CAVALCANTE\nUrgente\nPâmela Souza Lopes\nNNE - NORDESTE`;processGrow();}
 function clearGrow(){document.getElementById('growPeu').value='';document.getElementById('growCit').value='';processGrow();}
