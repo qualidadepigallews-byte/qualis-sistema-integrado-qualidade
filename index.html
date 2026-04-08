@@ -1770,19 +1770,11 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   <!-- Amostra -->
                   <div style="padding:20px 16px;border-right:1px solid #e5e7eb;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Amostra de Pesquisas</div>
-                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Pesquisáveis</div>
-                    <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:8px;">
-                      <div>
-                        <div style="font-size:10px;color:#888;margin-bottom:2px;">✨ Citroën</div>
-                        <div id="exec-amostra-cit" style="font-size:30px;font-weight:900;color:#7c3aed;">—</div>
-                      </div>
-                      <div>
-                        <div style="font-size:10px;color:#888;margin-bottom:2px;">🚗 Peugeot</div>
-                        <div id="exec-amostra-peu-cross" style="font-size:30px;font-weight:900;color:#2563eb;">—</div>
-                      </div>
+                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:6px;">Com pesquisa no e-mail</div>
+                    <div id="exec-amostra-cit" style="font-size:36px;font-weight:900;color:#1a1a2e;">—</div>
+                    <div style="margin-top:10px;">
+                      <div style="font-size:12px;color:#555;margin-bottom:3px;">VÃO RECEBER: <strong id="exec-vaorec-cit">—</strong></div>
                     </div>
-                    <div style="font-size:11px;color:#888;margin-bottom:8px;">podem ainda responder</div>
-                    <div style="font-size:12px;color:#555;">VÃO RECEBER: <strong id="exec-vaorec-cit">—</strong></div>
                   </div>
                   <!-- Barra NPS -->
                   <div style="padding:20px 16px;">
@@ -1811,19 +1803,11 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   </div>
                   <div style="padding:20px 16px;border-right:1px solid #e5e7eb;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Amostra de Pesquisas</div>
-                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Pesquisáveis</div>
-                    <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:8px;">
-                      <div>
-                        <div style="font-size:10px;color:#888;margin-bottom:2px;">🚗 Peugeot</div>
-                        <div id="exec-amostra-peu" style="font-size:30px;font-weight:900;color:#2563eb;">—</div>
-                      </div>
-                      <div>
-                        <div style="font-size:10px;color:#888;margin-bottom:2px;">✨ Citroën</div>
-                        <div id="exec-amostra-cit-cross" style="font-size:30px;font-weight:900;color:#7c3aed;">—</div>
-                      </div>
+                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:6px;">Com pesquisa no e-mail</div>
+                    <div id="exec-amostra-peu" style="font-size:36px;font-weight:900;color:#1a1a2e;">—</div>
+                    <div style="margin-top:10px;">
+                      <div style="font-size:12px;color:#555;margin-bottom:3px;">VÃO RECEBER: <strong id="exec-vaorec-peu">—</strong></div>
                     </div>
-                    <div style="font-size:11px;color:#888;margin-bottom:8px;">podem ainda responder</div>
-                    <div style="font-size:12px;color:#555;">VÃO RECEBER: <strong id="exec-vaorec-peu">—</strong></div>
                   </div>
                   <div style="padding:20px 16px;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:12px;">Distribuição</div>
@@ -4875,8 +4859,13 @@ async function salvarEntradaTratativa(){
 
 /* ════ PAINEL EXECUTIVO ════ */
 function renderPainelExecutivo(){
-  const posPeu = baseCache.POS_PEU || [];
-  const posCit = baseCache.POS_CIT || [];
+  // Recalcular status em tempo real para garantir dados corretos
+  const posPeu = (baseCache.POS_PEU || []).map(function(r){
+    return Object.assign({},r,{STATUS:calcStatus(r.NOTA_NPS,r.DATA_CONVITE)});
+  });
+  const posCit = (baseCache.POS_CIT || []).map(function(r){
+    return Object.assign({},r,{STATUS:calcStatus(r.NOTA_NPS,r.DATA_CONVITE)});
+  });
 
   function calcNpsArr(arr){
     const p=arr.filter(r=>r.STATUS==='PROMOTOR').length;
@@ -4939,11 +4928,6 @@ function renderPainelExecutivo(){
   document.getElementById('exec-det-cit').textContent = cit.d;
   document.getElementById('exec-amostra-cit').textContent = citPesq;
   document.getElementById('exec-vaorec-cit').textContent = citRec;
-  // Cross reference nos dois cards
-  var cpCross = document.getElementById('exec-amostra-peu-cross');
-  if(cpCross) cpCross.textContent = peuPesq;
-  var ccCross = document.getElementById('exec-amostra-cit-cross');
-  if(ccCross) ccCross.textContent = citPesq;
   document.getElementById('exec-barra-cit').innerHTML = barraDistribuicao(cit.p,cit.n,cit.d);
 
   // Alerta meta Citroën
@@ -5017,15 +5001,19 @@ async function imprimirPainelExecutivo(){
 function toggleTheme(){
   var isLight = document.body.classList.toggle('light-mode');
   localStorage.setItem('q-theme', isLight ? 'light' : 'dark');
-  document.getElementById('btn-theme').textContent = isLight ? '☀️' : '🌙';
+  var btn = document.getElementById('btn-theme');
+  if(btn) btn.textContent = isLight ? '☀️' : '🌙';
 }
 function carregarTema(){
   var saved = localStorage.getItem('q-theme');
   if(saved === 'light'){
     document.body.classList.add('light-mode');
-    var btn = document.getElementById('btn-theme');
-    if(btn) btn.textContent = '☀️';
   }
+  // Atualizar ícone sempre que possível
+  setTimeout(function(){
+    var btn = document.getElementById('btn-theme');
+    if(btn) btn.textContent = document.body.classList.contains('light-mode') ? '☀️' : '🌙';
+  }, 100);
 }
 
 window.addEventListener('DOMContentLoaded',()=>{
