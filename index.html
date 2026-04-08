@@ -993,6 +993,7 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
     </div>
 
     <div class="topnav-right">
+      <button id="btn-theme" onclick="toggleTheme()" title="Alternar tema" style="background:none;border:1px solid var(--q-border);color:rgba(255,255,255,.5);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:15px;transition:all .2s;" onmouseover="this.style.borderColor='rgba(59,130,246,.5)'" onmouseout="this.style.borderColor='var(--q-border)'">🌙</button>
       <div class="topnav-user">
         <div class="topnav-user-name" id="sbName">—</div>
         <div class="topnav-user-role" id="sbRole">—</div>
@@ -1769,12 +1770,19 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   <!-- Amostra -->
                   <div style="padding:20px 16px;border-right:1px solid #e5e7eb;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Amostra de Pesquisas</div>
-                    <div style="font-size:13px;color:#333;margin-bottom:6px;">COM PESQUISA NO E-MAIL</div>
-                    <div id="exec-amostra-cit" style="font-size:36px;font-weight:900;color:#1a1a2e;">—</div>
-                    <div style="margin-top:10px;">
-                      <div style="font-size:12px;color:#555;margin-bottom:3px;">VÃO RECEBER: <strong id="exec-vaorec-cit">—</strong></div>
-                      <div style="font-size:12px;color:#999;">EXPIRADOS: <strong id="exec-exp-cit">—</strong></div>
+                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Pesquisáveis</div>
+                    <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:8px;">
+                      <div>
+                        <div style="font-size:10px;color:#888;margin-bottom:2px;">✨ Citroën</div>
+                        <div id="exec-amostra-cit" style="font-size:30px;font-weight:900;color:#7c3aed;">—</div>
+                      </div>
+                      <div>
+                        <div style="font-size:10px;color:#888;margin-bottom:2px;">🚗 Peugeot</div>
+                        <div id="exec-amostra-peu-cross" style="font-size:30px;font-weight:900;color:#2563eb;">—</div>
+                      </div>
                     </div>
+                    <div style="font-size:11px;color:#888;margin-bottom:8px;">podem ainda responder</div>
+                    <div style="font-size:12px;color:#555;">VÃO RECEBER: <strong id="exec-vaorec-cit">—</strong></div>
                   </div>
                   <!-- Barra NPS -->
                   <div style="padding:20px 16px;">
@@ -1803,12 +1811,19 @@ tfoot td{background:var(--surface2);font-weight:700;border-top:1px solid var(--b
                   </div>
                   <div style="padding:20px 16px;border-right:1px solid #e5e7eb;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Amostra de Pesquisas</div>
-                    <div style="font-size:13px;color:#333;margin-bottom:6px;">COM PESQUISA NO E-MAIL</div>
-                    <div id="exec-amostra-peu" style="font-size:36px;font-weight:900;color:#1a1a2e;">—</div>
-                    <div style="margin-top:10px;">
-                      <div style="font-size:12px;color:#555;margin-bottom:3px;">VÃO RECEBER: <strong id="exec-vaorec-peu">—</strong></div>
-                      <div style="font-size:12px;color:#999;">EXPIRADOS: <strong id="exec-exp-peu">—</strong></div>
+                    <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:8px;">Pesquisáveis</div>
+                    <div style="display:flex;gap:12px;align-items:flex-end;margin-bottom:8px;">
+                      <div>
+                        <div style="font-size:10px;color:#888;margin-bottom:2px;">🚗 Peugeot</div>
+                        <div id="exec-amostra-peu" style="font-size:30px;font-weight:900;color:#2563eb;">—</div>
+                      </div>
+                      <div>
+                        <div style="font-size:10px;color:#888;margin-bottom:2px;">✨ Citroën</div>
+                        <div id="exec-amostra-cit-cross" style="font-size:30px;font-weight:900;color:#7c3aed;">—</div>
+                      </div>
                     </div>
+                    <div style="font-size:11px;color:#888;margin-bottom:8px;">podem ainda responder</div>
+                    <div style="font-size:12px;color:#555;">VÃO RECEBER: <strong id="exec-vaorec-peu">—</strong></div>
                   </div>
                   <div style="padding:20px 16px;">
                     <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;margin-bottom:12px;">Distribuição</div>
@@ -4868,7 +4883,9 @@ function renderPainelExecutivo(){
     const d=arr.filter(r=>r.STATUS==='DETRATOR').length;
     const n=arr.filter(r=>r.STATUS==='NEUTRO').length;
     const t=p+d+n;
-    return {p,d,n,t, nps: t>0?Math.round((p-d)/t*100):null};
+    const npsRaw = t>0?((p-d)/t*100):null;
+    const nps = npsRaw!==null ? Math.round(npsRaw*10)/10 : null; // 1 casa decimal
+    return {p,d,n,t, nps};
   }
 
   function barraDistribuicao(p,n,d){
@@ -4910,19 +4927,23 @@ function renderPainelExecutivo(){
 
   // CITROËN
   const cit = calcNpsArr(posCit);
-  const citExp = posCit.filter(r=>r.STATUS==='EXPIRADO'||calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='EXPIRADO').length;
-  const citRec = posCit.filter(r=>r.STATUS==='VAI RECEBER'||calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='VAI RECEBER').length;
-  const citTotal = posCit.length;
+  // Recalcular status em tempo real
+  const citPesq = posCit.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL').length;
+  const citRec  = posCit.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='VAI RECEBER').length;
 
   var npsColor = cit.nps===null?'#999':cit.nps>=meta?'#16a34a':'#dc2626';
-  document.getElementById('exec-nps-cit').textContent = cit.nps!==null?cit.nps+'%':'—';
+  document.getElementById('exec-nps-cit').textContent = cit.nps!==null?String(cit.nps).replace('.',',')+'%':'—';
   document.getElementById('exec-nps-cit').style.color = npsColor;
   document.getElementById('exec-prom-cit').textContent = cit.p;
   document.getElementById('exec-neu-cit').textContent = cit.n;
   document.getElementById('exec-det-cit').textContent = cit.d;
-  document.getElementById('exec-amostra-cit').textContent = cit.t;
+  document.getElementById('exec-amostra-cit').textContent = citPesq;
   document.getElementById('exec-vaorec-cit').textContent = citRec;
-  document.getElementById('exec-exp-cit').textContent = citExp;
+  // Cross reference nos dois cards
+  var cpCross = document.getElementById('exec-amostra-peu-cross');
+  if(cpCross) cpCross.textContent = peuPesq;
+  var ccCross = document.getElementById('exec-amostra-cit-cross');
+  if(ccCross) ccCross.textContent = citPesq;
   document.getElementById('exec-barra-cit').innerHTML = barraDistribuicao(cit.p,cit.n,cit.d);
 
   // Alerta meta Citroën
@@ -4939,18 +4960,17 @@ function renderPainelExecutivo(){
 
   // PEUGEOT
   const peu = calcNpsArr(posPeu);
-  const peuExp = posPeu.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='EXPIRADO').length;
-  const peuRec = posPeu.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='VAI RECEBER').length;
+  const peuPesq = posPeu.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL').length;
+  const peuRec  = posPeu.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='VAI RECEBER').length;
 
   var npsColorP = peu.nps===null?'#999':peu.nps>=meta?'#16a34a':'#dc2626';
-  document.getElementById('exec-nps-peu').textContent = peu.nps!==null?peu.nps+'%':'—';
+  document.getElementById('exec-nps-peu').textContent = peu.nps!==null?String(peu.nps).replace('.',',')+'%':'—';
   document.getElementById('exec-nps-peu').style.color = npsColorP;
   document.getElementById('exec-prom-peu').textContent = peu.p;
   document.getElementById('exec-neu-peu').textContent = peu.n;
   document.getElementById('exec-det-peu').textContent = peu.d;
-  document.getElementById('exec-amostra-peu').textContent = peu.t;
+  document.getElementById('exec-amostra-peu').textContent = peuPesq;
   document.getElementById('exec-vaorec-peu').textContent = peuRec;
-  document.getElementById('exec-exp-peu').textContent = peuExp;
   document.getElementById('exec-barra-peu').innerHTML = barraDistribuicao(peu.p,peu.n,peu.d);
 
   var alertaPeu = document.getElementById('exec-alerta-peu');
@@ -4989,6 +5009,22 @@ async function imprimirPainelExecutivo(){
     };
   }catch(e){
     alert('Erro ao gerar imagem: '+e.message);
+  }
+}
+
+
+/* ════ TEMA CLARO/ESCURO ════ */
+function toggleTheme(){
+  var isLight = document.body.classList.toggle('light-mode');
+  localStorage.setItem('q-theme', isLight ? 'light' : 'dark');
+  document.getElementById('btn-theme').textContent = isLight ? '☀️' : '🌙';
+}
+function carregarTema(){
+  var saved = localStorage.getItem('q-theme');
+  if(saved === 'light'){
+    document.body.classList.add('light-mode');
+    var btn = document.getElementById('btn-theme');
+    if(btn) btn.textContent = '☀️';
   }
 }
 
