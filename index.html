@@ -4680,31 +4680,6 @@ function exportarRelatorio(){
 </div>
 
 
-<!-- Modal Adicionar Clientes -->
-<div id="modalAdicionarClientes" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:16px;font-weight:800;color:var(--text);" id="modalAddTitulo">Adicionar Clientes</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:3px;">Clientes existentes são mantidos. Novos VINs são adicionados.</div>
-      </div>
-      <button onclick="fecharModalAdicionar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:24px;">
-      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;">
-        Duplicatas detectadas pelo VIN — clientes já existentes são ignorados automaticamente.
-      </div>
-      <textarea id="pasteAdicionar" rows="10"
-        style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:var(--mono);"
-        placeholder="VIN;Cliente;Email;Telefone;Data Convite;Consultor&#10;Cole apenas os novos clientes aqui..."></textarea>
-      <div id="addPreview" style="margin-top:10px;font-size:13px;color:var(--muted);font-weight:500;"></div>
-      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
-        <button onclick="fecharModalAdicionar()" class="btn ghost">Cancelar</button>
-        <button onclick="confirmarAdicionar()" class="btn primary">Adicionar à base</button>
-      </div>
-    </div>
-  </div>
-</div>
 </body></html>`;
 
   const w=window.open('','_blank');
@@ -6257,6 +6232,33 @@ setTimeout(function(){
   }
 }, 200);
 </script>
+
+<!-- Modal Adicionar Clientes -->
+<div id="modalAdicionarClientes" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);" id="modalAddTitulo">Adicionar Clientes</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px;">Clientes existentes são mantidos. Novos VINs são adicionados.</div>
+      </div>
+      <button onclick="fecharModalAdicionar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;">
+        Duplicatas detectadas pelo VIN — clientes já existentes são ignorados automaticamente.
+      </div>
+      <textarea id="pasteAdicionar" rows="10"
+        style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:var(--mono);"
+        placeholder="VIN;Cliente;Email;Telefone;Data Convite;Consultor&#10;Cole apenas os novos clientes aqui..."></textarea>
+      <div id="addPreview" style="margin-top:10px;font-size:13px;color:var(--muted);font-weight:500;"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+        <button onclick="fecharModalAdicionar()" class="btn ghost">Cancelar</button>
+        <button onclick="confirmarAdicionar()" class="btn primary">Adicionar à base</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
