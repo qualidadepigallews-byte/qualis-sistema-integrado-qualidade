@@ -173,10 +173,15 @@ button, input, select, textarea { font-family: inherit; }
 
 /* ══ APP LAYOUT ══ */
 #app {
-  display: none; height: 100vh; overflow: hidden;
+  display: none;
   flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
-#app.visible { display: flex; }
+#app.visible {
+  display: flex !important;
+}
 
 /* ══ SIDEBAR ══ */
 .sidebar {
@@ -280,7 +285,7 @@ button, input, select, textarea { font-family: inherit; }
 .sb-toggle-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
 
 /* ══ MAIN BODY ══ */
-.app-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+.app-body { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); height: 100%; }
 
 /* ══ TOPBAR ══ */
 .topbar {
@@ -305,7 +310,7 @@ button, input, select, textarea { font-family: inherit; }
 .topbar-btn:hover { border-color: var(--orange); color: var(--orange); }
 .notif-badge {
   position: absolute; top: -3px; right: -3px;
-  background: var(--red); color: #fff;
+  background: #ef4444; color: #fff;
   font-size: 9px; font-weight: 800;
   width: 15px; height: 15px; border-radius: 99px;
   display: flex; align-items: center; justify-content: center;
@@ -314,13 +319,13 @@ button, input, select, textarea { font-family: inherit; }
 .topbar-logout {
   padding: 0 14px; height: 36px; border-radius: 9px;
   background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.15);
-  color: var(--red); font-size: 13px; font-weight: 600;
+  color: #ef4444; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: all .15s;
 }
 .topbar-logout:hover { background: rgba(239,68,68,.14); }
 
 /* ══ CONTENT ══ */
-.content-area { flex: 1; overflow-y: auto; padding: 28px; background: var(--bg); }
+.content-area { flex: 1; min-height: 0; overflow-y: auto; padding: 28px; background: var(--bg); display: block; }
 .page { display: none; animation: fadeUp .22s ease both; }
 .page.active { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -328,8 +333,8 @@ button, input, select, textarea { font-family: inherit; }
 /* ══ SECTION HEADER (configs e outras) ══ */
 .section-header {
   display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 24px; padding-bottom: 16px;
-  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
 }
 .section-header h2 { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: -.4px; }
 .section-header p { font-size: 13px; color: var(--muted); margin-top: 3px; }
@@ -370,6 +375,7 @@ button, input, select, textarea { font-family: inherit; }
   border-radius: var(--r); padding: 22px;
   box-shadow: var(--shadow-sm);
   transition: box-shadow .2s;
+  overflow: visible;
 }
 .card-white:hover, .card:hover { box-shadow: var(--shadow); }
 .card-title {
@@ -527,7 +533,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
   border: 1px solid var(--border);
 }
 .btn.ghost:hover { border-color: var(--orange); color: var(--orange); }
-.btn.danger { background: rgba(239,68,68,.08); color: var(--red); border: 1px solid rgba(239,68,68,.15); }
+.btn.danger { background: rgba(239,68,68,.08); color: #ef4444; border: 1px solid rgba(239,68,68,.15); }
 .btn.danger:hover { background: rgba(239,68,68,.14); }
 .btn.success { background: linear-gradient(135deg,#10b981,#059669); color: #fff; }
 .btn-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
@@ -695,8 +701,20 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 .sc-hist-badges { display: flex; gap: 6px; }
 
 /* ══ GROW ══ */
-.grow-stats { margin-bottom: 16px; }
-.grow-inputs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.grow-stats {
+  display: grid; grid-template-columns: repeat(6,1fr);
+  gap: 12px; margin-bottom: 20px;
+}
+.grow-stat {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px; text-align: center;
+}
+.g-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin-bottom: 8px; }
+.g-val { font-size: 28px; font-weight: 900; color: var(--text); letter-spacing: -1px; }
+.grow-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.grow-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.grow-box h3 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.grow-box textarea { width: 100%; min-height: 100px; resize: vertical; border: 1px solid var(--border); border-radius: 8px; background: var(--surface2); color: var(--text); padding: 10px; font-size: 12px; font-family: var(--mono); outline: none; }
 
 /* ══ TREINAMENTOS ══ */
 .tr-filter-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
@@ -739,6 +757,11 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 .react-btn span { font-size: 11px; font-weight: 700; margin-left: 4px; }
 .sc-history { display: flex; flex-direction: column; gap: 6px; }
 .sc-comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+
+/* ══ PAGE HEADER legado ══ */
+.page-header { margin-bottom: 20px; }
+.page-title { font-size: 22px; font-weight: 900; color: var(--text); letter-spacing: -.4px; margin-bottom: 4px; }
+.page-sub { font-size: 13px; color: var(--muted); line-height: 1.6; }
 </style>
 </head>
 <body>
@@ -921,11 +944,6 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
     <!-- CONTENT -->
     <div class="content-area" id="contentArea">
 
-
-
-
-  <!-- CONTENT -->
-
         <!-- ══ INÍCIO ══ -->
         <div class="page active" id="pg-inicio">
 
@@ -942,6 +960,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
                 <span id="cd-dias" style="font-size:36px;font-weight:900;letter-spacing:-2px;color:#f97316;">—</span>
                 <span style="font-size:13px;opacity:.7;">dias</span>
               </div>
+              <div id="cd-horas" style="font-size:13px;font-weight:600;color:rgba(255,255,255,.5);margin-top:2px;text-align:center;">00h 00min</div>
               <div style="font-size:11px;opacity:.55;margin-top:4px;" id="cd-data-fim">para o fim do trimestre</div>
             </div>
           </div>
@@ -979,48 +998,11 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 
           </div>
 
-          <!-- Linha 2: KPIs operacionais -->
-          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:20px;">
-            <div style="background:#fff;border-radius:14px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#10b981;margin-bottom:10px;">Promotoras Pós</div>
-              <div id="h-prom-pos" style="font-size:32px;font-weight:900;color:#0f172a;letter-spacing:-1px;">—</div>
-            </div>
-            <div style="background:#fff;border-radius:14px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#3b82f6;margin-bottom:10px;">Promotoras Vendas</div>
-              <div id="h-prom-ven" style="font-size:32px;font-weight:900;color:#0f172a;letter-spacing:-1px;">—</div>
-            </div>
-            <div style="background:#fff;border-radius:14px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#f59e0b;margin-bottom:10px;">Pesquisáveis Pós</div>
-              <div id="h-pesq-pos" style="font-size:32px;font-weight:900;color:#0f172a;letter-spacing:-1px;">—</div>
-            </div>
-            <div style="background:#fff;border-radius:14px;padding:16px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b5cf6;margin-bottom:10px;">Pesquisáveis Vendas</div>
-              <div id="h-pesq-ven" style="font-size:32px;font-weight:900;color:#0f172a;letter-spacing:-1px;">—</div>
-            </div>
-            <div style="background:#fef2f2;border-radius:14px;padding:16px;border:1px solid #fecaca;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#ef4444;margin-bottom:10px;">Hot Alerts</div>
-              <div id="h-hot" style="font-size:32px;font-weight:900;color:#ef4444;letter-spacing:-1px;">—</div>
-            </div>
-            <div style="background:#fff7ed;border-radius:14px;padding:16px;border:1px solid #fed7aa;box-shadow:0 1px 4px rgba(0,0,0,.05);">
-              <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#f97316;margin-bottom:10px;">Treinamentos</div>
-              <div id="h-trein" style="font-size:32px;font-weight:900;color:#f97316;letter-spacing:-1px;">—</div>
-            </div>
-          </div>
+
 
           <!-- IDs ocultos para compatibilidade -->
           <span id="h-prom" style="display:none;"></span>
           <span id="h-pesq" style="display:none;"></span>
-
-          <!-- Próximos eventos Google Agenda -->
-          <div class="card" style="margin-bottom:16px;" id="h-agenda-card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-              <div class="card-title" style="margin:0;">Próximos Eventos</div>
-              <button onclick="conectarGoogleAgenda()" style="font-size:11px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:4px 10px;cursor:pointer;color:var(--muted);">Conectar Agenda</button>
-            </div>
-            <div id="h-agenda-eventos" style="font-size:13px;color:var(--muted);">
-              <div style="color:var(--muted);font-size:13px;">Conecte sua agenda Google para ver os próximos eventos aqui.</div>
-            </div>
-          </div>
 
           <!-- Mural de Avisos + Aniversariantes -->
           <div class="grid-2" style="margin-bottom:16px;">
@@ -1046,11 +1028,16 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               </div>
             </div>
           </div>
+
+          
+          </div>
+
+          
         </div>
 
         <!-- ══ VENDAS ══ -->
         <div class="page" id="pg-vendas">
-          <div class="section-header"><div><h2>Vendas</h2><p>NPS, base de clientes, hot alerts e ranking</p></div></div>
+          <div class="ph" style="margin-bottom:16px;"><div class="ph-left"><h1>Vendas</h1><p>NPS, base de clientes, hot alerts e ranking</p></div></div>
           <div class="subnav">
             <button class="subnav-btn active" onclick="openSub('vendas','v-painel',this)">Painel</button>
             <button class="subnav-btn" onclick="openSub('vendas','v-peugeot',this);loadBase('VEN_PEU')">Base Peugeot</button>
@@ -1082,28 +1069,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
   </div>
 
   <!-- Linha 1: 4 stat cards rápidos -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
-    <div style="background:#fff;border-radius:16px;padding:20px;border-left:4px solid #10b981;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#10b981;margin-bottom:10px;">Promotoras</div>
-      <div id="venPeuPromT" style="font-size:38px;font-weight:900;color:#0f172a;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#fff;border-radius:16px;padding:20px;border-left:4px solid #f59e0b;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#f59e0b;margin-bottom:10px;">Neutras</div>
-      <div id="venPeuNeutT" style="font-size:38px;font-weight:900;color:#0f172a;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#fef2f2;border-radius:16px;padding:20px;border-left:4px solid #ef4444;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#ef4444;margin-bottom:10px;">Detratoras</div>
-      <div id="venPeuDetT" style="font-size:38px;font-weight:900;color:#ef4444;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#f0f9ff;border-radius:16px;padding:20px;border-left:4px solid #0ea5e9;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#0ea5e9;margin-bottom:10px;">NPS do Período</div>
-      <div id="venNpsPer" style="font-size:38px;font-weight:900;color:#0ea5e9;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-  </div>
+  <span id="venPeuPromT" style="display:none"></span><span id="venPeuNeutT" style="display:none"></span><span id="venPeuDetT" style="display:none"></span><span id="venNpsPer" style="display:none"></span>
 
   <!-- Linha 2: Cards Peugeot e Citroën lado a lado — estilo executivo -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
@@ -1206,20 +1172,20 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 </div>
 <div class="subpage" id="v-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pasteVenPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_PEU')" style="color:#ef4444;border-color:#ef4444;">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_PEU')">Excel</button>
               <button class="btn primary" onclick="importBase('VEN_PEU','pasteVenPeu')">Importar</button>
-              <button class="btn ghost" onclick="abrirModalAdicionar('VEN_PEU')" style="border-color:var(--q-teal);color:var(--q-teal);" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
+              <button class="btn ghost" onclick="abrirModalAdicionar('VEN_PEU')" style="border-color:#10b981;color:#10b981;" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_PEU" onchange="renderBase('VEN_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_PEU" oninput="renderBase('VEN_PEU')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tb_VEN_PEU"><tr><td colspan="8" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="v-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pasteVenCit" placeholder="Cole os dados aqui..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pasteVenCit" placeholder="Cole os dados aqui..."></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('VEN_CIT')" style="color:#ef4444;border-color:#ef4444;">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('VEN_CIT')">Excel</button>
               <button class="btn primary" onclick="importBase('VEN_CIT','pasteVenCit')">Importar</button>
-              <button class="btn ghost" onclick="abrirModalAdicionar('VEN_CIT')" style="border-color:var(--q-teal);color:var(--q-teal);" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
+              <button class="btn ghost" onclick="abrirModalAdicionar('VEN_CIT')" style="border-color:#10b981;color:#10b981;" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsVEN_CIT" onchange="renderBase('VEN_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqVEN_CIT" oninput="renderBase('VEN_CIT')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tb_VEN_CIT"><tr><td colspan="8" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
@@ -1314,28 +1280,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
   </div>
 
   <!-- Stat cards -->
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;">
-    <div style="background:#fff;border-radius:16px;padding:20px;border-left:4px solid #10b981;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#10b981;margin-bottom:10px;">Promotoras</div>
-      <div id="posPeuPromT" style="font-size:38px;font-weight:900;color:#0f172a;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#fff;border-radius:16px;padding:20px;border-left:4px solid #f59e0b;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#f59e0b;margin-bottom:10px;">Neutras</div>
-      <div id="posPeuNeutT" style="font-size:38px;font-weight:900;color:#0f172a;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#fef2f2;border-radius:16px;padding:20px;border-left:4px solid #ef4444;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#ef4444;margin-bottom:10px;">Detratoras</div>
-      <div id="posPeuDetT" style="font-size:38px;font-weight:900;color:#ef4444;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-    <div style="background:#f0f9ff;border-radius:16px;padding:20px;border-left:4px solid #0ea5e9;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#0ea5e9;margin-bottom:10px;">NPS do Período</div>
-      <div id="posNpsPer" style="font-size:38px;font-weight:900;color:#0ea5e9;letter-spacing:-1px;line-height:1;">—</div>
-      <div style="font-size:12px;color:#64748b;margin-top:6px;">Peugeot + Citroën</div>
-    </div>
-  </div>
+  <span id="posPeuPromT" style="display:none"></span><span id="posPeuNeutT" style="display:none"></span><span id="posPeuDetT" style="display:none"></span><span id="posNpsPer" style="display:none"></span>
 
   <!-- Cards Peugeot e Citroën -->
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
@@ -1415,20 +1360,20 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 </div>
 <div class="subpage" id="p-peugeot">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Peugeot</h3><textarea id="pastePosPeu" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_PEU')" style="color:#ef4444;border-color:#ef4444;">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_PEU')">Excel</button>
               <button class="btn primary" onclick="importBase('POS_PEU','pastePosPeu')">Importar</button>
-              <button class="btn ghost" onclick="abrirModalAdicionar('POS_PEU')" style="border-color:var(--q-teal);color:var(--q-teal);" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
+              <button class="btn ghost" onclick="abrirModalAdicionar('POS_PEU')" style="border-color:#10b981;color:#10b981;" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_PEU" onchange="renderBase('POS_PEU')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_PEU" oninput="renderBase('POS_PEU')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tb_POS_PEU"><tr><td colspan="9" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-citroen">
             <div class="import-grid">
-              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:var(--q-red);border-color:var(--q-red);">🗑️ Limpar base</button>
+              <div class="import-box"><h3>Colar base Citroën</h3><textarea id="pastePosCit" placeholder="VIN;Cliente;Email;Telefone;Data Convite;Vendedor&#10;Ex: 935CNFC51SB500365;João Silva;joao@email.com;85999999999;10/03/2026;ADRIANO"></textarea><div class="btn-row"><button class="btn ghost" onclick="limparBase('POS_CIT')" style="color:#ef4444;border-color:#ef4444;">🗑️ Limpar base</button>
               <button class="btn ghost" style="font-size:12px;" onclick="exportarBaseExcel('POS_CIT')">Excel</button>
               <button class="btn primary" onclick="importBase('POS_CIT','pastePosCit')">Importar</button>
-              <button class="btn ghost" onclick="abrirModalAdicionar('POS_CIT')" style="border-color:var(--q-teal);color:var(--q-teal);" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
+              <button class="btn ghost" onclick="abrirModalAdicionar('POS_CIT')" style="border-color:#10b981;color:#10b981;" title="Adiciona clientes sem apagar os existentes">+ Adicionar clientes</button></div></div>
               <div class="import-box"><h3>Filtros</h3><div class="toolbar"><select id="fsPOS_CIT" onchange="renderBase('POS_CIT')"><option value="">Todos</option><option>VAI RECEBER</option><option>PESQUISAVEL</option><option>PROMOTOR</option><option>NEUTRO</option><option>DETRATOR</option><option>EXPIRADO</option></select><input id="fqPOS_CIT" oninput="renderBase('POS_CIT')" placeholder="Buscar..."></div></div>
             </div>
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tb_POS_CIT"><tr><td colspan="9" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
@@ -1514,11 +1459,11 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
           </div>
 
           <!-- Contador regressivo trimestre -->
-          <div class="card" style="margin-bottom:16px;background:var(--g-accent);border:none;">
+          <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
               <div>
                 <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.8);margin-bottom:4px;">⏱️ Countdown do Trimestre Stellantis</div>
-                <div id="countdownTrimestre" style="font-size:28px;font-weight:800;color:#fff;">Calculando...</div>
+                
               </div>
               <div style="text-align:right;">
                 <div id="countdownTrimestreInfo" style="font-size:13px;color:rgba(255,255,255,.85);">—</div>
@@ -1564,7 +1509,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 
             <!-- Peugeot -->
             <div class="card">
-              <div class="card-title" style="color:var(--q-accent);">Simulador Pós-Vendas · Peugeot</div>
+              <div class="card-title" style="color:#f97316;">Simulador Pós-Vendas · Peugeot</div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
                 <div>
                   <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label>
@@ -1617,7 +1562,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               </div>
             </div>
             <div class="card">
-              <div class="card-title" style="color:var(--q-accent);">Simulador Vendas · Peugeot</div>
+              <div class="card-title" style="color:#f97316;">Simulador Vendas · Peugeot</div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
                 <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Promotoras</label><input id="simVPeuProm" type="number" min="0" value="0" oninput="calcSimulador('vpeu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
                 <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Neutras</label><input id="simVPeuNeu" type="number" min="0" value="0" oninput="calcSimulador('vpeu')" style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;font-size:18px;font-weight:700;text-align:center;background:var(--surface2);"></div>
@@ -1669,7 +1614,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
                   <div class="form-field"><label>Fim almoço</label><input type="time" id="trLunchEnd" value="14:00"></div>
                 </div>
                 <div class="card-title" style="margin-top:14px;margin-bottom:10px;">Envio por Gmail</div>
-                <div style="background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;padding:12px 14px;font-size:13px;color:var(--q-teal);margin-bottom:12px;">Integrado com Google Apps Script — e-mails enviados direto pelo seu Gmail com HTML formatado.
+                <div style="background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);border-radius:8px;padding:12px 14px;font-size:13px;color:#10b981;margin-bottom:12px;">Integrado com Google Apps Script — e-mails enviados direto pelo seu Gmail com HTML formatado.
                 </div>
                 <div class="form-grid" style="grid-template-columns:1fr;margin-top:10px;">
                   <div class="form-field"><label>Cc — Gestores (separe por vírgula)</label><input id="trEmailCc" placeholder="gestor1@adtsa.com.br, gestor2@adtsa.com.br"></div>
@@ -1707,7 +1652,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">
                 Conecte seu Gmail nas configurações (acima, aba Base Bruta) e clique em <strong>Enviar para todos</strong>. Cada pessoa recebe um e-mail personalizado com o layout completo.
               </p>
-              <div style="font-size:13px;margin-bottom:12px;padding:10px 13px;border-radius:7px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);color:var(--q-teal);">Integrado com Google Apps Script — clique em Enviar e os e-mails saem direto do seu Gmail.
+              <div style="font-size:13px;margin-bottom:12px;padding:10px 13px;border-radius:7px;background:rgba(13,148,136,.06);border:1px solid rgba(13,148,136,.15);color:#10b981;">Integrado com Google Apps Script — clique em Enviar e os e-mails saem direto do seu Gmail.
               </div>
               <div class="btn-row">
                 <button class="btn primary" onclick="trEnviarTodos()">Enviar para todos os PENDENTES</button>
@@ -1734,11 +1679,17 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 
         <!-- ══ SISTEMAS ══ -->
         <div class="page" id="pg-sistemas">
-          <div class="page-header"><div class="page-title">Sistemas</div><div class="page-sub">Central de acessos, logins e senhas da operação.</div></div>
-          <div class="systems-grid" id="systemsGrid"></div>
-        </div>
-
-        <div class="page" id="pg-inteligencia">
+  <div class="ph">
+    <div class="ph-left">
+      <h1>Sistemas</h1>
+      <p>Logins e senhas da operação</p>
+    </div>
+  </div>
+  <div id="sistemas-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+  <div id="sistemas-empty" style="text-align:center;padding:60px;color:var(--muted);display:none;">
+    Nenhum sistema cadastrado. Configure em Configurações → Sistemas.
+  </div>
+<div class="page" id="pg-inteligencia">
           <div class="section-header"><div><h2>Inteligência CX</h2><p>Insights automáticos e IA com dados reais</p></div></div>
 
           <!-- Insights automáticos -->
@@ -1751,11 +1702,11 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               </div>
               <div style="background:var(--surface2);border-radius:12px;padding:16px;border:1px solid var(--border);">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Consultor em Atenção</div>
-                <div id="insight-consultor" style="font-size:14px;font-weight:600;color:var(--q-red);line-height:1.4;">Calculando...</div>
+                <div id="insight-consultor" style="font-size:14px;font-weight:600;color:#ef4444;line-height:1.4;">Calculando...</div>
               </div>
               <div style="background:var(--surface2);border-radius:12px;padding:16px;border:1px solid var(--border);">
                 <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Destaque Positivo</div>
-                <div id="insight-positivo" style="font-size:14px;font-weight:600;color:var(--q-teal);line-height:1.4;">Calculando...</div>
+                <div id="insight-positivo" style="font-size:14px;font-weight:600;color:#10b981;line-height:1.4;">Calculando...</div>
               </div>
             </div>
             <!-- Verbalizações analisadas -->
@@ -1764,7 +1715,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               <div id="insight-verbalizacoes" style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">
                 Nenhuma verbalização registrada ainda. Adicione nos Hot Alerts para ver a análise aqui.
               </div>
-              <button onclick="gerarInsightsIA()" style="margin-top:10px;background:var(--g-accent);color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">Gerar análise com IA
+              <button onclick="gerarInsightsIA()" style="margin-top:10px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">Gerar análise com IA
               </button>
             </div>
           </div>
@@ -1858,7 +1809,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
                 <div style="font-size:24px;font-weight:800;letter-spacing:-.5px;">Painel Executivo</div>
                 <div style="font-size:13px;color:var(--muted);margin-top:3px;" id="exec-subtitulo">NPS Pós-Vendas — carregando...</div>
               </div>
-              <button onclick="imprimirPainelExecutivo()" style="background:var(--q-accent);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">Salvar como imagem
+              <button onclick="imprimirPainelExecutivo()" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;">Salvar como imagem
               </button>
             </div>
 
@@ -2021,7 +1972,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
             <input id="gcalClientId" type="text" placeholder="xxxx.apps.googleusercontent.com"
               style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;box-sizing:border-box;margin-bottom:10px;">
             <button onclick="salvarGcalClientId()" class="btn primary">Salvar</button>
-            <span id="gcal-fb" style="font-size:12px;color:var(--q-teal);margin-left:10px;"></span>
+            <span id="gcal-fb" style="font-size:12px;color:#10b981;margin-left:10px;"></span>
           </div>
 
           <!-- Regras de Contestação -->
@@ -2071,7 +2022,7 @@ CONCLUSÃO PARA A IA:
 - Se o motivo da reclamação se encaixa em um dos 6 motivos acima E há documentação comprobatória disponível → PODE CONTESTAR
 - Se o motivo é atendimento ruim, demora, preço, qualidade do serviço da concessionária, ou não se encaixa nos motivos → NÃO PODE CONTESTAR</textarea>
             <button onclick="salvarRegrasContestacao()" class="btn primary" style="margin-top:10px;">Salvar regras</button>
-            <span id="regras-fb" style="font-size:12px;color:var(--q-teal);margin-left:10px;"></span>
+            <span id="regras-fb" style="font-size:12px;color:#10b981;margin-left:10px;"></span>
           </div>
           <div class="subnav">
             <button class="subnav-btn active" onclick="openSub('config','cfg-geral',this)">Geral</button>
@@ -2080,9 +2031,9 @@ CONCLUSÃO PARA A IA:
           </div>
           <div class="subpage active" id="cfg-geral">
             <!-- API Key Groq -->
-            <div class="card" style="margin-bottom:16px;border:2px solid var(--q-accent);">
+            <div class="card" style="margin-bottom:16px;border:2px solid #f97316;">
               <div class="card-title">API Key Groq — IA QUALIS</div>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Necessária para usar a IA QUALIS. Acesse <a href="https://console.groq.com" target="_blank" style="color:var(--q-accent);font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Necessária para usar a IA QUALIS. Acesse <a href="https://console.groq.com" target="_blank" style="color:#f97316;font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
               <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
                 <input type="password" id="groqApiKeyInput" placeholder="gsk_..." style="flex:1;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;outline:none;min-width:240px;">
                 <button class="btn primary" onclick="salvarGroqKey()">Salvar chave</button>
@@ -2141,7 +2092,7 @@ CONCLUSÃO PARA A IA:
           <div class="subpage active" id="sc-import">
             <div class="card" style="margin-bottom:16px;">
               <div class="card-title">️ API Key Groq (Gratuito)</div>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Acesse <a href="https://console.groq.com" target="_blank" style="color:var(--q-red);font-weight:700;">console.groq.com</a> → login → <strong>API Keys → Create API Key</strong>. Grátis!</p>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Acesse <a href="https://console.groq.com" target="_blank" style="color:#ef4444;font-weight:700;">console.groq.com</a> → login → <strong>API Keys → Create API Key</strong>. Grátis!</p>
               <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
                 <input type="password" id="scApiKey" placeholder="gsk_..." style="flex:1;padding:9px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;outline:none;min-width:240px;">
                 <button class="btn primary" onclick="scSaveApiKey()">Salvar chave</button>
@@ -2176,7 +2127,7 @@ CONCLUSÃO PARA A IA:
             </div>
             <div id="scProgress" style="display:none;margin-top:14px;">
               <div style="font-size:13px;font-weight:600;margin-bottom:7px;" id="scProgressLabel">Lendo PDF...</div>
-              <div style="height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--border);"><div id="scProgressBar" style="height:100%;background:var(--g-teal);border-radius:99px;width:0%;transition:width .4s ease;"></div></div>
+              <div style="height:5px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--border);"><div id="scProgressBar" style="height:100%;background:linear-gradient(135deg,#10b981,#059669);border-radius:99px;width:0%;transition:width .4s ease;"></div></div>
             </div>
           </div>
           <div class="subpage" id="sc-painel">
@@ -2198,7 +2149,7 @@ CONCLUSÃO PARA A IA:
         <div id="scEmailModal" class="sc-email-modal hidden">
           <div class="sc-email-card">
             <div class="sc-email-title">Enviar alertas — Resend</div>
-            <div class="sc-email-sub">Configure sua API Key do <a href="https://resend.com" target="_blank" style="color:var(--q-red);">Resend</a> para envio com HTML perfeito.</div>
+            <div class="sc-email-sub">Configure sua API Key do <a href="https://resend.com" target="_blank" style="color:#ef4444;">Resend</a> para envio com HTML perfeito.</div>
             <div class="sc-email-field"><label>Resend API Key</label><input id="scResendKey" placeholder="re_15jjGe9Q_Je9YzL5URmJHStkLwzNNdH3H" value="re_15jjGe9Q_Je9YzL5URmJHStkLwzNNdH3H"></div>
             <div class="sc-email-field"><label>E-mail remetente (verificado no Resend)</label><input id="scEmailFrom" placeholder="qualis@resend.dev" value="qualis@resend.dev"></div>
             <div class="sc-email-field"><label>Destinatário</label><input id="scEmailTo" placeholder="kamilly.paiva@adtsa.com.br" value="kamilly.paiva@adtsa.com.br"></div>
@@ -2213,12 +2164,13 @@ CONCLUSÃO PARA A IA:
         </div>
 
       </div><!-- /pages -->
-  </div><!-- /content-area -->
+    </div><!-- /content-area -->
+  </div><!-- /app-body -->
 </div><!-- /app -->
 
 <!-- ══ MODAIS ══ -->
 <div id="modalNpsManual" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mes fechado.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
@@ -2258,7 +2210,7 @@ CONCLUSÃO PARA A IA:
 </div>
 
 <div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Novo Aviso</div>
     <div style="margin-bottom:12px;">
       <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Titulo</label>
@@ -2285,7 +2237,7 @@ CONCLUSÃO PARA A IA:
 </div>
 
 <div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
     <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Adicionar Aniversariante</div>
     <div style="margin-bottom:12px;">
       <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
@@ -2307,7 +2259,7 @@ CONCLUSÃO PARA A IA:
 </div>
 
 <div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
     <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
     <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
     <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
@@ -2365,7 +2317,7 @@ function renderOnline(data){
   const side=document.getElementById('onlineSide');const badges=document.getElementById('onlineBadges');
   if(!side||!badges)return;
   const users=Object.values(data);
-  side.innerHTML=TEAM.map(n=>{const u=users.find(x=>x.name===n);const on=u&&u.online;return `<div class="online-item"><div class="dot ${on?'on':''}"></div>${n}${on?'<span style="margin-left:auto;font-size:11px;color:var(--q-teal);font-weight:700;">online</span>':''}</div>`;}).join('');
+  side.innerHTML=TEAM.map(n=>{const u=users.find(x=>x.name===n);const on=u&&u.online;return `<div class="online-item"><div class="dot ${on?'on':''}"></div>${n}${on?'<span style="margin-left:auto;font-size:11px;color:#10b981;font-weight:700;">online</span>':''}</div>`;}).join('');
   badges.innerHTML=TEAM.map(n=>{const on=(users.find(x=>x.name===n)||{}).online;return `<div class="online-badge"><div class="dot ${on?'on':''}"></div>${n}</div>`;}).join('');
 }
 
@@ -2491,7 +2443,7 @@ let scFiles={peugeot:null,citroen:null};
 let scData=JSON.parse(localStorage.getItem('sc-data')||'[]');
 function scSaveState(){localStorage.setItem('sc-data',JSON.stringify(scData));}
 function scCalcIndicadores(raw){if(!raw)return null;let notaTotal=0;const indicadores={};SC_INDICATORS.forEach(ind=>{const val=raw[ind.key]!==undefined?raw[ind.key]:null;const perf=val!==null?ind.calcPerf(val):null;const nota=val!==null?Math.min(ind.peso,ind.calcNota(perf,ind.peso)):0;indicadores[ind.key]={ind,val,perf,nota};notaTotal+=nota;});const classificacao=SC_CLASSES.find(c=>notaTotal>=c.min)?.label||'D';return{notaTotal,classificacao,indicadores};}
-function scGetClassColor(cls){return cls==='A'?'var(--q-teal)':cls==='B'?'var(--blue)':cls==='C'?'var(--q-gold)':'var(--red)';}
+function scGetClassColor(cls){return cls==='A'?'#10b981':cls==='B'?'var(--blue)':cls==='C'?'#f59e0b':'#ef4444';}
 function scGetClassBarColor(cls){return cls==='A'?'sc-bar-green':cls==='B'?'sc-bar-blue':cls==='C'?'sc-bar-amber':'sc-bar-red';}
 function scSaveApiKey(){const key=document.getElementById('scApiKey').value.trim();if(!key){scShowStatus('Cole sua API Key primeiro.','error');return;}localStorage.setItem('sc-apikey',key);document.getElementById('scApiStatus').textContent='✅ Chave salva!';setTimeout(()=>document.getElementById('scApiStatus').textContent='',3000);}
 function scGetApiKey(){const stored=localStorage.getItem('sc-apikey');if(stored)document.getElementById('scApiKey').value=stored;return stored||document.getElementById('scApiKey').value.trim();}
@@ -2555,7 +2507,7 @@ function scBrandOverviewHTML(brand,label,calc){if(!calc)return `<div class="sc-b
 function scRenderIndicadoresTable(tbId,calc,mesAno,brand){const tb=document.getElementById(tbId);if(!calc||!tb){if(tb)tb.innerHTML='<tr><td colspan="8" class="empty">PDF não importado.</td></tr>';return;}const prevEntry=scGetPrevEntry(mesAno);const prevCalc=prevEntry?scCalcIndicadores(prevEntry[brand]):null;tb.innerHTML=SC_INDICATORS.map(ind=>{const d=calc.indicadores[ind.key];const valStr=d.val!==null?d.val.toFixed(1)+'%':'—';const perfStr=d.perf!==null?d.perf.toFixed(1)+'%':'—';const notaStr=d.nota.toFixed(2);let deltaHTML='<span class="sc-delta sc-delta-zero">—</span>';if(prevCalc){const prevD=prevCalc.indicadores[ind.key];if(d.nota!==null&&prevD.nota!==null){const diff=d.nota-prevD.nota;if(Math.abs(diff)<0.01)deltaHTML='<span class="sc-delta sc-delta-zero">= Igual</span>';else if(diff>0)deltaHTML=`<span class="sc-delta sc-delta-up">▲ +${diff.toFixed(2)}</span>`;else deltaHTML=`<span class="sc-delta sc-delta-down">▼ ${diff.toFixed(2)}</span>`;}}const barPct=(d.nota/ind.peso*100).toFixed(0);const barCls=d.nota===0?'sc-bar-red':d.nota>=ind.peso*.8?'sc-bar-teal':'sc-bar-amber';return `<tr><td><div class="sc-ind-name">${ind.name}</div><div class="sc-ind-area">${ind.area}</div></td><td>${ind.area}</td><td>${ind.objetivo}${ind.formato}</td><td><strong>${ind.peso}</strong></td><td>${valStr}</td><td>${perfStr}</td><td><div style="display:flex;align-items:center;gap:7px;"><strong>${notaStr}</strong><div style="flex:1;min-width:50px;"><div class="sc-bar-track" style="height:5px;"><div class="sc-bar-fill ${barCls}" style="width:${barPct}%"></div></div></div></div></td><td>${deltaHTML}</td></tr>`;}).join('');}
 function scGerarAlertas(peuCalc,citCalc,prevEntry){const alertas=[];const prevPeu=prevEntry?scCalcIndicadores(prevEntry.peugeot):null;const prevCit=prevEntry?scCalcIndicadores(prevEntry.citroen):null;function checkBrand(calc,prevCalc,brandLabel){if(!calc)return;if(prevCalc&&calc.classificacao!==prevCalc.classificacao){const piora=['A','B','C','D'].indexOf(calc.classificacao)>['A','B','C','D'].indexOf(prevCalc.classificacao);alertas.push({tipo:'class',icon:piora?'⚠️':'🎉',title:`${brandLabel}: Mudança ${prevCalc.classificacao} → ${calc.classificacao}`,desc:piora?`Caiu para ${calc.classificacao}.`:`Evoluiu para ${calc.classificacao}!`,piora});}SC_INDICATORS.forEach(ind=>{const d=calc.indicadores[ind.key];if(!d||d.nota===undefined)return;if(d.val!==null&&d.nota===0)alertas.push({tipo:'zero',icon:'🚨',title:`${brandLabel}: ${ind.name} com nota ZERO`,desc:`Valor: ${d.val!==null?d.val.toFixed(1)+'%':'—'}`,piora:true});if(prevCalc){const prevD=prevCalc.indicadores[ind.key];if(d.nota!==null&&prevD?.nota!==null){const diff=d.nota-prevD.nota;if(diff<-0.005)alertas.push({tipo:'down',icon:'🔴',title:`${brandLabel}: Queda em ${ind.name}`,desc:`${prevD.nota.toFixed(2)} → ${d.nota.toFixed(2)} (${diff.toFixed(2)} pts)`,piora:true});else if(diff>0.005)alertas.push({tipo:'up',icon:'🟢',title:`${brandLabel}: Evolução em ${ind.name}`,desc:`+${diff.toFixed(2)} pontos.`,piora:false});}}});}checkBrand(peuCalc,prevPeu,'Peugeot');checkBrand(citCalc,prevCit,'Citroën');return alertas;}
 function renderAlertas(alertas){const el=document.getElementById('scAlertas');if(!el)return;if(!alertas.length){el.innerHTML='';return;}const quedas=alertas.filter(a=>a.piora).length;const evolucoes=alertas.filter(a=>!a.piora).length;el.innerHTML=`<div class="card"><div class="card-title">Alertas — ${quedas} queda(s) · ${evolucoes} evolução(ões)</div>${alertas.sort((a,b)=>b.piora-a.piora).map(a=>`<div class="sc-alert-item sc-alert-${a.tipo}"><div class="sc-alert-icon">${a.icon}</div><div><div class="sc-alert-title">${a.title}</div><div class="sc-alert-desc">${a.desc}</div></div></div>`).join('')}</div>`;}
-function renderScComparativo(){const sel1=document.getElementById('scCompMes1');const sel2=document.getElementById('scCompMes2');scPopulateSelect(sel1);scPopulateSelect(sel2);const content=document.getElementById('scComparativoContent');if(scData.length<2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Importe pelo menos dois meses.</div>';return;}if(sel2.options.length>=2&&!sel2.value){sel1.value=scData[scData.length-2]?.mesAno||'';sel2.value=scData[scData.length-1]?.mesAno||'';}const e1=scData.find(d=>d.mesAno===sel1.value);const e2=scData.find(d=>d.mesAno===sel2.value);if(!e1||!e2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Selecione dois meses.</div>';return;}content.innerHTML=['peugeot','citroen'].map(brand=>{const labels={peugeot:'Peugeot',citroen:'Citroën'};const c1=scCalcIndicadores(e1[brand]);const c2=scCalcIndicadores(e2[brand]);if(!c1||!c2)return '';const rows=SC_INDICATORS.map(ind=>{const d1=c1.indicadores[ind.key];const d2=c2.indicadores[ind.key];const diff=(d2?.nota||0)-(d1?.nota||0);const diffStr=diff>0.005?`<span class="sc-delta sc-delta-up">▲+${diff.toFixed(2)}</span>`:diff<-0.005?`<span class="sc-delta sc-delta-down">▼${diff.toFixed(2)}</span>`:`<span class="sc-delta sc-delta-zero">—</span>`;return `<tr><td><div class="sc-ind-name">${ind.name}</div></td><td>${d1?.val!=null?d1.val.toFixed(1)+'%':'—'}</td><td>${d1?.nota?.toFixed(2)||'0.00'}</td><td>${d2?.val!=null?d2.val.toFixed(1)+'%':'—'}</td><td>${d2?.nota?.toFixed(2)||'0.00'}</td><td>${diffStr}</td></tr>`;}).join('');const totalDiff=c2.notaTotal-c1.notaTotal;const totalColor=totalDiff>0?'var(--q-teal)':totalDiff<0?'var(--red)':'var(--muted)';return `<div class="card" style="margin-bottom:14px;"><div class="card-title">${labels[brand]}</div><div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;"><div class="kpi sky" style="flex:1;min-width:120px;"><h4>${MESES[e1.mes]}/${e1.ano}</h4><div class="val sky">${c1.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c1.classificacao}</div></div><div class="kpi mint" style="flex:1;min-width:120px;"><h4>${MESES[e2.mes]}/${e2.ano}</h4><div class="val mint">${c2.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c2.classificacao}</div></div><div class="kpi" style="flex:1;min-width:120px;"><h4>Variação</h4><div class="val" style="color:${totalColor};font-size:24px;">${totalDiff>0?'▲ +':''}${totalDiff.toFixed(2)}</div></div></div><div class="table-wrap"><table class="sc-ind-table"><thead><tr><th>Indicador</th><th>${MESES[e1.mes]} Val</th><th>Nota</th><th>${MESES[e2.mes]} Val</th><th>Nota</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');}
+function renderScComparativo(){const sel1=document.getElementById('scCompMes1');const sel2=document.getElementById('scCompMes2');scPopulateSelect(sel1);scPopulateSelect(sel2);const content=document.getElementById('scComparativoContent');if(scData.length<2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Importe pelo menos dois meses.</div>';return;}if(sel2.options.length>=2&&!sel2.value){sel1.value=scData[scData.length-2]?.mesAno||'';sel2.value=scData[scData.length-1]?.mesAno||'';}const e1=scData.find(d=>d.mesAno===sel1.value);const e2=scData.find(d=>d.mesAno===sel2.value);if(!e1||!e2){content.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Selecione dois meses.</div>';return;}content.innerHTML=['peugeot','citroen'].map(brand=>{const labels={peugeot:'Peugeot',citroen:'Citroën'};const c1=scCalcIndicadores(e1[brand]);const c2=scCalcIndicadores(e2[brand]);if(!c1||!c2)return '';const rows=SC_INDICATORS.map(ind=>{const d1=c1.indicadores[ind.key];const d2=c2.indicadores[ind.key];const diff=(d2?.nota||0)-(d1?.nota||0);const diffStr=diff>0.005?`<span class="sc-delta sc-delta-up">▲+${diff.toFixed(2)}</span>`:diff<-0.005?`<span class="sc-delta sc-delta-down">▼${diff.toFixed(2)}</span>`:`<span class="sc-delta sc-delta-zero">—</span>`;return `<tr><td><div class="sc-ind-name">${ind.name}</div></td><td>${d1?.val!=null?d1.val.toFixed(1)+'%':'—'}</td><td>${d1?.nota?.toFixed(2)||'0.00'}</td><td>${d2?.val!=null?d2.val.toFixed(1)+'%':'—'}</td><td>${d2?.nota?.toFixed(2)||'0.00'}</td><td>${diffStr}</td></tr>`;}).join('');const totalDiff=c2.notaTotal-c1.notaTotal;const totalColor=totalDiff>0?'#10b981':totalDiff<0?'#ef4444':'var(--muted)';return `<div class="card" style="margin-bottom:14px;"><div class="card-title">${labels[brand]}</div><div style="display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;"><div class="kpi sky" style="flex:1;min-width:120px;"><h4>${MESES[e1.mes]}/${e1.ano}</h4><div class="val sky">${c1.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c1.classificacao}</div></div><div class="kpi mint" style="flex:1;min-width:120px;"><h4>${MESES[e2.mes]}/${e2.ano}</h4><div class="val mint">${c2.notaTotal.toFixed(1)}</div><div class="sub">Classe ${c2.classificacao}</div></div><div class="kpi" style="flex:1;min-width:120px;"><h4>Variação</h4><div class="val" style="color:${totalColor};font-size:24px;">${totalDiff>0?'▲ +':''}${totalDiff.toFixed(2)}</div></div></div><div class="table-wrap"><table class="sc-ind-table"><thead><tr><th>Indicador</th><th>${MESES[e1.mes]} Val</th><th>Nota</th><th>${MESES[e2.mes]} Val</th><th>Nota</th><th>Δ</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;}).join('');}
 function renderScHistorico(){const el=document.getElementById('scHistoricoList');if(!scData.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Nenhum Scorecard importado.</div>';return;}el.innerHTML=[...scData].reverse().map(entry=>{const peuCalc=scCalcIndicadores(entry.peugeot);const citCalc=scCalcIndicadores(entry.citroen);const peuBadge=peuCalc?`<div class="sc-class sc-class-${peuCalc.classificacao}" style="width:28px;height:28px;border-radius:8px;font-size:12px;">🚗${peuCalc.classificacao}</div>`:'';const citBadge=citCalc?`<div class="sc-class sc-class-${citCalc.classificacao}" style="width:28px;height:28px;border-radius:8px;font-size:12px;">✨${citCalc.classificacao}</div>`:'';return `<div class="sc-hist-item"><div onclick="scVerMes('${entry.mesAno}')" style="flex:1;"><div class="sc-hist-month">${MESES[entry.mes]} / ${entry.ano}</div><div class="sc-hist-scores">${peuCalc?`Peugeot: ${peuCalc.notaTotal.toFixed(1)} pts`:''} ${citCalc?`· Citroën: ${citCalc.notaTotal.toFixed(1)} pts`:''}</div></div><div class="sc-hist-badges">${peuBadge}${citBadge}</div><button class="btn ghost" style="padding:5px 9px;font-size:11px;" onclick="scEditarMes('${entry.mesAno}')">✏️</button><button class="btn danger" style="padding:5px 9px;font-size:11px;" onclick="scDeletarMes('${entry.mesAno}')">🗑️</button></div>`;}).join('');}
 function scEditarMes(mesAno){const entry=scData.find(d=>d.mesAno===mesAno);if(!entry)return;const novoMes=prompt(`Mês atual: ${MESES[entry.mes]}/${entry.ano}\n\nDigite o número do mês (1-12):`);if(!novoMes)return;const novoAno=prompt('Ano correto:',entry.ano);if(!novoAno)return;const mes=Number(novoMes);const ano=Number(novoAno);if(mes<1||mes>12||isNaN(ano)){alert('Inválido.');return;}const novoMesAno=`${ano}-${String(mes).padStart(2,'0')}`;if(scData.find(d=>d.mesAno===novoMesAno&&d.mesAno!==mesAno)){alert('Já existe.');return;}entry.mes=mes;entry.ano=ano;entry.mesAno=novoMesAno;scData.sort((a,b)=>a.mesAno.localeCompare(b.mesAno));scSaveState();renderScHistorico();alert(`✅ ${MESES[mes]}/${ano}`);}
 function scDeletarMes(mesAno){const entry=scData.find(d=>d.mesAno===mesAno);if(!entry)return;if(!confirm(`Deletar ${MESES[entry.mes]}/${entry.ano}?`))return;scData=scData.filter(d=>d.mesAno!==mesAno);scSaveState();renderScHistorico();}
@@ -2566,7 +2518,7 @@ function scAbrirEmail(){['scResendKey','scEmailFrom','scEmailTo','scEmailCc'].fo
 
 async function scEnviarEmail(){
   const resendKey=document.getElementById('scResendKey').value.trim();const from=document.getElementById('scEmailFrom').value.trim();const to=document.getElementById('scEmailTo').value.trim();const cc=document.getElementById('scEmailCc')?.value.trim()||'';const msg=document.getElementById('scEmailMsg').value.trim();const fb=document.getElementById('scEmailFeedback');
-  if(!resendKey||!from||!to){fb.textContent='Preencha API Key, remetente e destinatário.';fb.style.color='var(--red)';return;}
+  if(!resendKey||!from||!to){fb.textContent='Preencha API Key, remetente e destinatário.';fb.style.color='#ef4444';return;}
   ['scResendKey','scEmailFrom','scEmailTo','scEmailCc'].forEach(id=>{const el=document.getElementById(id);if(el)localStorage.setItem('sc-email-'+id,el.value.trim());});
   const mesAno=document.getElementById('scPainelMes')?.value||'';const entry=scData.find(d=>d.mesAno===mesAno);
   const peuCalc=entry?scCalcIndicadores(entry.peugeot):null;const citCalc=entry?scCalcIndicadores(entry.citroen):null;
@@ -2582,9 +2534,9 @@ async function scEnviarEmail(){
   try{
     const resp=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+resendKey},body:JSON.stringify({from:from,to:to,cc:cc||undefined,subject:"QUALIS - Relatorio Scorecard",html:htmlBody})});
     const data=await resp.json();
-    if(resp.ok){fb.textContent="Email enviado!";fb.style.color="var(--q-teal)";setTimeout(()=>{document.getElementById("scEmailModal").classList.add("hidden");fb.textContent="";},2500);}
-    else{fb.textContent="Erro: "+(data.message||resp.status);fb.style.color="var(--red)";}
-  }catch(err){fb.textContent="Erro: "+err.message;fb.style.color="var(--red)";}
+    if(resp.ok){fb.textContent="Email enviado!";fb.style.color="#10b981";setTimeout(()=>{document.getElementById("scEmailModal").classList.add("hidden");fb.textContent="";},2500);}
+    else{fb.textContent="Erro: "+(data.message||resp.status);fb.style.color="#ef4444";}
+  }catch(err){fb.textContent="Erro: "+err.message;fb.style.color="#ef4444";}
 }
 
 /* ══ AUTH & USUÁRIAS ══ */
@@ -2664,10 +2616,10 @@ function renderUsuarias(){
   const tb=document.getElementById('tbUsuarias');if(!tb)return;
   const users=getUsers();const isSA=currentUser?.role==='superadmin';
   document.getElementById('addUserSection')?.classList.toggle('hidden',!isSA);
-  tb.innerHTML=users.map((u,i)=>{const exp=new Date(u.pwdAt+'T00:00:00');exp.setDate(exp.getDate()+PW_DAYS);const vencida=daysSince(u.pwdAt)>=PW_DAYS;const badge=u.role==='superadmin'?'<span class="chip chip-teal">Super Admin</span>':'<span class="chip chip-blue">Operacional</span>';const acoes=isSA?`<button class="btn ghost" style="padding:4px 9px;font-size:11px;" onclick="renovarSenha(${i})">🔄</button>${i>0?`<button class="btn danger" style="padding:4px 9px;font-size:11px;" onclick="removerUsuaria(${i})">🗑️</button>`:''}`:'—';return `<tr><td><strong>${esc(u.name)}</strong></td><td style="font-size:12px;">${esc(u.email)}</td><td>${badge}</td><td><span style="font-family:monospace;font-size:11px;background:var(--surface2);padding:2px 7px;border-radius:5px;">${'•'.repeat(Math.min(u.password.length,12))}</span></td><td style="color:${vencida?'var(--red)':'var(--q-teal)'};font-weight:700;">${exp.toLocaleDateString('pt-BR')}${vencida?' ⚠️':''}</td><td>${acoes}</td></tr>`;}).join('');
+  tb.innerHTML=users.map((u,i)=>{const exp=new Date(u.pwdAt+'T00:00:00');exp.setDate(exp.getDate()+PW_DAYS);const vencida=daysSince(u.pwdAt)>=PW_DAYS;const badge=u.role==='superadmin'?'<span class="chip chip-teal">Super Admin</span>':'<span class="chip chip-blue">Operacional</span>';const acoes=isSA?`<button class="btn ghost" style="padding:4px 9px;font-size:11px;" onclick="renovarSenha(${i})">🔄</button>${i>0?`<button class="btn danger" style="padding:4px 9px;font-size:11px;" onclick="removerUsuaria(${i})">🗑️</button>`:''}`:'—';return `<tr><td><strong>${esc(u.name)}</strong></td><td style="font-size:12px;">${esc(u.email)}</td><td>${badge}</td><td><span style="font-family:monospace;font-size:11px;background:var(--surface2);padding:2px 7px;border-radius:5px;">${'•'.repeat(Math.min(u.password.length,12))}</span></td><td style="color:${vencida?'#ef4444':'#10b981'};font-weight:700;">${exp.toLocaleDateString('pt-BR')}${vencida?' ⚠️':''}</td><td>${acoes}</td></tr>`;}).join('');
 }
 
-function addNovaUsuaria(){const nome=document.getElementById('newUserNome')?.value.trim();const email=document.getElementById('newUserEmail')?.value.trim();const senha=document.getElementById('newUserSenha')?.value.trim();const role=document.getElementById('newUserRole')?.value||'user';const fb=document.getElementById('addUserFeedback');if(!nome||!email||!senha){fb.textContent='Preencha todos os campos.';fb.style.color='var(--red)';return;}if(senha.length<6){fb.textContent='Mín. 6 caracteres.';fb.style.color='var(--red)';return;}const users=getUsers();if(users.find(u=>u.email.toLowerCase()===email.toLowerCase())){fb.textContent='E-mail já cadastrado.';fb.style.color='var(--red)';return;}const today=new Date().toISOString().split('T')[0];users.push({name:nome,role,email,password:hashPw(senha),pwdAt:today});saveUsers(users);['newUserNome','newUserEmail','newUserSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});fb.textContent=`✅ ${nome} adicionada!`;fb.style.color='var(--q-teal)';setTimeout(()=>{fb.textContent='';},3000);renderUsuarias();}
+function addNovaUsuaria(){const nome=document.getElementById('newUserNome')?.value.trim();const email=document.getElementById('newUserEmail')?.value.trim();const senha=document.getElementById('newUserSenha')?.value.trim();const role=document.getElementById('newUserRole')?.value||'user';const fb=document.getElementById('addUserFeedback');if(!nome||!email||!senha){fb.textContent='Preencha todos os campos.';fb.style.color='#ef4444';return;}if(senha.length<6){fb.textContent='Mín. 6 caracteres.';fb.style.color='#ef4444';return;}const users=getUsers();if(users.find(u=>u.email.toLowerCase()===email.toLowerCase())){fb.textContent='E-mail já cadastrado.';fb.style.color='#ef4444';return;}const today=new Date().toISOString().split('T')[0];users.push({name:nome,role,email,password:hashPw(senha),pwdAt:today});saveUsers(users);['newUserNome','newUserEmail','newUserSenha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});fb.textContent=`✅ ${nome} adicionada!`;fb.style.color='#10b981';setTimeout(()=>{fb.textContent='';},3000);renderUsuarias();}
 function renovarSenha(idx){const users=getUsers();const u=users[idx];if(!u)return;const s=prompt(`Nova senha para ${u.name} (mín. 6 chars):`);if(!s)return;if(s.length<6){alert('Muito curta.');return;}users[idx].password=hashPw(s);users[idx].pwdAt=new Date().toISOString().split('T')[0];saveUsers(users);alert(`✅ Senha de ${u.name} renovada!`);renderUsuarias();}
 function removerUsuaria(idx){const users=getUsers();const u=users[idx];if(!u)return;if(!confirm(`Remover ${u.name}?`))return;users.splice(idx,1);saveUsers(users);renderUsuarias();}
 function doLogout(){currentUser=null;localStorage.removeItem('q-user');document.getElementById('app').style.display='none';document.getElementById('loginScreen').style.display='flex';document.getElementById('loginPassword').value='';}
@@ -2686,6 +2638,8 @@ function startPortal(){
     }
   },100);
   document.getElementById('loginScreen').style.display='none';
+  fixarEstrutura();
+  fixarLayout();
   document.getElementById('app').style.display='flex';
   // Data no início
 calcCountdownTrimestre();
@@ -2821,11 +2775,25 @@ function getNpsDados(tipo, mes, marca) {
   // Meses fechados vêm do histórico fixo
   const hist = historico.find(r => r.mes === mes && r.marca === marca);
 
-  // Mês atual (março em diante) vem da base em tempo real
+  // Filtra base pelo mês
+  const MESES_NUM = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,
+                     JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
+  const mesAtualIdx = new Date().getMonth();
+  const mesAtualNome = Object.keys(MESES_NUM).find(k => MESES_NUM[k] === mesAtualIdx);
+  const mesFiltro = mes || mesAtualNome;
+  const mesIdx = MESES_NUM[mesFiltro] ?? mesAtualIdx;
+
   const baseRows = baseKeys.flatMap(k => (baseCache[k]||[]).filter(r => {
-    if(!mes || mes === 'TODOS') return true;
-    // filtra pelo mês da data de convite (se tiver) ou considera todos do mês atual
-    return true; // por ora pega tudo da base ativa
+    if(!r.DATA_CONVITE) return mesIdx === mesAtualIdx; // sem data → só mês atual
+    // Tentar parsear a data
+    var d = r.DATA_CONVITE;
+    var parts = d.includes('/') ? d.split('/') : d.split('-');
+    var m;
+    if(parts.length >= 2){
+      // formato dd/mm/yyyy ou yyyy-mm-dd
+      m = d.includes('-') ? parseInt(parts[1])-1 : parseInt(parts[1])-1;
+    }
+    return m === mesIdx;
   }));
 
   if(hist) return {prom:hist.prom, det:hist.det, neu:hist.neu, fechado:true};
@@ -3020,9 +2988,9 @@ function renderNpsMensalTabela(tipo, meta) {
     const okCit  = npsCit !== null && npsCit >= meta;
     const isAtual = m === mesAtualNome;
     return `<tr${isAtual?' style="background:rgba(249,115,22,.04);"':''}>
-      <td><strong>${MESES_LABEL[m]||m}</strong>${isAtual?'<span style="font-size:10px;color:var(--q-accent);font-weight:700;margin-left:6px;">ATUAL</span>':''}</td>
-      <td style="font-weight:700;color:${npsPeu!==null?(okPeu?'var(--q-teal)':'var(--red)'):'var(--muted)'};">${npsPeu!==null?fmt(npsPeu):'—'}</td>
-      <td style="font-weight:700;color:${npsCit!==null?(okCit?'var(--q-teal)':'var(--red)'):'var(--muted)'};">${npsCit!==null?fmt(npsCit):'—'}</td>
+      <td><strong>${MESES_LABEL[m]||m}</strong>${isAtual?'<span style="font-size:10px;color:#f97316;font-weight:700;margin-left:6px;">ATUAL</span>':''}</td>
+      <td style="font-weight:700;color:${npsPeu!==null?(okPeu?'#10b981':'#ef4444'):'var(--muted)'};">${npsPeu!==null?fmt(npsPeu):'—'}</td>
+      <td style="font-weight:700;color:${npsCit!==null?(okCit?'#10b981':'#ef4444'):'var(--muted)'};">${npsCit!==null?fmt(npsCit):'—'}</td>
       <td>${npsPeu!==null?(okPeu?'<span class="chip chip-green">Meta</span>':'<span class="chip chip-red">Abaixo</span>'):'<span class="chip chip-amber">Em aberto</span>'}</td>
       <td>${npsCit!==null?(okCit?'<span class="chip chip-green">Meta</span>':'<span class="chip chip-red">Abaixo</span>'):'<span class="chip chip-amber">Em aberto</span>'}</td>
     </tr>`;
@@ -3067,20 +3035,20 @@ function renderNpsTrimestral(tipo, meta, elId) {
     const okPeu  = npsPeu >= meta;
     const okCit  = npsCit >= meta;
     const pagou  = okPeu && okCit;
-    return `<div style="border-radius:13px;border:2px solid ${pagou?'var(--q-teal)':okPeu||okCit?'var(--q-gold)':'var(--red)'};padding:12px 14px;margin-bottom:8px;background:${pagou?'rgba(16,185,129,.04)':okPeu||okCit?'rgba(245,158,11,.04)':'rgba(239,68,68,.04)'};">
+    return `<div style="border-radius:13px;border:2px solid ${pagou?'#10b981':okPeu||okCit?'#f59e0b':'#ef4444'};padding:12px 14px;margin-bottom:8px;background:${pagou?'rgba(16,185,129,.04)':okPeu||okCit?'rgba(245,158,11,.04)':'rgba(239,68,68,.04)'};">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <span style="font-weight:800;font-size:15px;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')}</span>
-        <span style="font-weight:800;font-size:13px;color:${pagou?'var(--q-teal)':okPeu||okCit?'var(--q-gold)':'var(--red)'};">${pagou?'✅ Paga':'⚠️ Em risco'}</span>
+        <span style="font-weight:800;font-size:13px;color:${pagou?'#10b981':okPeu||okCit?'#f59e0b':'#ef4444'};">${pagou?'✅ Paga':'⚠️ Em risco'}</span>
       </div>
       <div style="display:flex;gap:10px;">
         <div style="flex:1;background:var(--surface);border-radius:9px;padding:9px;text-align:center;border:1px solid var(--border);">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Peugeot</div>
-          <div style="font-size:20px;font-weight:800;color:${okPeu?'var(--q-teal)':'var(--red)'};">${fmt(npsPeu)}</div>
+          <div style="font-size:20px;font-weight:800;color:${okPeu?'#10b981':'#ef4444'};">${fmt(npsPeu)}</div>
           <div style="font-size:11px;color:var(--muted);">meta ${meta}%</div>
         </div>
         <div style="flex:1;background:var(--surface);border-radius:9px;padding:9px;text-align:center;border:1px solid var(--border);">
           <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Citroën</div>
-          <div style="font-size:20px;font-weight:800;color:${okCit?'var(--q-teal)':'var(--red)'};">${fmt(npsCit)}</div>
+          <div style="font-size:20px;font-weight:800;color:${okCit?'#10b981':'#ef4444'};">${fmt(npsCit)}</div>
           <div style="font-size:11px;color:var(--muted);">meta ${meta}%</div>
         </div>
       </div>
@@ -3123,10 +3091,10 @@ async function renderRankingVen(){
   tb.innerHTML = rows.map(r => `<tr>
     <td><strong>${esc(r.name)}</strong></td>
     <td style="text-align:center;font-weight:700;color:var(--blue);">${r.pp}</td>
-    <td style="text-align:center;font-weight:700;color:var(--red);">${r.hp}</td>
+    <td style="text-align:center;font-weight:700;color:#ef4444;">${r.hp}</td>
     <td style="text-align:center;font-weight:700;color:var(--purple);">${r.pc}</td>
     <td style="text-align:center;font-weight:700;color:var(--orange);">${r.hc}</td>
-    <td style="text-align:center;font-weight:800;color:var(--q-teal);">${r.total}</td>
+    <td style="text-align:center;font-weight:800;color:#10b981;">${r.total}</td>
   </tr>`).join('');
 
   // Totais
@@ -3139,10 +3107,10 @@ async function renderRankingVen(){
   if(tf) tf.innerHTML = `<tr style="background:var(--surface2);font-weight:800;">
     <td><strong>TOTAL</strong></td>
     <td style="text-align:center;color:var(--blue);">${totPP}</td>
-    <td style="text-align:center;color:var(--red);">${totHP}</td>
+    <td style="text-align:center;color:#ef4444;">${totHP}</td>
     <td style="text-align:center;color:var(--purple);">${totPC}</td>
     <td style="text-align:center;color:var(--orange);">${totHC}</td>
-    <td style="text-align:center;color:var(--q-teal);">${totT}</td>
+    <td style="text-align:center;color:#10b981;">${totT}</td>
   </tr>`;
 }
 
@@ -3446,7 +3414,7 @@ async function renderHotAlertsVen(){
     <td>${esc(r.MARCA)}</td>
     <td>${esc(r.CLIENTE||'')}</td>
     <td>${esc(r.VENDEDOR||'')}</td>
-    <td style="font-weight:700;color:${Number(r.NOTA_NPS)<=6?'var(--q-red)':'var(--q-gold)'}">${esc(r.NOTA_NPS||'')}</td>
+    <td style="font-weight:700;color:${Number(r.NOTA_NPS)<=6?'#ef4444':'#f59e0b'}">${esc(r.NOTA_NPS||'')}</td>
     <td>${statusChip(r.STATUS)}</td>
     <td class="editable"><textarea
       placeholder="Descreva o que o cliente disse..."
@@ -3454,7 +3422,7 @@ async function renderHotAlertsVen(){
       style="width:200px;min-height:60px;font-size:12px;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--surface);resize:vertical;">${esc(r.VERBALIZACAO||'')}</textarea></td>
     <td style="text-align:center;">
       <button onclick="analisarHotAlertIA('${r._key}','${r.id}','${esc(r.CLIENTE||'')}','${esc(r.NOTA_NPS||'')}','${esc(r.MARCA)}')"
-        style="background:var(--g-accent);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;">
+        style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(249,115,22,.3);">
         Analisar
       </button>
       <div id="ia-hot-${r.id}" style="font-size:11px;color:var(--muted);margin-top:4px;max-width:180px;line-height:1.4;"></div>
@@ -3470,7 +3438,7 @@ async function renderHotAlertsPos(){
     <td>${esc(r.MARCA)}</td>
     <td>${esc(r.CLIENTE||'')}</td>
     <td>${esc(r.CONSULTOR||'')}</td>
-    <td style="font-weight:700;color:${Number(r.NOTA_NPS)<=6?'var(--q-red)':'var(--q-gold)'}">${esc(r.NOTA_NPS||'')}</td>
+    <td style="font-weight:700;color:${Number(r.NOTA_NPS)<=6?'#ef4444':'#f59e0b'}">${esc(r.NOTA_NPS||'')}</td>
     <td>${statusChip(r.STATUS)}</td>
     <td class="editable"><textarea 
       placeholder="Descreva o que o cliente disse..."
@@ -3478,7 +3446,7 @@ async function renderHotAlertsPos(){
       style="width:200px;min-height:60px;font-size:12px;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--surface);resize:vertical;">${esc(r.VERBALIZACAO||'')}</textarea></td>
     <td style="text-align:center;">
       <button onclick="analisarHotAlertIA('${r._key}','${r.id}','${esc(r.CLIENTE||'')}','${esc(r.NOTA_NPS||'')}','${esc(r.MARCA)}')" 
-        style="background:var(--g-accent);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;">
+        style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(249,115,22,.3);">
         Analisar
       </button>
       <div id="ia-hot-${r.id}" style="font-size:11px;color:var(--muted);margin-top:4px;max-width:180px;line-height:1.4;"></div>
@@ -3490,7 +3458,7 @@ async function renderConversoes(){
   if(!baseCache.POS_CIT)await loadBase('POS_CIT');
   renderConversoesAuto();
 }
-async function renderRankingVen(){if(!baseCache.VEN_PEU)await loadBase('VEN_PEU');if(!baseCache.VEN_CIT)await loadBase('VEN_CIT');const nomes=new Set();[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])].forEach(r=>{if(r.VENDEDOR)nomes.add(r.VENDEDOR);});const wrap=document.getElementById('rankVenWrap');if(!wrap)return;const p=baseCache.VEN_PEU||[],c=baseCache.VEN_CIT||[];const rows=[...nomes].map(name=>{const pp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;const pc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;return{name,pp,hp,pc,hc,total:pp+pc};}).sort((a,b)=>b.total-a.total);wrap.innerHTML=rows.map((r,i)=>`<div class="rank-row"><div class="rank-pos ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div><div class="rank-name">${esc(r.name)}</div><div class="rank-stats"><span class="rank-stat" style="background:rgba(16,185,129,.1);color:var(--q-teal);">P🚗${r.pp}</span><span class="rank-stat" style="background:rgba(239,68,68,.1);color:var(--red);">H🚗${r.hp}</span><span class="rank-stat" style="background:rgba(139,92,246,.1);color:var(--purple);">P✨${r.pc}</span><span class="rank-stat" style="background:rgba(249,115,22,.1);color:var(--orange);">H✨${r.hc}</span><span class="rank-stat" style="background:var(--surface2);color:var(--muted);">T:${r.total}</span></div></div>`).join('')||'<div style="color:var(--muted);padding:20px;">Sem dados.</div>';}
+async function renderRankingVen(){if(!baseCache.VEN_PEU)await loadBase('VEN_PEU');if(!baseCache.VEN_CIT)await loadBase('VEN_CIT');const nomes=new Set();[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])].forEach(r=>{if(r.VENDEDOR)nomes.add(r.VENDEDOR);});const wrap=document.getElementById('rankVenWrap');if(!wrap)return;const p=baseCache.VEN_PEU||[],c=baseCache.VEN_CIT||[];const rows=[...nomes].map(name=>{const pp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hp=p.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;const pc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&r.STATUS==='PROMOTOR').length;const hc=c.filter(r=>String(r.VENDEDOR||'').toUpperCase()===name.toUpperCase()&&['DETRATOR','NEUTRO'].includes(String(r.STATUS||''))).length;return{name,pp,hp,pc,hc,total:pp+pc};}).sort((a,b)=>b.total-a.total);wrap.innerHTML=rows.map((r,i)=>`<div class="rank-row"><div class="rank-pos ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${i+1}</div><div class="rank-name">${esc(r.name)}</div><div class="rank-stats"><span class="rank-stat" style="background:rgba(16,185,129,.1);color:#10b981;">P🚗${r.pp}</span><span class="rank-stat" style="background:rgba(239,68,68,.1);color:#ef4444;">H🚗${r.hp}</span><span class="rank-stat" style="background:rgba(139,92,246,.1);color:var(--purple);">P✨${r.pc}</span><span class="rank-stat" style="background:rgba(249,115,22,.1);color:var(--orange);">H✨${r.hc}</span><span class="rank-stat" style="background:var(--surface2);color:var(--muted);">T:${r.total}</span></div></div>`).join('')||'<div style="color:var(--muted);padding:20px;">Sem dados.</div>';}
 
 var _growRecords = [];
 function processGrow(){
@@ -3614,7 +3582,51 @@ async function addEquipe(tipo,inputId){const nome=(document.getElementById(input
 
 const SYSTEMS=[{nome:'Portal de Treinamentos',cat:'Treinamento',url:'https://psa.csod.com/samldefault.aspx?ouid=2',login:'DN89492',senha:'Piga2070'},{nome:'DealerNet',cat:'Rede',url:'https://grupoadtsa.dealernetworkflow.com.br/Portal/default.html',login:'KAMILLY.PAIVA',senha:'Adtsa@2032'},{nome:'Holmes',cat:'Operação',url:'',login:'kamilly.paiva@adtsa.com.br',senha:'Adtsa@2025'},{nome:'Syonet',cat:'CRM',url:'https://adtsa.syonet.com/portal/app.do?modulo=login#/login',login:'KAMILLY.PAIVA',senha:'K10092018m@'},{nome:'Grow – Peugeot',cat:'Grow',url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',login:'DN89494',senha:'Piga2050'},{nome:'Grow – Citroën',cat:'Grow',url:'https://idfed.mpsa.com/idp/startSSO.ping?PartnerSpId=https%3A%2F%2Fcrmfcalatam.my.site.com%2FDealers',login:'DN89492',senha:'Piga2407'},{nome:'Snap On – Auditoria',cat:'Auditoria',url:'https://psa.network-perf.com/psaww-dnsangular/index.html#/opstandards/site/108092',login:'DN89492',senha:'Piga2407'},{nome:'Focus – Peugeot',cat:'Focus',url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',login:'DN89494',senha:'Piga2050'},{nome:'Focus – Citroën',cat:'Focus',url:'https://focus.roarinc.com/fieldworkReport/fieldwork-overview-elastic',login:'DM62286',senha:'Piga2060'},{nome:'Trilogo',cat:'Portal',url:'https://entrar.trilogo.app/',login:'kamilly.paiva@adtsa.com.br',senha:'K10092018m@'},{nome:'Reclame Aqui',cat:'Atendimento',url:'https://www.reclameaqui.com.br/',login:'kamilly.paiva@adtsa.com.br',senha:'Adtsa@2025'},{nome:'Webmail Qualidade',cat:'E-mail',url:'https://mail.google.com/mail/u/0/',login:'qualidade.pigallews@adtsa.com.br',senha:'Citroen@2026'},{nome:'Gmail Qualidade',cat:'E-mail',url:'https://mail.google.com/mail/u/0/',login:'qualidadepigallews@gmail.com',senha:'Adtsa@2025'},{nome:'CSPS – Peugeot',cat:'Pesquisa',url:'',login:'CA00064P',senha:'Piga2033'},{nome:'CSPS – Citroën',cat:'Pesquisa',url:'',login:'CA00013C',senha:'Piga2033'}];
 const CAT_COLORS={Treinamento:'chip-blue',Rede:'chip-green','Operação':'chip-purple',CRM:'chip-amber',Grow:'chip-red',Auditoria:'chip-teal',Focus:'chip-blue',Portal:'chip-purple',Atendimento:'chip-green','E-mail':'chip-orange',Pesquisa:'chip-blue',default:'chip-blue'};
-function renderSystems(){const grid=document.getElementById('systemsGrid');if(!grid)return;grid.innerHTML=SYSTEMS.map((s,i)=>`<div class="system-card"><div class="system-card-head"><div class="system-card-name">${esc(s.nome)}</div><span class="chip ${CAT_COLORS[s.cat]||CAT_COLORS.default}">${esc(s.cat)}</span></div><div class="system-field"><div class="system-field-label">Login</div><div class="system-field-val">${esc(s.login||'—')}</div></div><div class="system-field"><div class="system-field-label">Senha</div><div style="display:flex;align-items:center;gap:6px;"><div class="system-field-val" id="sysPw${i}" data-raw="${esc(s.senha||'')}">••••••••</div><button class="sys-btn" onclick="editarSenhaSistema(${i},'${jsEsc(s.nome||'')}')" style="padding:2px 7px;font-size:10px;">✏️</button></div></div><div class="system-actions"><button class="sys-btn" onclick="navigator.clipboard.writeText('${jsEsc(s.login||'')}').then(()=>alert('Login copiado!'))">Copiar login</button><button class="sys-btn" onclick="navigator.clipboard.writeText(SYSTEMS[${i}].senha||'').then(()=>alert('Senha copiada!'))">Copiar senha</button><button class="sys-btn" onclick="toggleSysPw(${i})">Ver</button>${s.url?`<button class="sys-btn open" onclick="window.open('${jsEsc(s.url)}','_blank')">Abrir</button>`:''}</div></div>`).join('');}
+function renderSystems(){
+  var grid = document.getElementById('sistemas-grid');
+  var empty = document.getElementById('sistemas-empty');
+  if(!grid) return;
+  if(!SYSTEMS || !SYSTEMS.length){ if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  
+  var isSA = window.currentUser && window.currentUser.role === 'superadmin';
+  // Agrupar por categoria
+  var cats = {};
+  SYSTEMS.forEach(function(s){
+    var cat = s.cat || 'Geral';
+    if(!cats[cat]) cats[cat] = [];
+    cats[cat].push(s);
+  });
+  var catColors = {
+    'Treinamento':'#f97316','Rede':'#8b5cf6',
+    'Operação':'#10b981','CRM':'#3b82f6','Geral':'#64748b'
+  };
+  var html = '';
+  Object.entries(cats).forEach(function(entry){
+    var cat=entry[0]; var items=entry[1];
+    var cor = catColors[cat]||'#64748b';
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
+    html += '<div style="background:'+cor+';padding:12px 18px;">';
+    html += '<span style="font-size:13px;font-weight:800;color:#fff;">'+esc(cat)+'</span></div>';
+    html += '<div style="padding:16px;display:flex;flex-direction:column;gap:12px;">';
+    items.forEach(function(s){
+      var pw = isSA ? esc(s.senha||'') : '••••••••';
+      html += '<div style="border:1px solid var(--border);border-radius:10px;padding:14px;">';
+      html += '<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px;">'+esc(s.nome)+'</div>';
+      html += '<div style="font-size:12px;color:var(--muted);margin-bottom:10px;">';
+      html += '<div><strong>Login:</strong> '+esc(s.login||'')+'</div>';
+      if(isSA) html += '<div><strong>Senha:</strong> <span style="font-family:monospace;">'+pw+'</span></div>';
+      html += '</div>';
+      html += '<div style="display:flex;gap:6px;flex-wrap:wrap;">';
+      html += '<button class="btn ghost" style="padding:5px 10px;font-size:11px;" data-copy="'+esc(s.login||'')+'" onclick="navigator.clipboard.writeText(this.dataset.copy);var t=this;t.textContent=\'✅\';setTimeout(function(){t.textContent=\'Copiar login\'},1500)">Copiar login</button>';
+      if(isSA && s.senha) html += '<button class="btn ghost" style="padding:5px 10px;font-size:11px;" data-copy="'+esc(s.senha)+'" onclick="navigator.clipboard.writeText(this.dataset.copy);var t=this;t.textContent=\'✅\';setTimeout(function(){t.textContent=\'Copiar senha\'},1500)">Copiar senha</button>';
+      if(s.url) html += '<a href="'+esc(s.url)+'" target="_blank" class="btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Abrir</a>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  });
+  grid.innerHTML = html;
+}
 function toggleSysPw(i){const el=document.getElementById('sysPw'+i);if(!el)return;el.textContent=el.textContent==='••••••••'?el.dataset.raw:'••••••••';}
 
 async function renderInteligencia(){for(const k of['VEN_PEU','VEN_CIT','POS_PEU','POS_CIT']){if(!baseCache[k])await loadBase(k).catch(()=>{});}const posRows=[...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[])];const venRows=[...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];const pend=posRows.filter(r=>r.STATUS==='PESQUISAVEL').length+venRows.filter(r=>r.STATUS==='PESQUISAVEL').length;const dets=posRows.filter(r=>r.STATUS==='DETRATOR');const grpDet={};dets.forEach(r=>{const k=r.CONSULTOR||'Sem consultor';grpDet[k]=(grpDet[k]||0)+1;});const critico=Object.entries(grpDet).sort((a,b)=>b[1]-a[1])[0];setText('ins-resumo',`${venRows.filter(r=>r.STATUS==='PROMOTOR').length} promotoras em vendas, ${posRows.filter(r=>r.STATUS==='PROMOTOR').length} em pós-vendas e ${dets.length} detratores.`);setText('ins-pend',`${pend} clientes pesquisáveis podem ainda responder.`);setText('ins-critico',critico?`${critico[0]} tem ${critico[1]} detratores.`:'Nenhum crítico.');const conv={};posRows.filter(r=>String(r.CONVERTIDA_POR||'').trim()).forEach(r=>{const k=r.CONVERTIDA_POR;conv[k]=(conv[k]||0)+1;});setText('ins-conv',Object.entries(conv).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>`${k}: ${v}`).join('\n')||'Sem conversões.');const sm={};venRows.forEach(r=>{if(!r.VENDEDOR)return;if(!sm[r.VENDEDOR])sm[r.VENDEDOR]=0;if(r.STATUS==='PROMOTOR')sm[r.VENDEDOR]++;});const top=Object.entries(sm).sort((a,b)=>b[1]-a[1])[0];setText('ins-rank',top?`${top[0]} lidera com ${top[1]} promotoras.`:'Sem dados.');
@@ -3630,15 +3642,15 @@ async function renderInteligencia(){for(const k of['VEN_PEU','VEN_CIT','POS_PEU'
     const elF = document.getElementById(elFalta);
     if(elV){
       elV.textContent = nps!==null ? nps+'%' : '—';
-      elV.style.color = nps===null?'var(--muted)':nps>=metaNum?'var(--q-teal)':'var(--q-red)';
+      elV.style.color = nps===null?'var(--muted)':nps>=metaNum?'#10b981':'#ef4444';
     }
     if(elF){
       if(nps===null){elF.textContent='Sem dados ainda';}
-      else if(nps>=metaNum){elF.textContent='✅ Meta atingida!';elF.style.color='var(--q-teal)';}
+      else if(nps>=metaNum){elF.textContent='✅ Meta atingida!';elF.style.color='#10b981';}
       else{
         const faltam=calcFalta(metaNum,prom,neu,det);
         elF.textContent='Faltam '+faltam+' promotora(s)';
-        elF.style.color='var(--q-red)';
+        elF.style.color='#ef4444';
       }
     }
   }
@@ -3684,13 +3696,13 @@ function runAssist(){
 const iscHistorico={};const MESES_ISC=['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 function calcISC(det,neu,prom){const total=det+neu+prom;if(!total)return null;return((prom*1)+(neu*0.5))/total;}
 function iscTendencia(isc,meta){if(isc===null)return '—';const pct=isc*100;if(pct>=meta)return '<span class="chip chip-green">⬆️ Puxando pra cima</span>';if(pct>=meta-1)return '<span class="chip chip-amber">➡️ Neutro</span>';return '<span class="chip chip-red">⬇️ Puxando pra baixo</span>';}
-function iscOrientacao(det,neu,prom,isc,meta){const total=det+neu+prom;if(!total)return '<span style="color:var(--muted);font-size:12px;">Prospectar pesquisas</span>';if(det>0)return '<span style="color:var(--red);font-weight:700;font-size:12px;">⚠️ Atuar nos detratores</span>';if(isc!==null&&isc*100<meta)return '<span style="color:var(--q-gold);font-weight:700;font-size:12px;">Converter neutros</span>';return '<span style="color:var(--q-teal);font-weight:700;font-size:12px;">Manter excelência</span>';}
+function iscOrientacao(det,neu,prom,isc,meta){const total=det+neu+prom;if(!total)return '<span style="color:var(--muted);font-size:12px;">Prospectar pesquisas</span>';if(det>0)return '<span style="color:#ef4444;font-weight:700;font-size:12px;">⚠️ Atuar nos detratores</span>';if(isc!==null&&isc*100<meta)return '<span style="color:#f59e0b;font-weight:700;font-size:12px;">Converter neutros</span>';return '<span style="color:#10b981;font-weight:700;font-size:12px;">Manter excelência</span>';}
 function iscProcessar(){const raw=document.getElementById('iscPasteArea')?.value||'';const mes=Number(document.getElementById('iscMes')?.value||3);const ano=Number(document.getElementById('iscAno')?.value||2026);const meta=Number(document.getElementById('iscMeta')?.value||82);if(!raw.trim()){alert('Cole os dados.');return;}const lines=raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);const sep=lines[0].includes('\t')?'\t':';';const registros=[];for(const line of lines){const cols=line.split(sep).map(c=>c.trim());if(cols.length<7)continue;const consultor=cols[0];if(!consultor)continue;registros.push({consultor,dPeu:Number(cols[1])||0,nPeu:Number(cols[2])||0,pPeu:Number(cols[3])||0,dCit:Number(cols[4])||0,nCit:Number(cols[5])||0,pCit:Number(cols[6])||0});}if(!registros.length){alert('Nenhum dado válido.');return;}const key=`${ano}-${String(mes).padStart(2,'0')}`;iscHistorico[key]={registros,mes,ano,meta};if(window._fbSet)window._fbSet('qualis_isc/'+key,{registros,mes,ano,meta}).catch(()=>{});iscRenderMesBtns();iscRenderMes(key);}
 function iscLimpar(){document.getElementById('iscPasteArea').value='';}
 function iscRenderMesBtns(){const wrap=document.getElementById('iscMesBtns');if(!wrap)return;wrap.innerHTML=Object.keys(iscHistorico).sort().map(k=>{const d=iscHistorico[k];return `<button class="subnav-btn" onclick="iscRenderMes('${k}')" id="iscBtn-${k}">${MESES_ISC[d.mes]}/${d.ano}</button>`;}).join('');}
 function iscRenderMes(key){document.querySelectorAll('[id^="iscBtn-"]').forEach(b=>b.classList.remove('active'));document.getElementById('iscBtn-'+key)?.classList.add('active');const dados=iscHistorico[key];if(!dados)return;const{registros,meta}=dados;document.getElementById('iscVazio').style.display='none';document.getElementById('iscKpis').style.display='grid';document.getElementById('iscTabelaPeu').style.display='block';document.getElementById('iscTabelaCit').style.display='block';const withISC=registros.map(r=>({...r,iscPeu:calcISC(r.dPeu,r.nPeu,r.pPeu),iscCit:calcISC(r.dCit,r.nCit,r.pCit)}));const vP=withISC.filter(r=>r.iscPeu!==null);const vC=withISC.filter(r=>r.iscCit!==null);const mP=vP.length?vP.reduce((s,r)=>s+r.iscPeu,0)/vP.length:null;const mC=vC.length?vC.reduce((s,r)=>s+r.iscCit,0)/vC.length:null;const melhor=[...withISC].sort((a,b)=>Math.max(b.iscPeu??0,b.iscCit??0)-Math.max(a.iscPeu??0,a.iscCit??0))[0];const abaixo=withISC.filter(r=>(r.iscPeu!==null&&r.iscPeu*100<meta)||(r.iscCit!==null&&r.iscCit*100<meta)).length;setText('iscKiPeu',mP!==null?(mP*100).toFixed(1)+'%':'—');setText('iscKiCit',mC!==null?(mC*100).toFixed(1)+'%':'—');setText('iscKMelhor',melhor?Math.max(melhor.iscPeu??0,melhor.iscCit??0)*100|0+'%':'—');setText('iscKMelhorNome',melhor?.consultor||'—');setText('iscKAtencao',abaixo);
-  const tbPeu=document.getElementById('iscTbPeu');tbPeu.innerHTML=withISC.map(r=>{const isc=r.iscPeu;const total=r.dPeu+r.nPeu+r.pPeu;const iscStr=isc!==null?`<strong style="color:${isc*100>=meta?'var(--q-teal)':'var(--red)'}">${(isc*100).toFixed(1)}%</strong>`:'<span style="color:var(--muted);">Sem dados</span>';return `<tr class="${r.dPeu>0?'row-detrator':''}"><td><strong>${esc(r.consultor)}</strong></td><td style="text-align:center;color:${r.dPeu>0?'var(--red)':'inherit'};font-weight:${r.dPeu>0?700:400};">${r.dPeu}</td><td style="text-align:center;color:var(--q-gold);">${r.nPeu}</td><td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pPeu}</td><td style="text-align:center;">${total||'—'}</td><td style="text-align:center;">${iscStr}</td><td>${iscTendencia(isc,meta)}</td><td>${iscOrientacao(r.dPeu,r.nPeu,r.pPeu,isc,meta)}</td></tr>`;}).join('')||'<tr><td colspan="8" class="empty">Sem dados.</td></tr>';
-  const tbCit=document.getElementById('iscTbCit');tbCit.innerHTML=withISC.map(r=>{const isc=r.iscCit;const total=r.dCit+r.nCit+r.pCit;const iscStr=isc!==null?`<strong style="color:${isc*100>=meta?'var(--q-teal)':'var(--red)'}">${(isc*100).toFixed(1)}%</strong>`:'<span style="color:var(--muted);">Sem dados</span>';return `<tr class="${r.dCit>0?'row-detrator':''}"><td><strong>${esc(r.consultor)}</strong></td><td style="text-align:center;color:${r.dCit>0?'var(--red)':'inherit'};font-weight:${r.dCit>0?700:400};">${r.dCit}</td><td style="text-align:center;color:var(--q-gold);">${r.nCit}</td><td style="text-align:center;color:var(--q-teal);font-weight:700;">${r.pCit}</td><td style="text-align:center;">${total||'—'}</td><td style="text-align:center;">${iscStr}</td><td>${iscTendencia(isc,meta)}</td><td>${iscOrientacao(r.dCit,r.nCit,r.pCit,isc,meta)}</td></tr>`;}).join('')||'<tr><td colspan="8" class="empty">Sem dados.</td></tr>';}
+  const tbPeu=document.getElementById('iscTbPeu');tbPeu.innerHTML=withISC.map(r=>{const isc=r.iscPeu;const total=r.dPeu+r.nPeu+r.pPeu;const iscStr=isc!==null?`<strong style="color:${isc*100>=meta?'#10b981':'#ef4444'}">${(isc*100).toFixed(1)}%</strong>`:'<span style="color:var(--muted);">Sem dados</span>';return `<tr class="${r.dPeu>0?'row-detrator':''}"><td><strong>${esc(r.consultor)}</strong></td><td style="text-align:center;color:${r.dPeu>0?'#ef4444':'inherit'};font-weight:${r.dPeu>0?700:400};">${r.dPeu}</td><td style="text-align:center;color:#f59e0b;">${r.nPeu}</td><td style="text-align:center;color:#10b981;font-weight:700;">${r.pPeu}</td><td style="text-align:center;">${total||'—'}</td><td style="text-align:center;">${iscStr}</td><td>${iscTendencia(isc,meta)}</td><td>${iscOrientacao(r.dPeu,r.nPeu,r.pPeu,isc,meta)}</td></tr>`;}).join('')||'<tr><td colspan="8" class="empty">Sem dados.</td></tr>';
+  const tbCit=document.getElementById('iscTbCit');tbCit.innerHTML=withISC.map(r=>{const isc=r.iscCit;const total=r.dCit+r.nCit+r.pCit;const iscStr=isc!==null?`<strong style="color:${isc*100>=meta?'#10b981':'#ef4444'}">${(isc*100).toFixed(1)}%</strong>`:'<span style="color:var(--muted);">Sem dados</span>';return `<tr class="${r.dCit>0?'row-detrator':''}"><td><strong>${esc(r.consultor)}</strong></td><td style="text-align:center;color:${r.dCit>0?'#ef4444':'inherit'};font-weight:${r.dCit>0?700:400};">${r.dCit}</td><td style="text-align:center;color:#f59e0b;">${r.nCit}</td><td style="text-align:center;color:#10b981;font-weight:700;">${r.pCit}</td><td style="text-align:center;">${total||'—'}</td><td style="text-align:center;">${iscStr}</td><td>${iscTendencia(isc,meta)}</td><td>${iscOrientacao(r.dCit,r.nCit,r.pCit,isc,meta)}</td></tr>`;}).join('')||'<tr><td colspan="8" class="empty">Sem dados.</td></tr>';}
 async function loadIscFromFirebase(){if(!window._fbGet)return;try{const snap=await window._fbGet('qualis_isc');const data=snap.val()||{};Object.entries(data).forEach(([k,v])=>{iscHistorico[k]=v;});iscRenderMesBtns();const keys=Object.keys(iscHistorico).sort();if(keys.length)iscRenderMes(keys[keys.length-1]);}catch(e){console.warn(e);}}
 
 /* ══ TREINAMENTOS ══ */
@@ -3892,9 +3904,9 @@ function trProcessar(){
 }
 
 function trLimpar(){document.getElementById('trBasePaste').value='';trState.resumo=[];trState.cronograma=[];trState.envio=[];document.getElementById('trKpis').style.display='none';['trTbResumo','trTbCron','trTbEnvio'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<tr><td colspan="9" class="empty">Processe a base primeiro.</td></tr>';});trHideStatus();}
-function trRenderResumo(fn='',fm=''){const tb=document.getElementById('trTbResumo');let rows=trState.resumo;if(fn)rows=rows.filter(r=>r.nome.toLowerCase().includes(fn.toLowerCase()));if(fm)rows=rows.filter(r=>r.tipo===fm);if(!rows.length){tb.innerHTML='<tr><td colspan="9" class="empty">Nenhum resultado.</td></tr>';return;}tb.innerHTML=rows.map(r=>{const m=r.tipo==='SALA'?'<span class="chip chip-amber">Sala</span>':'<span class="chip chip-blue">Remoto</span>';const bg=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';return `<tr class="${bg}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:11px;">${esc(r.email)}</td><td><code style="font-size:11px;">${esc(r.idUsuario||'—')}</code></td><td style="font-size:12px;">${esc(r.area)}</td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${m}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td></tr>`;}).join('');}
+function trRenderResumo(fn='',fm=''){const tb=document.getElementById('trTbResumo');let rows=trState.resumo;if(fn)rows=rows.filter(r=>r.nome.toLowerCase().includes(fn.toLowerCase()));if(fm)rows=rows.filter(r=>r.tipo===fm);if(!rows.length){tb.innerHTML='<tr><td colspan="9" class="empty">Nenhum resultado.</td></tr>';return;}tb.innerHTML=rows.map(r=>{const m=r.tipo==='SALA'?'<span class="chip chip-amber">Sala</span>':'<span class="chip chip-blue">Remoto</span>';const bg=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';return `<tr class="${bg}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:11px;">${esc(r.email)}</td><td><code style="font-size:11px;">${esc(r.idUsuario||'—')}</code></td><td style="font-size:12px;">${esc(r.area)}</td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${m}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'#ef4444':r.total>=5?'#f59e0b':'inherit'}">${r.total}</strong></td></tr>`;}).join('');}
 function trFiltrarResumo(){trRenderResumo(document.getElementById('trFiltroResumo')?.value||'',document.getElementById('trFiltroModal')?.value||'');}
-function trRenderCron(filtro=''){const tb=document.getElementById('trTbCron');let rows=trState.cronograma;if(filtro)rows=rows.filter(r=>r.nome.toLowerCase().includes(filtro.toLowerCase())||r.data.includes(filtro));if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="empty">Nenhum agendamento.</td></tr>';return;}const byDate={};rows.forEach(r=>{if(!byDate[r.data])byDate[r.data]=[];byDate[r.data].push(r);});let html='';Object.entries(byDate).forEach(([date,items])=>{html+=`<tr style="background:rgba(0,191,165,.05);"><td colspan="8" style="font-weight:700;font-size:12px;padding:8px 13px;color:var(--q-red);">📅 ${date}</td></tr>`;items.forEach(r=>{html+=`<tr><td>${esc(r.data)}</td><td><strong>${esc(r.inicio)}</strong></td><td>${esc(r.fim)}</td><td>${esc(r.nome)}</td><td style="font-size:11px;">${esc(r.email)}</td><td><code style="font-size:11px;">${esc(r.id||'—')}</code></td><td><span class="chip chip-amber">Sala</span></td><td style="font-size:12px;color:var(--muted);">${esc(r.obs)}</td></tr>`;});});tb.innerHTML=html;}
+function trRenderCron(filtro=''){const tb=document.getElementById('trTbCron');let rows=trState.cronograma;if(filtro)rows=rows.filter(r=>r.nome.toLowerCase().includes(filtro.toLowerCase())||r.data.includes(filtro));if(!rows.length){tb.innerHTML='<tr><td colspan="8" class="empty">Nenhum agendamento.</td></tr>';return;}const byDate={};rows.forEach(r=>{if(!byDate[r.data])byDate[r.data]=[];byDate[r.data].push(r);});let html='';Object.entries(byDate).forEach(([date,items])=>{html+=`<tr style="background:rgba(0,191,165,.05);"><td colspan="8" style="font-weight:700;font-size:12px;padding:8px 13px;color:#ef4444;">📅 ${date}</td></tr>`;items.forEach(r=>{html+=`<tr><td>${esc(r.data)}</td><td><strong>${esc(r.inicio)}</strong></td><td>${esc(r.fim)}</td><td>${esc(r.nome)}</td><td style="font-size:11px;">${esc(r.email)}</td><td><code style="font-size:11px;">${esc(r.id||'—')}</code></td><td><span class="chip chip-amber">Sala</span></td><td style="font-size:12px;color:var(--muted);">${esc(r.obs)}</td></tr>`;});});tb.innerHTML=html;}
 function trFiltrarCron(){trRenderCron(document.getElementById('trFiltroCron')?.value||'');}
 function trRenderEnvio(){
   const tb=document.getElementById('trTbEnvio');
@@ -3915,24 +3927,24 @@ function trCopiarUm(idx){
     p.status='COPIADO'; trRenderEnvio();
     const fb=document.getElementById('trEmailStatus');
     fb.textContent='✅ HTML de '+p.nome+' copiado! Abra o Gmail, cole (Ctrl+V) e envie para '+p.email;
-    fb.style.color='var(--q-teal)';
+    fb.style.color='#10b981';
   }).catch(()=>{
     const w=window.open('','_blank'); w.document.write(trBuildHtml(p)); w.document.close();
     const fb=document.getElementById('trEmailStatus');
     fb.textContent='E-mail abriu em nova aba — copie o conteúdo e cole no Gmail.';
-    fb.style.color='var(--q-accent)';
+    fb.style.color='#f97316';
   });
 }
 
 function trCopiarTodos(){
-  if(!trState.envio.length){ const fb=document.getElementById('trEmailStatus'); fb.textContent='⚠️ Processe a base primeiro.'; fb.style.color='var(--q-gold)'; return; }
+  if(!trState.envio.length){ const fb=document.getElementById('trEmailStatus'); fb.textContent='⚠️ Processe a base primeiro.'; fb.style.color='#f59e0b'; return; }
   const pendentes=trState.envio.filter(p=>p.status!=='COPIADO');
-  if(!pendentes.length){ const fb=document.getElementById('trEmailStatus'); fb.textContent='Todos já foram copiados!'; fb.style.color='var(--q-teal)'; return; }
+  if(!pendentes.length){ const fb=document.getElementById('trEmailStatus'); fb.textContent='Todos já foram copiados!'; fb.style.color='#10b981'; return; }
   trCopiarUm(trState.envio.indexOf(pendentes[0]));
 }
 
 function trAbrirGmail(){ window.open('https://mail.google.com/mail/u/0/#compose','_blank'); }
-function trShowStatus(msg,type='info'){const el=document.getElementById('trStatus');el.style.display='block';el.textContent=msg;el.style.background=type==='success'?'rgba(16,185,129,.08)':type==='error'?'rgba(239,68,68,.08)':'rgba(13,148,136,.08)';el.style.color=type==='success'?'var(--q-teal)':type==='error'?'var(--q-red)':'var(--q-accent)';el.style.border=`1px solid ${type==='success'?'rgba(16,185,129,.2)':type==='error'?'rgba(239,68,68,.2)':'rgba(13,148,136,.2)'}`;}
+function trShowStatus(msg,type='info'){const el=document.getElementById('trStatus');el.style.display='block';el.textContent=msg;el.style.background=type==='success'?'rgba(16,185,129,.08)':type==='error'?'rgba(239,68,68,.08)':'rgba(13,148,136,.08)';el.style.color=type==='success'?'#10b981':type==='error'?'#ef4444':'#f97316';el.style.border=`1px solid ${type==='success'?'rgba(16,185,129,.2)':type==='error'?'rgba(239,68,68,.2)':'rgba(13,148,136,.2)'}`;}
 function trHideStatus(){document.getElementById('trStatus').style.display='none';}
 /* ════════════════════════════════════════════
    GMAIL OAUTH — Envio direto pelo Gmail
@@ -4007,7 +4019,7 @@ function gmailUpdateUI(connected){
   if(!status) return;
   if(connected){
     status.textContent = '✅ Gmail conectado — pronto para enviar!';
-    status.style.color = 'var(--q-teal)';
+    status.style.color = '#10b981';
     if(btnConnect) btnConnect.style.display='none';
     if(btnDisconnect) btnDisconnect.style.display='inline-flex';
   } else {
@@ -4066,7 +4078,7 @@ async function trEnviarTodos(){
   if(!confirm('Enviar e-mails para '+pendentes.length+' pessoa(s)?'))return;
   const cc=(localStorage.getItem('tr-trEmailCc')||document.getElementById('trEmailCc')?.value||'').split(',').map(x=>x.trim()).filter(Boolean).join(',');
   let enviados=0,erros=0;
-  fb.textContent='📤 Enviando 0/'+pendentes.length+'...';fb.style.color='var(--q-accent)';
+  fb.textContent='📤 Enviando 0/'+pendentes.length+'...';fb.style.color='#f97316';
   for(const p of trState.envio){
     if(p.status!=='PENDENTE')continue;
     try{
@@ -4080,7 +4092,7 @@ async function trEnviarTodos(){
   }
   trRenderEnvio();
   fb.textContent='✅ '+enviados+' enviado(s)'+(erros?', '+erros+' erro(s).':' com sucesso!');
-  fb.style.color=erros?'var(--q-gold)':'var(--q-teal)';
+  fb.style.color=erros?'#f59e0b':'#10b981';
 }
 function trCarregarEmailConfig(){['trResendKey','trEmailFrom','trEmailCc'].forEach(id=>{const v=localStorage.getItem('tr-'+id);const el=document.getElementById(id);if(v&&el)el.value=v;});}
 
@@ -4107,11 +4119,11 @@ async function renderIAQualis(){
   setText('ia-tr',   c.tr);
   // Alertas
   const alertas=[];
-  if(c.dv+c.dp>0) alertas.push({cor:'var(--q-red)',icon:'🚨',msg:`${c.dv+c.dp} detrator(es) na base — atenção!`});
-  if(c.nv_pct!==null&&c.nv_pct<90) alertas.push({cor:'var(--q-gold)',icon:'📊',msg:`NPS Vendas em ${c.nv_pct}% — abaixo da meta de 90%.`});
-  if(c.np_pct!==null&&c.np_pct<82) alertas.push({cor:'var(--q-gold)',icon:'📊',msg:`NPS Pos-Vendas em ${c.np_pct}% — abaixo da meta de 82%.`});
-  if(c.tr>0) alertas.push({cor:'var(--q-accent)',icon:'🎓',msg:`${c.tr} pessoa(s) com treinamento pendente.`});
-  if(c.critico&&c.critico!=='nenhum') alertas.push({cor:'var(--q-red)',icon:'👤',msg:`${c.critico} tem detratores — prioridade!`});
+  if(c.dv+c.dp>0) alertas.push({cor:'#ef4444',icon:'🚨',msg:`${c.dv+c.dp} detrator(es) na base — atenção!`});
+  if(c.nv_pct!==null&&c.nv_pct<90) alertas.push({cor:'#f59e0b',icon:'📊',msg:`NPS Vendas em ${c.nv_pct}% — abaixo da meta de 90%.`});
+  if(c.np_pct!==null&&c.np_pct<82) alertas.push({cor:'#f59e0b',icon:'📊',msg:`NPS Pos-Vendas em ${c.np_pct}% — abaixo da meta de 82%.`});
+  if(c.tr>0) alertas.push({cor:'#f97316',icon:'🎓',msg:`${c.tr} pessoa(s) com treinamento pendente.`});
+  if(c.critico&&c.critico!=='nenhum') alertas.push({cor:'#ef4444',icon:'👤',msg:`${c.critico} tem detratores — prioridade!`});
   const alertasEl=document.getElementById('ia-alertas');
   if(alertasEl){
     alertasEl.innerHTML=alertas.length?alertas.map(a=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;background:var(--surface2);border-left:3px solid ${a.cor};"><span style="font-size:16px;">${a.icon}</span><span style="font-size:13px;font-weight:500;">${a.msg}</span></div>`).join(''):'<div style="color:var(--muted);font-size:13px;">Nenhum alerta. Tudo tranquilo!</div>';
@@ -4275,21 +4287,21 @@ function atualizarDashboardInicio(){
 
 async function trTestarEmail(){
   const fb=document.getElementById('trEmailStatus');
-  if(!trState.envio.length){fb.textContent='⚠️ Processe a base primeiro.';fb.style.color='var(--q-gold)';return;}
+  if(!trState.envio.length){fb.textContent='⚠️ Processe a base primeiro.';fb.style.color='#f59e0b';return;}
   const p=trState.envio[0];
   const testeTo=currentUser?.email||'kamilly.paiva@adtsa.com.br';
-  fb.textContent='📨 Enviando teste...';fb.style.color='var(--q-accent)';
+  fb.textContent='📨 Enviando teste...';fb.style.color='#f97316';
   try{
     const resp=await fetch('https://script.google.com/macros/s/AKfycbxN4HpBdgO8fnFTRkOVJXQsyYzvi1ITKaM12jUAz1jkgdW6oCzltFmkmjnwgkDkpcnM4A/exec',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({to:testeTo,subject:'🎓 TESTE — Treinamentos: '+p.nome,html:trBuildHtml(p),cc:''})});
     const data=await resp.json();
     if(!data.success)throw new Error(data.error||'Erro');
-    fb.textContent='✅ Teste enviado para '+testeTo+'!';fb.style.color='var(--q-teal)';
-  }catch(e){fb.textContent='❌ '+e.message;fb.style.color='var(--q-red)';}
+    fb.textContent='✅ Teste enviado para '+testeTo+'!';fb.style.color='#10b981';
+  }catch(e){fb.textContent='❌ '+e.message;fb.style.color='#ef4444';}
 }
 
 async function trEnviarTodos2(){} // placeholder
 
-function renderTreinamentosPos(){const tb=document.getElementById('tbPosTreinamentos');if(!tb)return;const todos=trState.resumo;if(!todos.length){tb.innerHTML='<tr><td colspan="7" class="empty">Processe no módulo Treinamentos.</td></tr>';setText('posTrSala','0');setText('posTrRemoto','0');setText('posTrTotal','0');return;}const posAreas=['pós','pos','oficina','garantia','assistência','assistencia','técnico','tecnico','serviço','servico'];let rows=todos.filter(p=>{const a=trNorm(p.area),f=trNorm(p.funcao);return posAreas.some(x=>a.includes(x)||f.includes(x));});if(!rows.length)rows=[...todos];const fq=(document.getElementById('fqPosTr')?.value||'').toLowerCase();const fm=document.getElementById('fsPosTr')?.value||'';if(fq)rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));if(fm)rows=rows.filter(r=>r.tipo===fm);setText('posTrSala',rows.filter(r=>r.tipo==='SALA').length);setText('posTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);setText('posTrTotal',rows.reduce((s,r)=>s+r.total,0));if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});tb.innerHTML=rows.map(r=>{const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';const modal=r.tipo==='SALA'?'<span class="chip chip-amber">Sala</span>':'<span class="chip chip-blue">Remoto</span>';const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:700;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: 7 dias</span>`:'—';return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;}).join('');}
+function renderTreinamentosPos(){const tb=document.getElementById('tbPosTreinamentos');if(!tb)return;const todos=trState.resumo;if(!todos.length){tb.innerHTML='<tr><td colspan="7" class="empty">Processe no módulo Treinamentos.</td></tr>';setText('posTrSala','0');setText('posTrRemoto','0');setText('posTrTotal','0');return;}const posAreas=['pós','pos','oficina','garantia','assistência','assistencia','técnico','tecnico','serviço','servico'];let rows=todos.filter(p=>{const a=trNorm(p.area),f=trNorm(p.funcao);return posAreas.some(x=>a.includes(x)||f.includes(x));});if(!rows.length)rows=[...todos];const fq=(document.getElementById('fqPosTr')?.value||'').toLowerCase();const fm=document.getElementById('fsPosTr')?.value||'';if(fq)rows=rows.filter(r=>r.nome.toLowerCase().includes(fq));if(fm)rows=rows.filter(r=>r.tipo===fm);setText('posTrSala',rows.filter(r=>r.tipo==='SALA').length);setText('posTrRemoto',rows.filter(r=>r.tipo==='REMOTO').length);setText('posTrTotal',rows.reduce((s,r)=>s+r.total,0));if(!rows.length){tb.innerHTML='<tr><td colspan="7" class="empty">Nenhum resultado.</td></tr>';return;}const cronMap={};trState.cronograma.forEach(c=>{cronMap[c.nome]=`${c.data} · ${c.inicio}–${c.fim}`;});tb.innerHTML=rows.map(r=>{const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';const modal=r.tipo==='SALA'?'<span class="chip chip-amber">Sala</span>':'<span class="chip chip-blue">Remoto</span>';const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:#10b981;font-weight:700;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: 7 dias</span>`:'—';return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:700;">${r.peu}</td><td style="text-align:center;font-weight:700;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'#ef4444':r.total>=5?'#f59e0b':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;}).join('');}
 
 /* Treinamentos filtrados para área de VENDAS */
 function renderTreinamentosVen(){
@@ -4318,8 +4330,8 @@ function renderTreinamentosVen(){
   tb.innerHTML=rows.map(r=>{
     const crit=r.total>=10?'row-detrator':r.total>=5?'row-neutro':'';
     const modal=r.tipo==='SALA'?'<span class="chip chip-accent">Sala</span>':'<span class="chip chip-teal">Remoto</span>';
-    const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:var(--q-teal);font-weight:600;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: ${r.prazoStr||'7 dias'}</span>`:'—';
-    return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:600;">${r.peu}</td><td style="text-align:center;font-weight:600;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'var(--q-red)':r.total>=5?'var(--q-gold)':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;
+    const agenda=cronMap[r.nome]?`<span style="font-size:12px;color:#10b981;font-weight:600;">📅 ${cronMap[r.nome]}</span>`:r.tipo==='REMOTO'?`<span style="font-size:12px;color:var(--muted);">Prazo: ${r.prazoStr||'7 dias'}</span>`:'—';
+    return `<tr class="${crit}"><td><strong>${esc(r.nome)}</strong></td><td style="font-size:12px;">${esc(r.funcao)}</td><td>${modal}</td><td style="text-align:center;font-weight:600;">${r.peu}</td><td style="text-align:center;font-weight:600;">${r.cit}</td><td style="text-align:center;"><strong style="color:${r.total>=10?'#ef4444':r.total>=5?'#f59e0b':'inherit'}">${r.total}</strong></td><td>${agenda}</td></tr>`;
   }).join('');
 }
 
@@ -4338,11 +4350,11 @@ function trInit(){
     if(statusEnvio){
       if(gmailToken){
         statusEnvio.textContent='✅ Gmail conectado — pronto para enviar!';
-        statusEnvio.style.color='var(--q-teal)';
+        statusEnvio.style.color='#10b981';
         statusEnvio.style.borderColor='rgba(13,148,136,.2)';
       } else {
         statusEnvio.innerHTML='⚠️ Gmail não conectado. Vá em <strong>Base Bruta → E-mail via Gmail</strong> e clique em Conectar Gmail.';
-        statusEnvio.style.color='var(--q-gold)';
+        statusEnvio.style.color='#f59e0b';
       }
     }
   }, 500);
@@ -4667,6 +4679,32 @@ function exportarRelatorio(){
 
 </div>
 
+
+<!-- Modal Adicionar Clientes -->
+<div id="modalAdicionarClientes" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);" id="modalAddTitulo">Adicionar Clientes</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px;">Clientes existentes são mantidos. Novos VINs são adicionados.</div>
+      </div>
+      <button onclick="fecharModalAdicionar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;">
+        Duplicatas detectadas pelo VIN — clientes já existentes são ignorados automaticamente.
+      </div>
+      <textarea id="pasteAdicionar" rows="10"
+        style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:var(--mono);"
+        placeholder="VIN;Cliente;Email;Telefone;Data Convite;Consultor&#10;Cole apenas os novos clientes aqui..."></textarea>
+      <div id="addPreview" style="margin-top:10px;font-size:13px;color:var(--muted);font-weight:500;"></div>
+      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
+        <button onclick="fecharModalAdicionar()" class="btn ghost">Cancelar</button>
+        <button onclick="confirmarAdicionar()" class="btn primary">Adicionar à base</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body></html>`;
 
   const w=window.open('','_blank');
@@ -4697,15 +4735,15 @@ function calcSimulador(tipo){
   const pct=Math.round(npsAtual*100);
   if(npsEl){
     npsEl.textContent=pct+'%';
-    npsEl.style.color=npsAtual>=obj?'var(--q-teal)':'var(--q-red)';
+    npsEl.style.color=npsAtual>=obj?'#10b981':'#ef4444';
   }
   // Necessidade: quantas promotoras a mais (como promotor puro) para atingir obj
   // (p+x - d)/(total+x) >= obj → x >= (obj*(total) - p + d)/(1-obj)
   if(npsAtual>=obj){
-    if(necEl){necEl.textContent='✅ Meta atingida!';necEl.style.color='var(--q-teal)';}
+    if(necEl){necEl.textContent='✅ Meta atingida!';necEl.style.color='#10b981';}
   } else {
     const nec=Math.ceil((obj*total - p + d)/(1-obj));
-    if(necEl){necEl.textContent='Faltam '+nec+' promotora(s)';necEl.style.color='var(--q-red)';}
+    if(necEl){necEl.textContent='Faltam '+nec+' promotora(s)';necEl.style.color='#ef4444';}
   }
 }
 
@@ -4735,10 +4773,10 @@ function atualizarCountdown(){
 
 /* ════ MURAL DE AVISOS ════ */
 const TIPO_AVISO = {
-  info:    {cor:'var(--q-accent)', bg:'rgba(37,99,235,.08)', icon:'ℹ️'},
-  alert:   {cor:'var(--q-gold)',   bg:'rgba(245,158,11,.08)', icon:'⚠️'},
-  success: {cor:'var(--q-teal)',   bg:'rgba(13,148,136,.08)', icon:'✅'},
-  urgent:  {cor:'var(--q-red)',    bg:'rgba(220,38,38,.08)',  icon:'🚨'},
+  info:    {cor:'#f97316', bg:'rgba(37,99,235,.08)', icon:'ℹ️'},
+  alert:   {cor:'#f59e0b',   bg:'rgba(245,158,11,.08)', icon:'⚠️'},
+  success: {cor:'#10b981',   bg:'rgba(13,148,136,.08)', icon:'✅'},
+  urgent:  {cor:'#ef4444',    bg:'rgba(220,38,38,.08)',  icon:'🚨'},
 };
 
 
@@ -4821,7 +4859,7 @@ function renderAniversariantes(){
     const isHoje=d.getDate()===hoje.getDate()&&d.getMonth()===hoje.getMonth();
     const anoNasc=d.getFullYear();
     const idade=hoje.getFullYear()-anoNasc;
-    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:${isHoje?'rgba(13,148,136,.1)':'var(--surface2)'};border:1px solid ${isHoje?'var(--q-teal)':'var(--border)'};">
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:${isHoje?'rgba(13,148,136,.1)':'var(--surface2)'};border:1px solid ${isHoje?'#10b981':'var(--border)'};">
       <div style="font-size:28px;flex-shrink:0;">${isHoje?'🎂':'🎁'}</div>
       <div style="flex:1;">
         <div style="font-weight:700;font-size:14px;">${esc(a.nome)}${isHoje?' 🎉 Hoje!':''}</div>
@@ -4842,7 +4880,7 @@ function salvarGroqKey(){
   // Sincroniza com scApiKey se existir
   if(document.getElementById('scApiKey')) document.getElementById('scApiKey').value = key;
   const st = document.getElementById('groqKeyStatus');
-  if(st){st.textContent='✅ Chave salva!';st.style.color='var(--q-teal)';}
+  if(st){st.textContent='✅ Chave salva!';st.style.color='#10b981';}
   setTimeout(()=>{if(st)st.textContent='';},3000);
 }
 
@@ -4968,8 +5006,8 @@ function renderEquipeConfig(){
   var vs=equipeGlobal.vendedores||[], cs=equipeGlobal.consultores||[];
   var elV=document.getElementById('listaVendedoresConfig');
   var elC=document.getElementById('listaConsultoresConfig');
-  if(elV) elV.innerHTML=vs.length?vs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'vendedor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:var(--q-red);font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum vendedor.</p>';
-  if(elC) elC.innerHTML=cs.length?cs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'consultor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:var(--q-red);font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum consultor.</p>';
+  if(elV) elV.innerHTML=vs.length?vs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'vendedor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum vendedor.</p>';
+  if(elC) elC.innerHTML=cs.length?cs.map(function(n){return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border:1px solid var(--border);border-radius:7px;margin-bottom:4px;"><span style="font-size:13px;">'+esc(n)+'</span><button onclick="excluirMembro(\'consultor\',\''+n+'\')" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;line-height:1;">×</button></div>';}).join(''):'<p style="color:var(--muted);font-size:13px;">Nenhum consultor.</p>';
 }
 async function excluirMembro(tipo,nome){
   if(!confirm('Remover '+nome+' da equipe?'))return;
@@ -4990,7 +5028,7 @@ var _notificacoes = JSON.parse(localStorage.getItem('q-notificacoes')||'[]');
 function adicionarNotificacao(tipo, cliente, nota, marca, setor){
   var icone = nota>=9?'🏆':nota>=7?'📋':'🚨';
   var titulo = nota>=9?'Promotora registrada':nota>=7?'Neutra registrada':'Detratora — ação necessária';
-  var cor = nota>=9?'var(--q-teal)':nota>=7?'var(--q-gold)':'var(--q-red)';
+  var cor = nota>=9?'#10b981':nota>=7?'#f59e0b':'#ef4444';
   var notif = {
     id: Date.now(),
     icone, titulo, cor,
@@ -5155,9 +5193,9 @@ function renderHistorico(){
   el.innerHTML = lista.slice().reverse().map(function(e){
     return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 13px;">'+
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">'+
-        '<span style="font-size:11px;font-weight:700;color:var(--q-accent);">'+esc(e.data)+'</span>'+
+        '<span style="font-size:11px;font-weight:700;color:#f97316;">'+esc(e.data)+'</span>'+
         '<span style="font-size:11px;color:var(--muted);">'+esc(e.hora)+'</span>'+
-        '<span style="font-size:11px;font-weight:700;color:var(--q-teal);">'+esc(e.usuario)+'</span>'+
+        '<span style="font-size:11px;font-weight:700;color:#10b981;">'+esc(e.usuario)+'</span>'+
       '</div>'+
       '<div style="font-size:13px;line-height:1.5;">'+esc(e.texto)+'</div>'+
     '</div>';
@@ -5444,7 +5482,7 @@ Responda EXATAMENTE neste formato:
     const texto = d.choices?.[0]?.message?.content||'Sem resposta';
     if(elResp){
       elResp.textContent = texto;
-      elResp.style.color = texto.includes('NÃO PODE')||texto.includes('nao pode')?'var(--q-red)':'var(--q-teal)';
+      elResp.style.color = texto.includes('NÃO PODE')||texto.includes('nao pode')?'#ef4444':'#10b981';
     }
   }catch(e){
     if(elResp) elResp.textContent = 'Erro: '+e.message;
@@ -5599,7 +5637,7 @@ function renderEventosAgenda(){
     var diffDias = Math.round((evDia-hoje)/86400000);
     var diaLabel = diffDias===0?'Hoje':diffDias===1?'Amanhã':dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'});
     var hora = ev.start.dateTime ? dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}) : 'Dia todo';
-    var cor = diffDias===0?'var(--q-red)':diffDias===1?'var(--q-gold)':'var(--q-accent)';
+    var cor = diffDias===0?'#ef4444':diffDias===1?'#f59e0b':'#f97316';
     return '<div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;background:var(--surface2);border-left:3px solid '+cor+';margin-bottom:6px;">'+
       '<div style="flex-shrink:0;text-align:center;min-width:44px;">'+
         '<div style="font-size:11px;font-weight:700;color:'+cor+';">'+diaLabel+'</div>'+
@@ -5677,7 +5715,7 @@ function calcularInsights(){
       elVerbs.textContent='Nenhuma verbalização registrada ainda.';
     } else {
       elVerbs.innerHTML = verbs.map(function(r){
-        var cor = r.STATUS==='DETRATOR'?'var(--q-red)':'var(--q-gold)';
+        var cor = r.STATUS==='DETRATOR'?'#ef4444':'#f59e0b';
         return '<div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);">'+
           '<span style="font-size:11px;font-weight:700;color:'+cor+';background:rgba(239,68,68,.08);padding:2px 8px;border-radius:99px;">'+
           (r.CLIENTE||'?')+' · Nota '+r.NOTA_NPS+'</span>'+
@@ -5807,14 +5845,19 @@ function calcCountdownTrimestre(){
   else tri = trimestres[3];
 
   var diff = tri.fim - now;
-  var dias = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  var totalHoras = diff / (1000 * 60 * 60);
+  var dias = Math.floor(totalHoras / 24);
+  var horas = Math.floor(totalHoras % 24);
+  var minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   var meses = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
   var elDias = document.getElementById('cd-dias');
+  var elHoras = document.getElementById('cd-horas');
   var elLabel = document.getElementById('cd-trimestre-label');
   var elFim = document.getElementById('cd-data-fim');
 
   if(elDias) elDias.textContent = dias;
+  if(elHoras) elHoras.textContent = String(horas).padStart(2,'0')+'h '+String(minutos).padStart(2,'0')+'min';
   if(elLabel) elLabel.textContent = tri.nome + ' · Pigalle WS';
   if(elFim){
     var fimStr = tri.fim.getDate() + '/' + meses[tri.fim.getMonth()] + '/' + tri.fim.getFullYear();
@@ -5871,6 +5914,41 @@ function carregarApisCfg(){
   });
 }
 
+
+function syCopy(btn, tipo){
+  var v = btn.getAttribute('data-v');
+  if(v) navigator.clipboard.writeText(v);
+  var orig = btn.textContent;
+  btn.textContent = '✅ Copiado!';
+  setTimeout(function(){ btn.textContent = orig; }, 1500);
+}
+
+
+function fixarLayout(){
+  var app = document.getElementById('app');
+  if(app){
+    app.style.width = '100vw';
+    app.style.height = '100vh';
+    app.style.display = 'flex';
+    app.style.overflow = 'hidden';
+  }
+}
+
+
+function fixarEstrutura(){
+  var ca = document.getElementById('contentArea');
+  if(!ca) return;
+  var pageIds = ['pg-inicio','pg-vendas','pg-posvendas','pg-scorecard-pos',
+                 'pg-grow','pg-treinamentos','pg-simulador','pg-inteligencia',
+                 'pg-executivo','pg-sistemas','pg-config'];
+  pageIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && el.parentElement !== ca){
+      ca.appendChild(el);
+    }
+  });
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('sc-apikey');
   if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
@@ -5886,7 +5964,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 
 <div id="modalNotificacoes" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);">
       <div style="font-size:16px;font-weight:700;">Notificações</div>
       <div style="display:flex;gap:8px;align-items:center;">
@@ -5902,7 +5980,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 
 <!-- Modal Histórico de Tratativa -->
 <div id="modalHistoricoTratativa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);width:min(520px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:min(520px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0;">
       <div>
         <div style="font-size:15px;font-weight:700;">Histórico de Tratativa</div>
@@ -5913,4 +5991,274 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="histLista" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;min-height:80px;"></div>
     <div style="padding:16px;border-top:1px solid var(--border);flex-shrink:0;">
       <textarea id="histNovaEntrada" placeholder="Descreva a tratativa realizada..." 
-        style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:v
+        style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;resize:vertical;min-height:70px;box-sizing:border-box;margin-bottom:10px;"></textarea>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="fecharHistoricoTratativa()" class="btn ghost">Fechar</button>
+        <button onclick="salvarEntradaTratativa()" class="btn primary">Registrar</button>
+      </div>
+    </div>
+  </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /app-body -->
+</div><!-- /app -->
+
+
+
+<!-- ══ MODAIS ══ -->
+<div id="modalNpsManual" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mes fechado.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mes</label>
+        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Marco</option>
+          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
+          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
+          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
+        </select></div>
+      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
+        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Peugeot</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Citroen</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="var _m=document.getElementById('modalNpsManual');if(_m)_m.style.display='none';">Cancelar</button>
+      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Novo Aviso</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Titulo</label>
+      <input id="avisoTitulo" type="text" placeholder="Ex: Reuniao amanha as 14h" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mensagem</label>
+      <textarea id="avisoMensagem" rows="3" placeholder="Detalhes do aviso..." style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;resize:vertical;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Tipo</label>
+      <select id="avisoTipo" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+        <option value="info">Informacao</option>
+        <option value="alert">Atencao</option>
+        <option value="success">Positivo</option>
+        <option value="urgent">Urgente</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAviso').style.display='none'">Cancelar</button>
+      <button class="btn primary" onclick="salvarAviso()">Publicar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
+    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Adicionar Aniversariante</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
+      <input id="anivNome" type="text" placeholder="Ex: Kamilly Paiva" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
+      <input id="anivData" type="text" placeholder="DD/MM/AAAA (ex: 15/03/1985)" maxlength="10" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;" oninput="mascaraData(this)">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor / Cargo</label>
+      <input id="anivSetor" type="text" placeholder="Ex: Qualidade - SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').style.display='none'">Cancelar</button>
+      <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
+    <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
+    <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
+    <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Conversão</label>
+      <textarea id="waDescricao" rows="3" placeholder="Ex: Convertido pelo consultor Adriano / Convertido pela Laís / Cliente viu o e-mail e respondeu por conta própria..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn ghost" onclick="document.getElementById('modalAlertaWA').style.display='none'">Cancelar</button>
+      <button onclick="enviarAlertaWA()" style="background:#25D366;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Enviar no grupo</button>
+    </div>
+  </div>
+</div>
+
+
+    </div><!-- /main -->
+  </div><!-- /shell -->
+</div><!-- /app -->
+
+<!-- Google Identity Services para Gmail OAuth -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getDatabase, ref, push, onValue, set, onDisconnect, serverTimestamp, get, update }
+  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+const FB_CONFIG = {
+  apiKey:"AIzaSyDglwSytkT39MAzEdqAeVMwJjSXP3jgInA",
+  authDomain:"qualis-portal1.firebaseapp.com",
+  databaseURL:"https://qualis-portal1-default-rtdb.firebaseio.com",
+  projectId:"qualis-portal1",
+  storageBucket:"qualis-portal1.firebasestorage.app",
+  messagingSenderId:"618969990570",
+  appId:"1:618969990570:web:ed827ca068163f5c0f57d3"
+};
+
+const EMOJIS=['👍','❤️','😂','😮','🎉','🔥'];
+const TEAM=['Kamilly','Letícia','Laís'];
+let fbApp,fbDb,_chatBooted=false;
+
+function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function hlMsg(txt){let s=esc(txt);TEAM.forEach(n=>{s=s.replace(new RegExp('@'+n,'g'),`<span class="mention">@${n}</span>`);});return s.replace(/\n/g,'<br>');}
+function initFb(){try{fbApp=initializeApp(FB_CONFIG);fbDb=getDatabase(fbApp);return true;}catch(e){console.error(e);return false;}}
+
+function setupPresence(userName){
+  if(!fbDb||!userName)return;
+  const r=ref(fbDb,`qualis_presence/${userName}`);
+  set(r,{name:userName,online:true,ts:serverTimestamp()});
+  onDisconnect(r).set({name:userName,online:false,ts:serverTimestamp()});
+  onValue(ref(fbDb,'qualis_presence'),snap=>renderOnline(snap.val()||{}));
+}
+
+function renderOnline(data){
+  const side=document.getElementById('onlineSide');const badges=document.getElementById('onlineBadges');
+  if(!side||!badges)return;
+  const users=Object.values(data);
+  side.innerHTML=TEAM.map(n=>{const u=users.find(x=>x.name===n);const on=u&&u.online;return `<div class="online-item"><div class="dot ${on?'on':''}"></div>${n}${on?'<span style="margin-left:auto;font-size:11px;color:#10b981;font-weight:700;">online</span>':''}</div>`;}).join('');
+  badges.innerHTML=TEAM.map(n=>{const on=(users.find(x=>x.name===n)||{}).online;return `<div class="online-badge"><div class="dot ${on?'on':''}"></div>${n}</div>`;}).join('');
+}
+
+function listenMsgs(){
+  if(!fbDb)return;
+  onValue(ref(fbDb,'qualis_chat'),snap=>{
+    const raw=snap.val()||{};
+    const msgs=Object.entries(raw).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
+    renderMsgs(msgs);
+  });
+}
+
+function renderMsgs(msgs){
+  const wrap=document.getElementById('chatMessages');if(!wrap)return;
+  const me=(window.currentUser||{}).name||'';
+  const atBot=wrap.scrollHeight-wrap.scrollTop-wrap.clientHeight<100;
+  if(!msgs.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Nenhuma mensagem. Diga olá! 👋</div>';return;}
+  wrap.innerHTML=msgs.map(msg=>{
+    const mine=msg.usuario===me;
+    const time=msg.ts?new Date(msg.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'';
+    const rxns=msg.reactions||{};
+    const rxHtml=Object.entries(rxns).map(([e,us])=>{const cnt=Object.keys(us).length;if(!cnt)return '';const isMine=us[me]?'mine':'';return `<button class="react-btn ${isMine}" onclick="window._toggleRx('${msg.id}','${e}')">${e}<span>${cnt}</span></button>`;}).join('');
+    const pickHtml=EMOJIS.map(e=>`<button class="emoji-pick" onclick="window._toggleRx('${msg.id}','${e}')">${e}</button>`).join('');
+    return `<div class="msg-group ${mine?'mine':'other'}">${!mine?`<div class="msg-author">${esc(msg.usuario)}</div>`:''}<div class="msg-bubble">${hlMsg(msg.mensagem)}</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;"><div class="msg-time">${time}</div><div class="msg-reactions">${rxHtml}</div><details><summary style="list-style:none;cursor:pointer;font-size:12px;color:var(--muted);">😊</summary><div class="emoji-picks">${pickHtml}</div></details></div></div>`;
+  }).join('');
+  if(atBot)wrap.scrollTop=wrap.scrollHeight;
+}
+
+async function doSend(){
+  // Tenta reconectar Firebase se necessario
+  if(!fbDb){
+    if(!initFb()){
+      alert('Firebase nao conectado. Verifique sua conexao e recarregue a pagina.');
+      return;
+    }
+  }
+  const me=(window.currentUser||{}).name;
+  if(!me){alert('Faca login primeiro.');return;}
+  const inp=document.getElementById('chatInput');
+  const txt=(inp?.value||'').trim();
+  if(!txt)return;
+  try{
+    await push(ref(fbDb,'qualis_chat'),{usuario:me,mensagem:txt,ts:Date.now()});
+    inp.value='';
+  }catch(e){
+    alert('Erro ao enviar: '+e.message);
+  }
+}
+
+async function toggleRx(msgId,emoji){
+  if(!fbDb)return;
+  const me=(window.currentUser||{}).name;if(!me)return;
+  const p=ref(fbDb,`qualis_chat/${msgId}/reactions/${emoji}/${me}`);
+  const snap=await get(p);
+  snap.exists()?await set(p,null):await set(p,true);
+}
+
+window._fbDb=()=>fbDb;
+window._toggleRx=toggleRx;
+window.sendMsg=doSend;
+window._fbRef=(path)=>ref(fbDb,path);
+window._fbPush=(path,data)=>push(ref(fbDb,path),data);
+window._fbSet=(path,data)=>set(ref(fbDb,path),data);
+window._fbGet=(path)=>get(ref(fbDb,path));
+window._fbUpdate=(path,data)=>update(ref(fbDb,path),data);
+window._fbOnValue=(path,cb)=>onValue(ref(fbDb,path),snap=>cb(snap.val()));
+
+window.bootChat=function(){
+  const me=(window.currentUser||{}).name;
+  if(!me){setTimeout(window.bootChat,400);return;}
+  if(!fbDb){if(!initFb()){document.getElementById('chatFirebaseWarn')?.classList.remove('hidden');return;}}
+  if(!_chatBooted){
+    _chatBooted=true;
+    const infoEl=document.getElementById('chatInfo');
+    if(infoEl)infoEl.textContent='Grupo QUALIS · Logada como '+me;
+    setupPresence(me);
+    listenMsgs();
+  }
+};
+
+initFb();
+if(fbDb){
+  onValue(ref(fbDb,'qualis_config'),snap=>{
+    const cfg=snap.val();if(!cfg)return;
+    localStorage.setItem('q-cfg',JSON.stringify(cfg));
+    if(document.getElementById('app')?.style.display==='block'){if(window.applyNpsUI)window.applyNpsUI();}
+  });
+}
+window.__fbDbReady=true;
+// Firebase pronto — carregar equipe e bases imediatamente
+setTimeout(function(){
+  if(window.currentUser){
+    // Carrega equipe primeiro, depois as bases
+    loadEquipeGlobal().then(function(){
+      loadBase('VEN_PEU');
+      loadBase('VEN_CIT');
+      loadBase('POS_PEU');
+      loadBase('POS_CIT');
+    });
+  }
+}, 200);
+</script>
+
+
+
+</body>
+</html>
