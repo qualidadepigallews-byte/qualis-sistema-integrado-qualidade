@@ -750,6 +750,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
 .row-neutro td { background: rgba(249,115,22,.03); }
 .row-expirado td { opacity: .6; }
 
+.busca-item:hover { background: var(--surface2) !important; }
 /* ══ MISC ══ */
 .msg-group { display: flex; flex-direction: column; margin-bottom: 8px; }
 .react-btn { border: 1px solid var(--border); background: var(--surface2); border-radius: 99px; padding: 2px 8px; font-size: 13px; cursor: pointer; }
@@ -926,6 +927,18 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
         <div class="topbar-breadcrumb">QUALIS / <span id="topbarSub">Início</span></div>
       </div>
       <div class="topbar-actions">
+        <!-- Busca global -->
+        <div style="position:relative;">
+          <input id="busca-global" type="text" placeholder="🔍 Buscar cliente ou VIN..."
+            oninput="buscaGlobal(this.value)"
+            onfocus="document.getElementById('busca-resultado').style.display='block'"
+            onblur="setTimeout(()=>document.getElementById('busca-resultado').style.display='none',200)"
+            style="padding:7px 14px;border:1px solid var(--border);border-radius:99px;background:var(--surface);font-size:13px;color:var(--text);width:220px;outline:none;transition:border .2s;"
+          >
+          <div id="busca-resultado" style="display:none;position:absolute;top:40px;right:0;width:380px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:999;max-height:320px;overflow-y:auto;">
+            <div id="busca-lista" style="padding:8px;"></div>
+          </div>
+        </div>
         <div style="position:relative;">
           <button class="topbar-btn" onclick="abrirCentralNotif()" title="Notificações">
             🔔
@@ -969,30 +982,50 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
 
             <div style="background:#f97316;border-radius:16px;padding:20px;color:#fff;position:relative;overflow:hidden;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:8px;">NPS Vendas · Peugeot</div>
-              <div id="h-nps-vp" style="font-size:44px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
-              <div style="font-size:12px;opacity:.7;margin-top:8px;">meta 90%</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:6px;">NPS Vendas · Peugeot</div>
+              <div id="h-nps-vp" style="font-size:48px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
+              <div style="margin-top:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;opacity:.7;margin-bottom:4px;"><span>0%</span><span>meta 90%</span></div>
+                <div style="background:rgba(255,255,255,.2);border-radius:99px;height:5px;overflow:hidden;">
+                  <div id="h-bar-vp" style="height:100%;background:#fff;border-radius:99px;width:0%;transition:width .6s;"></div>
+                </div>
+              </div>
               <div style="position:absolute;right:-20px;bottom:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
             </div>
 
             <div style="background:#8b5cf6;border-radius:16px;padding:20px;color:#fff;position:relative;overflow:hidden;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:8px;">NPS Vendas · Citroën</div>
-              <div id="h-nps-vc" style="font-size:44px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
-              <div style="font-size:12px;opacity:.7;margin-top:8px;">meta 90%</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:6px;">NPS Vendas · Citroën</div>
+              <div id="h-nps-vc" style="font-size:48px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
+              <div style="margin-top:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;opacity:.7;margin-bottom:4px;"><span>0%</span><span>meta 90%</span></div>
+                <div style="background:rgba(255,255,255,.2);border-radius:99px;height:5px;overflow:hidden;">
+                  <div id="h-bar-vc" style="height:100%;background:#fff;border-radius:99px;width:0%;transition:width .6s;"></div>
+                </div>
+              </div>
               <div style="position:absolute;right:-20px;bottom:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
             </div>
 
             <div style="background:#10b981;border-radius:16px;padding:20px;color:#fff;position:relative;overflow:hidden;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:8px;">NPS Pós · Peugeot</div>
-              <div id="h-nps-pp" style="font-size:44px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
-              <div style="font-size:12px;opacity:.7;margin-top:8px;">meta 82%</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:6px;">NPS Pós · Peugeot</div>
+              <div id="h-nps-pp" style="font-size:48px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
+              <div style="margin-top:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;opacity:.7;margin-bottom:4px;"><span>0%</span><span>meta 82%</span></div>
+                <div style="background:rgba(255,255,255,.2);border-radius:99px;height:5px;overflow:hidden;">
+                  <div id="h-bar-pp" style="height:100%;background:#fff;border-radius:99px;width:0%;transition:width .6s;"></div>
+                </div>
+              </div>
               <div style="position:absolute;right:-20px;bottom:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
             </div>
 
             <div style="background:#0ea5e9;border-radius:16px;padding:20px;color:#fff;position:relative;overflow:hidden;">
-              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:8px;">NPS Pós · Citroën</div>
-              <div id="h-nps-pc" style="font-size:44px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
-              <div style="font-size:12px;opacity:.7;margin-top:8px;">meta 82%</div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.7;margin-bottom:6px;">NPS Pós · Citroën</div>
+              <div id="h-nps-pc" style="font-size:48px;font-weight:900;line-height:1;letter-spacing:-2px;">—</div>
+              <div style="margin-top:10px;">
+                <div style="display:flex;justify-content:space-between;font-size:11px;opacity:.7;margin-bottom:4px;"><span>0%</span><span>meta 82%</span></div>
+                <div style="background:rgba(255,255,255,.2);border-radius:99px;height:5px;overflow:hidden;">
+                  <div id="h-bar-pc" style="height:100%;background:#fff;border-radius:99px;width:0%;transition:width .6s;"></div>
+                </div>
+              </div>
               <div style="position:absolute;right:-20px;bottom:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%;"></div>
             </div>
 
@@ -1153,14 +1186,13 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
       <div style="overflow-x:auto;border-radius:10px;border:1px solid #f1f5f9;">
         <table id="tbNpsVenMensal" style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead><tr>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Mês</th>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Peugeot %</th>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Citroën %</th>
-            <th style="background:#f8fafc;padding:10px 14px;border-bottom:1px solid #f1f5f9;"></th>
-            <th style="background:#f8fafc;padding:10px 14px;border-bottom:1px solid #f1f5f9;"></th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);width:130px;">Mês</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#f97316;border-bottom:2px solid var(--border);">Peugeot %</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#f97316;border-bottom:2px solid var(--border);">Status</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b5cf6;border-bottom:2px solid var(--border);">Citroën %</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b5cf6;border-bottom:2px solid var(--border);">Status</th>
           </tr></thead>
-          <tbody id="tbodyNpsVenMensal"><tr><td colspan="5" style="padding:24px;text-align:center;color:#94a3b8;">Sem dados.</td></tr></tbody>
-        </table>
+          <tbody id="tbodyNpsVenMensal"></tbody></table>
       </div>
     </div>
     <div style="background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
@@ -1191,7 +1223,23 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Vendedor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th></tr></thead><tbody id="tb_VEN_CIT"><tr><td colspan="8" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="v-hotalerts">
-            <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Vendedor</th><th>Nota</th><th>Status</th><th>Verbalização</th><th>IA</th></tr></thead><tbody id="tbHotVen"><tr><td colspan="6" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+              <select id="filt-hot-ven-vend" onchange="renderHotAlertsVen()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Todos os vendedores</option>
+              </select>
+              <select id="filt-hot-ven-status" onchange="renderHotAlertsVen()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Todos os status</option>
+                <option value="DETRATOR">Detratores</option>
+                <option value="NEUTRO">Neutros</option>
+                <option value="PROMOTOR">Promotores</option>
+              </select>
+              <select id="filt-hot-ven-marca" onchange="renderHotAlertsVen()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Ambas as marcas</option>
+                <option value="Peugeot">Peugeot</option>
+                <option value="Citroën">Citroën</option>
+              </select>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Vendedor</th><th>Nota</th><th>Status</th><th>Verbalização</th><th>IA</th></tr></thead><tbody id="tbHotVen"><tr><td colspan="7" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="v-ranking">
             <div class="card" style="margin-bottom:16px;">
@@ -1256,6 +1304,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
             <button class="subnav-btn" onclick="openSub('posvendas','p-hotalerts',this);renderHotAlertsPos()">Hot Alerts</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-conversoes',this);renderConversoes()">Conversões</button>
             <button class="subnav-btn" onclick="openSub('posvendas','p-treinamentos-pos',this);renderTreinamentosPos()">Treinamentos</button>
+            <button class="subnav-btn" onclick="openSub('posvendas','p-risco',this);renderPainelRisco()">🔴 Risco</button>
           </div>
           <div class="subpage active" id="p-painel">
 
@@ -1341,14 +1390,13 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
       <div style="overflow-x:auto;border-radius:10px;border:1px solid #f1f5f9;">
         <table id="tbNpsPosMensal" style="width:100%;border-collapse:collapse;font-size:13px;">
           <thead><tr>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Mês</th>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Peugeot %</th>
-            <th style="background:#f8fafc;padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;border-bottom:1px solid #f1f5f9;">Citroën %</th>
-            <th style="background:#f8fafc;padding:10px 14px;border-bottom:1px solid #f1f5f9;"></th>
-            <th style="background:#f8fafc;padding:10px 14px;border-bottom:1px solid #f1f5f9;"></th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-bottom:2px solid var(--border);width:130px;">Mês</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#f97316;border-bottom:2px solid var(--border);">Peugeot %</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#f97316;border-bottom:2px solid var(--border);">Status</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b5cf6;border-bottom:2px solid var(--border);">Citroën %</th>
+            <th style="background:var(--surface2);padding:10px 14px;text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8b5cf6;border-bottom:2px solid var(--border);">Status</th>
           </tr></thead>
-          <tbody id="tbodyNpsPosMensal"><tr><td colspan="5" style="padding:24px;text-align:center;color:#94a3b8;">Sem dados.</td></tr></tbody>
-        </table>
+          <tbody id="tbodyNpsPosMensal"></tbody></table>
       </div>
     </div>
     <div style="background:#fff;border-radius:16px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.06);">
@@ -1379,42 +1427,45 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
             <div class="table-wrap"><table><thead><tr><th>VIN</th><th>Cliente</th><th>Email</th><th>Telefone</th><th>Consultor</th><th>Data Convite</th><th>Nota NPS</th><th>Status</th><th>Tratativa</th><th>Convertida por</th></tr></thead><tbody id="tb_POS_CIT"><tr><td colspan="9" class="empty">Nenhum cliente carregado.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-hotalerts">
-            <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Consultor</th><th>Nota</th><th>Status</th><th>Verbalização</th><th>IA</th></tr></thead><tbody id="tbHotPos"><tr><td colspan="6" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;align-items:center;">
+              <select id="filt-hot-cons" onchange="renderHotAlertsPos()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Todas as consultoras</option>
+              </select>
+              <select id="filt-hot-status" onchange="renderHotAlertsPos()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Todos os status</option>
+                <option value="DETRATOR">Detratoras</option>
+                <option value="NEUTRO">Neutras</option>
+              </select>
+              <select id="filt-hot-marca" onchange="renderHotAlertsPos()" style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);">
+                <option value="">Ambas as marcas</option>
+                <option value="Peugeot">Peugeot</option>
+                <option value="Citroën">Citroën</option>
+              </select>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Marca</th><th>Cliente</th><th>Consultor</th><th>Nota</th><th>Status</th><th>Verbalização</th><th>IA</th><th>Contestada</th></tr></thead><tbody id="tbHotPos"><tr><td colspan="8" class="empty">Nenhum hot alert.</td></tr></tbody></table></div>
           </div>
           <div class="subpage" id="p-conversoes">
-            <div style="padding:12px 16px;margin-bottom:16px;background:var(--surface2);border-radius:10px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-              <span style="font-size:13px;font-weight:700;">Premiacao por pesquisa:</span>
-              <span style="font-size:13px;">Promotora = <strong style="color:#0d9488">+R$ 25,00</strong></span>
-              <span style="font-size:13px;">Neutra = <strong style="color:#d97706">-R$ 25,00</strong></span>
-              <span style="font-size:13px;">Detratora = <strong style="color:#dc2626">-R$ 50,00</strong></span>
+            <!-- Cabeçalho explicativo -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+              <div>
+                <h2 style="font-size:20px;font-weight:900;color:var(--text);margin-bottom:4px;">Conversões por Consultora</h2>
+                <p style="font-size:13px;color:var(--muted);">Resultado individual de cada consultora no período atual</p>
+              </div>
+              <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span style="width:12px;height:12px;border-radius:50%;background:#10b981;display:inline-block;"></span><strong style="color:#10b981;">+R$25</strong> promotora</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span style="width:12px;height:12px;border-radius:50%;background:#f59e0b;display:inline-block;"></span><strong style="color:#f59e0b;">-R$25</strong> neutra</div>
+                <div style="display:flex;align-items:center;gap:6px;font-size:13px;"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;display:inline-block;"></span><strong style="color:#ef4444;">-R$50</strong> detratora</div>
+              </div>
             </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th rowspan="2">Consultor</th>
-                    <th colspan="4" style="background:#1a3a6b;color:#fff;text-align:center;">Peugeot</th>
-                    <th colspan="4" style="background:#3d1a7a;color:#fff;text-align:center;">Citroen</th>
-                    <th rowspan="2" style="text-align:center;">Total</th>
-                    <th rowspan="2" style="background:#065f46;color:#fff;text-align:center;">Premiacao</th>
-                  </tr>
-                  <tr>
-                    <th style="background:#1e4080;color:#fff;">Prom.</th>
-                    <th style="background:#1e4080;color:#fff;">Neu.</th>
-                    <th style="background:#1e4080;color:#fff;">Det.</th>
-                    <th style="background:#1e4080;color:#fff;">ISC</th>
-                    <th style="background:#4a1f8f;color:#fff;">Prom.</th>
-                    <th style="background:#4a1f8f;color:#fff;">Neu.</th>
-                    <th style="background:#4a1f8f;color:#fff;">Det.</th>
-                    <th style="background:#4a1f8f;color:#fff;">ISC</th>
-                  </tr>
-                </thead>
-                <tbody id="tbConv"><tr><td colspan="11" class="empty">Carregando...</td></tr></tbody>
-              </table>
-            </div>
+
+            <!-- Grid de cards por consultora -->
+            <div id="conv-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-bottom:24px;"></div>
+
+            <!-- Totalizador -->
+            <div id="conv-total" style=""></div>
+
           </div>
 
-          <!-- ISC CONSULTOR -->
           <div class="subpage" id="p-treinamentos-pos">
             <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
               <div style="font-size:13px;color:var(--muted);flex:1;">Pendências de treinamento do time de pós-vendas.</div>
@@ -1712,7 +1763,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
             <!-- Verbalizações analisadas -->
             <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
               <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;">Análise das Verbalizações</div>
-              <div id="insight-verbalizacoes" style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">
+              <div id="insight-verbalizacoes" style="line-height:1.7;font-size:13px;color:var(--text2);" style="font-size:13px;color:var(--text2);line-height:1.7;background:var(--surface2);border-radius:10px;padding:14px;">
                 Nenhuma verbalização registrada ainda. Adicione nos Hot Alerts para ver a análise aqui.
               </div>
               <button onclick="gerarInsightsIA()" style="margin-top:10px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">Gerar análise com IA
@@ -1737,7 +1788,7 @@ tfoot td { background: var(--surface2); font-weight: 700; border-top: 1px solid 
               <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte sobre NPS, detratores, metas, conversões..." onkeydown="if(event.key==='Enter')runIAQualis()">
               <button class="btn primary" onclick="runIAQualis()">Perguntar</button>
             </div>
-            <div class="assist-response" id="iaResp" style="margin-top:12px;">Olá! Sou a IA QUALIS. Analiso os dados reais do portal e respondo qualquer pergunta. Como posso ajudar?</div>
+            <div class="assist-response" id="iaResp" style="margin-top:12px;line-height:1.7;font-size:13px;color:var(--text2);">Olá! Sou a IA QUALIS. Analiso os dados reais do portal e respondo qualquer pergunta. Como posso ajudar?</div>
           </div>
 
           <!-- KPIs rápidos -->
@@ -2280,7 +2331,7 @@ CONCLUSÃO PARA A IA:
 </div><!-- /app -->
 
 <!-- Google Identity Services para Gmail OAuth -->
-<script src="https://accounts.google.com/gsi/client" async></script>
+
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
@@ -2811,10 +2862,10 @@ function agregaNps(tipo, periodoMes, ano) {
   const baseKeysPeu = tipo === 'VEN' ? ['VEN_PEU'] : ['POS_PEU'];
   const baseKeysCit = tipo === 'VEN' ? ['VEN_CIT'] : ['POS_CIT'];
 
-  let peu = {prom:0, det:0, neu:0};
-  let cit = {prom:0, det:0, neu:0};
-
   const MESES_IDX2 = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
+  const mesAtualIdx2 = new Date().getMonth();
+  const mesAtualNome2 = MESES_ORDEM[mesAtualIdx2];
+
   let meses;
   if(periodoMes === 'TODOS') meses = MESES_ORDEM;
   else if(periodoMes === 'RANGE'){
@@ -2825,31 +2876,56 @@ function agregaNps(tipo, periodoMes, ano) {
   }
   else meses = [periodoMes];
 
-  for(const m of meses) {
+  let peu = {prom:0, det:0, neu:0};
+  let cit = {prom:0, det:0, neu:0};
+
+  // Separar meses em passados e atual
+  const mesesPassados = meses.filter(m => (MESES_IDX2[m]??-1) < mesAtualIdx2);
+  const incluiAtual   = meses.includes(mesAtualNome2);
+
+  // 1. Meses passados: SEMPRE do histórico fixo
+  for(const m of mesesPassados) {
     const hPeu = historico.find(r=>r.mes===m&&r.marca==='PEUGEOT');
     const hCit = historico.find(r=>r.mes===m&&r.marca==='CITROEN');
     if(hPeu){ peu.prom+=hPeu.prom; peu.det+=hPeu.det; peu.neu+=hPeu.neu; }
     if(hCit){ cit.prom+=hCit.prom; cit.det+=hCit.det; cit.neu+=hCit.neu; }
   }
 
-  // Sempre soma a base em tempo real (notas digitadas na base de clientes)
-  // Recalcula o status na hora para garantir que a nota recém digitada já conta
-  baseKeysPeu.forEach(k=>{
-    (baseCache[k]||[]).forEach(r=>{
-      const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
-      if(st==='PROMOTOR') peu.prom++;
-      else if(st==='DETRATOR') peu.det++;
-      else if(st==='NEUTRO') peu.neu++;
+  // 2. Mês atual: SEMPRE da base em tempo real (filtrado por DATA_CONVITE quando possível)
+  if(incluiAtual) {
+    function filtraAtual(rows) {
+      // Tentar filtrar por DATA_CONVITE do mês atual
+      const comData = rows.filter(r => {
+        if(!r.DATA_CONVITE) return false;
+        const d = String(r.DATA_CONVITE).trim();
+        let mesRow = -1;
+        if(/^\d{2}\/\d{2}\/\d{4}$/.test(d)) mesRow = parseInt(d.split('/')[1]) - 1;
+        else if(/^\d{4}-\d{2}-\d{2}/.test(d)) mesRow = parseInt(d.split('-')[1]) - 1;
+        return mesRow === mesAtualIdx2;
+      });
+      // Se nenhum tem data → usa todos (base só tem o mês atual)
+      return comData.length > 0 ? comData : rows;
+    }
+
+    baseKeysPeu.forEach(k => {
+      filtraAtual(baseCache[k]||[]).forEach(r => {
+        if(r.CONTESTADA) return; // excluir contestadas do NPS
+        const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+        if(st==='PROMOTOR') peu.prom++;
+        else if(st==='DETRATOR') peu.det++;
+        else if(st==='NEUTRO') peu.neu++;
+      });
     });
-  });
-  baseKeysCit.forEach(k=>{
-    (baseCache[k]||[]).forEach(r=>{
-      const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
-      if(st==='PROMOTOR') cit.prom++;
-      else if(st==='DETRATOR') cit.det++;
-      else if(st==='NEUTRO') cit.neu++;
+    baseKeysCit.forEach(k => {
+      filtraAtual(baseCache[k]||[]).forEach(r => {
+        if(r.CONTESTADA) return; // excluir contestadas do NPS
+        const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+        if(st==='PROMOTOR') cit.prom++;
+        else if(st==='DETRATOR') cit.det++;
+        else if(st==='NEUTRO') cit.neu++;
+      });
     });
-  });
+  }
 
   return {peu, cit};
 }
@@ -2942,58 +3018,85 @@ function renderNpsMensalTabela(tipo, meta) {
   const tbId = tipo === 'VEN' ? 'tbodyNpsVenMensal' : 'tbodyNpsPosMensal';
   const tb = document.getElementById(tbId); if(!tb) return;
   const historico = tipo === 'VEN' ? NPS_HISTORICO_VENDAS : NPS_HISTORICO_POS;
-
-  // Bases em tempo real
   const basePeuKey = tipo === 'VEN' ? 'VEN_PEU' : 'POS_PEU';
   const baseCitKey = tipo === 'VEN' ? 'VEN_CIT' : 'POS_CIT';
   const basePeu = baseCache[basePeuKey] || [];
   const baseCit = baseCache[baseCitKey] || [];
-  const mesAtualNome = MESES_ORDEM[new Date().getMonth()];
+  const mesAtualIdx3 = new Date().getMonth();
+  const mesAtualNome = MESES_ORDEM[mesAtualIdx3];
+  const MESES_NUM5 = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
 
-  // Meses com dados: histórico + mês atual se base carregada
-  const mesesComDados = MESES_ORDEM.filter(m =>
-    historico.some(r=>r.mes===m) ||
-    (m === mesAtualNome && (basePeu.length > 0 || baseCit.length > 0))
-  );
+  function filtraBasePorMes(rows, mesNome) {
+    const mesIdx = MESES_NUM5[mesNome] ?? -1;
+    const comData = rows.filter(r => {
+      if(!r.DATA_CONVITE) return false;
+      const d = String(r.DATA_CONVITE).trim();
+      let mesRow = -1;
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(d)) mesRow = parseInt(d.split('/')[1]) - 1;
+      else if(/^\d{4}-\d{2}-\d{2}/.test(d)) mesRow = parseInt(d.split('-')[1]) - 1;
+      return mesRow === mesIdx;
+    });
+    // Para o mês atual sem DATA_CONVITE, usa toda a base
+    if(!comData.length && mesNome === mesAtualNome) return rows;
+    return comData;
+  }
 
-  // Garantir que o mês atual sempre aparece se tiver base
-  if(!mesesComDados.includes(mesAtualNome) && (basePeu.length > 0 || baseCit.length > 0)){
+  // Meses com dados: histórico + mês atual se tiver base
+  const mesesComDados = MESES_ORDEM.filter(m => {
+    const idxM = MESES_NUM5[m] ?? -1;
+    if(idxM > mesAtualIdx3) return false; // futuros não mostrar
+    if(historico.some(r=>r.mes===m)) return true;
+    if(m === mesAtualNome && (basePeu.length > 0 || baseCit.length > 0)) return true;
+    // Mês passado com dados na base
+    if(idxM < mesAtualIdx3) {
+      return filtraBasePorMes(basePeu, m).length > 0 || filtraBasePorMes(baseCit, m).length > 0;
+    }
+    return false;
+  });
+  if(!mesesComDados.includes(mesAtualNome) && (basePeu.length > 0 || baseCit.length > 0)) {
     mesesComDados.push(mesAtualNome);
   }
 
   tb.innerHTML = mesesComDados.map(m => {
+    const idxM = MESES_NUM5[m] ?? -1;
+    const isPast = idxM < mesAtualIdx3;
     const hPeu = historico.find(r=>r.mes===m&&r.marca==='PEUGEOT');
     const hCit = historico.find(r=>r.mes===m&&r.marca==='CITROEN');
 
-    // Prioridade: histórico manual. Se não existe e é mês atual, usa base em tempo real
     let pPeu, nPeu, dPeu, pCit, nCit, dCit;
-    if(hPeu){ pPeu=hPeu.prom; nPeu=hPeu.neu; dPeu=hPeu.det; }
-    else if(m===mesAtualNome && basePeu.length){
-      pPeu=basePeu.filter(r=>r.STATUS==='PROMOTOR').length;
-      nPeu=basePeu.filter(r=>r.STATUS==='NEUTRO').length;
-      dPeu=basePeu.filter(r=>r.STATUS==='DETRATOR').length;
-    }
-    if(hCit){ pCit=hCit.prom; nCit=hCit.neu; dCit=hCit.det; }
-    else if(m===mesAtualNome && baseCit.length){
-      pCit=baseCit.filter(r=>r.STATUS==='PROMOTOR').length;
-      nCit=baseCit.filter(r=>r.STATUS==='NEUTRO').length;
-      dCit=baseCit.filter(r=>r.STATUS==='DETRATOR').length;
+
+    // Meses passados: prioridade ao histórico fixo
+    if(isPast) {
+      if(hPeu){ pPeu=hPeu.prom; nPeu=hPeu.neu; dPeu=hPeu.det; }
+      if(hCit){ pCit=hCit.prom; nCit=hCit.neu; dCit=hCit.det; }
+    } else {
+      // Mês atual: usa base em tempo real
+      const bp = filtraBasePorMes(basePeu, m);
+      if(bp.length){ pPeu=bp.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PROMOTOR').length; nPeu=bp.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='NEUTRO').length; dPeu=bp.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='DETRATOR').length; }
+      const bc = filtraBasePorMes(baseCit, m);
+      if(bc.length){ pCit=bc.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PROMOTOR').length; nCit=bc.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='NEUTRO').length; dCit=bc.filter(r=>calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='DETRATOR').length; }
     }
 
     const tPeu = (pPeu||0)+(nPeu||0)+(dPeu||0);
     const tCit = (pCit||0)+(nCit||0)+(dCit||0);
     const npsPeu = tPeu > 0 ? calcNps(pPeu,nPeu,dPeu) : null;
     const npsCit = tCit > 0 ? calcNps(pCit,nCit,dCit) : null;
-    const okPeu  = npsPeu !== null && npsPeu >= meta;
-    const okCit  = npsCit !== null && npsCit >= meta;
+    const okPeu = npsPeu !== null && npsPeu >= meta;
+    const okCit = npsCit !== null && npsCit >= meta;
     const isAtual = m === mesAtualNome;
-    return `<tr${isAtual?' style="background:rgba(249,115,22,.04);"':''}>
-      <td><strong>${MESES_LABEL[m]||m}</strong>${isAtual?'<span style="font-size:10px;color:#f97316;font-weight:700;margin-left:6px;">ATUAL</span>':''}</td>
-      <td style="font-weight:700;color:${npsPeu!==null?(okPeu?'#10b981':'#ef4444'):'var(--muted)'};">${npsPeu!==null?fmt(npsPeu):'—'}</td>
-      <td style="font-weight:700;color:${npsCit!==null?(okCit?'#10b981':'#ef4444'):'var(--muted)'};">${npsCit!==null?fmt(npsCit):'—'}</td>
-      <td>${npsPeu!==null?(okPeu?'<span class="chip chip-green">Meta</span>':'<span class="chip chip-red">Abaixo</span>'):'<span class="chip chip-amber">Em aberto</span>'}</td>
-      <td>${npsCit!==null?(okCit?'<span class="chip chip-green">Meta</span>':'<span class="chip chip-red">Abaixo</span>'):'<span class="chip chip-amber">Em aberto</span>'}</td>
-    </tr>`;
+    var rowStyle = isAtual ? ' style="background:rgba(249,115,22,.04);"' : '';
+    var labelAtual = isAtual ? '<span style="font-size:10px;color:#f97316;font-weight:700;margin-left:6px;">ATUAL</span>' : '';
+    var valPeu = npsPeu!==null ? '<strong style="font-size:15px;color:'+(okPeu?'#10b981':'#ef4444')+';">'+fmt(npsPeu)+'</strong>' : '<span style="color:var(--muted);">—</span>';
+    var stsPeu = npsPeu!==null ? (okPeu?'<span class="chip chip-green">✓ Meta</span>':'<span class="chip chip-red">Abaixo</span>') : '<span class="chip chip-muted">Em aberto</span>';
+    var valCit = npsCit!==null ? '<strong style="font-size:15px;color:'+(okCit?'#10b981':'#ef4444')+';">'+fmt(npsCit)+'</strong>' : '<span style="color:var(--muted);">—</span>';
+    var stsCit = npsCit!==null ? (okCit?'<span class="chip chip-green">✓ Meta</span>':'<span class="chip chip-red">Abaixo</span>') : '<span class="chip chip-muted">Em aberto</span>';
+    return '<tr'+rowStyle+'>'
+      +'<td style="padding:10px 14px;border-bottom:1px solid var(--border);"><strong>'+(MESES_LABEL[m]||m)+'</strong>'+labelAtual+'</td>'
+      +'<td style="padding:10px 14px;border-bottom:1px solid var(--border);text-align:center;">'+valPeu+'</td>'
+      +'<td style="padding:10px 14px;border-bottom:1px solid var(--border);text-align:center;">'+stsPeu+'</td>'
+      +'<td style="padding:10px 14px;border-bottom:1px solid var(--border);text-align:center;">'+valCit+'</td>'
+      +'<td style="padding:10px 14px;border-bottom:1px solid var(--border);text-align:center;">'+stsCit+'</td>'
+      +'</tr>';
   }).join('') || '<tr><td colspan="5" class="empty">Sem dados.</td></tr>';
 }
 
@@ -3004,41 +3107,101 @@ function renderNpsTrimestral(tipo, meta, elId) {
   const baseCitKey = tipo === 'VEN' ? 'VEN_CIT' : 'POS_CIT';
   const basePeu = baseCache[basePeuKey] || [];
   const baseCit = baseCache[baseCitKey] || [];
-  // Mês atual para saber qual mês da base usar
-  const mesAtualIdx = new Date().getMonth(); // 0=jan
-  const mesAtualNome = MESES_ORDEM[mesAtualIdx];
+  const hoje = new Date();
+  const mesAtualIdx = hoje.getMonth(); // 0=jan
+  const MESES_NUM3 = {JANEIRO:0,FEVEREIRO:1,MARCO:2,ABRIL:3,MAIO:4,JUNHO:5,JULHO:6,AGOSTO:7,SETEMBRO:8,OUTUBRO:9,NOVEMBRO:10,DEZEMBRO:11};
 
-  el.innerHTML = TRIMESTRES.map(tri => {
+  // Descobrir trimestre atual
+  const triAtualIdx = TRIMESTRES.findIndex(t => t.meses.some(m => MESES_NUM3[m] === mesAtualIdx));
+
+  // Função para filtrar base por lista de meses
+  function baseDoTrimestre(rows, meses) {
+    const idxs = meses.map(m => MESES_NUM3[m] ?? -1);
+    // Se nenhum registro tem DATA_CONVITE no trimestre atual, usa todos (sem data definida)
+    const comData = rows.filter(r => {
+      if(!r.DATA_CONVITE) return false;
+      const d = String(r.DATA_CONVITE).trim();
+      let mesRow = -1;
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(d)) mesRow = parseInt(d.split('/')[1]) - 1;
+      else if(/^\d{4}-\d{2}-\d{2}/.test(d)) mesRow = parseInt(d.split('-')[1]) - 1;
+      return idxs.includes(mesRow);
+    });
+    // Fallback: se trimestre atual e sem dados por data, usa toda a base
+    if(!comData.length && meses.some(m => MESES_NUM3[m] === mesAtualIdx)) {
+      return rows;
+    }
+    return comData;
+  }
+
+  el.innerHTML = TRIMESTRES.map((tri, triIdx) => {
     let pprom=0,pdet=0,pneu=0,cprom=0,cdet=0,cneu=0,temDados=false;
+    const isPast = triIdx < triAtualIdx;
+    const isCurrent = triIdx === triAtualIdx;
+    const isFuture = triIdx > triAtualIdx;
+
+    // Somar histórico fixo
     tri.meses.forEach(m => {
       const hPeu = historico.find(r=>r.mes===m&&r.marca==='PEUGEOT');
       const hCit = historico.find(r=>r.mes===m&&r.marca==='CITROEN');
       if(hPeu){ pprom+=hPeu.prom; pdet+=hPeu.det; pneu+=hPeu.neu; temDados=true; }
       if(hCit){ cprom+=hCit.prom; cdet+=hCit.det; cneu+=hCit.neu; temDados=true; }
-      // Se é o mês atual e não tem historico, usa a base em tempo real
-      if(m === mesAtualNome && !hPeu && basePeu.length){
-        pprom += basePeu.filter(r=>r.STATUS==='PROMOTOR').length;
-        pdet  += basePeu.filter(r=>r.STATUS==='DETRATOR').length;
-        pneu  += basePeu.filter(r=>r.STATUS==='NEUTRO').length;
-        temDados = true;
-      }
-      if(m === mesAtualNome && !hCit && baseCit.length){
-        cprom += baseCit.filter(r=>r.STATUS==='PROMOTOR').length;
-        cdet  += baseCit.filter(r=>r.STATUS==='DETRATOR').length;
-        cneu  += baseCit.filter(r=>r.STATUS==='NEUTRO').length;
-        temDados = true;
-      }
     });
-    if(!temDados) return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;"><span style="font-weight:700;">${tri.nome}</span><span style="font-size:12px;color:var(--muted);">Sem dados ainda</span></div>`;
+
+    // Somar base em tempo real (apenas meses do trimestre)
+    if(isCurrent || isPast) {
+      baseDoTrimestre(basePeu, tri.meses).forEach(r => {
+        const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+        if(st==='PROMOTOR') { pprom++; temDados=true; }
+        else if(st==='DETRATOR') { pdet++; temDados=true; }
+        else if(st==='NEUTRO') { pneu++; temDados=true; }
+      });
+      baseDoTrimestre(baseCit, tri.meses).forEach(r => {
+        const st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+        if(st==='PROMOTOR') { cprom++; temDados=true; }
+        else if(st==='DETRATOR') { cdet++; temDados=true; }
+        else if(st==='NEUTRO') { cneu++; temDados=true; }
+      });
+    }
+
+    // Trimestres futuros — só mostrar placeholder
+    if(isFuture) {
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);margin-bottom:8px;opacity:.5;">
+        <span style="font-weight:700;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')}</span>
+        <span style="font-size:12px;color:var(--muted);">Aguardando</span>
+      </div>`;
+    }
+
+    // Trimestre passado sem dados → NÃO ATINGIDO
+    if(isPast && !temDados) {
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:rgba(239,68,68,.04);border:2px solid #ef4444;margin-bottom:8px;">
+        <span style="font-weight:700;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')}</span>
+        <span style="font-weight:800;font-size:13px;color:#ef4444;">❌ Não atingido</span>
+      </div>`;
+    }
+
+    // Sem dados (trimestre atual ainda sem base)
+    if(!temDados) {
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:11px;background:var(--surface2);border:2px solid var(--orange);margin-bottom:8px;">
+        <span style="font-weight:700;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')} <span style="font-size:11px;background:#f97316;color:#fff;padding:2px 7px;border-radius:99px;margin-left:6px;">ATUAL</span></span>
+        <span style="font-size:12px;color:var(--muted);">Sem dados ainda</span>
+      </div>`;
+    }
+
     const npsPeu = calcNps(pprom,pneu,pdet);
     const npsCit = calcNps(cprom,cneu,cdet);
     const okPeu  = npsPeu >= meta;
     const okCit  = npsCit >= meta;
     const pagou  = okPeu && okCit;
-    return `<div style="border-radius:13px;border:2px solid ${pagou?'#10b981':okPeu||okCit?'#f59e0b':'#ef4444'};padding:12px 14px;margin-bottom:8px;background:${pagou?'rgba(16,185,129,.04)':okPeu||okCit?'rgba(245,158,11,.04)':'rgba(239,68,68,.04)'};">
+    const corBorda = isPast ? (pagou?'#10b981':'#ef4444') : (pagou?'#10b981':okPeu||okCit?'#f59e0b':'#f97316');
+    const statusLabel = isPast
+      ? (pagou ? '✅ Atingido' : '❌ Não atingido')
+      : (pagou ? '✅ Meta batida' : '⏳ Em andamento');
+    const statusCor = isPast ? (pagou?'#10b981':'#ef4444') : (pagou?'#10b981':'#f97316');
+
+    return `<div style="border-radius:13px;border:2px solid ${corBorda};padding:12px 14px;margin-bottom:8px;background:${pagou?'rgba(16,185,129,.04)':'rgba(249,115,22,.04)'};${isCurrent?'box-shadow:0 4px 16px rgba(249,115,22,.15);':''}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <span style="font-weight:800;font-size:15px;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')}</span>
-        <span style="font-weight:800;font-size:13px;color:${pagou?'#10b981':okPeu||okCit?'#f59e0b':'#ef4444'};">${pagou?'✅ Paga':'⚠️ Em risco'}</span>
+        <span style="font-weight:800;font-size:15px;">${tri.nome} — ${tri.meses.map(m=>MESES_LABEL[m]?.substring(0,3)).join('/')}${isCurrent?` <span style="font-size:11px;background:#f97316;color:#fff;padding:2px 7px;border-radius:99px;margin-left:6px;">ATUAL</span>`:''}</span>
+        <span style="font-weight:800;font-size:13px;color:${statusCor};">${statusLabel}</span>
       </div>
       <div style="display:flex;gap:10px;">
         <div style="flex:1;background:var(--surface);border-radius:9px;padding:9px;text-align:center;border:1px solid var(--border);">
@@ -3136,71 +3299,120 @@ function calcIscDaBase() {
 
 /* ISC por Consultor — automático da base pós-vendas */
 function renderConversoesAuto(){
-  var peu=baseCache.POS_PEU||[], cit=baseCache.POS_CIT||[];
-  var tb=document.getElementById('tbConv'); if(!tb)return;
-  var nomesSet=new Set();
-  peu.forEach(function(r){if(r.CONSULTOR)nomesSet.add(r.CONSULTOR);if(r.CONVERTIDA_POR)nomesSet.add(r.CONVERTIDA_POR);});
-  cit.forEach(function(r){if(r.CONSULTOR)nomesSet.add(r.CONSULTOR);if(r.CONVERTIDA_POR)nomesSet.add(r.CONVERTIDA_POR);});
-  if(!nomesSet.size){tb.innerHTML='<tr><td colspan="11" class="empty">Nenhum dado ainda.</td></tr>';return;}
+  var peu = baseCache.POS_PEU||[], cit = baseCache.POS_CIT||[];
+  var cards = document.getElementById('conv-cards');
+  var totalEl = document.getElementById('conv-total');
+  if(!cards) return;
 
-  function cnt(arr,nome,st){
+  // Coletar consultoras únicas
+  var nomesSet = new Set();
+  peu.forEach(function(r){ if(r.CONSULTOR) nomesSet.add(r.CONSULTOR); });
+  cit.forEach(function(r){ if(r.CONSULTOR) nomesSet.add(r.CONSULTOR); });
+
+  if(!nomesSet.size){
+    cards.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--muted);font-size:14px;">Importe a base de Pós-Vendas para ver as conversões.</div>';
+    if(totalEl) totalEl.innerHTML = '';
+    return;
+  }
+
+  function cnt(arr, nome, st){
     return arr.filter(function(r){
-      var resp=String(r.CONSULTOR||r.CONVERTIDA_POR||'').toUpperCase();
-      return resp===String(nome).toUpperCase()&&String(r.STATUS||'').toUpperCase()===st;
+      return String(r.CONSULTOR||'').toUpperCase() === String(nome).toUpperCase()
+          && String(r.STATUS||'').toUpperCase() === st;
     }).length;
   }
-  function isc(p,n,d){var t=p+n+d;if(!t)return'—';return Math.round(((p)+(n*.5))/t*100)+'%';}
-  function corIsc(p,n,d){var t=p+n+d;if(!t)return'';return((p+(n*.5))/t)>=.82?'color:#0d9488;font-weight:700':'color:#dc2626;font-weight:700';}
-  function calcPrem(pp,np,dp,pc,nc,dc,nome){
-    // Laís tem bônus fixo de R$400,00
-    if(nome && String(nome).toUpperCase().includes('LA')) {
-      var nomeU = String(nome).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
-      if(nomeU.includes('LAIS') || nomeU.includes('LAÍS')) {
-        return '<span style="font-weight:800;font-size:14px;color:#0d9488">+R$400,00 🌟</span>';
-      }
+
+  function calcNpsNum(p,n,d){ var t=p+n+d; return t>0 ? Math.round(((p-d)/t)*100) : null; }
+
+  var isLais = function(nome){
+    var s = String(nome).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+    return s.includes('LAIS');
+  };
+
+  var totalPrem = 0;
+  var html = '';
+
+  Array.from(nomesSet).sort().forEach(function(nome){
+    var pp = cnt(peu,nome,'PROMOTOR'), np = cnt(peu,nome,'NEUTRO'), dp = cnt(peu,nome,'DETRATOR');
+    var pc = cnt(cit,nome,'PROMOTOR'), nc = cnt(cit,nome,'NEUTRO'), dc = cnt(cit,nome,'DETRATOR');
+    var totalPeu = pp+np+dp, totalCit = pc+nc+dc;
+    var npsP = calcNpsNum(pp,np,dp), npsC = calcNpsNum(pc,nc,dc);
+    var npsTotal = calcNpsNum(pp+pc, np+nc, dp+dc);
+
+    var prem, premStr, premCor;
+    if(isLais(nome)){
+      prem = 400;
+      premStr = '+R$ 400,00 ⭐';
+      premCor = '#10b981';
+    } else {
+      prem = (pp+pc)*25 - (np+nc)*25 - (dp+dc)*50;
+      premStr = (prem>=0?'+':'') + 'R$ ' + Math.abs(prem).toLocaleString('pt-BR') + ',00';
+      premCor = prem > 0 ? '#10b981' : prem < 0 ? '#ef4444' : '#f59e0b';
     }
-    var v=Math.max(0,(pp+pc)*25-(np+nc)*25-(dp+dc)*50);
-    var cor=v>0?'#0d9488':'#6b7280';
-    var sinal=v>0?'+':'';
-    return '<span style="font-weight:800;font-size:14px;color:'+cor+'">'+sinal+'R$'+Math.abs(v).toFixed(2).replace('.',',')+'</span>';
+    totalPrem += prem;
+
+    var npsCorP = npsP!==null ? (npsP>=82?'#10b981':'#ef4444') : 'var(--muted)';
+    var npsCorC = npsC!==null ? (npsC>=82?'#10b981':'#ef4444') : 'var(--muted)';
+    var npsBg   = npsTotal!==null ? (npsTotal>=82?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)') : 'var(--surface2)';
+
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
+
+    // Cabeçalho do card
+    html += '<div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">';
+    html += '<div style="display:flex;align-items:center;gap:12px;">';
+    html += '<div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#f97316,#ea580c);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;">'+esc(nome.charAt(0))+'</div>';
+    html += '<div><div style="font-size:15px;font-weight:800;color:var(--text);">'+esc(nome)+'</div>';
+    html += '<div style="font-size:12px;color:var(--muted);">Consultora Pós-Vendas</div></div>';
+    html += '</div>';
+    html += '<div style="font-size:22px;font-weight:900;color:'+premCor+';">'+premStr+'</div>';
+    html += '</div>';
+
+    // NPS geral
+    html += '<div style="padding:12px 20px;background:'+npsBg+';border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">';
+    html += '<span style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;">NPS Geral</span>';
+    html += '<span style="font-size:26px;font-weight:900;color:'+(npsTotal!==null?(npsTotal>=82?'#10b981':'#ef4444'):'var(--muted)')+';">'+(npsTotal!==null?npsTotal+'%':'—')+'</span>';
+    html += '</div>';
+
+    // Peugeot e Citroën lado a lado
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">';
+
+    // Peugeot
+    html += '<div style="padding:16px 20px;border-right:1px solid var(--border);">';
+    html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#f97316;margin-bottom:10px;">🟠 Peugeot</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">';
+    html += '<div style="text-align:center;background:rgba(16,185,129,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#10b981;text-transform:uppercase;margin-bottom:3px;">Prom</div><div style="font-size:20px;font-weight:900;color:#10b981;">'+pp+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(245,158,11,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#f59e0b;text-transform:uppercase;margin-bottom:3px;">Neu</div><div style="font-size:20px;font-weight:900;color:#f59e0b;">'+np+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(239,68,68,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#ef4444;text-transform:uppercase;margin-bottom:3px;">Det</div><div style="font-size:20px;font-weight:900;color:#ef4444;">'+dp+'</div></div>';
+    html += '</div>';
+    html += '<div style="font-size:12px;color:var(--muted);">NPS: <strong style="color:'+npsCorP+';">'+(npsP!==null?npsP+'%':'—')+'</strong></div>';
+    html += '</div>';
+
+    // Citroën
+    html += '<div style="padding:16px 20px;">';
+    html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8b5cf6;margin-bottom:10px;">🟣 Citroën</div>';
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;">';
+    html += '<div style="text-align:center;background:rgba(16,185,129,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#10b981;text-transform:uppercase;margin-bottom:3px;">Prom</div><div style="font-size:20px;font-weight:900;color:#10b981;">'+pc+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(245,158,11,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#f59e0b;text-transform:uppercase;margin-bottom:3px;">Neu</div><div style="font-size:20px;font-weight:900;color:#f59e0b;">'+nc+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(239,68,68,.08);border-radius:8px;padding:8px 4px;"><div style="font-size:9px;font-weight:700;color:#ef4444;text-transform:uppercase;margin-bottom:3px;">Det</div><div style="font-size:20px;font-weight:900;color:#ef4444;">'+dc+'</div></div>';
+    html += '</div>';
+    html += '<div style="font-size:12px;color:var(--muted);">NPS: <strong style="color:'+npsCorC+';">'+(npsC!==null?npsC+'%':'—')+'</strong></div>';
+    html += '</div>';
+
+    html += '</div>';
+    html += '</div>';
+  });
+
+  cards.innerHTML = html;
+
+  // Total geral de premiação
+  var corTotal = totalPrem >= 0 ? '#10b981' : '#ef4444';
+  if(totalEl){
+    totalEl.innerHTML = '<div style="background:var(--surface);border:2px solid '+corTotal+';border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;">'
+      +'<div><div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;">Total de premiação da equipe</div>'
+      +'<div style="font-size:12px;color:var(--muted);">Soma de todas as consultoras no período</div></div>'
+      +'<div style="font-size:32px;font-weight:900;color:'+corTotal+';">'+(totalPrem>=0?'+':'')+'R$ '+Math.abs(totalPrem).toLocaleString('pt-BR')+',00</div>'
+      +'</div>';
   }
-
-  var nomes=[...nomesSet].sort();
-  var rows=nomes.map(function(c){
-    var pp=cnt(peu,c,'PROMOTOR'),np=cnt(peu,c,'NEUTRO'),dp=cnt(peu,c,'DETRATOR');
-    var pc=cnt(cit,c,'PROMOTOR'),nc=cnt(cit,c,'NEUTRO'),dc=cnt(cit,c,'DETRATOR');
-    return{c:c,pp:pp,np:np,dp:dp,pc:pc,nc:nc,dc:dc,total:pp+np+dp+pc+nc+dc};
-  }).sort(function(a,b){return b.total-a.total;});
-
-  var tot={pp:0,np:0,dp:0,pc:0,nc:0,dc:0,total:0};
-  rows.forEach(function(r){tot.pp+=r.pp;tot.np+=r.np;tot.dp+=r.dp;tot.pc+=r.pc;tot.nc+=r.nc;tot.dc+=r.dc;tot.total+=r.total;});
-
-  tb.innerHTML=rows.map(function(r){return '<tr>'+
-    '<td style="font-weight:600;">'+esc(r.c)+'</td>'+
-    '<td style="text-align:center;color:#0d9488;font-weight:700;">'+r.pp+'</td>'+
-    '<td style="text-align:center;color:#d97706;">'+r.np+'</td>'+
-    '<td style="text-align:center;color:#dc2626;font-weight:700;">'+r.dp+'</td>'+
-    '<td style="text-align:center;'+corIsc(r.pp,r.np,r.dp)+'">'+isc(r.pp,r.np,r.dp)+'</td>'+
-    '<td style="text-align:center;color:#0d9488;font-weight:700;">'+r.pc+'</td>'+
-    '<td style="text-align:center;color:#d97706;">'+r.nc+'</td>'+
-    '<td style="text-align:center;color:#dc2626;font-weight:700;">'+r.dc+'</td>'+
-    '<td style="text-align:center;'+corIsc(r.pc,r.nc,r.dc)+'">'+isc(r.pc,r.nc,r.dc)+'</td>'+
-    '<td style="text-align:center;font-weight:700;">'+r.total+'</td>'+
-    '<td style="text-align:center;">'+calcPrem(r.pp,r.np,r.dp,r.pc,r.nc,r.dc,r.c)+'</td>'+
-  '</tr>';}).join('')+
-  '<tr style="background:var(--surface2);font-weight:800;border-top:2px solid var(--border);">'+
-    '<td>TOTAL</td>'+
-    '<td style="text-align:center;color:#0d9488;">'+tot.pp+'</td>'+
-    '<td style="text-align:center;color:#d97706;">'+tot.np+'</td>'+
-    '<td style="text-align:center;color:#dc2626;">'+tot.dp+'</td>'+
-    '<td style="text-align:center;'+corIsc(tot.pp,tot.np,tot.dp)+'">'+isc(tot.pp,tot.np,tot.dp)+'</td>'+
-    '<td style="text-align:center;color:#0d9488;">'+tot.pc+'</td>'+
-    '<td style="text-align:center;color:#d97706;">'+tot.nc+'</td>'+
-    '<td style="text-align:center;color:#dc2626;">'+tot.dc+'</td>'+
-    '<td style="text-align:center;'+corIsc(tot.pc,tot.nc,tot.dc)+'">'+isc(tot.pc,tot.nc,tot.dc)+'</td>'+
-    '<td style="text-align:center;">'+tot.total+'</td>'+
-    '<td style="text-align:center;">'+calcPrem(tot.pp,tot.np,tot.dp,tot.pc,tot.nc,tot.dc)+'</td>'+
-  '</tr>';
 }
 
 let npsVenCache=[],npsPosCache=[];
@@ -3309,8 +3521,14 @@ async function importBase(key,taId){
   for(var i=0;i<rows.length;i++){
     await window._fbPush('qualis_base_'+key.toLowerCase(),rows[i]);
   }
+  // Registrar histórico de importação
+  var histKey = 'q-import-hist-'+key;
+  var hist = JSON.parse(localStorage.getItem(histKey)||'[]');
+  hist.unshift({data: new Date().toLocaleString('pt-BR'), qtd: rows.length});
+  hist = hist.slice(0,5); // manter últimas 5
+  localStorage.setItem(histKey, JSON.stringify(hist));
   document.getElementById(taId).value='';
-  alert(rows.length+' cliente(s) importado(s)!');
+  alert(rows.length+' cliente(s) importado(s)! Importação registrada.');
 }
 function calcStatus(nota,data){
   const n=Number(nota);
@@ -3337,14 +3555,14 @@ function exportarBaseExcel(key){
   const isPos = BASE_IS_POS[key];
   const role = BASE_ROLE[key];
   const headers = isPos
-    ? ['VIN','Cliente','Consultor','Data Convite','Nota NPS','Status','Syonet','Tratativa','Convertida Por']
-    : ['VIN','Cliente','Vendedor','Data Convite','Nota NPS','Status','Syonet','Tratativa'];
+    ? ['VIN','Cliente','Email','Telefone','Consultor','Data Convite','Nota NPS','Status','Syonet','Tratativa','Convertida Por']
+    : ['VIN','Cliente','Email','Telefone','Vendedor','Data Convite','Nota NPS','Status','Syonet','Tratativa'];
 
   const csvRows = [headers.join(';')];
   rows.forEach(r=>{
     const cols = isPos
-      ? [r.VIN,r.CLIENTE,r.CONSULTOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA,r.CONVERTIDA_POR]
-      : [r.VIN,r.CLIENTE,r.VENDEDOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA];
+      ? [r.VIN,r.CLIENTE,r.EMAIL||'',r.TELEFONE||'',r.CONSULTOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA,r.CONVERTIDA_POR]
+      : [r.VIN,r.CLIENTE,r.EMAIL||'',r.TELEFONE||'',r.VENDEDOR,r.DATA_CONVITE,r.NOTA_NPS,r.STATUS,r.SYONET,r.TRATATIVA];
     csvRows.push(cols.map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"').join(';'));
   });
 
@@ -3427,31 +3645,77 @@ async function renderHotAlertsVen(){
       </button>
       <div id="ia-hot-${r.id}" style="font-size:11px;color:var(--muted);margin-top:4px;max-width:180px;line-height:1.4;"></div>
     </td>
-  </tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum hot alert.</td></tr>';
-}
-async function renderHotAlertsPos(){
-  if(!baseCache.POS_PEU)await loadBase('POS_PEU');
-  if(!baseCache.POS_CIT)await loadBase('POS_CIT');
-  const rows=[...(baseCache.POS_PEU||[]).map(r=>({...r,MARCA:'Peugeot',_key:'POS_PEU'})),...(baseCache.POS_CIT||[]).map(r=>({...r,MARCA:'Citroën',_key:'POS_CIT'}))].filter(r=>['DETRATOR','NEUTRO'].includes(String(r.STATUS||'').toUpperCase()));
-  const tb=document.getElementById('tbHotPos');if(!tb)return;
-  tb.innerHTML=rows.length?rows.map(r=>`<tr>
-    <td>${esc(r.MARCA)}</td>
-    <td>${esc(r.CLIENTE||'')}</td>
-    <td>${esc(r.CONSULTOR||'')}</td>
-    <td style="font-weight:700;color:${Number(r.NOTA_NPS)<=6?'#ef4444':'#f59e0b'}">${esc(r.NOTA_NPS||'')}</td>
-    <td>${statusChip(r.STATUS)}</td>
-    <td class="editable"><textarea 
-      placeholder="Descreva o que o cliente disse..."
-      onchange="salvarVerbalizacao('${r._key}','${r.id}',this.value)"
-      style="width:200px;min-height:60px;font-size:12px;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--surface);resize:vertical;">${esc(r.VERBALIZACAO||'')}</textarea></td>
     <td style="text-align:center;">
-      <button onclick="analisarHotAlertIA('${r._key}','${r.id}','${esc(r.CLIENTE||'')}','${esc(r.NOTA_NPS||'')}','${esc(r.MARCA)}')" 
-        style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;box-shadow:0 2px 8px rgba(249,115,22,.3);">
-        Analisar
+      <button onclick="toggleContestada('${r._key}','${r.id}',this)"
+        style="border:2px solid ${r.CONTESTADA?'#10b981':'#e2e8f0'};background:${r.CONTESTADA?'rgba(16,185,129,.1)':'transparent'};color:${r.CONTESTADA?'#10b981':'#94a3b8'};border-radius:99px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">
+        ${r.CONTESTADA?'✓ Contestada':'Contestar'}
       </button>
-      <div id="ia-hot-${r.id}" style="font-size:11px;color:var(--muted);margin-top:4px;max-width:180px;line-height:1.4;"></div>
     </td>
   </tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum hot alert.</td></tr>';
+}
+function renderHotAlertsPos(){
+  var tb = document.getElementById('tbHotPos'); if(!tb) return;
+
+  var todos = [
+    ...(baseCache.POS_PEU||[]).map(function(r){ return Object.assign({},r,{MARCA:'Peugeot',_key:'POS_PEU'}); }),
+    ...(baseCache.POS_CIT||[]).map(function(r){ return Object.assign({},r,{MARCA:'Citroën',_key:'POS_CIT'}); })
+  ];
+
+  // Atualizar select de consultoras
+  var selCons = document.getElementById('filt-hot-cons');
+  if(selCons){
+    var cons = [...new Set(todos.map(function(r){ return r.CONSULTOR||''; }).filter(Boolean))].sort();
+    var curVal = selCons.value;
+    selCons.innerHTML = '<option value="">Todas as consultoras</option>' + cons.map(function(cn){
+      return '<option value="'+esc(cn)+'"'+(cn===curVal?' selected':'')+'>'+esc(cn)+'</option>';
+    }).join('');
+  }
+
+  var filtCons   = selCons ? selCons.value : '';
+  var filtStatus = (document.getElementById('filt-hot-status')||{}).value||'';
+  var filtMarca  = (document.getElementById('filt-hot-marca')||{}).value||'';
+
+  var rows = todos.filter(function(r){
+    var st = String(r.STATUS||'').toUpperCase();
+    if(!['DETRATOR','NEUTRO'].includes(st)) return false;
+    if(filtCons   && (r.CONSULTOR||'') !== filtCons)   return false;
+    if(filtStatus && st !== filtStatus.toUpperCase())   return false;
+    if(filtMarca  && r.MARCA !== filtMarca)             return false;
+    return true;
+  });
+
+  if(!rows.length){
+    tb.innerHTML = '<tr><td colspan="8" class="empty">Nenhum hot alert.</td></tr>';
+    return;
+  }
+
+  tb.innerHTML = rows.map(function(r){
+    var notaCor = Number(r.NOTA_NPS)<=6 ? '#ef4444' : '#f59e0b';
+    var verb = esc(r.VERBALIZACAO||'');
+    var contBorder = r.CONTESTADA ? '#10b981' : '#e2e8f0';
+    var contBg     = r.CONTESTADA ? 'rgba(16,185,129,.1)' : 'transparent';
+    var contCor    = r.CONTESTADA ? '#10b981' : '#94a3b8';
+    var contTxt    = r.CONTESTADA ? '\u2713 Contestada' : 'Contestar';
+    var limpar     = verb ? '<button onclick="limparVerbalizacao(\''+r._key+'\',\''+r.id+'\',this)" style="display:block;margin-top:4px;font-size:10px;color:#ef4444;background:none;border:none;cursor:pointer;padding:0;">✕ Excluir</button>' : '';
+    return '<tr>'
+      +'<td>'+esc(r.MARCA)+'</td>'
+      +'<td>'+esc(r.CLIENTE||'')+'</td>'
+      +'<td>'+esc(r.CONSULTOR||'')+'</td>'
+      +'<td style="font-weight:700;color:'+notaCor+';">'+esc(r.NOTA_NPS||'')+'</td>'
+      +'<td>'+statusChip(r.STATUS)+'</td>'
+      +'<td class="editable">'
+        +'<textarea placeholder="Descreva o que o cliente disse..." onchange="salvarVerbalizacao(\''+r._key+'\',\''+r.id+'\',this.value)" style="width:200px;min-height:60px;font-size:12px;padding:6px;border:1px solid var(--border);border-radius:6px;background:var(--surface);resize:vertical;">'+verb+'</textarea>'
+        +limpar
+      +'</td>'
+      +'<td style="text-align:center;">'
+        +'<button onclick="analisarHotAlertIA(\''+r._key+'\',\''+r.id+'\',\''+esc(r.CLIENTE||'')+'\',\''+esc(r.NOTA_NPS||'')+'\',\''+esc(r.MARCA)+'\')" style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:7px;padding:6px 12px;cursor:pointer;font-size:12px;font-weight:600;">Analisar</button>'
+        +'<div id="ia-hot-'+r.id+'" style="font-size:11px;color:var(--muted);margin-top:4px;max-width:180px;line-height:1.4;"></div>'
+      +'</td>'
+      +'<td style="text-align:center;">'
+        +'<button onclick="toggleContestada(\''+r._key+'\',\''+r.id+'\',this)" style="border:2px solid '+contBorder+';background:'+contBg+';color:'+contCor+';border-radius:99px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;">'+contTxt+'</button>'
+      +'</td>'
+      +'</tr>';
+  }).join('');
 }
 async function renderConversoes(){
   if(!baseCache.POS_PEU)await loadBase('POS_PEU');
@@ -4211,9 +4475,10 @@ Quando perguntarem sobre Grow, use os dados de GROW CUSTOMER CARE acima.`;
   try{
     const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+apiKey},body:JSON.stringify({model:'llama-3.3-70b-versatile',messages:[{role:'system',content:sys},{role:'user',content:input}],max_tokens:800,temperature:0.3})});
     const d=await r.json();if(!r.ok)throw new Error(d.error?.message||'Erro');
-    document.getElementById('iaResp').textContent=d.choices?.[0]?.message?.content||'Sem resposta';
+    var iaText = d.choices?.[0]?.message?.content||'Sem resposta';
+    document.getElementById('iaResp').innerHTML = '<div style="line-height:1.7;">'+mdToHtml(iaText)+'</div>';
     document.getElementById('iaInput').value='';
-  }catch(e){document.getElementById('iaResp').textContent='Erro: '+e.message;}
+  }catch(e){document.getElementById('iaResp').innerHTML='<span style="color:#ef4444;">Erro: '+e.message+'</span>';}
 }
 
 
@@ -4263,7 +4528,21 @@ function atualizarDashboardInicio(){
   setText('h-nps-pc',npsStr(pc.filter(r=>r.STATUS==='PROMOTOR'),pc.filter(r=>r.STATUS==='DETRATOR'),pc.filter(r=>r.STATUS==='NEUTRO')));
 
   // Alertas
+  // Detectar pesquisáveis expirando em breve (<=3 dias)
+  var todos_base = [...(baseCache.POS_PEU||[]),...(baseCache.POS_CIT||[]),...(baseCache.VEN_PEU||[]),...(baseCache.VEN_CIT||[])];
+  var expirando = todos_base.filter(function(r){
+    if(r.NOTA_NPS || !r.DATA_CONVITE) return false;
+    var s=String(r.DATA_CONVITE).trim(), dt;
+    if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){var p=s.split('/');dt=new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));}
+    else{dt=new Date(s);}
+    if(isNaN(dt.getTime())) return false;
+    var hoje=new Date(); hoje.setHours(0,0,0,0); dt.setHours(0,0,0,0);
+    var diff=Math.floor((hoje-dt)/86400000);
+    return diff>=27 && diff<=29; // 1 a 3 dias para expirar
+  });
+
   const alertas=[];
+  if(expirando.length>0) alertas.push({tipo:'red',icon:'⏰',msg:`${expirando.length} cliente(s) pesquisável(is) expiram em até 3 dias — contate agora!`});
   if(det>0) alertas.push({tipo:'red',icon:'🚨',msg:`${det} detrator(es) na base — atenção imediata!`});
   if(pesq>0) alertas.push({tipo:'accent',icon:'📋',msg:`${pesq} cliente(s) pesquisável(is) ainda podem responder.`});
   if(tr>0) alertas.push({tipo:'gold',icon:'🎓',msg:`${tr} pessoa(s) com treinamento pendente.`});
@@ -5198,6 +5477,166 @@ async function salvarEntradaTratativa(){
 
 
 /* ════ PAINEL EXECUTIVO ════ */
+
+
+function renderPremiacao(){
+  var grid = document.getElementById('premiacao-grid');
+  var totalEl = document.getElementById('premiacao-total');
+  if(!grid) return;
+
+  var pos = [
+    ...(baseCache.POS_PEU||[]).map(function(r){return Object.assign({},r,{_marca:'Peugeot'});}),
+    ...(baseCache.POS_CIT||[]).map(function(r){return Object.assign({},r,{_marca:'Citroën'});})
+  ];
+
+  if(!pos.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">Importe a base de Pós-Vendas para calcular a premiação.</div>';
+    return;
+  }
+
+  // Consultoras fixas com regra especial
+  var LAIS = ['LAÍS','LAIS','LAíS'];
+
+  // Agrupar por consultora
+  var consultoras = {};
+  pos.forEach(function(r){
+    var nome = (r.CONSULTOR||'(sem consultor)').trim().toUpperCase();
+    var nomeOrig = (r.CONSULTOR||'(sem consultor)').trim();
+    if(!consultoras[nomeOrig]) consultoras[nomeOrig] = {nome:nomeOrig,prom:0,neu:0,det:0};
+    var st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+    if(st==='PROMOTOR') consultoras[nomeOrig].prom++;
+    else if(st==='NEUTRO') consultoras[nomeOrig].neu++;
+    else if(st==='DETRATOR') consultoras[nomeOrig].det++;
+  });
+
+  var html = '';
+  var totalGeral = 0;
+  Object.values(consultoras).sort(function(a,b){return a.nome.localeCompare(b.nome);}).forEach(function(c){
+    var isLais = LAIS.some(function(l){return c.nome.toUpperCase().includes(l);});
+    var valor, detalhe;
+    if(isLais){
+      valor = 400;
+      detalhe = 'Remuneração fixa';
+    } else {
+      valor = (c.prom * 25) + (c.neu * -25) + (c.det * -50);
+      detalhe = '+R$'+c.prom*25+' (prom) -R$'+c.neu*25+' (neu) -R$'+c.det*50+' (det)';
+    }
+    totalGeral += valor;
+    var cor = valor > 0 ? '#10b981' : valor < 0 ? '#ef4444' : '#f59e0b';
+    var bg  = valor > 0 ? 'rgba(16,185,129,.06)' : valor < 0 ? 'rgba(239,68,68,.06)' : 'rgba(245,158,11,.06)';
+
+    html += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05);">';
+    html += '<div style="background:'+bg+';padding:14px 18px;border-bottom:1px solid var(--border);">';
+    html += '<div style="font-size:15px;font-weight:800;color:var(--text);">'+esc(c.nome)+'</div>';
+    html += '<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+esc(detalhe)+'</div>';
+    html += '</div>';
+    html += '<div style="padding:16px;display:flex;align-items:center;justify-content:space-between;">';
+    html += '<div style="display:flex;gap:12px;font-size:13px;">';
+    html += '<span style="color:#10b981;font-weight:700;">'+c.prom+' P</span>';
+    html += '<span style="color:#f59e0b;font-weight:700;">'+c.neu+' N</span>';
+    html += '<span style="color:#ef4444;font-weight:700;">'+c.det+' D</span>';
+    html += '</div>';
+    html += '<div style="font-size:24px;font-weight:900;color:'+cor+';">'+(valor>=0?'+':'')+'R$'+Math.abs(valor)+'</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+
+  grid.innerHTML = html;
+
+  // Total geral
+  var corTotal = totalGeral >= 0 ? '#10b981' : '#ef4444';
+  totalEl.innerHTML = '<div style="background:var(--surface);border:2px solid '+corTotal+';border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;">'
+    +'<div><div style="font-size:13px;color:var(--muted);margin-bottom:4px;">Total de premiação do período</div>'
+    +'<div style="font-size:12px;color:var(--muted);">Soma de todas as consultoras</div></div>'
+    +'<div style="font-size:32px;font-weight:900;color:'+corTotal+';">'+(totalGeral>=0?'+':'')+'R$'+Math.abs(totalGeral)+'</div>'
+    +'</div>';
+}
+
+function renderPainelRisco(){
+  var grid = document.getElementById('risco-grid');
+  if(!grid) return;
+  var pos = [
+    ...(baseCache.POS_PEU||[]).map(function(r){return Object.assign({},r,{_marca:'Peugeot'});}),
+    ...(baseCache.POS_CIT||[]).map(function(r){return Object.assign({},r,{_marca:'Citroën'});})
+  ];
+  if(!pos.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">Importe a base de Pós-Vendas para ver o painel de risco.</div>';
+    return;
+  }
+
+  // Agrupar por consultora
+  var consultoras = {};
+  pos.forEach(function(r){
+    var nome = r.CONSULTOR || '(sem consultor)';
+    if(!consultoras[nome]) consultoras[nome] = [];
+    consultoras[nome].push(r);
+  });
+
+  var html = '';
+  Object.entries(consultoras).sort(function(a,b){return a[0].localeCompare(b[0]);}).forEach(function(entry){
+    var nome = entry[0];
+    var clientes = entry[1];
+    var prom = clientes.filter(function(r){return calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PROMOTOR';}).length;
+    var det  = clientes.filter(function(r){return calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='DETRATOR';}).length;
+    var neu  = clientes.filter(function(r){return calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='NEUTRO';}).length;
+    var pesq = clientes.filter(function(r){return calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL';}).length;
+    var total = prom+det+neu;
+    var nps = total > 0 ? calcNps(prom,neu,det) : null;
+
+    // Calcular dias para expirar mais urgente
+    var minDias = 999;
+    clientes.filter(function(r){return calcStatus(r.NOTA_NPS,r.DATA_CONVITE)==='PESQUISAVEL';}).forEach(function(r){
+      if(!r.DATA_CONVITE) return;
+      var s=String(r.DATA_CONVITE).trim(), dt;
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(s)){var p=s.split('/');dt=new Date(Number(p[2]),Number(p[1])-1,Number(p[0]));}
+      else{dt=new Date(s);}
+      if(isNaN(dt.getTime())) return;
+      var hoje=new Date(); hoje.setHours(0,0,0,0); dt.setHours(0,0,0,0);
+      var diasUsados=Math.floor((hoje-dt)/86400000);
+      var diasRestantes=29-diasUsados;
+      if(diasRestantes < minDias) minDias = diasRestantes;
+    });
+
+    // Semáforo
+    var risco, cor, bg, emoji;
+    if(det >= 2 || (nps !== null && nps < 50)){
+      risco='Alto'; cor='#ef4444'; bg='rgba(239,68,68,.06)'; emoji='🔴';
+    } else if(det === 1 || (nps !== null && nps < 82) || (minDias < 999 && minDias <= 3)){
+      risco='Médio'; cor='#f59e0b'; bg='rgba(245,158,11,.06)'; emoji='🟡';
+    } else {
+      risco='Baixo'; cor='#10b981'; bg='rgba(16,185,129,.06)'; emoji='🟢';
+    }
+
+    html += '<div style="background:var(--surface);border:2px solid '+cor+';border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
+    html += '<div style="background:'+bg+';padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);">';
+    html += '<span style="font-size:15px;font-weight:800;color:var(--text);">'+esc(nome)+'</span>';
+    html += '<span style="font-size:13px;font-weight:700;color:'+cor+';">'+emoji+' '+risco+'</span>';
+    html += '</div>';
+    html += '<div style="padding:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">';
+    html += '<div style="text-align:center;background:rgba(16,185,129,.08);border-radius:10px;padding:10px;">';
+    html += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#10b981;margin-bottom:4px;">Promotoras</div>';
+    html += '<div style="font-size:22px;font-weight:900;color:#10b981;">'+prom+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(245,158,11,.08);border-radius:10px;padding:10px;">';
+    html += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#f59e0b;margin-bottom:4px;">Neutras</div>';
+    html += '<div style="font-size:22px;font-weight:900;color:#f59e0b;">'+neu+'</div></div>';
+    html += '<div style="text-align:center;background:rgba(239,68,68,.08);border-radius:10px;padding:10px;">';
+    html += '<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#ef4444;margin-bottom:4px;">Detratoras</div>';
+    html += '<div style="font-size:22px;font-weight:900;color:#ef4444;">'+det+'</div></div>';
+    html += '</div>';
+    html += '<div style="padding:0 16px 16px;display:flex;justify-content:space-between;align-items:center;">';
+    html += '<div style="font-size:13px;color:var(--muted);">NPS: <strong style="color:'+(nps!==null?(nps>=82?'#10b981':'#ef4444'):'var(--muted)')+';font-size:16px;">'+(nps!==null?fmt(nps):'—')+'</strong></div>';
+    if(pesq>0){
+      html += '<div style="font-size:12px;color:var(--muted);">📋 '+pesq+' pesquisável(is)';
+      if(minDias < 999) html += ' · <strong style="color:'+(minDias<=3?'#ef4444':'#f59e0b')+';">'+minDias+'d restante(s)</strong>';
+      html += '</div>';
+    }
+    html += '</div>';
+    html += '</div>';
+  });
+
+  grid.innerHTML = html;
+}
+
 function renderPainelExecutivo(){
   // Recalcular status em tempo real para garantir dados corretos
   const posPeu = (baseCache.POS_PEU || []).map(function(r){
@@ -5379,7 +5818,7 @@ async function analisarHotAlertIA(key, id, cliente, nota, marca){
   const setor = key.startsWith('POS')?'Pós-Vendas':'Vendas';
   
   const elResp = document.getElementById('ia-hot-'+id);
-  if(elResp) elResp.textContent = 'Analisando...';
+  if(elResp) elResp.innerHTML = '<span style="color:var(--muted);">⏳ Analisando...</span>';
   
   const regrasContestacao = localStorage.getItem('q-regras-contestacao')||
     'Regras gerais: pode contestar se o motivo for externo à concessionária (problema de fábrica, recall, atraso de peça da montadora). Não pode contestar se for atendimento, demora, preço ou qualidade do serviço da concessionária.';
@@ -5456,11 +5895,11 @@ Responda EXATAMENTE neste formato:
     if(!resp.ok) throw new Error(d.error?.message||'Erro');
     const texto = d.choices?.[0]?.message?.content||'Sem resposta';
     if(elResp){
-      elResp.textContent = texto;
+      elResp.innerHTML = '<div style="line-height:1.7;">'+mdToHtml(texto)+'</div>';
       elResp.style.color = texto.includes('NÃO PODE')||texto.includes('nao pode')?'#ef4444':'#10b981';
     }
   }catch(e){
-    if(elResp) elResp.textContent = 'Erro: '+e.message;
+    if(elResp) elResp.innerHTML = '<span style="color:#ef4444;">Erro: '+e.message+'</span>';
   }
 }
 
@@ -5485,6 +5924,42 @@ function carregarRegrasContestacao(){
 
 /* ════ SIDEBAR ════ */
 var _sidebarCollapsed = localStorage.getItem('q-sidebar') === 'collapsed';
+
+
+
+function limparVerbalizacao(baseKey, rowId, btn){
+  if(!confirm('Excluir verbalização deste cliente?')) return;
+  if(!window._fbUpdate){ alert('Firebase não conectado.'); return; }
+  window._fbUpdate('qualis_base_'+baseKey.toLowerCase()+'/'+rowId, {VERBALIZACAO: ''}).then(function(){
+    var row = (baseCache[baseKey]||[]).find(function(r){ return r.id === rowId; });
+    if(row) row.VERBALIZACAO = '';
+    // Atualizar textarea
+    var td = btn.parentElement;
+    var ta = td.querySelector('textarea');
+    if(ta) ta.value = '';
+    btn.remove();
+  }).catch(function(e){ alert('Erro: '+e.message); });
+}
+
+function toggleContestada(baseKey, rowId, btn){
+  if(!window._fbUpdate){ alert('Firebase não conectado.'); return; }
+  var rows = baseCache[baseKey]||[];
+  var row = rows.find(function(r){ return r.id === rowId; });
+  if(!row) return;
+  var novoValor = !row.CONTESTADA;
+  window._fbUpdate('qualis_base_'+baseKey.toLowerCase()+'/'+rowId, {CONTESTADA: novoValor}).then(function(){
+    row.CONTESTADA = novoValor;
+    // Atualizar botão
+    btn.style.borderColor = novoValor ? '#10b981' : '#e2e8f0';
+    btn.style.background = novoValor ? 'rgba(16,185,129,.1)' : 'transparent';
+    btn.style.color = novoValor ? '#10b981' : '#94a3b8';
+    btn.textContent = novoValor ? '✓ Contestada' : 'Contestar';
+    // Recalcular NPS
+    if(baseKey.startsWith('VEN')) renderNpsVenMes();
+    if(baseKey.startsWith('POS')) renderNpsPosMes();
+    atualizarDashboardInicio();
+  }).catch(function(e){ alert('Erro: '+e.message); });
+}
 
 function toggleSidebar(){
   _sidebarCollapsed = !_sidebarCollapsed;
@@ -5701,6 +6176,29 @@ function calcularInsights(){
   }
 }
 
+async function mdToHtml(text){
+  if(!text) return '';
+  return text
+    // Títulos **texto**
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Itálico *texto*
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    // Listas numeradas: "1. texto"
+    .replace(/^(\d+)\.\s+(.+)$/gm, '<li>$2</li>')
+    // Agrupar <li> em <ol>
+    .replace(/(<li>.*<\/li>\n?)+/gs, function(m){ return '<ol style="padding-left:20px;margin:8px 0;">'+m+'</ol>'; })
+    // Listas com bullet: "- texto"
+    .replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>')
+    // Títulos com #
+    .replace(/^###\s+(.+)$/gm, '<h4 style="font-size:13px;font-weight:700;margin:14px 0 6px;color:var(--text);">$1</h4>')
+    .replace(/^##\s+(.+)$/gm, '<h3 style="font-size:14px;font-weight:800;margin:16px 0 8px;color:var(--text);">$1</h3>')
+    .replace(/^#\s+(.+)$/gm, '<h2 style="font-size:16px;font-weight:900;margin:16px 0 8px;color:var(--text);">$1</h2>')
+    // Parágrafos (linha vazia)
+    .replace(/\n\n+/g, '</p><p style="margin:8px 0;">')
+    // Quebras de linha simples
+    .replace(/\n/g, '<br>');
+}
+
 async function gerarInsightsIA(){
   var apiKey = localStorage.getItem('sc-apikey')||'';
   if(!apiKey){alert('Configure a API Key do Groq em Configurações.');return;}
@@ -5713,7 +6211,7 @@ async function gerarInsightsIA(){
   if(!verbs){alert('Adicione verbalizações nos Hot Alerts primeiro.');return;}
 
   var el = document.getElementById('insight-verbalizacoes');
-  if(el) el.textContent = 'Analisando com IA...';
+  if(el) el.innerHTML = '<span style="color:var(--muted);">⏳ Analisando com IA...</span>';
 
   var prompt = 'Analise verbalizacoes de clientes da concessionaria Peugeot/Citroen. Identifique: padroes de reclamacao, oportunidades de melhoria, pontos criticos. Verbalizacoes: ' + verbs + '. Responda em portugues de forma direta e estruturada.';
 
@@ -5724,8 +6222,9 @@ async function gerarInsightsIA(){
     });
     var d = await r.json();
     if(!r.ok) throw new Error(d.error?.message||'Erro');
-    if(el) el.textContent = d.choices?.[0]?.message?.content||'Sem resposta';
-  }catch(e){if(el) el.textContent='Erro: '+e.message;}
+    var txt = d.choices?.[0]?.message?.content||'Sem resposta';
+    if(el){ el.innerHTML = '<p style="margin:8px 0;">'+mdToHtml(txt)+'</p>'; }
+  }catch(e){if(el) el.innerHTML='<span style="color:#ef4444;">Erro: '+e.message+'</span>';}
 }
 
 
@@ -5898,6 +6397,41 @@ function syCopy(btn, tipo){
   setTimeout(function(){ btn.textContent = orig; }, 1500);
 }
 
+
+
+function buscaGlobal(q){
+  var lista = document.getElementById('busca-lista');
+  if(!lista) return;
+  q = (q||'').trim().toLowerCase();
+  if(q.length < 2){ lista.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px;">Digite ao menos 2 caracteres</div>'; return; }
+  var bases = {'Vendas · Peugeot': baseCache.VEN_PEU||[], 'Vendas · Citroën': baseCache.VEN_CIT||[], 'Pós-Vendas · Peugeot': baseCache.POS_PEU||[], 'Pós-Vendas · Citroën': baseCache.POS_CIT||[]};
+  var results = [];
+  Object.entries(bases).forEach(function(entry){
+    var label = entry[0], rows = entry[1];
+    rows.forEach(function(r){
+      if((r.CLIENTE||'').toLowerCase().includes(q) || (r.VIN||'').toLowerCase().includes(q)){
+        results.push({label:label, r:r});
+      }
+    });
+  });
+  if(!results.length){ lista.innerHTML = '<div style="padding:12px;color:var(--muted);font-size:13px;">Nenhum cliente encontrado</div>'; return; }
+  var html = '';
+  results.slice(0,10).forEach(function(item){
+    var r = item.r;
+    var st = calcStatus(r.NOTA_NPS, r.DATA_CONVITE);
+    var cor = st==='PROMOTOR'?'#10b981':st==='DETRATOR'?'#ef4444':'#f59e0b';
+    html += '<div class="busca-item" style="padding:10px 12px;border-radius:9px;cursor:pointer;display:flex;align-items:center;gap:10px;">';
+    html += '<div style="width:8px;height:8px;border-radius:50%;background:'+cor+';flex-shrink:0;"></div>';
+    html += '<div style="flex:1;min-width:0;">';
+    html += '<div style="font-size:13px;font-weight:600;color:var(--text);">'+esc(r.CLIENTE||'')+'</div>';
+    html += '<div style="font-size:11px;color:var(--muted);">'+esc(item.label)+' · '+esc(r.VIN||'')+'</div>';
+    html += '</div>';
+    html += '<span style="font-size:11px;font-weight:700;color:'+cor+';">'+st+'</span>';
+    html += '</div>';
+  });
+  if(results.length > 10) html += '<div style="padding:8px 12px;font-size:12px;color:var(--muted);">+'+(results.length-10)+' resultados</div>';
+  lista.innerHTML = html;
+}
 
 function fixarLayout(){
   var app = document.getElementById('app');
@@ -6094,144 +6628,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 <!-- Google Identity Services para Gmail OAuth -->
 <script src="https://accounts.google.com/gsi/client" async></script>
 
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, push, onValue, set, onDisconnect, serverTimestamp, get, update }
-  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-const FB_CONFIG = {
-  apiKey:"AIzaSyDglwSytkT39MAzEdqAeVMwJjSXP3jgInA",
-  authDomain:"qualis-portal1.firebaseapp.com",
-  databaseURL:"https://qualis-portal1-default-rtdb.firebaseio.com",
-  projectId:"qualis-portal1",
-  storageBucket:"qualis-portal1.firebasestorage.app",
-  messagingSenderId:"618969990570",
-  appId:"1:618969990570:web:ed827ca068163f5c0f57d3"
-};
-
-const EMOJIS=['👍','❤️','😂','😮','🎉','🔥'];
-const TEAM=['Kamilly','Letícia','Laís'];
-let fbApp,fbDb,_chatBooted=false;
-
-function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function hlMsg(txt){let s=esc(txt);TEAM.forEach(n=>{s=s.replace(new RegExp('@'+n,'g'),`<span class="mention">@${n}</span>`);});return s.replace(/\n/g,'<br>');}
-function initFb(){try{fbApp=initializeApp(FB_CONFIG);fbDb=getDatabase(fbApp);return true;}catch(e){console.error(e);return false;}}
-
-function setupPresence(userName){
-  if(!fbDb||!userName)return;
-  const r=ref(fbDb,`qualis_presence/${userName}`);
-  set(r,{name:userName,online:true,ts:serverTimestamp()});
-  onDisconnect(r).set({name:userName,online:false,ts:serverTimestamp()});
-  onValue(ref(fbDb,'qualis_presence'),snap=>renderOnline(snap.val()||{}));
-}
-
-function renderOnline(data){
-  const side=document.getElementById('onlineSide');const badges=document.getElementById('onlineBadges');
-  if(!side||!badges)return;
-  const users=Object.values(data);
-  side.innerHTML=TEAM.map(n=>{const u=users.find(x=>x.name===n);const on=u&&u.online;return `<div class="online-item"><div class="dot ${on?'on':''}"></div>${n}${on?'<span style="margin-left:auto;font-size:11px;color:#10b981;font-weight:700;">online</span>':''}</div>`;}).join('');
-  badges.innerHTML=TEAM.map(n=>{const on=(users.find(x=>x.name===n)||{}).online;return `<div class="online-badge"><div class="dot ${on?'on':''}"></div>${n}</div>`;}).join('');
-}
-
-function listenMsgs(){
-  if(!fbDb)return;
-  onValue(ref(fbDb,'qualis_chat'),snap=>{
-    const raw=snap.val()||{};
-    const msgs=Object.entries(raw).map(([id,v])=>({id,...v})).sort((a,b)=>(a.ts||0)-(b.ts||0));
-    renderMsgs(msgs);
-  });
-}
-
-function renderMsgs(msgs){
-  const wrap=document.getElementById('chatMessages');if(!wrap)return;
-  const me=(window.currentUser||{}).name||'';
-  const atBot=wrap.scrollHeight-wrap.scrollTop-wrap.clientHeight<100;
-  if(!msgs.length){wrap.innerHTML='<div style="text-align:center;padding:40px;color:var(--muted);">Nenhuma mensagem. Diga olá! 👋</div>';return;}
-  wrap.innerHTML=msgs.map(msg=>{
-    const mine=msg.usuario===me;
-    const time=msg.ts?new Date(msg.ts).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}):'';
-    const rxns=msg.reactions||{};
-    const rxHtml=Object.entries(rxns).map(([e,us])=>{const cnt=Object.keys(us).length;if(!cnt)return '';const isMine=us[me]?'mine':'';return `<button class="react-btn ${isMine}" onclick="window._toggleRx('${msg.id}','${e}')">${e}<span>${cnt}</span></button>`;}).join('');
-    const pickHtml=EMOJIS.map(e=>`<button class="emoji-pick" onclick="window._toggleRx('${msg.id}','${e}')">${e}</button>`).join('');
-    return `<div class="msg-group ${mine?'mine':'other'}">${!mine?`<div class="msg-author">${esc(msg.usuario)}</div>`:''}<div class="msg-bubble">${hlMsg(msg.mensagem)}</div><div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap;"><div class="msg-time">${time}</div><div class="msg-reactions">${rxHtml}</div><details><summary style="list-style:none;cursor:pointer;font-size:12px;color:var(--muted);">😊</summary><div class="emoji-picks">${pickHtml}</div></details></div></div>`;
-  }).join('');
-  if(atBot)wrap.scrollTop=wrap.scrollHeight;
-}
-
-async function doSend(){
-  // Tenta reconectar Firebase se necessario
-  if(!fbDb){
-    if(!initFb()){
-      alert('Firebase nao conectado. Verifique sua conexao e recarregue a pagina.');
-      return;
-    }
-  }
-  const me=(window.currentUser||{}).name;
-  if(!me){alert('Faca login primeiro.');return;}
-  const inp=document.getElementById('chatInput');
-  const txt=(inp?.value||'').trim();
-  if(!txt)return;
-  try{
-    await push(ref(fbDb,'qualis_chat'),{usuario:me,mensagem:txt,ts:Date.now()});
-    inp.value='';
-  }catch(e){
-    alert('Erro ao enviar: '+e.message);
-  }
-}
-
-async function toggleRx(msgId,emoji){
-  if(!fbDb)return;
-  const me=(window.currentUser||{}).name;if(!me)return;
-  const p=ref(fbDb,`qualis_chat/${msgId}/reactions/${emoji}/${me}`);
-  const snap=await get(p);
-  snap.exists()?await set(p,null):await set(p,true);
-}
-
-window._fbDb=()=>fbDb;
-window._toggleRx=toggleRx;
-window.sendMsg=doSend;
-window._fbRef=(path)=>ref(fbDb,path);
-window._fbPush=(path,data)=>push(ref(fbDb,path),data);
-window._fbSet=(path,data)=>set(ref(fbDb,path),data);
-window._fbGet=(path)=>get(ref(fbDb,path));
-window._fbUpdate=(path,data)=>update(ref(fbDb,path),data);
-window._fbOnValue=(path,cb)=>onValue(ref(fbDb,path),snap=>cb(snap.val()));
-
-window.bootChat=function(){
-  const me=(window.currentUser||{}).name;
-  if(!me){setTimeout(window.bootChat,400);return;}
-  if(!fbDb){if(!initFb()){document.getElementById('chatFirebaseWarn')?.classList.remove('hidden');return;}}
-  if(!_chatBooted){
-    _chatBooted=true;
-    const infoEl=document.getElementById('chatInfo');
-    if(infoEl)infoEl.textContent='Grupo QUALIS · Logada como '+me;
-    setupPresence(me);
-    listenMsgs();
-  }
-};
-
-initFb();
-if(fbDb){
-  onValue(ref(fbDb,'qualis_config'),snap=>{
-    const cfg=snap.val();if(!cfg)return;
-    localStorage.setItem('q-cfg',JSON.stringify(cfg));
-    if(document.getElementById('app')?.style.display==='block'){if(window.applyNpsUI)window.applyNpsUI();}
-  });
-}
-window.__fbDbReady=true;
-// Firebase pronto — carregar equipe e bases imediatamente
-setTimeout(function(){
-  if(window.currentUser){
-    // Carrega equipe primeiro, depois as bases
-    loadEquipeGlobal().then(function(){
-      loadBase('VEN_PEU');
-      loadBase('VEN_CIT');
-      loadBase('POS_PEU');
-      loadBase('POS_CIT');
-    });
-  }
-}, 200);
-</script>
 
 <!-- Modal Adicionar Clientes -->
 <div id="modalAdicionarClientes" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
