@@ -4327,7 +4327,7 @@ async function updateBaseField(key,id,field,value){
   if(key.startsWith('VEN')){renderNpsVenMes();renderRankingVen();}
   if(key.startsWith('POS')){renderNpsPosMes();renderConversoesAuto();}
   atualizarDashboardInicio();
-  // Alerta WA para qualquer nota
+  // Primeiro abre modal de DATA_RESPOSTA, depois WA
   if(field==='NOTA_NPS'&&value!==''){
     const nota=Number(value);
     if(!isNaN(nota)&&nota>=0&&nota<=10){
@@ -4335,7 +4335,9 @@ async function updateBaseField(key,id,field,value){
       if(r){
         const marca=key.includes('PEU')?'Peugeot':'Citroen';
         const setor=key.startsWith('POS')?'Pos-Vendas':'Vendas';
-        abrirModalAlertaWA(r.CLIENTE||'?',nota,r.DATA_CONVITE||'',marca,setor,key);
+        // Abrir modal de data ANTES do WA
+        abrirModalDataResposta(r.CLIENTE||'?', nota, r.DATA_CONVITE||'',
+                               marca, setor, key, id);
       }
     }
   }
@@ -7888,6 +7890,89 @@ function _renderPDFComite(d){
   alert('✅ Revista gerada! Verifique seus downloads.');
 }
 
+
+// ══ MODAL DATA RESPOSTA — abre ANTES do modal WA ══
+var _drTemp = {};
+
+function abrirModalDataResposta(cliente, nota, dataConvite, marca, setor, key, id){
+  _drTemp = {cliente, nota, dataConvite, marca, setor, key, id};
+
+  // Preencher modal
+  var mdrCliente = document.getElementById('mdrCliente');
+  var mdrTitulo  = document.getElementById('mdrTitulo');
+  var mdrData    = document.getElementById('mdrData');
+
+  if(mdrCliente) mdrCliente.textContent = cliente;
+  if(mdrTitulo)  mdrTitulo.textContent  = 'Quando ' + cliente + ' respondeu?';
+
+  // Sugerir hoje como data padrão
+  if(mdrData){
+    var hoje = new Date().toISOString().split('T')[0];
+    mdrData.value = hoje;
+  }
+
+  // Abrir o modal
+  var modal = document.getElementById('modalDataResposta');
+  if(modal) modal.style.display = 'flex';
+}
+
+function salvarDataResposta(){
+  var mdrData = document.getElementById('mdrData');
+  var dataVal = mdrData ? mdrData.value : '';
+
+  // Fechar modal
+  var modal = document.getElementById('modalDataResposta');
+  if(modal) modal.style.display = 'none';
+
+  // Salvar DATA_RESPOSTA no Firebase e no cache
+  if(dataVal && _drTemp.key && _drTemp.id){
+    // Formatar para DD/MM/YYYY
+    var pp = dataVal.split('-');
+    var dataFormatada = pp[2]+'/'+pp[1]+'/'+pp[0];
+
+    if(window._fbUpdate){
+      window._fbUpdate('qualis_base_'+_drTemp.key.toLowerCase()+'/'+_drTemp.id,
+        {DATA_RESPOSTA: dataFormatada}).catch(function(){});
+    }
+    // Atualizar cache
+    var base = baseCache[_drTemp.key];
+    if(base){
+      var r = base.find(function(x){ return x.id===_drTemp.id; });
+      if(r) r.DATA_RESPOSTA = dataFormatada;
+    }
+  }
+
+  // Agora abrir o modal WA
+  setTimeout(function(){
+    abrirModalAlertaWA(
+      _drTemp.cliente||'?',
+      _drTemp.nota,
+      _drTemp.dataConvite||'',
+      _drTemp.marca,
+      _drTemp.setor,
+      _drTemp.key
+    );
+  }, 150);
+}
+
+function fecharModalDataResposta(){
+  var modal = document.getElementById('modalDataResposta');
+  if(modal) modal.style.display = 'none';
+  // Mesmo sem data, abre o WA
+  setTimeout(function(){
+    if(_drTemp.key){
+      abrirModalAlertaWA(
+        _drTemp.cliente||'?',
+        _drTemp.nota,
+        _drTemp.dataConvite||'',
+        _drTemp.marca,
+        _drTemp.setor,
+        _drTemp.key
+      );
+    }
+  }, 150);
+}
+
 function fixarLayout(){
   var app = document.getElementById('app');
   if(app){
@@ -8140,7 +8225,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       <input type="date" id="mdrData" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:14px;outline:none;transition:border .2s;">
       <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
         <button onclick="fecharModalDataResposta()" class="btn ghost">Cancelar</button>
-        <button onclick="confirmarDataResposta()" class="btn primary">Confirmar e notificar grupo</button>
+        <button onclick="salvarDataResposta()" class="btn primary">Confirmar e notificar grupo</button>
       </div>
     </div>
   </div>
