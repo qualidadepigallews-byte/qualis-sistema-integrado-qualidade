@@ -1402,6 +1402,9 @@ input[type="date"], input[type="number"], select, textarea {
         <!-- ══ INÍCIO ══ -->
         <div class="page active" id="pg-inicio">
 
+          <!-- Banner de Aniversariantes -->
+          <div id="banner-aniversariantes" style="display:none;margin-bottom:20px;"></div>
+
           <!-- Header da página -->
           <div style="margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;">
             <div>
@@ -3447,6 +3450,7 @@ function goPage(id,btn){
   if(id==='posvendas'){ renderNpsPosMes(); renderConversoesAuto(); }
   if(id==='demandas'){ loadDemandas(); }
   if(id==='fardamento'){ initFardamento(); }
+  if(id==='inicio'){ renderBannerAniversariantes(); }
 }
 function openSub(pageId,subId,btn){const pg=document.getElementById('pg-'+pageId);pg?.querySelectorAll('.subpage').forEach(s=>s.classList.remove('active'));document.getElementById(subId)?.classList.add('active');const nav=pg?.querySelector('.subnav');nav?.querySelectorAll('.subnav-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 
@@ -5122,7 +5126,7 @@ async function runIAQualis(){
   const detTop=Object.entries(det).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>k+':'+v).join(', ')||'nenhum';
 
   // Conversoes da Lais
-  const lais=pos.filter(r=>String(r.CONVERTIDA_POR||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().includes('LAIS')).length;
+  const lais=pos.filter(r=>String(r.CONVERTIDA_POR||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().includes('LAIS')).length;
 
   // NPS separado por marca e setor
   const vpPeu=baseCache.VEN_PEU||[], vpCit=baseCache.VEN_CIT||[];
@@ -5235,6 +5239,9 @@ function atualizarDashboardInicio(){
   setText('h-nps-vc', nvc.str);
   setText('h-nps-pp', npp.str);
   setText('h-nps-pc', npc.str);
+
+  // Atualizar aniversariantes automaticamente
+  renderAniversariantes();
 
   // Atualizar barras de progresso das metas
   function setBar(barId, npsVal, meta){
@@ -5815,34 +5822,90 @@ function bootMural(){
 
 /* ════ ANIVERSARIANTES ════ */
 function renderAniversariantes(){
-  const el=document.getElementById('aniversariantesLista');if(!el)return;
-  const todos=window._aniversariantes||JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
-  const mesAtual=new Date().getMonth()+1;
-  const doMes=todos.filter(a=>{
-    if(!a.data)return false;
-    const d=new Date(a.data+'T00:00:00');
-    return d.getMonth()+1===mesAtual;
-  }).sort((a,b)=>new Date(a.data+'T00:00:00').getDate()-new Date(b.data+'T00:00:00').getDate());
+  var el = document.getElementById('aniversariantesLista');
+  if(!el) return;
+  var mesAtual = new Date().getMonth()+1;
+  var diaAtual = new Date().getDate();
+  var hoje = new Date(); hoje.setHours(0,0,0,0);
 
-  if(!doMes.length){
-    el.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês. Clique em "+ Adicionar".</div>';
+  // 1. Manuais (do localStorage)
+  var manuais = window._aniversariantes || JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
+  var listaFinal = [];
+
+  manuais.forEach(function(a){
+    if(!a.data) return;
+    var d = new Date(a.data+'T00:00:00');
+    if(d.getMonth()+1 !== mesAtual) return;
+    listaFinal.push({
+      id: a.id, nome: a.nome, setor: a.setor||a.cargo||'',
+      dia: d.getDate(),
+      tipo: '🎂', label: (function(){
+        var idade = hoje.getFullYear() - d.getFullYear();
+        return (a.setor||a.cargo||'') + ' · ' + idade + ' anos';
+      })(),
+      podeExcluir: true
+    });
+  });
+
+  // 2. Funcionários cadastrados — aniversário de nascimento
+  (_fardFuncionarios||[]).forEach(function(f){
+    if(!f.nome || !f.nascimento_fmt) return;
+    var pp = f.nascimento_fmt.split('/');
+    if(pp.length!==3 || parseInt(pp[1])!==mesAtual) return;
+    var dia = parseInt(pp[0]);
+    var anoNasc = parseInt(pp[2]);
+    var idade = hoje.getFullYear() - anoNasc;
+    listaFinal.push({
+      id: 'nasc_'+f.id, nome: f.nome,
+      setor: f.setor||f.funcao||'',
+      dia: dia,
+      tipo: '🎂',
+      label: (f.setor||f.funcao||'') + ' · ' + idade + ' anos',
+      podeExcluir: false
+    });
+  });
+
+  // 3. Funcionários — aniversário de empresa (admissão)
+  (_fardFuncionarios||[]).forEach(function(f){
+    if(!f.nome || !f.admissao_fmt) return;
+    var pa = f.admissao_fmt.split('/');
+    if(pa.length!==3 || parseInt(pa[1])!==mesAtual) return;
+    var dia = parseInt(pa[0]);
+    var anoAdm = parseInt(pa[2]);
+    var anos = hoje.getFullYear() - anoAdm;
+    listaFinal.push({
+      id: 'adm_'+f.id, nome: f.nome,
+      setor: f.setor||f.funcao||'',
+      dia: dia,
+      tipo: '🏆',
+      label: (f.setor||f.funcao||'') + ' · ' + anos + ' ano' + (anos===1?'':'s') + ' de empresa',
+      podeExcluir: false
+    });
+  });
+
+  // Ordenar por dia
+  listaFinal.sort(function(a,b){ return a.dia - b.dia; });
+
+  if(!listaFinal.length){
+    el.innerHTML = '<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês.</div>';
     return;
   }
-  const hoje=new Date(); hoje.setHours(0,0,0,0);
-  el.innerHTML=doMes.map(a=>{
-    const d=new Date(a.data+'T00:00:00');
-    const dia=d.getDate();
-    const isHoje=d.getDate()===hoje.getDate()&&d.getMonth()===hoje.getMonth();
-    const anoNasc=d.getFullYear();
-    const idade=hoje.getFullYear()-anoNasc;
-    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:${isHoje?'rgba(13,148,136,.1)':'var(--surface2)'};border:1px solid ${isHoje?'#10b981':'var(--border)'};">
-      <div style="font-size:28px;flex-shrink:0;">${isHoje?'🎂':'🎁'}</div>
-      <div style="flex:1;">
-        <div style="font-weight:700;font-size:14px;">${esc(a.nome)}${isHoje?' 🎉 Hoje!':''}</div>
-        <div style="font-size:12px;color:var(--muted);">Dia ${String(dia).padStart(2,'0')}/${String(mesAtual).padStart(2,'0')} · ${esc(a.setor||a.cargo||'')} · ${idade} anos</div>
-      </div>
-      <button onclick="excluirAniversariante('${a.id}')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;" title="Remover">×</button>
-    </div>`;
+
+  el.innerHTML = listaFinal.map(function(a){
+    var isHoje = a.dia === diaAtual;
+    var bg = isHoje ? 'rgba(13,148,136,.1)' : 'var(--surface2)';
+    var border = isHoje ? '#10b981' : 'var(--border)';
+    var excBtn = a.podeExcluir
+      ? '<button onclick="excluirAniversariante(\''+a.id+'\')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;" title="Remover">×</button>'
+      : '';
+    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:'+bg+';border:1px solid '+border+';">'
+      + '<div style="font-size:26px;flex-shrink:0;">'+a.tipo+'</div>'
+      + '<div style="flex:1;">'
+      + '<div style="font-weight:700;font-size:14px;">'+esc(a.nome)+(isHoje?' 🎉 Hoje!':'')+'</div>'
+      + '<div style="font-size:12px;color:var(--muted);">Dia '+String(a.dia).padStart(2,'0')+'/'+String(mesAtual).padStart(2,'0')+' · '+esc(a.label)+'</div>'
+      + '</div>'
+      + excBtn
+      + '</div>';
   }).join('');
 }
 
@@ -8026,6 +8089,7 @@ function fecharModalDataResposta(){
 var _fardMarca = 'Peugeot';
 var _fardFuncionarios = [];
 var _fardItensCount = 0;
+var _fardFichasCache = {};
 
 function mascaraCPF(el){
   var v = el.value.replace(/\D/g,'').slice(0,11);
@@ -8059,6 +8123,7 @@ function loadFuncionariosCfg(){
     });
     renderFuncionariosCfg();
     preencherSelectFuncionarios();
+    renderBannerAniversariantes(); // Atualizar banner ao carregar funcionários
   });
 }
 
@@ -8172,6 +8237,24 @@ async function excluirFuncionario(id){
 }
 
 // ── Página Fardamento ──
+
+// Variáveis globais para o histórico
+var _funcAtualHist = '';
+var _histEl = null;
+
+function _renderFichasHist(fichas, funcId){
+  var hist = document.getElementById('fard-historico');
+  if(!hist) return;
+  if(!fichas||!fichas.length){
+    hist.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhuma ficha gerada para este funcionário.</div>';
+    return;
+  }
+  var fid = funcId || _funcAtualHist;
+  hist.innerHTML = fichas.map(function(fi){
+    return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;">'      +'<button onclick="excluirFichaFardamento(\''+fid+'\',\''+fi.id+'\',this)" '      +'style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;'      +'color:#ef4444;font-size:18px;line-height:1;padding:0 4px;opacity:.8;" title="Excluir">×</button>'      +'<div style="font-size:12px;font-weight:700;color:var(--text);padding-right:24px;">'+esc(fi.marca||'')+'  ·  '+esc(fi.data||'')+'</div>'      +'<div style="font-size:11px;color:var(--muted);margin-top:3px;">ME: '+esc(fi.motivo||'')+'  |  '+esc(fi.entregue_por||'')+'</div>'      +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+(fi.itens||[]).map(function(it){return esc(it.desc||'')+' T:'+esc(it.tam||'');}).join(' | ')+'</div>'      +'</div>';
+  }).join('');
+}
+
 function initFardamento(){
   if(!_fardFuncionarios.length) loadFuncionariosCfg();
   else preencherSelectFuncionarios();
@@ -8219,27 +8302,45 @@ function fardSelecionarFuncionario(){
       +'<div><strong>Admissão:</strong> '+esc(f.admissao_fmt||f.admissao||'—')+'</div>'
       +'<div><strong>CPF:</strong> '+esc(f.cpf||'—')+'</div>';
   }
-  // Histórico de fichas
-  if(hist && window._fbOnValue){
-    window._fbOnValue('qualis_fichas_fardamento/'+id, function(data){
-      var fichas = Object.entries(data||{}).map(function(e){ return Object.assign({id:e[0]},e[1]); });
-      if(!fichas.length){
+  // Histórico de fichas — mostrar cache local imediatamente
+  // Usar a função global _renderFichasHist com o id e hist atuais
+  _funcAtualHist = id;
+  _histEl = document.getElementById('fard-historico');
+  if(_fardFichasCache[id]&&_fardFichasCache[id].length) _renderFichasHist(_fardFichasCache[id], id);
+  else if(hist) hist.innerHTML='<div style="color:var(--muted);font-size:13px;">Carregando histórico...</div>';
+  // Buscar fichas do Firebase (leitura única — mais confiável)
+  if(window._fbGet){
+    hist.innerHTML = '<div style="color:var(--muted);font-size:13px;">⏳ Carregando histórico...</div>';
+    window._fbGet('qualis_fichas_fardamento/'+id).then(function(snap){
+      var data = snap.val ? snap.val() : snap;
+      if(!data){
         hist.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhuma ficha gerada para este funcionário.</div>';
         return;
       }
-      hist.innerHTML = fichas.reverse().map(function(fi){
-        return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;">'          +'<button onclick="excluirFichaFardamento(\''+id+'\',\''+fi.id+'\',this)" '          +'style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;'          +'color:#ef4444;font-size:18px;line-height:1;padding:0 4px;opacity:.7;" title="Excluir">×</button>'          +'<div style="font-size:12px;font-weight:700;color:var(--text);padding-right:20px;">'+esc(fi.marca||'')+'  ·  '+esc(fi.data||'')+'</div>'          +'<div style="font-size:11px;color:var(--muted);margin-top:3px;">ME: '+esc(fi.motivo||'')+'  |  Entregue por: '+esc(fi.entregue_por||'')+'</div>'          +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+(fi.itens||[]).map(function(it){ return esc(it.desc||'')+' T:'+esc(it.tam||''); }).join(' | ')+'</div>'          +'</div>';
-      }).join('');
+      var fichas = Object.entries(data).map(function(e){
+        return Object.assign({id:e[0]}, e[1]);
+      });
+      // Ordenar do mais recente para o mais antigo
+      fichas.sort(function(a,b){
+        return (b.criado_em||b.data||'').localeCompare(a.criado_em||a.data||'');
+      });
+      _fardFichasCache[id] = fichas;
+      _renderFichasHist(fichas, id);
+    }).catch(function(){
+      hist.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhuma ficha encontrada.</div>';
     });
   }
 }
 
 
 function excluirFichaFardamento(funcId, fichaId, btn){
-  if(!confirm('Excluir esta entrega do histórico?')) return;
-  // Remover visualmente
-  var card = btn.closest ? btn.closest('div[style*="border-radius:10px"]') : btn.parentElement;
-  if(card) card.remove();
+  if(!confirm('Excluir esta entrega?')) return;
+  // Remover do cache local
+  if(_fardFichasCache[funcId]){
+    _fardFichasCache[funcId] = _fardFichasCache[funcId].filter(function(f){ return f.id !== fichaId; });
+  }
+  // Re-renderizar sem a ficha excluída
+  _renderFichasHist(_fardFichasCache[funcId]||[], funcId);
   // Remover do Firebase
   if(window._fbRemove){
     window._fbRemove('qualis_fichas_fardamento/'+funcId+'/'+fichaId).catch(function(){});
@@ -8272,7 +8373,7 @@ function fardColetarItens(){
   }).filter(function(it){ return it.desc; });
 }
 
-async function fardGerarFicha(){
+function fardGerarFicha(){
   var sel = document.getElementById('fard-funcionario');
   var fid = sel ? sel.value : '';
   if(!fid){ alert('Selecione um funcionário.'); return; }
@@ -8299,11 +8400,17 @@ async function fardGerarFicha(){
     criado_em: new Date().toISOString(),
   };
 
-  // Salvar no Firebase
-  if(window._fbPush) await window._fbPush('qualis_fichas_fardamento/'+fid, ficha).catch(function(){});
-
-  // Gerar PDF
+  // GERAR PDF PRIMEIRO — igual à revista, sem esperar Firebase
   _gerarPDFFardamento(f, ficha);
+
+  // Salvar no Firebase em background (sem await — não bloqueia o PDF)
+  if(window._fbPush) window._fbPush('qualis_fichas_fardamento/'+fid, ficha).catch(function(){});
+
+  // Atualizar histórico local
+  if(!_fardFichasCache[fid]) _fardFichasCache[fid] = [];
+  _fardFichasCache[fid].unshift(Object.assign({id:'local_'+Date.now()}, ficha));
+  _funcAtualHist = fid;
+  _renderFichasHist(_fardFichasCache[fid], fid);
 }
 
 function _gerarPDFFardamento(f, ficha){
@@ -8504,18 +8611,8 @@ function _renderPDFFardamento(f, ficha){
 
   // Download
   var nome = 'Fardamento_'+(f.nome||'').replace(/\s+/g,'_')+'_'+(ficha.data||'').replace(/\//g,'-')+'.pdf';
-  // Forçar download via blob (evita popup blocker)
-  try {
-    var blob = doc.output('blob');
-    var url  = URL.createObjectURL(blob);
-    var a    = document.createElement('a');
-    a.href = url; a.download = nome;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1000);
-  } catch(e) {
-    doc.save(nome); // fallback
-  }
+  // Download — mesmo padrão da revista
+  doc.save(nome);
 }
 
 
@@ -8675,6 +8772,120 @@ async function salvarImportacaoFuncionarios(){
   setTimeout(function(){
     fecharModalImportarFuncionarios();
   }, 1500);
+}
+
+
+// ════════════════════════════════════════
+//  ANIVERSARIANTES DO MÊS
+// ════════════════════════════════════════
+var MESES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function renderBannerAniversariantes(){
+  var banner = document.getElementById('banner-aniversariantes');
+  if(!banner) return;
+
+  var hoje     = new Date();
+  var mesAtual = hoje.getMonth(); // 0-11
+  var diaHoje  = hoje.getDate();
+  var nomeMes  = MESES_PT[mesAtual];
+
+  function parseDt(str){
+    // Aceita DD/MM/YYYY ou YYYY-MM-DD
+    if(!str) return null;
+    str = String(str).trim();
+    if(/^\d{2}\/\d{2}\/\d{4}$/.test(str)){
+      var p=str.split('/'); return {dia:parseInt(p[0]),mes:parseInt(p[1])-1};
+    }
+    if(/^\d{4}-\d{2}-\d{2}$/.test(str)){
+      var p=str.split('-'); return {dia:parseInt(p[2]),mes:parseInt(p[1])-1};
+    }
+    return null;
+  }
+
+  var anivVida    = []; // {nome, dia, hoje}
+  var anivEmpresa = []; // {nome, dia, anos, hoje}
+
+  _fardFuncionarios.forEach(function(f){
+    if(!f.nome) return;
+    var nome = f.nome.split(' ')[0]; // Primeiro nome
+
+    // Aniversário de vida
+    var dtNasc = parseDt(f.nascimento_fmt || f.nascimento);
+    if(dtNasc && dtNasc.mes === mesAtual){
+      anivVida.push({
+        nome: nome,
+        nomeCompleto: f.nome,
+        dia: dtNasc.dia,
+        hoje: (dtNasc.dia === diaHoje)
+      });
+    }
+
+    // Aniversário de empresa
+    var dtAdm = parseDt(f.admissao_fmt || f.admissao);
+    if(dtAdm && dtAdm.mes === mesAtual){
+      var anoAdm = null;
+      var str = String(f.admissao_fmt || f.admissao || '').trim();
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(str)) anoAdm = parseInt(str.split('/')[2]);
+      if(/^\d{4}-\d{2}-\d{2}$/.test(str))      anoAdm = parseInt(str.split('-')[0]);
+      var anos = anoAdm ? (hoje.getFullYear() - anoAdm) : null;
+      anivEmpresa.push({
+        nome: nome,
+        nomeCompleto: f.nome,
+        dia: dtAdm.dia,
+        anos: anos,
+        hoje: (dtAdm.dia === diaHoje)
+      });
+    }
+  });
+
+  // Ordenar por dia
+  anivVida.sort(function(a,b){ return a.dia - b.dia; });
+  anivEmpresa.sort(function(a,b){ return a.dia - b.dia; });
+
+  if(!anivVida.length && !anivEmpresa.length){
+    banner.style.display = 'none';
+    return;
+  }
+
+  function chipPessoa(p, tipo){
+    var cor    = tipo==='vida' ? '#f97316' : '#8b5cf6';
+    var corBg  = tipo==='vida' ? 'rgba(249,115,22,.1)' : 'rgba(139,92,246,.1)';
+    var emoji  = p.hoje ? '🎉' : '🎂';
+    var extra  = p.anos ? ' · '+p.anos+'ano'+(p.anos===1?'':'s') : '';
+    var diaStr = String(p.dia).padStart(2,'0');
+    return '<div title="'+p.nomeCompleto+'" style="display:inline-flex;align-items:center;gap:6px;'
+      +'padding:5px 12px;background:'+corBg+';border:1.5px solid '+cor+';'
+      +'border-radius:99px;font-size:12px;font-weight:600;color:'+cor+';white-space:nowrap;">'
+      + emoji + ' ' + p.nome
+      +'<span style="font-weight:400;opacity:.7;font-size:11px;">dia '+diaStr+extra+'</span>'
+      +'</div>';
+  }
+
+  var html = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px;">'
+    +'<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;">🗓️ '+nomeMes+' — Aniversários</div>'
+    +'<div style="display:flex;flex-wrap:wrap;gap:16px;">';
+
+  if(anivVida.length){
+    html += '<div>'
+      +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#f97316;margin-bottom:6px;">🎂 De vida</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
+      + anivVida.map(function(p){ return chipPessoa(p,'vida'); }).join('')
+      +'</div></div>';
+  }
+
+  if(anivEmpresa.length){
+    html += '<div>'
+      +'<div style="font-size:10px;font-weight:700;text-transform:uppercase;color:#8b5cf6;margin-bottom:6px;">🏢 De empresa</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
+      + anivEmpresa.map(function(p){ return chipPessoa(p,'empresa'); }).join('')
+      +'</div></div>';
+  }
+
+  html += '</div></div>';
+
+  banner.innerHTML  = html;
+  banner.style.display = 'block';
 }
 
 function fixarLayout(){
