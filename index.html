@@ -1338,6 +1338,9 @@ input[type="date"], input[type="number"], select, textarea {
         <span class="sb-label">📋 Demandas</span>
         <span id="dem-badge" style="display:none;background:#ef4444;color:#fff;border-radius:99px;font-size:10px;font-weight:800;padding:1px 7px;margin-left:auto;">0</span>
       </button>
+      <button class="sb-item" id="sb-fardamento" onclick="goPage('fardamento',this)">
+        <span class="sb-label">👕 Fardamento</span>
+      </button>
       <button class="sb-item" id="sb-sistemas" onclick="goPage('sistemas',this)">
         <span class="sb-label">Sistemas</span>
       </button>
@@ -2650,65 +2653,20 @@ input[type="date"], input[type="number"], select, textarea {
   <div><h2>Configurações</h2><p>Banco de dados, metas e equipe</p></div>
 </div>
 
-<!-- ══ APIs — SOMENTE SUPERADMIN ══ -->
-<div id="cfg-apis-section" style="display:none;margin-bottom:20px;">
-  <div style="background:#fff;border-radius:16px;border:2px solid rgba(249,115,22,.2);overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">
-    <div style="background:linear-gradient(135deg,#f97316,#ea580c);padding:14px 22px;display:flex;align-items:center;gap:10px;">
-      <span style="font-size:15px;font-weight:800;color:#fff;">Chaves de API</span>
-      <span style="background:rgba(0,0,0,.2);color:rgba(255,255,255,.8);font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;">Somente Super Admin</span>
-    </div>
-    <div style="padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="subnav">
+            <button class="subnav-btn active" onclick="openSub('config','cfg-geral',this)">⚙️ Geral</button>
+            <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this);setTimeout(renderEquipeConfig,200)">👥 Equipe</button>
+            <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this);renderUsuarias()">🔐 Usuárias</button>
+            <button class="subnav-btn" onclick="openSub('config','cfg-funcionarios',this);loadFuncionariosCfg()">👕 Funcionários</button>
+          </div>
 
-      <!-- Groq IA -->
-      <div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px;">Groq API Key (IA QUALIS)</div>
-        <div style="display:flex;gap:8px;">
-          <input id="cfg-groq-key" type="password" placeholder="gsk_..."
-            style="flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--mono);outline:none;">
-          <button onclick="salvarApiKey('sc-apikey','cfg-groq-key','fb-groq')" class="btn primary" style="padding:9px 14px;">Salvar</button>
-        </div>
-        <div id="fb-groq" style="font-size:12px;color:#10b981;margin-top:5px;height:16px;"></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Usada para análise de contestações e insights</div>
-      </div>
-
-      <!-- Resend Email -->
-      <div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px;">Resend API Key (E-mail)</div>
-        <div style="display:flex;gap:8px;">
-          <input id="cfg-resend-key" type="password" placeholder="re_..."
-            style="flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--mono);outline:none;">
-          <button onclick="salvarApiKey('resend-key','cfg-resend-key','fb-resend')" class="btn primary" style="padding:9px 14px;">Salvar</button>
-        </div>
-        <div id="fb-resend" style="font-size:12px;color:#10b981;margin-top:5px;height:16px;"></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Usada para envio de e-mails de scorecard</div>
-      </div>
-
-      <!-- Gmail Client ID -->
-      <div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px;">Gmail Client ID</div>
-        <div style="display:flex;gap:8px;">
-          <input id="cfg-gmail-id" type="text" placeholder="xxxx.apps.googleusercontent.com"
-            style="flex:1;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;outline:none;">
-          <button onclick="salvarApiKey('q-gmail-client-id','cfg-gmail-id','fb-gmail')" class="btn primary" style="padding:9px 14px;">Salvar</button>
-        </div>
-        <div id="fb-gmail" style="font-size:12px;color:#10b981;margin-top:5px;height:16px;"></div>
-      </div>
-
-
-    </div>
-  </div>
-</div>
-
-          <!-- Google Agenda -->
-
-
-          <!-- Regras de Contestação -->
-          <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">️ Regras de Contestação NPS</div>
-            <div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Cole aqui as regras da Stellantis para contestação de notas. A IA usará essas regras ao analisar os hot alerts.</div>
-            <textarea id="regrasContestacao" rows="12" 
-              style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:monospace;"
-              >REGRAS DE CONTESTAÇÃO CSI STELLANTIS 2025 — Válidas para Vendas e Pós-Vendas
+          <!-- cfg-geral -->
+          <div class="subpage active" id="cfg-geral">
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-title">📋 Regras de Contestação NPS</div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Cole aqui as regras da Stellantis para contestação de notas. A IA usará essas regras ao analisar os hot alerts.</p>
+              <textarea id="regrasContestacao" rows="10"
+                style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:monospace;">REGRAS DE CONTESTAÇÃO CSI STELLANTIS 2025 — Válidas para Vendas e Pós-Vendas
 
 A concessionária pode reportar o resultado de uma pesquisa (solicitar exclusão) apenas pelos seguintes motivos:
 
@@ -2721,113 +2679,110 @@ MOTIVO 2 — Cliente avaliou setor errado (avaliou Vendas em Pós-Vendas ou vice
 - Ação: EXCLUSÃO DA PESQUISA
 
 MOTIVO 3 — Processo judicial em andamento COM A MONTADORA
-- Documento necessário: Notificação judicial sob análise do Departamento Jurídico Stellantis
-- Ação: EXCLUSÃO DA PESQUISA
-
 MOTIVO 4 — Cliente deu nota 9 ou 10 em Satisfação mas nota 1 ou 2 em Recomendação
-- Documento necessário: Print da pesquisa + verbalização positiva do cliente
-- Observação: A verbalização do cliente é levada em consideração e precisa ser positiva. Se o cliente não verbalizou, todo o questionário é levado em consideração
-- Ação: EXCLUSÃO DA PESQUISA
-
 MOTIVO 5 — Cliente menciona experiência com modelo de veículo DIFERENTE do pesquisado
-- Documento necessário: Print da pesquisa + verbalização mencionando outro modelo + análise comparativa entre o modelo citado e o modelo da pesquisa
-- Ação: EXCLUSÃO DA PESQUISA
-
-MOTIVO 6 — Cliente deu nota 1 tanto em Satisfação quanto em Recomendação, mas verbalização é POSITIVA
-- Documento necessário: Print da pesquisa + verbalização positiva contrastando com a nota baixa
-- Ação: EXCLUSÃO DA PESQUISA
-
-REGRAS GERAIS IMPORTANTES:
-- A evidência dos motivos deve ser anexada ao e-mail de solicitação
-- NÃO há entrevista com clientes fora do prazo da pesquisa
-- NÃO são aceitos prints de SMD, WhatsApp/SMS, e-mails e cartas enviados por clientes para alterar resultados ou como evidência
-- Cartas escritas de próprio punho ou autenticadas NÃO são aceitas como prova
-- Motivos por peças faltantes, atraso ou problema do produto NÃO são aceitos
-- Uma vez respondida a pesquisa pelo e-mail cadastrado, a identidade do cliente e sua participação no processo de compra/serviço não será passível de reporte
-
-CONCLUSÃO PARA A IA:
-- Se o motivo da reclamação se encaixa em um dos 6 motivos acima E há documentação comprobatória disponível → PODE CONTESTAR
-- Se o motivo é atendimento ruim, demora, preço, qualidade do serviço da concessionária, ou não se encaixa nos motivos → NÃO PODE CONTESTAR</textarea>
-            <button onclick="salvarRegrasContestacao()" class="btn primary" style="margin-top:10px;">Salvar regras</button>
-            <span id="regras-fb" style="font-size:12px;color:#10b981;margin-left:10px;"></span>
-          </div>
-
-          <div class="card" style="margin-bottom:16px;background:linear-gradient(135deg,rgba(249,115,22,.05),rgba(139,92,246,.05));border:1px solid rgba(249,115,22,.15);">
-            <div class="card-title" style="margin-bottom:10px;">🏆 Sobre o QUALIS</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
-              <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
-                <div style="font-size:22px;font-weight:900;color:#f97316;">v25</div>
-                <div style="font-size:11px;color:var(--muted);">Versão atual</div>
-              </div>
-              <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
-                <div style="font-size:22px;font-weight:900;color:#8b5cf6;">2026</div>
-                <div style="font-size:11px;color:var(--muted);">Pigalle WS</div>
-              </div>
-              <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
-                <div style="font-size:16px;">🚗✨</div>
-                <div style="font-size:11px;color:var(--muted);">Peugeot · Citroën</div>
+MOTIVO 6 — Cliente deu nota 1 tanto em Satisfação quanto em Recomendação, mas verbalização é POSITIVA</textarea>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+                <button onclick="salvarRegrasContestacao()" class="btn primary">Salvar regras</button>
+                <span id="regras-fb" style="font-size:12px;color:#10b981;"></span>
               </div>
             </div>
-            <div style="font-size:12px;color:var(--muted);line-height:1.8;background:var(--surface);border-radius:8px;padding:12px;">
-              <strong style="color:var(--text);">Novidades v25:</strong> Módulo Demandas com IA · DATA_RESPOSTA para NPS · Painel de Risco · Conversões redesenhadas · Virada de mês automática · Busca global · Badge de pendências
-            </div>
-          </div>
 
-          <div class="subnav">
-            <button class="subnav-btn active" onclick="openSub('config','cfg-geral',this)">Geral</button>
-            <button class="subnav-btn" onclick="openSub('config','cfg-equipe',this);setTimeout(renderEquipeConfig,200)">Equipe</button>
-            <button class="subnav-btn" onclick="openSub('config','cfg-usuarios',this);renderUsuarias()">Usuárias</button>
-          </div>
-          <div class="subpage active" id="cfg-geral">
-            <!-- API Key Groq -->
-            <div class="card" style="margin-bottom:16px;border:2px solid #f97316;">
-              <div class="card-title">API Key Groq — IA QUALIS</div>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Necessária para usar a IA QUALIS. Acesse <a href="https://console.groq.com" target="_blank" style="color:#f97316;font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
-              <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;">
-                <input type="password" id="groqApiKeyInput" placeholder="gsk_..." style="flex:1;padding:10px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;outline:none;min-width:240px;">
-                <button class="btn primary" onclick="salvarGroqKey()">Salvar chave</button>
-                <span id="groqKeyStatus" style="font-size:12px;"></span>
+            <div class="card" style="margin-bottom:16px;">
+              <div class="card-title">🔑 API Key Groq — IA QUALIS</div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Necessária para IA QUALIS, Scorecard e Demandas. Acesse <a href="https://console.groq.com" target="_blank" style="color:#f97316;font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
+              <div style="display:flex;gap:9px;align-items:center;">
+                <input id="groqApiKeyInput" type="password" placeholder="gsk_..."
+                  style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--mono);">
+                <button onclick="salvarGroqKey()" class="btn primary">Salvar chave</button>
               </div>
-              <div style="margin-top:8px;padding:10px 13px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:8px;font-size:13px;color:#7c3aed;">💡 <strong>Dica:</strong> A mesma API Key é usada na IA QUALIS, no Scorecard e no módulo Demandas. Você só precisa de uma chave.</div>
+              <span id="groqKeyStatus" style="font-size:12px;color:#10b981;display:block;margin-top:6px;"></span>
+              <div style="margin-top:8px;padding:10px 13px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:8px;font-size:13px;color:#7c3aed;">
+                💡 <strong>Dica:</strong> A mesma API Key serve para a IA QUALIS, o Scorecard e o módulo Demandas.
+              </div>
             </div>
 
-            
+            <div class="card" style="background:linear-gradient(135deg,rgba(249,115,22,.05),rgba(139,92,246,.05));border:1px solid rgba(249,115,22,.15);">
+              <div class="card-title" style="margin-bottom:10px;">🏆 Sobre o QUALIS</div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
+                <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+                  <div style="font-size:22px;font-weight:900;color:#f97316;">v25</div>
+                  <div style="font-size:11px;color:var(--muted);">Versão atual</div>
+                </div>
+                <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+                  <div style="font-size:22px;font-weight:900;color:#8b5cf6;">2026</div>
+                  <div style="font-size:11px;color:var(--muted);">Pigalle WS</div>
+                </div>
+                <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
+                  <div style="font-size:16px;">🚗✨</div>
+                  <div style="font-size:11px;color:var(--muted);">Peugeot · Citroën</div>
+                </div>
+              </div>
+              <div style="font-size:12px;color:var(--muted);line-height:1.8;background:var(--surface);border-radius:8px;padding:12px;">
+                <strong style="color:var(--text);">Novidades v25:</strong> Módulo Demandas com IA · DATA_RESPOSTA para NPS · Painel de Risco · Comitê Pós-Vendas com Revista · Fardamento · Busca global
+              </div>
+            </div>
           </div>
+
+          <!-- cfg-equipe -->
           <div class="subpage" id="cfg-equipe">
             <div class="grid-3">
-              <div class="card"><div class="card-title">Vendedores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbVend"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div class="btn-row" style="margin-top:11px;"><input id="newVendNome" placeholder="Nome do vendedor" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;outline:none;"><button class="btn primary" onclick="addEquipe('vendedores','newVendNome')">+</button></div></div>
-              <div class="card"><div class="card-title">Consultores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbCons"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div class="btn-row" style="margin-top:11px;"><input id="newConsNome" placeholder="Nome do consultor" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;outline:none;"><button class="btn primary" onclick="addEquipe('consultores','newConsNome')">+</button></div></div>
-              <div class="card"><div class="card-title">Gestores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Área</th></tr></thead><tbody id="tbGest"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div class="btn-row" style="margin-top:11px;"><input id="newGestNome" placeholder="Nome do gestor" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;flex:1;outline:none;"><button class="btn primary" onclick="addEquipe('gestores','newGestNome')">+</button></div></div>
+              <div class="card"><div class="card-title">Vendedores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbVend"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div style="display:flex;gap:6px;margin-top:8px;"><input id="newVendNome" placeholder="Nome do vendedor" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"><button onclick="addEquipe('vendedores','newVendNome')" style="padding:7px 14px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;">+</button></div></div>
+              <div class="card"><div class="card-title">Consultores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbCons"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div style="display:flex;gap:6px;margin-top:8px;"><input id="newConsNome" placeholder="Nome do consultor" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"><button onclick="addEquipe('consultores','newConsNome')" style="padding:7px 14px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;">+</button></div></div>
+              <div class="card"><div class="card-title">Gestores</div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Status</th></tr></thead><tbody id="tbGest"><tr><td colspan="2" class="empty">Carregando...</td></tr></tbody></table></div><div style="display:flex;gap:6px;margin-top:8px;"><input id="newGestNome" placeholder="Nome do gestor" style="flex:1;padding:7px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"><button onclick="addEquipe('gestores','newGestNome')" style="padding:7px 14px;background:var(--accent);color:#fff;border:none;border-radius:7px;font-size:13px;cursor:pointer;">+</button></div></div>
+            </div>
+            <div class="card" style="margin-top:16px;">
+              <div class="card-title" style="font-size:13px;">Vendedores cadastrados</div>
+              <div id="listaVendedoresConfig" style="margin-top:8px;"></div>
+            </div>
+            <div class="card" style="margin-top:12px;">
+              <div class="card-title" style="font-size:13px;">Consultores cadastrados</div>
+              <div id="listaConsultoresConfig" style="margin-top:8px;"></div>
             </div>
           </div>
-          <div class="card" style="margin-top:16px;">
-            <div class="card-title" style="font-size:13px;">Vendedores cadastrados</div>
-            <div id="listaVendedoresConfig" style="margin-top:8px;"></div>
-          </div>
-          <div class="card" style="margin-top:12px;">
-            <div class="card-title" style="font-size:13px;">Consultores cadastrados</div>
-            <div id="listaConsultoresConfig" style="margin-top:8px;"></div>
-          </div>
+
+          <!-- cfg-usuarios -->
           <div class="subpage" id="cfg-usuarios">
             <div class="card">
               <div class="card-title">Usuárias do portal</div>
               <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Senhas válidas por <strong>30 dias</strong>. Somente a Kamilly (Super Admin) pode adicionar ou renovar.</p>
               <div class="table-wrap" style="margin-bottom:18px;"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Perfil</th><th>Senha atual</th><th>Válida até</th><th>Ação</th></tr></thead><tbody id="tbUsuarias"></tbody></table></div>
-              <div id="addUserSection" class="hidden">
-                <div class="card-title" style="margin-bottom:13px;">Adicionar nova usuária</div>
-                <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
-                  <div class="form-field"><label>Nome</label><input id="newUserNome" placeholder="Ex: Fernanda"></div>
-                  <div class="form-field"><label>E-mail</label><input id="newUserEmail" placeholder="email@adtsa.com.br"></div>
-                  <div class="form-field"><label>Senha inicial</label><input id="newUserSenha" placeholder="Mín. 8 caracteres"></div>
+              <div id="divAddUser" style="display:none;background:var(--surface2);padding:16px;border-radius:10px;border:1px solid var(--border);">
+                <div style="font-size:13px;font-weight:700;margin-bottom:10px;">Nova usuária</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                  <input id="newUserNome" placeholder="Nome" style="padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+                  <input id="newUserEmail" placeholder="E-mail" style="padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+                  <select id="newUserPerfil" style="padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
+                    <option value="admin">Admin</option>
+                    <option value="viewer">Visualizador</option>
+                  </select>
                 </div>
-                <div class="form-grid" style="grid-template-columns:1fr 2fr;">
-                  <div class="form-field"><label>Perfil</label><select id="newUserRole" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface);font-size:13px;color:var(--text);outline:none;"><option value="user">Operacional</option><option value="superadmin">Super Admin</option></select></div>
+                <div style="display:flex;gap:8px;">
+                  <button onclick="salvarNovaUsuaria()" class="btn primary">Salvar</button>
+                  <button onclick="document.getElementById('divAddUser').style.display='none'" class="btn ghost">Cancelar</button>
                 </div>
-                <div class="btn-row"><button class="btn primary" onclick="addNovaUsuaria()">Adicionar usuária</button></div>
-                <div id="addUserFeedback" style="margin-top:9px;font-size:13px;"></div>
               </div>
+              <button id="btnAddUser" onclick="document.getElementById('divAddUser').style.display='block';this.style.display='none'" class="btn primary" style="margin-top:8px;">+ Adicionar usuária</button>
             </div>
           </div>
+
+          <!-- cfg-funcionarios -->
+          <div class="subpage" id="cfg-funcionarios">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+              <div>
+                <div style="font-size:15px;font-weight:700;color:var(--text);">Funcionários</div>
+                <div style="font-size:13px;color:var(--muted);">Cadastre os funcionários para geração automática das fichas de fardamento.</div>
+              </div>
+              <button onclick="abrirModalFuncionario(null)"
+                style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">
+                + Novo funcionário
+              </button>
+            </div>
+            <div id="cfg-func-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+              <div style="color:var(--muted);font-size:13px;">Nenhum funcionário cadastrado ainda.</div>
+            </div>
+          </div>
+
         </div>
 
         <!-- ══ SCORECARD ══ -->
@@ -3458,7 +3413,7 @@ async function carregarNpsDoFirebase(){
   }catch(e){ console.error('Erro ao carregar NPS:', e); }
 }
 
-const PAGE_TITLES={inicio:'Início',vendas:'Vendas',posvendas:'Pós-Vendas',grow:'Grow Customer Care',treinamentos:'Treinamentos',chat:'Chat',demandas:'Demandas',sistemas:'Sistemas',inteligencia:'Inteligência CX',config:'Configurações','scorecard-pos':'Scorecard Pós-Vendas'};
+const PAGE_TITLES={inicio:'Início',vendas:'Vendas',posvendas:'Pós-Vendas',grow:'Grow Customer Care',treinamentos:'Treinamentos',chat:'Chat',demandas:'Demandas',fardamento:'Fardamento',sistemas:'Sistemas',inteligencia:'Inteligência CX',config:'Configurações','scorecard-pos':'Scorecard Pós-Vendas'};
 function goPage(id,btn){
   updateSidebarActive(id);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -3485,6 +3440,7 @@ function goPage(id,btn){
   if(id==='inteligencia'){ calcularInsights(); setTimeout(renderIAQualis,300); }
   if(id==='posvendas'){ renderNpsPosMes(); renderConversoesAuto(); }
   if(id==='demandas'){ loadDemandas(); }
+  if(id==='fardamento'){ initFardamento(); }
 }
 function openSub(pageId,subId,btn){const pg=document.getElementById('pg-'+pageId);pg?.querySelectorAll('.subpage').forEach(s=>s.classList.remove('active'));document.getElementById(subId)?.classList.add('active');const nav=pg?.querySelector('.subnav');nav?.querySelectorAll('.subnav-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');}
 
@@ -8057,6 +8013,488 @@ function fecharModalDataResposta(){
   }, 150);
 }
 
+
+// ════════════════════════════════════════
+//  MÓDULO FARDAMENTO
+// ════════════════════════════════════════
+var _fardMarca = 'Peugeot';
+var _fardFuncionarios = [];
+var _fardItensCount = 0;
+
+function mascaraCPF(el){
+  var v = el.value.replace(/\D/g,'').slice(0,11);
+  if(v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,'$1.$2.$3-$4');
+  else if(v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{3})/,'$1.$2.$3');
+  else if(v.length > 3) v = v.replace(/(\d{3})(\d{3})/,'$1.$2');
+  el.value = v;
+}
+function mascaraTel(el){
+  var v = el.value.replace(/\D/g,'').slice(0,11);
+  if(v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  else if(v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d*)/,'($1) $2-$3');
+  else if(v.length > 2) v = v.replace(/(\d{2})(\d*)/,'($1) $2');
+  el.value = v;
+}
+
+// ── Configurações: funcionários ──
+var _funcListening = false;
+function loadFuncionariosCfg(){
+  // Se já tem dados no cache, apenas re-renderiza
+  if(_fardFuncionarios.length > 0){
+    renderFuncionariosCfg();
+    preencherSelectFuncionarios();
+  }
+  // Registrar listener só uma vez
+  if(_funcListening || !window._fbOnValue) return;
+  _funcListening = true;
+  window._fbOnValue('qualis_funcionarios', function(data){
+    _fardFuncionarios = Object.entries(data||{}).map(function(e){
+      return Object.assign({id:e[0]}, e[1]);
+    });
+    renderFuncionariosCfg();
+    preencherSelectFuncionarios();
+  });
+}
+
+function renderFuncionariosCfg(){
+  var grid = document.getElementById('cfg-func-grid');
+  if(!grid) return;
+  if(!_fardFuncionarios.length){
+    grid.innerHTML = '<div style="color:var(--muted);font-size:13px;">Nenhum funcionário cadastrado.</div>';
+    return;
+  }
+  grid.innerHTML = _fardFuncionarios.map(function(f){
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;position:relative;">'
+      +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;">'+esc(f.nome||'')+'</div>'
+      +'<div style="font-size:12px;color:#f97316;font-weight:600;margin-bottom:8px;">'+esc(f.funcao||'')+' · '+esc(f.empresa||'')+'</div>'
+      +'<div style="font-size:12px;color:var(--muted);line-height:1.7;">'
+      +'<div>📁 '+esc(f.setor||'—')+'</div>'
+      +'<div>📅 '+esc(f.admissao_fmt||f.admissao||'—')+'</div>'
+      +'<div>🪪 '+esc(f.cpf||'—')+'</div>'
+      +'</div>'
+      +'<div style="display:flex;gap:8px;margin-top:12px;">'
+      +'<button onclick="abrirModalFuncionario(\''+f.id+'\')" style="flex:1;background:none;border:1px solid var(--border);border-radius:8px;padding:6px;font-size:12px;cursor:pointer;color:var(--text);">✏️ Editar</button>'
+      +'<button onclick="excluirFuncionario(\''+f.id+'\')" style="background:none;border:1px solid #ef4444;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:#ef4444;">🗑️</button>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function preencherSelectFuncionarios(){
+  var sel = document.getElementById('fard-funcionario');
+  if(!sel) return;
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">— Selecionar —</option>'
+    + _fardFuncionarios.map(function(f){
+      return '<option value="'+f.id+'"'+(f.id===cur?' selected':'')+'>'+esc(f.nome||'')+'</option>';
+    }).join('');
+}
+
+function abrirModalFuncionario(id){
+  var m = document.getElementById('modalFuncionario');
+  if(!m) return;
+  document.getElementById('func-id-edit').value = id||'';
+  document.getElementById('modal-func-titulo').textContent = id ? 'Editar Funcionário' : 'Novo Funcionário';
+  if(id){
+    var f = _fardFuncionarios.find(function(x){ return x.id===id; });
+    if(f){
+      document.getElementById('func-nome').value    = f.nome||'';
+      document.getElementById('func-funcao').value  = f.funcao||'';
+      document.getElementById('func-setor').value   = f.setor||'';
+      document.getElementById('func-empresa').value = f.empresa||'Peugeot';
+      document.getElementById('func-cpf').value     = f.cpf||'';
+      document.getElementById('func-admissao').value= f.admissao||'';
+      document.getElementById('func-email').value   = f.email||'';
+      document.getElementById('func-tel').value     = f.tel||'';
+    }
+  } else {
+    ['func-nome','func-funcao','func-setor','func-cpf','func-admissao','func-email','func-tel'].forEach(function(id2){
+      var el2 = document.getElementById(id2); if(el2) el2.value='';
+    });
+    document.getElementById('func-empresa').value = 'Peugeot';
+  }
+  m.style.display = 'flex';
+}
+
+function fecharModalFuncionario(){
+  var m = document.getElementById('modalFuncionario');
+  if(m) m.style.display='none';
+}
+
+async function salvarFuncionario(){
+  var nome = document.getElementById('func-nome')?.value?.trim();
+  if(!nome){ alert('Informe o nome.'); return; }
+  var admissaoVal = document.getElementById('func-admissao')?.value||'';
+  var admissao_fmt = '';
+  if(admissaoVal){
+    var pp = admissaoVal.split('-');
+    admissao_fmt = pp[2]+'/'+pp[1]+'/'+pp[0];
+  }
+  var dados = {
+    nome:     nome,
+    funcao:   document.getElementById('func-funcao')?.value?.trim()||'',
+    setor:    document.getElementById('func-setor')?.value?.trim()||'',
+    empresa:  document.getElementById('func-empresa')?.value||'Peugeot',
+    cpf:      document.getElementById('func-cpf')?.value?.trim()||'',
+    admissao: admissaoVal,
+    admissao_fmt: admissao_fmt,
+    email:    document.getElementById('func-email')?.value?.trim()||'',
+    tel:      document.getElementById('func-tel')?.value?.trim()||'',
+  };
+  var editId = document.getElementById('func-id-edit')?.value;
+  if(editId){
+    if(window._fbUpdate) await window._fbUpdate('qualis_funcionarios/'+editId, dados).catch(function(){});
+    // Atualizar no cache local
+    var idx2 = _fardFuncionarios.findIndex(function(x){ return x.id===editId; });
+    if(idx2 > -1) _fardFuncionarios[idx2] = Object.assign({id:editId}, dados);
+  } else {
+    var novoId = 'local_'+Date.now();
+    if(window._fbPush){
+      var pushed = await window._fbPush('qualis_funcionarios', dados).catch(function(){});
+      // _fbPush retorna a referência do Firebase com a key real
+      if(pushed && pushed.key) novoId = pushed.key;
+    }
+    // Adicionar ao cache local imediatamente
+    _fardFuncionarios.push(Object.assign({id: novoId}, dados));
+  }
+  // Re-renderizar o grid imediatamente sem esperar Firebase
+  renderFuncionariosCfg();
+  preencherSelectFuncionarios();
+  fecharModalFuncionario();
+}
+
+async function excluirFuncionario(id){
+  if(!confirm('Excluir este funcionário?')) return;
+  if(window._fbRemove) await window._fbRemove('qualis_funcionarios/'+id).catch(function(){});
+}
+
+// ── Página Fardamento ──
+function initFardamento(){
+  if(!_fardFuncionarios.length) loadFuncionariosCfg();
+  else preencherSelectFuncionarios();
+  fardSelecionarMarca('Peugeot');
+  // Adicionar 1 item inicial
+  var lista = document.getElementById('fard-itens-lista');
+  if(lista && !lista.children.length) fardAdicionarItem();
+  // Preencher "entregue por" com usuário logado
+  var ep = document.getElementById('fard-entregue-por');
+  if(ep && !ep.value) ep.value = (window.currentUser||{}).name||'Kamilly';
+}
+
+function fardSelecionarMarca(marca){
+  _fardMarca = marca;
+  var btns = {
+    'Peugeot': 'fard-btn-peu',
+    'Citroën': 'fard-btn-cit',
+    'Ambas':   'fard-btn-amb'
+  };
+  Object.entries(btns).forEach(function(entry){
+    var el = document.getElementById(entry[1]);
+    if(!el) return;
+    var ativo = entry[0] === marca;
+    el.style.borderColor  = ativo ? '#f97316' : 'var(--border)';
+    el.style.background   = ativo ? 'rgba(249,115,22,.1)' : 'var(--surface2)';
+    el.style.color        = ativo ? '#f97316' : 'var(--text)';
+    el.style.fontWeight   = ativo ? '800' : '600';
+  });
+}
+
+function fardSelecionarFuncionario(){
+  var sel = document.getElementById('fard-funcionario');
+  var id  = sel ? sel.value : '';
+  var div = document.getElementById('fard-dados-func');
+  var hist = document.getElementById('fard-historico');
+  if(!id){ if(div) div.style.display='none'; return; }
+  var f = _fardFuncionarios.find(function(x){ return x.id===id; });
+  if(!f){ if(div) div.style.display='none'; return; }
+  if(div){
+    div.style.display='block';
+    div.innerHTML =
+      '<div><strong>Função:</strong> '+esc(f.funcao||'—')+'</div>'
+      +'<div><strong>Setor:</strong> '+esc(f.setor||'—')+'</div>'
+      +'<div><strong>Empresa:</strong> '+esc(f.empresa||'—')+'</div>'
+      +'<div><strong>Admissão:</strong> '+esc(f.admissao_fmt||f.admissao||'—')+'</div>'
+      +'<div><strong>CPF:</strong> '+esc(f.cpf||'—')+'</div>';
+  }
+  // Histórico de fichas
+  if(hist && window._fbOnValue){
+    window._fbOnValue('qualis_fichas_fardamento/'+id, function(data){
+      var fichas = Object.entries(data||{}).map(function(e){ return Object.assign({id:e[0]},e[1]); });
+      if(!fichas.length){
+        hist.innerHTML='<div style="color:var(--muted);font-size:13px;">Nenhuma ficha gerada para este funcionário.</div>';
+        return;
+      }
+      hist.innerHTML = fichas.reverse().map(function(fi){
+        return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;">'
+          +'<div style="font-size:12px;font-weight:700;color:var(--text);">'+esc(fi.marca||'')+'  ·  '+esc(fi.data||'')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted);margin-top:3px;">ME: '+esc(fi.motivo||'')+'  |  Entregue por: '+esc(fi.entregue_por||'')+'</div>'
+          +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+(fi.itens||[]).map(function(it){ return esc(it.desc||'')+' T:'+esc(it.tam||''); }).join(' | ')+'</div>'
+          +'</div>';
+      }).join('');
+    });
+  }
+}
+
+function fardAdicionarItem(){
+  var lista = document.getElementById('fard-itens-lista');
+  if(!lista) return;
+  var idx = _fardItensCount++;
+  var row = document.createElement('div');
+  row.style.cssText='display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:6px;align-items:center;';
+  row.innerHTML=
+    '<input type="text" placeholder="Descrição (ex: Camiseta polo)" '
+    +'style="padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);font-size:12px;" />'
+    +'<input type="text" placeholder="Tamanho" '
+    +'style="padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);font-size:12px;" />'
+    +'<input type="text" placeholder="Qtd" '
+    +'style="padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);font-size:12px;" />'
+    +'<button onclick="this.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;padding:0 4px;">×</button>';
+  lista.appendChild(row);
+}
+
+function fardColetarItens(){
+  var lista = document.getElementById('fard-itens-lista');
+  if(!lista) return [];
+  return Array.from(lista.children).map(function(row){
+    var inputs = row.querySelectorAll('input');
+    return { desc: (inputs[0]||{}).value||'', tam: (inputs[1]||{}).value||'', qtd: (inputs[2]||{}).value||'1' };
+  }).filter(function(it){ return it.desc; });
+}
+
+async function fardGerarFicha(){
+  var sel = document.getElementById('fard-funcionario');
+  var fid = sel ? sel.value : '';
+  if(!fid){ alert('Selecione um funcionário.'); return; }
+  var f = _fardFuncionarios.find(function(x){ return x.id===fid; });
+  if(!f){ alert('Funcionário não encontrado.'); return; }
+
+  var motivo_num = document.getElementById('fard-motivo')?.value||'1';
+  var motivos = {'1':'1 - Admissão','2':'2 - Danificado/Ajuste/Desgaste','3':'3 - Promoção ou Troca de Função','4':'4 - Reposição'};
+  var motivo_txt = motivos[motivo_num]||motivo_num;
+  var entregue = document.getElementById('fard-entregue-por')?.value||'';
+  var itens = fardColetarItens();
+  if(!itens.length){ alert('Adicione pelo menos 1 item.'); return; }
+
+  var hoje = new Date().toLocaleDateString('pt-BR');
+  var ficha = {
+    funcionario_id: fid,
+    funcionario_nome: f.nome,
+    marca: _fardMarca,
+    motivo: motivo_txt,
+    entregue_por: entregue,
+    itens: itens,
+    data: hoje,
+    criado_em: new Date().toISOString(),
+  };
+
+  // Salvar no Firebase
+  if(window._fbPush) await window._fbPush('qualis_fichas_fardamento/'+fid, ficha).catch(function(){});
+
+  // Gerar PDF
+  _gerarPDFFardamento(f, ficha);
+}
+
+function _gerarPDFFardamento(f, ficha){
+  if(window.jspdf){ _renderPDFFardamento(f, ficha); return; }
+  var s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload = function(){ _renderPDFFardamento(f, ficha); };
+  s.onerror = function(){ alert('Erro ao carregar jsPDF.'); };
+  document.head.appendChild(s);
+}
+
+function _renderPDFFardamento(f, ficha){
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({orientation:'portrait', unit:'mm', format:'a4'});
+  var W=210, H=297, ML=18, MR=18, MT=16, WU=W-ML-MR;
+
+  var LARANJA=[249,115,22], ESCURO=[15,23,42], MEDIO=[71,85,105];
+  var CLARO=[241,245,249], BORDA=[226,232,240], BRANCO=[255,255,255];
+  var LARANJA_CL=[255,247,237], LARANJA_BD=[253,186,116];
+
+  var marca = ficha.marca || 'Peugeot';
+  var me_num = parseInt(ficha.motivo_num||ficha.motivo||'1')||1;
+  var motivos = {1:'Admissão',2:'Danificado / Ajuste / Desgaste',3:'Promoção ou Troca de Função',4:'Reposição'};
+  var admFmt = f.admissao_fmt || f.admissao || '—';
+
+  function sf(rgb){ doc.setFillColor(rgb[0],rgb[1],rgb[2]); }
+  function st(rgb){ doc.setTextColor(rgb[0],rgb[1],rgb[2]); }
+  function sd(rgb){ doc.setDrawColor(rgb[0],rgb[1],rgb[2]); }
+  function rr(x,y,w,h,r,m){ doc.roundedRect(x,y,w,h,r,r,m||'F'); }
+
+  // ── Marca d'água ──
+  doc.saveState();
+  doc.setGState(new doc.GState({opacity:0.032}));
+  sf(LARANJA); doc.setFont('helvetica','bold'); doc.setFontSize(240);
+  st(LARANJA); doc.text('Q', W/2, H/2-20, {align:'center'});
+  doc.restoreState();
+
+  // ── Rodapé ──
+  sd(BORDA); doc.setLineWidth(0.4); doc.line(ML,H-12,W-MR,H-12);
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); st(MEDIO);
+  doc.text('PIGALLE WS  \u00b7  QUALIS  \u00b7  '+ficha.data, ML, H-7);
+  doc.text(marca.toUpperCase(), W-MR, H-7, {align:'right'});
+
+  var y = MT;
+
+  // ── Linha laranja topo ──
+  sf(LARANJA); doc.rect(ML, y, WU, 1.8, 'F'); y += 6;
+
+  // ── Título ──
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); st(MEDIO);
+  doc.text('CONTROLE DE', ML, y); y += 5;
+  doc.setFontSize(26); st(LARANJA);
+  doc.text('FARDAMENTO', ML, y); y += 4;
+
+  // Marca no canto direito
+  doc.setFontSize(14); st(LARANJA);
+  doc.text(marca.toUpperCase(), W-MR, MT+8, {align:'right'});
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); st(MEDIO);
+  doc.text('PIGALLE WS', W-MR, MT+13, {align:'right'});
+
+  y += 8;
+  sd(BORDA); doc.setLineWidth(0.4); doc.line(ML, y, W-MR, y); y += 8;
+
+  // ── Motivos ──
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); st(MEDIO);
+  doc.text('MOTIVO DA ENTREGA', ML, y); y += 5;
+
+  var pill_w = (WU-9)/4;
+  var pill_h = 8;
+  for(var k=1; k<=4; k++){
+    var px = ML + (k-1)*(pill_w+3);
+    var ativo = (k===me_num);
+    if(ativo){ sf(LARANJA); rr(px,y,pill_w,pill_h,3); }
+    else { sf(CLARO); rr(px,y,pill_w,pill_h,3); sd(BORDA); doc.setLineWidth(0.3); rr(px,y,pill_w,pill_h,3,'S'); }
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
+    st(ativo?BRANCO:MEDIO);
+    var txt = k+' '+motivos[k];
+    doc.text(txt, px+pill_w/2, y+pill_h/2+1, {align:'center'});
+  }
+  y += pill_h + 10;
+
+  // ── Dados do colaborador ──
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); st(MEDIO);
+  doc.text('DADOS DO COLABORADOR', ML, y); y += 5;
+
+  function drawCampo(x, yy, w, label, valor){
+    var h = 12;
+    sf(CLARO); rr(x,yy,w,h,3);
+    sf(LARANJA); doc.rect(x,yy,2,h,'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(5.5); st(LARANJA);
+    doc.text(label.toUpperCase(), x+5, yy+4.5);
+    sd(BORDA); doc.setLineWidth(0.3); doc.line(x+5, yy+6, x+w-4, yy+6);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8.5); st(ESCURO);
+    // Truncar valor se muito longo
+    var maxW = (w-10)*2.8;
+    var txt = String(valor||'—');
+    doc.text(txt, x+5, yy+10.5);
+  }
+
+  // Linha 1: Nome | Função | Empresa
+  drawCampo(ML,           y, WU*0.48-3, 'Nome completo', f.nome||'—');
+  drawCampo(ML+WU*0.48,   y, WU*0.30-3, 'Função',        f.funcao||'—');
+  drawCampo(ML+WU*0.78,   y, WU*0.22,   'Empresa',       f.empresa||'—');
+  y += 16;
+
+  // Linha 2: Admissão | Setor | CPF
+  drawCampo(ML,           y, WU*0.22-3, 'Admissão', admFmt);
+  drawCampo(ML+WU*0.22,   y, WU*0.40-3, 'Setor',    f.setor||'—');
+  drawCampo(ML+WU*0.62,   y, WU*0.38,   'CPF',      f.cpf||'—');
+  y += 18;
+
+  // ── Cláusula ──
+  var cl_txt = 'É obrigatório o uso diário do fardamento completo fornecido pela empresa durante toda a jornada de trabalho, sendo este um item de identificação profissional e padronização da equipe. O colaborador é responsável pela boa conservação, limpeza e apresentação do fardamento, devendo mantê-lo sempre em condições adequadas de uso — sem rasgos, manchas excessivas, alterações ou customizações não autorizadas. O fardamento é de uso exclusivo durante o expediente e não deve ser utilizado para fins pessoais fora do ambiente de trabalho. Em caso de perda, danos por mau uso ou descaracterização, a empresa poderá cobrar a reposição ou desconto proporcional ao valor da peça.';
+
+  // Cabeçalho cláusula
+  sf(LARANJA); doc.roundedRect(ML,y,WU,7,3,3,'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); st(BRANCO);
+  doc.text('Cláusula Única — Uso, Conservação e Obrigatoriedade do Fardamento', ML+5, y+5);
+  y += 7;
+
+  // Corpo cláusula
+  var linhas_cl = doc.splitTextToSize(cl_txt, WU-14);
+  var cl_h = linhas_cl.length * 4.2 + 8;
+  sf(LARANJA_CL); doc.roundedRect(ML,y,WU,cl_h,3,3,'F');
+  sd(LARANJA_BD); doc.setLineWidth(0.4); doc.roundedRect(ML,y,WU,cl_h,3,3,'S');
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); st(ESCURO);
+  doc.text(linhas_cl, ML+7, y+6);
+  y += cl_h + 10;
+
+  // ── Tabela de entrega ──
+  doc.setFont('helvetica','bold'); doc.setFontSize(7); st(MEDIO);
+  doc.text('REGISTRO DE ENTREGA', ML, y); y += 5;
+
+  var COLS = ['DATA','QTD','M.E','DESCRICAO DO ITEM','TAMANHO','ENTREGUE POR','ASSINATURA'];
+  var CRAT = [0.11,  0.06, 0.06, 0.27,               0.10,     0.17,          0.23];
+  var CWS  = CRAT.map(function(r){ return WU*r; });
+  var ROW_H = 9;
+
+  // Cabeçalho tabela
+  sf(ESCURO); doc.rect(ML, y, WU, ROW_H, 'F');
+  var tx = ML;
+  COLS.forEach(function(col, i){
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); st(BRANCO);
+    doc.text(col, tx+CWS[i]/2, y+6.5, {align:'center'});
+    tx += CWS[i];
+  });
+  y += ROW_H;
+
+  // Linhas de dados
+  var itens = ficha.itens||[];
+  var blanks = Math.max(4, 7-itens.length);
+  var all_rows = itens.concat(Array(blanks).fill(null));
+
+  all_rows.forEach(function(item, idx){
+    var bg = (idx%2===0) ? BRANCO : CLARO;
+    sf(bg); doc.rect(ML, y, WU-CWS[6], ROW_H, 'F');
+    sf([250,250,250]); doc.rect(ML+WU-CWS[6], y, CWS[6], ROW_H, 'F');
+    sd(BORDA); doc.setLineWidth(0.3);
+    doc.line(ML, y+ROW_H, W-MR, y+ROW_H);
+    // Separadores verticais
+    var sx=ML;
+    for(var i=0;i<6;i++){sx+=CWS[i]; doc.line(sx,y,sx,y+ROW_H);}
+
+    if(item){
+      tx = ML;
+      var vals = [
+        ficha.data||'', item.qtd||'1', String(me_num),
+        item.desc||'', item.tam||'', ficha.entregue_por||''
+      ];
+      vals.forEach(function(v,i){
+        var isBold = (i===1||i===2||i===4);
+        doc.setFont('helvetica', isBold?'bold':'normal');
+        doc.setFontSize(i===2?8.5:8);
+        st(i===2?LARANJA:(i===0||i===5)?MEDIO:ESCURO);
+        if(i===3){
+          doc.text(v, tx+3, y+6.2);
+        } else {
+          doc.text(v, tx+CWS[i]/2, y+6.2, {align:'center'});
+        }
+        tx+=CWS[i];
+      });
+    }
+    y += ROW_H;
+  });
+
+  y += 12;
+
+  // ── Assinaturas ──
+  sd(ESCURO); doc.setLineWidth(0.6);
+  doc.line(ML,         y, ML+WU*0.35,       y);  // Assinatura
+  doc.line(ML+WU*0.42, y, ML+WU*0.42+WU*0.23, y); // Entregue por
+  doc.line(ML+WU*0.72, y, ML+WU*0.72+WU*0.16, y); // Data
+
+  doc.setFont('helvetica','normal'); doc.setFontSize(7); st(MEDIO);
+  doc.text('Assinatura do colaborador', ML+WU*0.175,        y+4, {align:'center'});
+  doc.text('Entregue por',              ML+WU*0.535,        y+4, {align:'center'});
+  doc.text('Data',                      ML+WU*0.72+WU*0.08, y+4, {align:'center'});
+
+  // Download
+  var nome = 'Fardamento_'+(f.nome||'').replace(/\s+/g,'_')+'_'+(ficha.data||'').replace(/\//g,'-')+'.pdf';
+  doc.save(nome);
+}
+
 function fixarLayout(){
   var app = document.getElementById('app');
   if(app){
@@ -8069,6 +8507,103 @@ function fixarLayout(){
 
 
 function fixarEstrutura(){
+
+  // Criar pg-fardamento se não existir
+  if(!document.getElementById('pg-fardamento')){
+    var _pgFard = document.createElement('div');
+    _pgFard.className = 'page';
+    _pgFard.id = 'pg-fardamento';
+    _pgFard.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-size:24px;font-weight:900;letter-spacing:-.3px;">Fardamento</h1>
+          <p style="font-size:13px;color:var(--muted);margin-top:4px;">Gere fichas de entrega de fardamento e controle o histórico.</p>
+        </div>
+      </div>
+
+      <!-- Formulário de geração de ficha -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+
+        <!-- Card: dados da entrega -->
+        <div class="card">
+          <div class="card-title">📋 Nova Ficha de Entrega</div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Marca</label>
+            <div style="display:flex;gap:8px;">
+              <button id="fard-btn-peu" onclick="fardSelecionarMarca('Peugeot')"
+                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
+                🚗 Peugeot
+              </button>
+              <button id="fard-btn-cit" onclick="fardSelecionarMarca('Citroën')"
+                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
+                ✨ Citroën
+              </button>
+              <button id="fard-btn-amb" onclick="fardSelecionarMarca('Ambas')"
+                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
+                🔗 Ambas
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Funcionário</label>
+            <select id="fard-funcionario" onchange="fardSelecionarFuncionario()"
+              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
+              <option value="">— Selecionar —</option>
+            </select>
+          </div>
+
+          <!-- Dados puxados automaticamente -->
+          <div id="fard-dados-func" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.8;color:var(--muted);">
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Motivo da Entrega</label>
+            <select id="fard-motivo"
+              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
+              <option value="1">1 — Admissão</option>
+              <option value="2">2 — Danificado / Ajuste de tamanho / Desgaste</option>
+              <option value="3">3 — Promoção ou Troca de Função</option>
+              <option value="4">4 — Reposição</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Entregue por</label>
+            <input type="text" id="fard-entregue-por" placeholder="Nome de quem entrega"
+              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+          </div>
+
+          <!-- Itens da entrega -->
+          <div style="margin-bottom:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);">Itens entregues</label>
+              <button onclick="fardAdicionarItem()" style="background:none;border:1.5px dashed var(--border);border-radius:7px;padding:4px 12px;font-size:12px;cursor:pointer;color:var(--muted);">+ Item</button>
+            </div>
+            <div id="fard-itens-lista" style="display:flex;flex-direction:column;gap:8px;"></div>
+          </div>
+
+          <button onclick="fardGerarFicha()"
+            style="width:100%;margin-top:14px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">
+            📄 Gerar Ficha PDF
+          </button>
+        </div>
+
+        <!-- Card: histórico -->
+        <div class="card">
+          <div class="card-title">📦 Histórico de Entregas</div>
+          <div id="fard-historico" style="font-size:13px;color:var(--muted);">
+            Selecione um funcionário para ver o histórico.
+          </div>
+        </div>
+
+      </div>
+    `;
+    var ca = document.getElementById('contentArea');
+    if(ca) ca.appendChild(_pgFard);
+  }
+
 
   // Criar pg-demandas se não existir
   if(!document.getElementById('pg-demandas')){
@@ -8083,7 +8618,7 @@ function fixarEstrutura(){
   if(!ca) return;
   var pageIds = ['pg-inicio','pg-vendas','pg-posvendas','pg-scorecard-pos',
                  'pg-grow','pg-treinamentos','pg-simulador','pg-inteligencia',
-                 'pg-executivo','pg-demandas','pg-sistemas','pg-config'];
+                 'pg-executivo','pg-demandas','pg-fardamento','pg-sistemas','pg-config'];
   pageIds.forEach(function(id){
     var el = document.getElementById(id);
     if(el && el.parentElement !== ca){
@@ -8390,6 +8925,72 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div style="display:flex;justify-content:space-between;gap:10px;">
         <button onclick="excluirTarefa()" style="background:none;border:1px solid #ef4444;color:#ef4444;border-radius:10px;padding:9px 16px;font-size:13px;cursor:pointer;">🗑️ Excluir</button>
         <button onclick="salvarTarefa()" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MODAL FUNCIONÁRIO ══ -->
+<div id="modalFuncionario" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:16px;font-weight:800;color:var(--text);" id="modal-func-titulo">Novo Funcionário</div>
+      <button onclick="fecharModalFuncionario()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <input type="hidden" id="func-id-edit">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo *</label>
+          <input type="text" id="func-nome" placeholder="Nome completo"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Função *</label>
+          <input type="text" id="func-funcao" placeholder="Ex: Consultor de Serviço"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor *</label>
+          <input type="text" id="func-setor" placeholder="Ex: Pós-Vendas"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Empresa *</label>
+          <select id="func-empresa"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+            <option value="Peugeot">Peugeot</option>
+            <option value="Citroën">Citroën</option>
+            <option value="Ambas">Ambas (Peugeot + Citroën)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">CPF</label>
+          <input type="text" id="func-cpf" placeholder="000.000.000-00" maxlength="14"
+            oninput="mascaraCPF(this)"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de admissão</label>
+          <input type="date" id="func-admissao"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">E-mail</label>
+          <input type="email" id="func-email" placeholder="email@empresa.com"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Telefone</label>
+          <input type="text" id="func-tel" placeholder="(81) 99999-9999" maxlength="15"
+            oninput="mascaraTel(this)"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+        <button onclick="fecharModalFuncionario()" class="btn ghost">Cancelar</button>
+        <button onclick="salvarFuncionario()" class="btn primary">Salvar</button>
       </div>
     </div>
   </div>
