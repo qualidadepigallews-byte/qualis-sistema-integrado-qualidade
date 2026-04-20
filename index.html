@@ -2773,10 +2773,16 @@ MOTIVO 6 — Cliente deu nota 1 tanto em Satisfação quanto em Recomendação, 
                 <div style="font-size:15px;font-weight:700;color:var(--text);">Funcionários</div>
                 <div style="font-size:13px;color:var(--muted);">Cadastre os funcionários para geração automática das fichas de fardamento.</div>
               </div>
-              <button onclick="abrirModalFuncionario(null)"
-                style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">
-                + Novo funcionário
-              </button>
+              <div style="display:flex;gap:8px;">
+                <button onclick="abrirModalImportarFuncionarios()"
+                  style="background:var(--surface2);color:var(--text);border:1.5px solid var(--border);border-radius:10px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">
+                  📥 Importar respostas
+                </button>
+                <button onclick="abrirModalFuncionario(null)"
+                  style="background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">
+                  + Novo funcionário
+                </button>
+              </div>
             </div>
             <div id="cfg-func-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
               <div style="color:var(--muted);font-size:13px;">Nenhum funcionário cadastrado ainda.</div>
@@ -8104,8 +8110,9 @@ function abrirModalFuncionario(id){
       document.getElementById('func-empresa').value = f.empresa||'Peugeot';
       document.getElementById('func-cpf').value     = f.cpf||'';
       document.getElementById('func-admissao').value= f.admissao||'';
-      document.getElementById('func-email').value   = f.email||'';
-      document.getElementById('func-tel').value     = f.tel||'';
+      document.getElementById('func-email').value      = f.email||'';
+      document.getElementById('func-tel').value        = f.tel||'';
+      document.getElementById('func-nascimento').value = f.nascimento||'';
     }
   } else {
     ['func-nome','func-funcao','func-setor','func-cpf','func-admissao','func-email','func-tel'].forEach(function(id2){
@@ -8140,26 +8147,22 @@ async function salvarFuncionario(){
     admissao_fmt: admissao_fmt,
     email:    document.getElementById('func-email')?.value?.trim()||'',
     tel:      document.getElementById('func-tel')?.value?.trim()||'',
+    nascimento: document.getElementById('func-nascimento')?.value||'',
+    nascimento_fmt: (function(){
+      var v = document.getElementById('func-nascimento')?.value||'';
+      if(!v) return '';
+      var pp = v.split('-');
+      return pp[2]+'/'+pp[1]+'/'+pp[0];
+    })(),
   };
   var editId = document.getElementById('func-id-edit')?.value;
   if(editId){
     if(window._fbUpdate) await window._fbUpdate('qualis_funcionarios/'+editId, dados).catch(function(){});
-    // Atualizar no cache local
-    var idx2 = _fardFuncionarios.findIndex(function(x){ return x.id===editId; });
-    if(idx2 > -1) _fardFuncionarios[idx2] = Object.assign({id:editId}, dados);
+    // listener do Firebase vai atualizar automaticamente
   } else {
-    var novoId = 'local_'+Date.now();
-    if(window._fbPush){
-      var pushed = await window._fbPush('qualis_funcionarios', dados).catch(function(){});
-      // _fbPush retorna a referência do Firebase com a key real
-      if(pushed && pushed.key) novoId = pushed.key;
-    }
-    // Adicionar ao cache local imediatamente
-    _fardFuncionarios.push(Object.assign({id: novoId}, dados));
+    if(window._fbPush) await window._fbPush('qualis_funcionarios', dados).catch(function(){});
   }
-  // Re-renderizar o grid imediatamente sem esperar Firebase
-  renderFuncionariosCfg();
-  preencherSelectFuncionarios();
+  // Feedback visual e fechar modal
   fecharModalFuncionario();
 }
 
@@ -8281,6 +8284,7 @@ async function fardGerarFicha(){
     funcionario_nome: f.nome,
     marca: _fardMarca,
     motivo: motivo_txt,
+    motivo_num: parseInt(motivo_num)||1,
     entregue_por: entregue,
     itens: itens,
     data: hoje,
@@ -8493,6 +8497,165 @@ function _renderPDFFardamento(f, ficha){
   // Download
   var nome = 'Fardamento_'+(f.nome||'').replace(/\s+/g,'_')+'_'+(ficha.data||'').replace(/\//g,'-')+'.pdf';
   doc.save(nome);
+}
+
+
+// ════════════════════════════════════════
+//  IMPORTAÇÃO DE FUNCIONÁRIOS VIA IA
+// ════════════════════════════════════════
+var _importarFuncDados = []; // cache dos funcionários analisados
+
+function abrirModalImportarFuncionarios(){
+  var m = document.getElementById('modalImportarFuncionarios');
+  if(m) m.style.display = 'flex';
+  document.getElementById('importar-func-texto').value = '';
+  document.getElementById('importar-func-status').textContent = '';
+  document.getElementById('importar-func-preview').style.display = 'none';
+  document.getElementById('btn-importar-salvar').style.display = 'none';
+  document.getElementById('btn-importar-analisar').style.display = 'inline-flex';
+  _importarFuncDados = [];
+}
+
+function fecharModalImportarFuncionarios(){
+  var m = document.getElementById('modalImportarFuncionarios');
+  if(m) m.style.display = 'none';
+}
+
+async function analisarImportacaoFuncionarios(){
+  var texto = document.getElementById('importar-func-texto')?.value?.trim();
+  if(!texto){ alert('Cole o conteúdo do formulário primeiro.'); return; }
+
+  var apiKey = localStorage.getItem('sc-apikey')||'';
+  if(!apiKey){ alert('Configure a API Key do Groq em Configurações > Geral.'); return; }
+
+  var status = document.getElementById('importar-func-status');
+  var btn = document.getElementById('btn-importar-analisar');
+  btn.textContent = '⏳ Analisando...';
+  btn.disabled = true;
+  status.textContent = 'A IA está interpretando as respostas...';
+  status.style.color = 'var(--muted)';
+
+  var prompt = `Você é um assistente que extrai dados de funcionários de formulários.
+Analise o texto abaixo (pode ser CSV, planilha copiada, ou texto livre) e extraia os dados de CADA funcionário.
+
+Campos esperados: nome, cpf, email, tel, funcao, empresa, setor, nascimento (DD/MM/YYYY), admissao (DD/MM/YYYY)
+
+Para cada funcionário encontrado, retorne um JSON array com esses campos. Se algum campo não existir, use string vazia "".
+Datas devem ser no formato DD/MM/YYYY. CPF no formato 000.000.000-00.
+
+TEXTO DO FORMULÁRIO:
+${texto}
+
+Responda APENAS com o JSON array, sem nenhum texto antes ou depois. Exemplo:
+[{"nome":"João Silva","cpf":"111.222.333-44","email":"joao@email.com","tel":"(81) 99999-0000","funcao":"Mecânico","empresa":"Peugeot","setor":"Oficina","nascimento":"15/03/1990","admissao":"01/06/2022"}]`;
+
+  try {
+    var resp = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+apiKey },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role:'user', content: prompt }],
+        max_tokens: 2000,
+        temperature: 0.1
+      })
+    });
+
+    var d = await resp.json();
+    if(!resp.ok) throw new Error(d.error?.message||'Erro na API');
+
+    var textoResposta = d.choices?.[0]?.message?.content||'[]';
+    // Limpar possíveis backticks
+    textoResposta = textoResposta.replace(/```json|```/g,'').trim();
+
+    var funcionarios = JSON.parse(textoResposta);
+    if(!Array.isArray(funcionarios) || !funcionarios.length){
+      throw new Error('Nenhum funcionário encontrado no texto.');
+    }
+
+    _importarFuncDados = funcionarios;
+
+    // Montar prévia
+    var lista = document.getElementById('importar-func-lista');
+    lista.innerHTML = funcionarios.map(function(f, i){
+      return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:12px;">'
+        +'<div style="font-weight:700;color:var(--text);font-size:13px;margin-bottom:4px;">'+escHtml(f.nome||'—')+'</div>'
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;color:var(--muted);line-height:1.8;">'
+        +'<div>📋 '+escHtml(f.funcao||'—')+' · '+escHtml(f.empresa||'—')+'</div>'
+        +'<div>📁 '+escHtml(f.setor||'—')+'</div>'
+        +'<div>🪪 '+escHtml(f.cpf||'—')+'</div>'
+        +'<div>📅 Adm: '+escHtml(f.admissao||'—')+'</div>'
+        +'<div>🎂 Nasc: '+escHtml(f.nascimento||'—')+'</div>'
+        +'<div>📞 '+escHtml(f.tel||'—')+'</div>'
+        +'</div></div>';
+    }).join('');
+
+    document.getElementById('importar-func-preview').style.display = 'block';
+    document.getElementById('btn-importar-salvar').style.display = 'inline-flex';
+    btn.style.display = 'none';
+    status.textContent = '✅ '+funcionarios.length+' funcionário(s) identificado(s). Revise e confirme.';
+    status.style.color = '#10b981';
+
+  } catch(e) {
+    status.textContent = '❌ Erro: '+e.message;
+    status.style.color = '#ef4444';
+    btn.textContent = '🤖 Analisar com IA';
+    btn.disabled = false;
+  }
+}
+
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function salvarImportacaoFuncionarios(){
+  if(!_importarFuncDados.length) return;
+
+  var btn = document.getElementById('btn-importar-salvar');
+  var status = document.getElementById('importar-func-status');
+  btn.textContent = '⏳ Salvando...';
+  btn.disabled = true;
+
+  var salvos = 0;
+  for(var i=0; i<_importarFuncDados.length; i++){
+    var f = _importarFuncDados[i];
+    if(!f.nome) continue;
+
+    // Converter datas DD/MM/YYYY → YYYY-MM-DD para o campo date
+    function fmtParaInput(dt){
+      if(!dt) return '';
+      var pp = dt.split('/');
+      if(pp.length===3) return pp[2]+'-'+pp[1]+'-'+pp[0];
+      return '';
+    }
+
+    var dados = {
+      nome:          f.nome||'',
+      cpf:           f.cpf||'',
+      email:         f.email||'',
+      tel:           f.tel||'',
+      funcao:        f.funcao||'',
+      empresa:       f.empresa||'Peugeot',
+      setor:         f.setor||'',
+      nascimento:    fmtParaInput(f.nascimento),
+      nascimento_fmt: f.nascimento||'',
+      admissao:      fmtParaInput(f.admissao),
+      admissao_fmt:  f.admissao||'',
+    };
+
+    if(window._fbPush){
+      await window._fbPush('qualis_funcionarios', dados).catch(function(){});
+      salvos++;
+    }
+  }
+
+  status.textContent = '✅ '+salvos+' funcionário(s) salvo(s) com sucesso!';
+  status.style.color = '#10b981';
+  btn.textContent = '✅ Salvar todos';
+  btn.disabled = false;
+
+  // Fechar após 1.5s
+  setTimeout(function(){
+    fecharModalImportarFuncionarios();
+  }, 1500);
 }
 
 function fixarLayout(){
@@ -8987,10 +9150,55 @@ window.addEventListener('DOMContentLoaded',()=>{
             oninput="mascaraTel(this)"
             style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
         </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
+          <input type="date" id="func-nascimento"
+            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
       </div>
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
         <button onclick="fecharModalFuncionario()" class="btn ghost">Cancelar</button>
         <button onclick="salvarFuncionario()" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MODAL IMPORTAR FUNCIONÁRIOS ══ -->
+<div id="modalImportarFuncionarios" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(640px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);">📥 Importar Respostas do Formulário</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Cole o conteúdo do CSV ou das respostas. A IA vai interpretar e cadastrar os funcionários automaticamente.</div>
+      </div>
+      <button onclick="fecharModalImportarFuncionarios()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+
+      <!-- Como obter o CSV -->
+      <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#7c3aed;line-height:1.7;">
+        <strong>Como exportar do Google Forms:</strong><br>
+        Respostas → ícone do Google Sheets → Abrir planilha → Arquivo → Download → CSV.<br>
+        Ou cole diretamente o conteúdo copiado da planilha de respostas.
+      </div>
+
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Cole aqui o conteúdo do CSV ou das respostas</label>
+      <textarea id="importar-func-texto" rows="10" placeholder="Nome completo, CPF, E-mail, Telefone, Função, Empresa, Setor, Data de nascimento, Data de admissão..."
+        style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:monospace;"></textarea>
+
+      <div id="importar-func-preview" style="display:none;margin-top:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Prévia — confirme antes de salvar</div>
+        <div id="importar-func-lista" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;"></div>
+      </div>
+
+      <div id="importar-func-status" style="margin-top:12px;font-size:13px;color:var(--muted);min-height:20px;"></div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+        <button onclick="fecharModalImportarFuncionarios()" class="btn ghost">Cancelar</button>
+        <button id="btn-importar-analisar" onclick="analisarImportacaoFuncionarios()" class="btn primary">🤖 Analisar com IA</button>
+        <button id="btn-importar-salvar" onclick="salvarImportacaoFuncionarios()" class="btn primary" style="display:none;background:linear-gradient(135deg,#10b981,#059669);">✅ Salvar todos</button>
       </div>
     </div>
   </div>
