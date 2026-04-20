@@ -8228,13 +8228,21 @@ function fardSelecionarFuncionario(){
         return;
       }
       hist.innerHTML = fichas.reverse().map(function(fi){
-        return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;">'
-          +'<div style="font-size:12px;font-weight:700;color:var(--text);">'+esc(fi.marca||'')+'  ·  '+esc(fi.data||'')+'</div>'
-          +'<div style="font-size:11px;color:var(--muted);margin-top:3px;">ME: '+esc(fi.motivo||'')+'  |  Entregue por: '+esc(fi.entregue_por||'')+'</div>'
-          +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+(fi.itens||[]).map(function(it){ return esc(it.desc||'')+' T:'+esc(it.tam||''); }).join(' | ')+'</div>'
-          +'</div>';
+        return '<div style="border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;position:relative;">'          +'<button onclick="excluirFichaFardamento(\''+id+'\',\''+fi.id+'\',this)" '          +'style="position:absolute;top:6px;right:8px;background:none;border:none;cursor:pointer;'          +'color:#ef4444;font-size:18px;line-height:1;padding:0 4px;opacity:.7;" title="Excluir">×</button>'          +'<div style="font-size:12px;font-weight:700;color:var(--text);padding-right:20px;">'+esc(fi.marca||'')+'  ·  '+esc(fi.data||'')+'</div>'          +'<div style="font-size:11px;color:var(--muted);margin-top:3px;">ME: '+esc(fi.motivo||'')+'  |  Entregue por: '+esc(fi.entregue_por||'')+'</div>'          +'<div style="font-size:11px;color:var(--muted);margin-top:2px;">'+(fi.itens||[]).map(function(it){ return esc(it.desc||'')+' T:'+esc(it.tam||''); }).join(' | ')+'</div>'          +'</div>';
       }).join('');
     });
+  }
+}
+
+
+function excluirFichaFardamento(funcId, fichaId, btn){
+  if(!confirm('Excluir esta entrega do histórico?')) return;
+  // Remover visualmente
+  var card = btn.closest ? btn.closest('div[style*="border-radius:10px"]') : btn.parentElement;
+  if(card) card.remove();
+  // Remover do Firebase
+  if(window._fbRemove){
+    window._fbRemove('qualis_fichas_fardamento/'+funcId+'/'+fichaId).catch(function(){});
   }
 }
 
@@ -8496,7 +8504,18 @@ function _renderPDFFardamento(f, ficha){
 
   // Download
   var nome = 'Fardamento_'+(f.nome||'').replace(/\s+/g,'_')+'_'+(ficha.data||'').replace(/\//g,'-')+'.pdf';
-  doc.save(nome);
+  // Forçar download via blob (evita popup blocker)
+  try {
+    var blob = doc.output('blob');
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = nome;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 1000);
+  } catch(e) {
+    doc.save(nome); // fallback
+  }
 }
 
 
