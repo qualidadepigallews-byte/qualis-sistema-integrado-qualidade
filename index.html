@@ -3367,12 +3367,6 @@ function doLogout(){currentUser=null;localStorage.removeItem('q-user');document.
 function togglePw(){const i=document.getElementById('loginPassword');i.type=i.type==='password'?'text':'password';}
 
 function startPortal(){
-  // Pré-carregar jsPDF em background
-  if(!window.jspdf){
-    var _s = document.createElement('script');
-    _s.src = 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
-    document.head.appendChild(_s);
-  }
   setTimeout(function(){
     updateSidebarActive('inicio');
     // Info usuário na topbar e sidebar
@@ -8171,6 +8165,7 @@ function loadFuncionariosCfg(){
     });
     renderFuncionariosCfg();
     preencherSelectFuncionarios();
+    renderAniversariantes(); // Atualizar cards de aniversariantes
     renderBannerAniversariantes(); // Atualizar banner ao carregar funcionários
   });
 }
@@ -8191,10 +8186,7 @@ function renderFuncionariosCfg(){
       +'<div>📅 '+esc(f.admissao_fmt||f.admissao||'—')+'</div>'
       +'<div>🪪 '+esc(f.cpf||'—')+'</div>'
       +'</div>'
-      +'<div style="display:flex;gap:8px;margin-top:12px;">'
-      +'<button onclick="abrirModalFuncionario(\''+f.id+'\')" style="flex:1;background:none;border:1px solid var(--border);border-radius:8px;padding:6px;font-size:12px;cursor:pointer;color:var(--text);">✏️ Editar</button>'
-      +'<button onclick="excluirFuncionario(\''+f.id+'\')" style="background:none;border:1px solid #ef4444;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:#ef4444;">🗑️</button>'
-      +'</div>'
+      +'<div style="display:flex;gap:8px;margin-top:12px;">'      +'<button onclick="abrirModalAcessos(\''+f.id+'\',\''+esc(f.nome||'')+'\')" style="flex:1;background:none;border:1px solid #8b5cf6;border-radius:8px;padding:6px;font-size:12px;cursor:pointer;color:#8b5cf6;font-weight:600;">🔑 Acessos</button>'      +'<button onclick="abrirModalFuncionario(\''+f.id+'\')" style="flex:1;background:none;border:1px solid var(--border);border-radius:8px;padding:6px;font-size:12px;cursor:pointer;color:var(--text);">✏️ Editar</button>'      +'<button onclick="excluirFuncionario(\''+f.id+'\')" style="background:none;border:1px solid #ef4444;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:#ef4444;">🗑️</button>'      +'</div>'
       +'</div>';
   }).join('');
 }
@@ -8532,7 +8524,7 @@ function _renderPDFFardamento(f, ficha){
 
   // ── Título ──
   doc.setFont('helvetica','bold'); doc.setFontSize(9); st(MEDIO);
-  doc.text('CONTROLE DE', ML, y); y += 5;
+  doc.text('CONTROLE DE', ML, y); y += 8;
   doc.setFontSize(26); st(LARANJA);
   doc.text('FARDAMENTO', ML, y); y += 4;
 
@@ -8959,551 +8951,127 @@ function renderBannerAniversariantes(){
   banner.style.display = 'block';
 }
 
-function fixarLayout(){
-  var app = document.getElementById('app');
-  if(app){
-    app.style.width = '100vw';
-    app.style.height = '100vh';
-    app.style.display = 'flex';
-    app.style.overflow = 'hidden';
+
+// ════════════════════════════════════════
+//  ACESSOS DO FUNCIONÁRIO
+// ════════════════════════════════════════
+var _acessosFuncId = '';
+var _acessosFuncNome = '';
+
+function abrirModalAcessos(funcId, funcNome){
+  _acessosFuncId   = funcId;
+  _acessosFuncNome = funcNome;
+
+  var m = document.getElementById('modalAcessos');
+  var el = document.getElementById('acessos-func-nome');
+  if(el) el.textContent = funcNome;
+
+  // Carregar acessos do Firebase
+  var lista = document.getElementById('acessos-lista');
+  if(lista) lista.innerHTML = '<div style="color:var(--muted);font-size:13px;">⏳ Carregando...</div>';
+
+  if(window._fbGet){
+    window._fbGet('qualis_acessos/'+funcId).then(function(snap){
+      var data = snap.val ? snap.val() : snap;
+      var acessos = data ? Object.entries(data).map(function(e){
+        return Object.assign({id:e[0]}, e[1]);
+      }) : [];
+      _renderAcessosForm(acessos);
+    }).catch(function(){
+      _renderAcessosForm([]);
+    });
+  } else {
+    _renderAcessosForm([]);
   }
+
+  if(m) m.style.display = 'flex';
 }
 
+function _renderAcessosForm(acessos){
+  var lista = document.getElementById('acessos-lista');
+  if(!lista) return;
+  if(!acessos.length){ lista.innerHTML=''; return; }
 
-function fixarEstrutura(){
-
-  // Criar pg-fardamento se não existir
-  if(!document.getElementById('pg-fardamento')){
-    var _pgFard = document.createElement('div');
-    _pgFard.className = 'page';
-    _pgFard.id = 'pg-fardamento';
-    _pgFard.innerHTML = `
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
-        <div>
-          <h1 style="font-size:24px;font-weight:900;letter-spacing:-.3px;">Fardamento</h1>
-          <p style="font-size:13px;color:var(--muted);margin-top:4px;">Gere fichas de entrega de fardamento e controle o histórico.</p>
-        </div>
-      </div>
-
-      <!-- Formulário de geração de ficha -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
-
-        <!-- Card: dados da entrega -->
-        <div class="card">
-          <div class="card-title">📋 Nova Ficha de Entrega</div>
-
-          <div style="margin-bottom:12px;">
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Marca</label>
-            <div style="display:flex;gap:8px;">
-              <button id="fard-btn-peu" onclick="fardSelecionarMarca('Peugeot')"
-                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
-                🚗 Peugeot
-              </button>
-              <button id="fard-btn-cit" onclick="fardSelecionarMarca('Citroën')"
-                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
-                ✨ Citroën
-              </button>
-              <button id="fard-btn-amb" onclick="fardSelecionarMarca('Ambas')"
-                style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">
-                🔗 Ambas
-              </button>
-            </div>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Funcionário</label>
-            <select id="fard-funcionario" onchange="fardSelecionarFuncionario()"
-              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
-              <option value="">— Selecionar —</option>
-            </select>
-          </div>
-
-          <!-- Dados puxados automaticamente -->
-          <div id="fard-dados-func" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.8;color:var(--muted);">
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Motivo da Entrega</label>
-            <select id="fard-motivo"
-              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
-              <option value="1">1 — Admissão</option>
-              <option value="2">2 — Danificado / Ajuste de tamanho / Desgaste</option>
-              <option value="3">3 — Promoção ou Troca de Função</option>
-              <option value="4">4 — Reposição</option>
-            </select>
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Entregue por</label>
-            <input type="text" id="fard-entregue-por" placeholder="Nome de quem entrega"
-              style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-          </div>
-
-          <!-- Itens da entrega -->
-          <div style="margin-bottom:8px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-              <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);">Itens entregues</label>
-              <button onclick="fardAdicionarItem()" style="background:none;border:1.5px dashed var(--border);border-radius:7px;padding:4px 12px;font-size:12px;cursor:pointer;color:var(--muted);">+ Item</button>
-            </div>
-            <div id="fard-itens-lista" style="display:flex;flex-direction:column;gap:8px;"></div>
-          </div>
-
-          <button onclick="fardGerarFicha()"
-            style="width:100%;margin-top:14px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">
-            📄 Gerar Ficha PDF
-          </button>
-        </div>
-
-        <!-- Card: histórico -->
-        <div class="card">
-          <div class="card-title">📦 Histórico de Entregas</div>
-          <div id="fard-historico" style="font-size:13px;color:var(--muted);">
-            Selecione um funcionário para ver o histórico.
-          </div>
-        </div>
-
-      </div>
-    `;
-    var ca = document.getElementById('contentArea');
-    if(ca) ca.appendChild(_pgFard);
-  }
-
-
-  // Criar pg-demandas se não existir
-  if(!document.getElementById('pg-demandas')){
-    var _pgDem = document.createElement('div');
-    _pgDem.className = 'page';
-    _pgDem.id = 'pg-demandas';
-    _pgDem.innerHTML = '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;"><div><h1 style="font-size:24px;font-weight:900;letter-spacing:-.4px;">Demandas</h1><p style="font-size:13px;color:var(--muted);margin-top:4px;">Cole um e-mail ou texto — a IA extrai as tarefas automaticamente.</p></div><button class=\'btn primary\' onclick=\'abrirModalDemanda()\'>+ Nova demanda</button></div><div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;"><select id=\'dem-filtro-resp\' onchange=\'renderKanban()\' style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);"><option value=\'\'>Todas as responsáveis</option><option>Kamilly</option><option>Letícia</option><option>Laís</option><option>Liana</option></select><select id=\'dem-filtro-prio\' onchange=\'renderKanban()\' style="padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;color:var(--text);"><option value=\'\'>Todas as prioridades</option><option value=\'alta\'>🔴 Alta</option><option value=\'media\'>🟡 Média</option><option value=\'baixa\'>🟢 Baixa</option></select></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;"><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #f59e0b;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:800;">📋 A Fazer</span><span id=\'cnt-afazer\' style="background:#f59e0b;color:#fff;border-radius:99px;font-size:11px;font-weight:800;padding:2px 8px;">0</span></div><div id=\'col-afazer\' style="padding:12px;min-height:200px;display:flex;flex-direction:column;gap:10px;"></div></div><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #3b82f6;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:800;">⚡ Em Andamento</span><span id=\'cnt-andamento\' style="background:#3b82f6;color:#fff;border-radius:99px;font-size:11px;font-weight:800;padding:2px 8px;">0</span></div><div id=\'col-andamento\' style="padding:12px;min-height:200px;display:flex;flex-direction:column;gap:10px;"></div></div><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #10b981;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:13px;font-weight:800;">✅ Concluído</span><span id=\'cnt-concluido\' style="background:#10b981;color:#fff;border-radius:99px;font-size:11px;font-weight:800;padding:2px 8px;">0</span></div><div id=\'col-concluido\' style="padding:12px;min-height:200px;display:flex;flex-direction:column;gap:10px;"></div></div></div>';
-    document.getElementById('contentArea').appendChild(_pgDem);
-  }
-
-  var ca = document.getElementById('contentArea');
-  if(!ca) return;
-  var pageIds = ['pg-inicio','pg-vendas','pg-posvendas','pg-scorecard-pos',
-                 'pg-grow','pg-treinamentos','pg-simulador','pg-inteligencia',
-                 'pg-executivo','pg-demandas','pg-fardamento','pg-sistemas','pg-config'];
-  pageIds.forEach(function(id){
-    var el = document.getElementById(id);
-    if(el && el.parentElement !== ca){
-      ca.appendChild(el);
-    }
+  lista.innerHTML = '';
+  acessos.forEach(function(a){
+    lista.appendChild(_criarCardAcesso(a.sistema||'', a.link||'', a.login||'', a.senha||'', a.obs||'', a.id||''));
   });
 }
 
-window.addEventListener('DOMContentLoaded',()=>{
-  const saved=localStorage.getItem('sc-apikey');
-  if(saved&&document.getElementById('scApiKey'))document.getElementById('scApiKey').value=saved;
-  // Pré-carrega Client ID do Gmail
-  if(!localStorage.getItem('q-gmail-client-id')){
-    localStorage.setItem('q-gmail-client-id','300042761885-41u4i8gsp07s4ughbg62antp97ef38n0.apps.googleusercontent.com');
+function _criarCardAcesso(sistema, link, login, senha, obs, idAcesso){
+  var div = document.createElement('div');
+  div.setAttribute('data-acesso-id', idAcesso);
+  div.style.cssText = 'background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;margin-bottom:10px;';
+
+  function campo(label, cls, val, placeholder, type){
+    type = type||'text';
+    var wrap = document.createElement('div');
+    var lbl = document.createElement('label');
+    lbl.style.cssText = 'font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px;';
+    lbl.textContent = label;
+    wrap.appendChild(lbl);
+
+    if(type === 'password'){
+      var rel = document.createElement('div');
+      rel.style.position = 'relative';
+      var inp = document.createElement('input');
+      inp.type = 'password';
+      inp.className = cls;
+      inp.value = val;
+      inp.placeholder = placeholder;
+      inp.style.cssText = 'width:100%;padding:8px 36px 8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;box-sizing:border-box;';
+      var eye = document.createElement('button');
+      eye.type = 'button';
+      eye.textContent = '👁';
+      eye.style.cssText = 'position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--muted);';
+      eye.onclick = function(){ inp.type = inp.type==='password'?'text':'password'; };
+      rel.appendChild(inp); rel.appendChild(eye);
+      wrap.appendChild(rel);
+    } else {
+      var inp2 = document.createElement('input');
+      inp2.type = 'text';
+      inp2.className = cls;
+      inp2.value = val;
+      inp2.placeholder = placeholder;
+      inp2.style.cssText = 'width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);font-size:13px;box-sizing:border-box;';
+      wrap.appendChild(inp2);
+    }
+    return wrap;
   }
-  const stored=localStorage.getItem('q-user');
-  if(stored){try{const u=JSON.parse(stored);const found=getUsers().find(x=>x.email===u.email);if(found){currentUser=found;startPortal();return;}}catch{}localStorage.removeItem('q-user');}
-  document.getElementById('loginScreen').style.display='flex';
-});
-</script>
 
+  // Botão remover
+  var btnRem = document.createElement('button');
+  btnRem.textContent = '×';
+  btnRem.style.cssText = 'position:absolute;top:10px;right:10px;background:none;border:none;cursor:pointer;color:#ef4444;font-size:18px;opacity:.7;';
+  btnRem.onclick = function(){ div.remove(); };
+  div.appendChild(btnRem);
 
-<div id="modalNotificacoes" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:flex-end;z-index:9999;padding:60px 16px 0;">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:min(380px,95vw);max-height:70vh;overflow-y:auto;box-shadow:var(--shadow-lg);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);">
-      <div style="font-size:16px;font-weight:700;">Notificações</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button onclick="limparNotificacoes()" style="font-size:11px;color:var(--muted);background:none;border:none;cursor:pointer;">Limpar tudo</button>
-        <button onclick="var m=document.getElementById('modalNotificacoes');if(m)m.style.display='none';" style="background:none;border:none;cursor:pointer;font-size:18px;color:var(--muted);">×</button>
-      </div>
-    </div>
-    <div id="notif-lista" style="padding:12px;display:flex;flex-direction:column;gap:8px;">
-      <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px;">Nenhuma notificação ainda.</div>
-    </div>
-  </div>
-</div>
+  var grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;';
 
-<!-- Modal Histórico de Tratativa -->
-<div id="modalHistoricoTratativa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;width:min(520px,95vw);max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-lg);">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0;">
-      <div>
-        <div style="font-size:15px;font-weight:700;">Histórico de Tratativa</div>
-        <div id="histClienteNome" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
-      </div>
-      <button onclick="fecharHistoricoTratativa()" style="background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);">×</button>
-    </div>
-    <div id="histLista" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:8px;min-height:80px;"></div>
-    <div style="padding:16px;border-top:1px solid var(--border);flex-shrink:0;">
-      <textarea id="histNovaEntrada" placeholder="Descreva a tratativa realizada..." 
-        style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-size:13px;resize:vertical;min-height:70px;box-sizing:border-box;margin-bottom:10px;"></textarea>
-      <div style="display:flex;gap:8px;justify-content:flex-end;">
-        <button onclick="fecharHistoricoTratativa()" class="btn ghost">Fechar</button>
-        <button onclick="salvarEntradaTratativa()" class="btn primary">Registrar</button>
-      </div>
-    </div>
-  </div>
+  var cSistema = campo('Sistema / Nome', 'ac-sistema', sistema, 'Ex: DMS, E-mail, Syonet...');
+  cSistema.style.gridColumn = '1/-1';
+  var cLink = campo('🔗 Link / URL', 'ac-link', link, 'https://...');
+  cLink.style.gridColumn = '1/-1';
+  var cLogin = campo('👤 Login / Usuário', 'ac-login', login, 'usuario@email.com');
+  var cSenha = campo('🔒 Senha', 'ac-senha', senha, '••••••••', 'password');
+  var cObs = campo('📝 Observação', 'ac-obs', obs, 'Ex: Senha temporária, trocar depois...');
+  cObs.style.gridColumn = '1/-1';
 
-    </div><!-- /content-area -->
-  </div><!-- /app-body -->
-</div><!-- /app -->
+  grid.appendChild(cSistema);
+  grid.appendChild(cLink);
+  grid.appendChild(cLogin);
+  grid.appendChild(cSenha);
+  grid.appendChild(cObs);
+  div.appendChild(grid);
 
+  return div;
+}
 
-
-<!-- ══ MODAIS ══ -->
-<div id="modalNpsManual" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:4px;" id="modalNpsTitulo">Adicionar NPS Manualmente</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;">Insira os dados de um mes fechado.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
-      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mes</label>
-        <select id="mnMes" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-          <option value="JANEIRO">Janeiro</option><option value="FEVEREIRO">Fevereiro</option><option value="MARCO">Marco</option>
-          <option value="ABRIL">Abril</option><option value="MAIO">Maio</option><option value="JUNHO">Junho</option>
-          <option value="JULHO">Julho</option><option value="AGOSTO">Agosto</option><option value="SETEMBRO">Setembro</option>
-          <option value="OUTUBRO">Outubro</option><option value="NOVEMBRO">Novembro</option><option value="DEZEMBRO">Dezembro</option>
-        </select></div>
-      <div><label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Ano</label>
-        <input id="mnAno" type="number" value="2026" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;"></div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Peugeot</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnPeuProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnPeuNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnPeuDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-      <div style="border:1px solid var(--border);border-radius:10px;padding:14px;">
-        <div style="font-weight:700;font-size:13px;margin-bottom:10px;">Citroen</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Promotores</label><input id="mnCitProm" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Neutros</label><input id="mnCitNeu" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-          <div><label style="font-size:10px;color:var(--muted);display:block;margin-bottom:3px;">Detratores</label><input id="mnCitDet" type="number" min="0" value="0" style="width:100%;padding:7px;border:1px solid var(--border);border-radius:6px;font-size:13px;text-align:center;"></div>
-        </div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="var _m=document.getElementById('modalNpsManual');if(_m)_m.style.display='none';">Cancelar</button>
-      <button class="btn primary" onclick="salvarNpsManual()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-<div id="modalAviso" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(480px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Novo Aviso</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Titulo</label>
-      <input id="avisoTitulo" type="text" placeholder="Ex: Reuniao amanha as 14h" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Mensagem</label>
-      <textarea id="avisoMensagem" rows="3" placeholder="Detalhes do aviso..." style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;resize:vertical;box-sizing:border-box;"></textarea>
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Tipo</label>
-      <select id="avisoTipo" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;">
-        <option value="info">Informacao</option>
-        <option value="alert">Atencao</option>
-        <option value="success">Positivo</option>
-        <option value="urgent">Urgente</option>
-      </select>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAviso').style.display='none'">Cancelar</button>
-      <button class="btn primary" onclick="salvarAviso()">Publicar</button>
-    </div>
-  </div>
-</div>
-
-<div id="modalAniversariante" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(420px,90vw);box-shadow:var(--shadow-lg);">
-    <div style="font-size:18px;font-weight:700;margin-bottom:16px;">Adicionar Aniversariante</div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo</label>
-      <input id="anivNome" type="text" placeholder="Ex: Kamilly Paiva" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
-    </div>
-    <div style="margin-bottom:12px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
-      <input id="anivData" type="text" placeholder="DD/MM/AAAA (ex: 15/03/1985)" maxlength="10" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;" oninput="mascaraData(this)">
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor / Cargo</label>
-      <input id="anivSetor" type="text" placeholder="Ex: Qualidade - SDR" style="width:100%;padding:9px;border:1px solid var(--border);border-radius:7px;background:var(--surface);font-size:13px;box-sizing:border-box;">
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAniversariante').style.display='none'">Cancelar</button>
-      <button class="btn primary" onclick="salvarAniversariante()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-<div id="modalAlertaWA" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px;width:min(500px,92vw);box-shadow:var(--shadow-lg);">
-    <div id="waTitulo" style="font-size:18px;font-weight:800;margin-bottom:4px;"></div>
-    <div id="waSub" style="font-size:13px;color:var(--muted);margin-bottom:14px;"></div>
-    <div id="waResumo" style="padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:13px;line-height:1.9;margin-bottom:14px;border:1px solid var(--border);"></div>
-    <div style="margin-bottom:16px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Conversão</label>
-      <textarea id="waDescricao" rows="3" placeholder="Ex: Convertido pelo consultor Adriano / Convertido pela Laís / Cliente viu o e-mail e respondeu por conta própria..." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;">
-      <button class="btn ghost" onclick="document.getElementById('modalAlertaWA').style.display='none'">Cancelar</button>
-      <button onclick="enviarAlertaWA()" style="background:#25D366;border:none;color:#fff;padding:10px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:14px;">Enviar no grupo</button>
-    </div>
-  </div>
-</div>
-
-
-    </div><!-- /main -->
-  </div><!-- /shell -->
-</div><!-- /app -->
-
-<!-- Google Identity Services para Gmail OAuth -->
-<script src="https://accounts.google.com/gsi/client" async></script>
-
-
-
-<!-- Modal Adicionar Clientes -->
-<div id="modalAdicionarClientes" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:16px;font-weight:800;color:var(--text);" id="modalAddTitulo">Adicionar Clientes</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:3px;">Clientes existentes são mantidos. Novos VINs são adicionados.</div>
-      </div>
-      <button onclick="fecharModalAdicionar()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:24px;">
-      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;">
-        Duplicatas detectadas pelo VIN — clientes já existentes são ignorados automaticamente.
-      </div>
-      <textarea id="pasteAdicionar" rows="10"
-        style="width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:var(--mono);"
-        placeholder="VIN;Cliente;Email;Telefone;Data Convite;Consultor&#10;Cole apenas os novos clientes aqui..."></textarea>
-      <div id="addPreview" style="margin-top:10px;font-size:13px;color:var(--muted);font-weight:500;"></div>
-      <div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end;">
-        <button onclick="fecharModalAdicionar()" class="btn ghost">Cancelar</button>
-        <button onclick="confirmarAdicionar()" class="btn primary">Adicionar à base</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-
-<!-- Modal DATA_RESPOSTA -->
-<div id="modalDataResposta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(400px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:16px;font-weight:800;color:var(--text);" id="mdrTitulo">Registrar data da resposta</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:3px;" id="mdrCliente"></div>
-      </div>
-    </div>
-    <div style="padding:24px;">
-      <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Quando o cliente respondeu a pesquisa? Isso define em qual mês o NPS é contabilizado.</div>
-      <div style="margin-bottom:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Data da resposta</div>
-      <input type="date" id="mdrData" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:14px;outline:none;transition:border .2s;">
-      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
-        <button onclick="fecharModalDataResposta()" class="btn ghost">Cancelar</button>
-        <button onclick="salvarDataResposta()" class="btn primary">Confirmar e notificar grupo</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══ MODAL NOVA DEMANDA ══ -->
-<div id="modalDemanda" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(600px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-size:16px;font-weight:800;color:var(--text);">Nova Demanda</div>
-      <button onclick="fecharModalDemanda()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:24px;">
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:6px;">Cole o e-mail ou descreva a demanda</label>
-      <textarea id="dem-texto" rows="6" placeholder="Ex: Kamilly, preciso que você providencie: compra de armários, repintura do local..." style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;box-sizing:border-box;font-family:inherit;margin-bottom:10px;"></textarea>
-      <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="extrairComIA()" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">✨ Extrair tarefas com IA</button>
-        <span id="dem-ia-status" style="font-size:12px;color:var(--muted);"></span>
-      </div>
-      <div id="dem-tarefas-wrap" style="display:none;margin-top:20px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;">Tarefas extraídas <span style="color:var(--muted);font-weight:400;">(edite se necessário)</span></div>
-        <div id="dem-tarefas-lista" style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-          <div>
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Solicitante</label>
-            <input type="text" id="dem-solicitante" placeholder="Ex: Fred Dubeux" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-          </div>
-          <div>
-            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Prioridade</label>
-            <select id="dem-prioridade" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-              <option value="media">🟡 Média</option><option value="alta">🔴 Alta</option><option value="baixa">🟢 Baixa</option>
-            </select>
-          </div>
-        </div>
-        <div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
-          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Prazo sugerido pela IA</div>
-          <div id="dem-prazo-ia" style="font-size:13px;color:#f97316;font-weight:600;"></div>
-        </div>
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Confirmar prazo</label>
-        <input type="date" id="dem-prazo" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;margin-bottom:18px;">
-        <div style="display:flex;gap:10px;justify-content:flex-end;">
-          <button onclick="fecharModalDemanda()" class="btn ghost">Cancelar</button>
-          <button onclick="salvarDemanda()" class="btn primary">Criar demanda</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ MODAL DETALHE TAREFA ══ -->
-<div id="modalTarefa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(480px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div id="mtarefa-titulo" style="font-size:15px;font-weight:800;color:var(--text);flex:1;padding-right:12px;"></div>
-      <button onclick="fecharModalTarefa()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:20px 24px;">
-      <div style="margin-bottom:14px;">
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Responsável</label>
-        <select id="mtarefa-resp" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-          <option value="">— Selecionar —</option>
-          <option>Kamilly</option><option>Letícia</option><option>Laís</option><option>Liana</option>
-        </select>
-      </div>
-      <div style="margin-bottom:14px;">
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Status</label>
-        <select id="mtarefa-status" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-          <option value="afazer">📋 A Fazer</option>
-          <option value="andamento">⚡ Em Andamento</option>
-          <option value="concluido">✅ Concluído</option>
-        </select>
-      </div>
-      <div style="margin-bottom:18px;">
-        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Observação</label>
-        <textarea id="mtarefa-obs" rows="3" placeholder="Atualização, link, resultado..." style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;resize:none;box-sizing:border-box;font-family:inherit;"></textarea>
-      </div>
-      <div style="display:flex;justify-content:space-between;gap:10px;">
-        <button onclick="excluirTarefa()" style="background:none;border:1px solid #ef4444;color:#ef4444;border-radius:10px;padding:9px 16px;font-size:13px;cursor:pointer;">🗑️ Excluir</button>
-        <button onclick="salvarTarefa()" class="btn primary">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══ MODAL FUNCIONÁRIO ══ -->
-<div id="modalFuncionario" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div style="font-size:16px;font-weight:800;color:var(--text);" id="modal-func-titulo">Novo Funcionário</div>
-      <button onclick="fecharModalFuncionario()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:24px;">
-      <input type="hidden" id="func-id-edit">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div style="grid-column:1/-1;">
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo *</label>
-          <input type="text" id="func-nome" placeholder="Nome completo"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Função *</label>
-          <input type="text" id="func-funcao" placeholder="Ex: Consultor de Serviço"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor *</label>
-          <input type="text" id="func-setor" placeholder="Ex: Pós-Vendas"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Empresa *</label>
-          <select id="func-empresa"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-            <option value="Peugeot">Peugeot</option>
-            <option value="Citroën">Citroën</option>
-            <option value="Ambas">Ambas (Peugeot + Citroën)</option>
-          </select>
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">CPF</label>
-          <input type="text" id="func-cpf" placeholder="000.000.000-00" maxlength="14"
-            oninput="mascaraCPF(this)"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de admissão</label>
-          <input type="date" id="func-admissao"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">E-mail</label>
-          <input type="email" id="func-email" placeholder="email@empresa.com"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Telefone</label>
-          <input type="text" id="func-tel" placeholder="(81) 99999-9999" maxlength="15"
-            oninput="mascaraTel(this)"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-        <div>
-          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
-          <input type="date" id="func-nascimento"
-            style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
-        <button onclick="fecharModalFuncionario()" class="btn ghost">Cancelar</button>
-        <button onclick="salvarFuncionario()" class="btn primary">Salvar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══ MODAL IMPORTAR FUNCIONÁRIOS ══ -->
-<div id="modalImportarFuncionarios" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
-  <div style="background:var(--surface);border-radius:20px;width:min(640px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
-    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
-      <div>
-        <div style="font-size:16px;font-weight:800;color:var(--text);">📥 Importar Respostas do Formulário</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Cole o conteúdo do CSV ou das respostas. A IA vai interpretar e cadastrar os funcionários automaticamente.</div>
-      </div>
-      <button onclick="fecharModalImportarFuncionarios()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
-    </div>
-    <div style="padding:24px;">
-
-      <!-- Como obter o CSV -->
-      <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#7c3aed;line-height:1.7;">
-        <strong>Como exportar do Google Forms:</strong><br>
-        Respostas → ícone do Google Sheets → Abrir planilha → Arquivo → Download → CSV.<br>
-        Ou cole diretamente o conteúdo copiado da planilha de respostas.
-      </div>
-
-      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Cole aqui o conteúdo do CSV ou das respostas</label>
-      <textarea id="importar-func-texto" rows="10" placeholder="Nome completo, CPF, E-mail, Telefone, Função, Empresa, Setor, Data de nascimento, Data de admissão..."
-        style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:monospace;"></textarea>
-
-      <div id="importar-func-preview" style="display:none;margin-top:16px;">
-        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Prévia — confirme antes de salvar</div>
-        <div id="importar-func-lista" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;"></div>
-      </div>
-
-      <div id="importar-func-status" style="margin-top:12px;font-size:13px;color:var(--muted);min-height:20px;"></div>
-
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
-        <button onclick="fecharModalImportarFuncionarios()" class="btn ghost">Cancelar</button>
-        <button id="btn-importar-analisar" onclick="analisarImportacaoFuncionarios()" class="btn primary">🤖 Analisar com IA</button>
-        <button id="btn-importar-salvar" onclick="salvarImportacaoFuncionarios()" class="btn primary" style="display:none;background:linear-gradient(135deg,#10b981,#059669);">✅ Salvar todos</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</body>
-</html>
+function adicionarAcesso(){
+  var lista = document.getElementById('acessos-lista');
+  if(!lista) return;
+  var card = _criarCardAcesso('','','','','','');
+  lista.appendChild(card);
+  card.querySelector('.ac-sistema').focus();
+}>
