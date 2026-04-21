@@ -1494,30 +1494,55 @@ input[type="date"], input[type="number"], select, textarea {
             <button onclick="goPage('demandas',document.getElementById('sb-demandas'))" style="background:#ef4444;color:#fff;border:none;border-radius:8px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;">Ver demandas</button>
           </div>
 
-          <!-- Mural de Avisos + Aniversariantes -->
+          <!-- Aniversariantes de Vida + Empresa -->
           <div class="grid-2" style="margin-bottom:16px;">
-            <!-- Mural -->
-            <div class="card">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                <div class="card-title" style="margin:0;">Mural de Avisos</div>
-                <button class="btn primary" onclick="abrirModalAviso()" style="font-size:12px;padding:6px 14px;">+ Novo aviso</button>
+
+            <!-- Aniversariantes de Vida -->
+            <div style="background:linear-gradient(135deg,rgba(249,115,22,.08),rgba(249,115,22,.03));border:1.5px solid rgba(249,115,22,.25);border-radius:16px;padding:18px;overflow:hidden;position:relative;">
+              <div style="position:absolute;top:-10px;right:-10px;font-size:64px;opacity:.06;line-height:1;">🎂</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#f97316;margin-bottom:2px;">🎂 Aniversários de Vida</div>
+                  <div id="aniv-vida-mes" style="font-size:12px;color:var(--muted);"></div>
+                </div>
+                <button onclick="abrirModalAniversariante()" style="background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.3);color:#f97316;border-radius:8px;padding:5px 12px;font-size:11px;font-weight:700;cursor:pointer;">+ Adicionar</button>
               </div>
-              <div id="muralAvisos" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;">
-                <div style="color:var(--muted);font-size:13px;">Carregando avisos...</div>
+              <div id="aniversariantesVidaLista" style="display:flex;flex-direction:column;gap:7px;max-height:260px;overflow-y:auto;">
+                <div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês.</div>
               </div>
             </div>
 
-            <!-- Aniversariantes -->
+            <!-- Aniversariantes de Empresa -->
+            <div style="background:linear-gradient(135deg,rgba(139,92,246,.08),rgba(139,92,246,.03));border:1.5px solid rgba(139,92,246,.25);border-radius:16px;padding:18px;overflow:hidden;position:relative;">
+              <div style="position:absolute;top:-10px;right:-10px;font-size:64px;opacity:.06;line-height:1;">🏆</div>
+              <div style="display:flex;align-items:center;margin-bottom:14px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8b5cf6;margin-bottom:2px;">🏆 Aniversários de Empresa</div>
+                  <div id="aniv-empresa-mes" style="font-size:12px;color:var(--muted);"></div>
+                </div>
+              </div>
+              <div id="aniversariantesEmpresaLista" style="display:flex;flex-direction:column;gap:7px;max-height:260px;overflow-y:auto;">
+                <div style="color:var(--muted);font-size:13px;">Nenhum aniversariante de empresa este mês.</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mural de Avisos (mantido mas movido) -->
+          <div id="muralAvisosWrap" style="margin-bottom:16px;">
             <div class="card">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-                <div class="card-title" style="margin:0;">Aniversariantes do Mês</div>
-                <button class="btn ghost" onclick="abrirModalAniversariante()" style="font-size:12px;">+ Adicionar</button>
+                <div class="card-title" style="margin:0;">📢 Mural de Avisos</div>
+                <button class="btn primary" onclick="abrirModalAviso()" style="font-size:12px;padding:6px 14px;">+ Novo aviso</button>
               </div>
-              <div id="aniversariantesLista" style="display:flex;flex-direction:column;gap:8px;max-height:230px;overflow-y:auto;">
-                <div style="color:var(--muted);font-size:13px;">Nenhum aniversariante cadastrado.</div>
+              <div id="muralAvisos" style="display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto;">
+                <div style="color:var(--muted);font-size:13px;">Carregando avisos...</div>
               </div>
             </div>
           </div>
+
+          <!-- ID antigo mantido para compatibilidade -->
+          <div id="aniversariantesLista" style="display:none;"></div>
 
           
           </div>
@@ -5828,91 +5853,108 @@ function bootMural(){
 
 /* ════ ANIVERSARIANTES ════ */
 function renderAniversariantes(){
-  var el = document.getElementById('aniversariantesLista');
-  if(!el) return;
   var mesAtual = new Date().getMonth()+1;
   var diaAtual = new Date().getDate();
-  var hoje = new Date(); hoje.setHours(0,0,0,0);
+  var nomeMes  = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+                  'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][mesAtual-1];
 
-  // 1. Manuais (do localStorage)
+  // Atualizar subtítulos
+  var elVidaMes    = document.getElementById('aniv-vida-mes');
+  var elEmpMes     = document.getElementById('aniv-empresa-mes');
+  if(elVidaMes)    elVidaMes.textContent    = nomeMes;
+  if(elEmpMes)     elEmpMes.textContent     = nomeMes;
+
+  var listaVida    = [];
+  var listaEmpresa = [];
+
+  // 1. Manuais (localStorage)
   var manuais = window._aniversariantes || JSON.parse(localStorage.getItem('q-aniversariantes')||'[]');
-  var listaFinal = [];
-
   manuais.forEach(function(a){
     if(!a.data) return;
     var d = new Date(a.data+'T00:00:00');
     if(d.getMonth()+1 !== mesAtual) return;
-    listaFinal.push({
+    listaVida.push({
       id: a.id, nome: a.nome, setor: a.setor||a.cargo||'',
-      dia: d.getDate(),
-      tipo: '🎂', label: (function(){
-        var idade = hoje.getFullYear() - d.getFullYear();
-        return (a.setor||a.cargo||'') + ' · ' + idade + ' anos';
-      })(),
+      dia: d.getDate(), isHoje: d.getDate()===diaAtual,
+      extra: (new Date().getFullYear()-d.getFullYear())+' anos',
       podeExcluir: true
     });
   });
 
-  // 2. Funcionários cadastrados — aniversário de nascimento
+  // 2. Funcionários cadastrados
   (_fardFuncionarios||[]).forEach(function(f){
-    if(!f.nome || !f.nascimento_fmt) return;
-    var pp = f.nascimento_fmt.split('/');
-    if(pp.length!==3 || parseInt(pp[1])!==mesAtual) return;
-    var dia = parseInt(pp[0]);
-    var anoNasc = parseInt(pp[2]);
-    var idade = hoje.getFullYear() - anoNasc;
-    listaFinal.push({
-      id: 'nasc_'+f.id, nome: f.nome,
-      setor: f.setor||f.funcao||'',
-      dia: dia,
-      tipo: '🎂',
-      label: (f.setor||f.funcao||'') + ' · ' + idade + ' anos',
-      podeExcluir: false
-    });
-  });
+    if(!f.nome) return;
+    var nome1 = f.nome.split(' ')[0];
 
-  // 3. Funcionários — aniversário de empresa (admissão)
-  (_fardFuncionarios||[]).forEach(function(f){
-    if(!f.nome || !f.admissao_fmt) return;
-    var pa = f.admissao_fmt.split('/');
-    if(pa.length!==3 || parseInt(pa[1])!==mesAtual) return;
-    var dia = parseInt(pa[0]);
-    var anoAdm = parseInt(pa[2]);
-    var anos = hoje.getFullYear() - anoAdm;
-    listaFinal.push({
-      id: 'adm_'+f.id, nome: f.nome,
-      setor: f.setor||f.funcao||'',
-      dia: dia,
-      tipo: '🏆',
-      label: (f.setor||f.funcao||'') + ' · ' + anos + ' ano' + (anos===1?'':'s') + ' de empresa',
-      podeExcluir: false
-    });
+    // Nascimento
+    if(f.nascimento_fmt || f.nascimento){
+      var str = f.nascimento_fmt || f.nascimento || '';
+      var pp = str.indexOf('/')>-1 ? str.split('/') : (str.split('-').reverse());
+      if(pp.length===3 && parseInt(pp[1])===mesAtual){
+        var dia = parseInt(pp[0]);
+        var anoN = parseInt(pp[2]);
+        var idade = new Date().getFullYear() - anoN;
+        listaVida.push({
+          id:'nasc_'+f.id, nome:f.nome, nomeExib:nome1,
+          setor: f.setor||f.funcao||'', dia:dia,
+          isHoje: dia===diaAtual,
+          extra: idade+' anos', podeExcluir:false
+        });
+      }
+    }
+
+    // Admissão
+    if(f.admissao_fmt || f.admissao){
+      var str2 = f.admissao_fmt || f.admissao || '';
+      var pa = str2.indexOf('/')>-1 ? str2.split('/') : (str2.split('-').reverse());
+      if(pa.length===3 && parseInt(pa[1])===mesAtual){
+        var dia2 = parseInt(pa[0]);
+        var anoA = parseInt(pa[2]);
+        var anos = new Date().getFullYear() - anoA;
+        listaEmpresa.push({
+          id:'adm_'+f.id, nome:f.nome, nomeExib:nome1,
+          setor: f.setor||f.funcao||'', dia:dia2,
+          isHoje: dia2===diaAtual,
+          extra: anos+' ano'+(anos===1?'':'s')+' de empresa',
+          podeExcluir:false
+        });
+      }
+    }
   });
 
   // Ordenar por dia
-  listaFinal.sort(function(a,b){ return a.dia - b.dia; });
+  listaVida.sort(function(a,b){ return a.dia-b.dia; });
+  listaEmpresa.sort(function(a,b){ return a.dia-b.dia; });
 
-  if(!listaFinal.length){
-    el.innerHTML = '<div style="color:var(--muted);font-size:13px;">Nenhum aniversariante este mês.</div>';
-    return;
+  function renderCard(lista, cor, emptyMsg){
+    if(!lista.length) return '<div style="color:var(--muted);font-size:13px;">'+emptyMsg+'</div>';
+    return lista.map(function(a){
+      var isHoje = a.isHoje;
+      var nome = a.nomeExib || a.nome;
+      var diaStr = String(a.dia).padStart(2,'0')+'/'+String(mesAtual).padStart(2,'0');
+      var bgCard = isHoje
+        ? 'background:rgba('+cor+', .15);border:1.5px solid rgba('+cor+',.5);'
+        : 'background:var(--surface);border:1px solid var(--border);';
+      var excBtn = a.podeExcluir
+        ? '<button onclick="excluirAniversariante(\'' + a.id + '\')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:14px;padding:0 2px;opacity:.6;">×</button>'
+        : '';
+      var hojeBadge = isHoje
+        ? '<span style="background:rgba('+cor+',.2);color:rgb('+cor+');font-size:10px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:6px;">Hoje! 🎉</span>'
+        : '';
+      return '<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;'+bgCard+'">'
+        +'<div style="font-size:22px;flex-shrink:0;">'+(isHoje?'🥳':'🎁')+'</div>'
+        +'<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(nome)+hojeBadge+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);margin-top:1px;">'+diaStr+' · '+esc(a.setor)+' · '+esc(a.extra)+'</div>'
+        +'</div>'
+        +excBtn+'</div>';
+    }).join('');
   }
 
-  el.innerHTML = listaFinal.map(function(a){
-    var isHoje = a.dia === diaAtual;
-    var bg = isHoje ? 'rgba(13,148,136,.1)' : 'var(--surface2)';
-    var border = isHoje ? '#10b981' : 'var(--border)';
-    var excBtn = a.podeExcluir
-      ? '<button onclick="excluirAniversariante(\''+a.id+'\')" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:0 4px;" title="Remover">×</button>'
-      : '';
-    return '<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:'+bg+';border:1px solid '+border+';">'
-      + '<div style="font-size:26px;flex-shrink:0;">'+a.tipo+'</div>'
-      + '<div style="flex:1;">'
-      + '<div style="font-weight:700;font-size:14px;">'+esc(a.nome)+(isHoje?' 🎉 Hoje!':'')+'</div>'
-      + '<div style="font-size:12px;color:var(--muted);">Dia '+String(a.dia).padStart(2,'0')+'/'+String(mesAtual).padStart(2,'0')+' · '+esc(a.label)+'</div>'
-      + '</div>'
-      + excBtn
-      + '</div>';
-  }).join('');
+  var elVida = document.getElementById('aniversariantesVidaLista');
+  var elEmp  = document.getElementById('aniversariantesEmpresaLista');
+  if(elVida) elVida.innerHTML = renderCard(listaVida,   '249,115,22', 'Nenhum aniversariante de vida este mês.');
+  if(elEmp)  elEmp.innerHTML  = renderCard(listaEmpresa,'139,92,246', 'Nenhum aniversariante de empresa este mês.');
 }
 
 
@@ -8467,11 +8509,15 @@ function _renderPDFFardamento(f, ficha){
   function rr(x,y,w,h,r,m){ doc.roundedRect(x,y,w,h,r,r,m||'F'); }
 
   // ── Marca d'água ──
-  doc.saveState();
-  doc.setGState(new doc.GState({opacity:0.032}));
-  sf(LARANJA); doc.setFont('helvetica','bold'); doc.setFontSize(240);
-  st(LARANJA); doc.text('Q', W/2, H/2-20, {align:'center'});
-  doc.restoreState();
+  try{
+    if(doc.saveGraphicsState){ doc.saveGraphicsState(); }
+    else if(doc.saveState){ doc.saveState(); }
+    doc.setGState(new doc.GState({opacity:0.032}));
+    sf(LARANJA); doc.setFont('helvetica','bold'); doc.setFontSize(240);
+    st(LARANJA); doc.text('Q', W/2, H/2-20, {align:'center'});
+    if(doc.restoreGraphicsState){ doc.restoreGraphicsState(); }
+    else if(doc.restoreState){ doc.restoreState(); }
+  }catch(e){}
 
   // ── Rodapé ──
   sd(BORDA); doc.setLineWidth(0.4); doc.line(ML,H-12,W-MR,H-12);
