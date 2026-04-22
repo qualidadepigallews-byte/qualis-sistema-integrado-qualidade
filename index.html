@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>QUALIS — Pigalle WS</title>
+<title>QualiX — Pigalle WS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 /* ═══════════════════════════════════════════════════════════
-   QUALIS v25 — DESIGN SYSTEM COMPLETO
+   QualiX v25 — DESIGN SYSTEM COMPLETO
    Font: DM Sans — moderna, humanista, legível
    Aesthetic: Premium Corporate Dashboard — dark sidebar + clean content
 ═══════════════════════════════════════════════════════════ */
@@ -1244,11 +1244,11 @@ input[type="date"], input[type="number"], select, textarea {
   <div style="position:relative;z-index:2;width:min(420px,100%);margin:0 auto;padding:24px;">
     <!-- Logo -->
     <div style="text-align:center;margin-bottom:32px;">
-      <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;background:linear-gradient(135deg,#f97316,#ea580c);border-radius:18px;box-shadow:0 8px 32px rgba(249,115,22,.4);margin-bottom:16px;">
-        <span style="font-size:28px;font-weight:900;color:#fff;">Q</span>
+      <div style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;background:linear-gradient(135deg,#f97316,#dc2626);border-radius:20px;box-shadow:0 8px 32px rgba(249,115,22,.5);margin-bottom:16px;">
+        <span style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-2px;">Q<span style="font-size:18px;opacity:.85;">X</span></span>
       </div>
-      <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;">QUALIS</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:4px;">Sistema de Qualidade · Pigalle WS</div>
+      <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-.5px;">Quali<span style="color:#fb923c;">X</span></div>
+      <div style="font-size:13px;color:rgba(255,255,255,.4);margin-top:4px;">Sistema de Qualidade CX · Pigalle WS</div>
     </div>
 
     <!-- Form -->
@@ -1281,7 +1281,7 @@ input[type="date"], input[type="number"], select, textarea {
         style="width:100%;padding:14px;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(249,115,22,.4);transition:all .2s;"
         onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 24px rgba(249,115,22,.5)'"
         onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(249,115,22,.4)'">
-        Entrar no QUALIS
+        Entrar no QualiX
       </button>
 
       <div class="login-err" id="loginErr" style="min-height:18px;margin-top:14px;color:#f87171;font-size:13px;font-weight:500;text-align:center;"></div>
@@ -1298,7 +1298,7 @@ input[type="date"], input[type="number"], select, textarea {
     <div class="sb-logo" onclick="toggleSidebar()">
       <div class="sb-logo-icon">Q</div>
       <div class="sb-logo-text">
-        <div class="sb-logo-name">QUALIS</div>
+        <div class="sb-logo-name">QualiX</div>
         <div class="sb-logo-ver">v25 · Pigalle WS</div>
       </div>
     </div>
@@ -1366,7 +1366,7 @@ input[type="date"], input[type="number"], select, textarea {
     <div class="topbar">
       <div class="topbar-left">
         <div class="topbar-title" id="topbarTitle">Início</div>
-        <div class="topbar-breadcrumb">QUALIS / <span id="topbarSub">Início</span></div>
+        <div class="topbar-breadcrumb">QualiX / <span id="topbarSub">Início</span></div>
       </div>
       <div class="topbar-actions">
         <!-- Busca global -->
@@ -2497,7 +2497,7 @@ input[type="date"], input[type="number"], select, textarea {
 
           <!-- Chat IA — topo -->
           <div class="card" style="margin-bottom:16px;">
-            <div class="card-title">Pergunte à IA QUALIS</div>
+            <div class="card-title">Pergunte à IA QualiX</div>
             <div class="assist-presets" style="margin-bottom:12px;">
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de vendas?';runIAQualis()">NPS Vendas</button>
               <button class="assist-preset" onclick="document.getElementById('iaInput').value='Como esta o NPS de pos-vendas?';runIAQualis()">NPS Pos-Vendas</button>
@@ -2512,7 +2512,7 @@ input[type="date"], input[type="number"], select, textarea {
               <input class="assist-input" id="iaInput" type="text" placeholder="Pergunte sobre NPS, detratores, metas, conversões..." onkeydown="if(event.key==='Enter')runIAQualis()">
               <button class="btn primary" onclick="runIAQualis()">Perguntar</button>
             </div>
-            <div class="assist-response" id="iaResp" style="margin-top:12px;line-height:1.7;font-size:13px;color:var(--text2);">Olá! Sou a IA QUALIS. Analiso os dados reais do portal e respondo qualquer pergunta. Como posso ajudar?</div>
+            <div class="assist-response" id="iaResp" style="margin-top:12px;line-height:1.7;font-size:13px;color:var(--text2);">Olá! Sou a IA QualiX. Analiso os dados reais do portal e respondo qualquer pergunta. Como posso ajudar?</div>
           </div>
 
           <!-- KPIs rápidos -->
@@ -2668,7 +2668,7 @@ input[type="date"], input[type="number"], select, textarea {
 
               <!-- Rodapé -->
               <div style="text-align:center;margin-top:16px;font-size:11px;color:#999;">
-                QUALIS · Pigalle WS · Gerado em <span id="exec-data-geracao"></span>
+                QualiX · Pigalle WS · Gerado em <span id="exec-data-geracao"></span>
               </div>
 
             </div><!-- /painelExecCaptura -->
@@ -2717,8 +2717,8 @@ MOTIVO 6 — Cliente deu nota 1 tanto em Satisfação quanto em Recomendação, 
             </div>
 
             <div class="card" style="margin-bottom:16px;">
-              <div class="card-title">🔑 API Key Groq — IA QUALIS</div>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Necessária para IA QUALIS, Scorecard e Demandas. Acesse <a href="https://console.groq.com" target="_blank" style="color:#f97316;font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
+              <div class="card-title">🔑 API Key Groq — IA QualiX</div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Necessária para IA QualiX, Scorecard e Demandas. Acesse <a href="https://console.groq.com" target="_blank" style="color:#f97316;font-weight:700;">console.groq.com</a> → Login → API Keys → Create API Key. É gratuito!</p>
               <div style="display:flex;gap:9px;align-items:center;">
                 <input id="groqApiKeyInput" type="password" placeholder="gsk_..."
                   style="flex:1;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--mono);">
@@ -2726,15 +2726,15 @@ MOTIVO 6 — Cliente deu nota 1 tanto em Satisfação quanto em Recomendação, 
               </div>
               <span id="groqKeyStatus" style="font-size:12px;color:#10b981;display:block;margin-top:6px;"></span>
               <div style="margin-top:8px;padding:10px 13px;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.2);border-radius:8px;font-size:13px;color:#7c3aed;">
-                💡 <strong>Dica:</strong> A mesma API Key serve para a IA QUALIS, o Scorecard e o módulo Demandas.
+                💡 <strong>Dica:</strong> A mesma API Key serve para a IA QualiX, o Scorecard e o módulo Demandas.
               </div>
             </div>
 
             <div class="card" style="background:linear-gradient(135deg,rgba(249,115,22,.05),rgba(139,92,246,.05));border:1px solid rgba(249,115,22,.15);">
-              <div class="card-title" style="margin-bottom:10px;">🏆 Sobre o QUALIS</div>
+              <div class="card-title" style="margin-bottom:10px;">🏆 Sobre o QualiX</div>
               <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;">
                 <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
-                  <div style="font-size:22px;font-weight:900;color:#f97316;">v25</div>
+                  <div style="font-size:22px;font-weight:900;background:linear-gradient(135deg,#f97316,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">v25</div>
                   <div style="font-size:11px;color:var(--muted);">Versão atual</div>
                 </div>
                 <div style="text-align:center;padding:12px;background:var(--surface);border-radius:10px;border:1px solid var(--border);">
@@ -3133,7 +3133,7 @@ window.bootChat=function(){
   if(!_chatBooted){
     _chatBooted=true;
     const infoEl=document.getElementById('chatInfo');
-    if(infoEl)infoEl.textContent='Grupo QUALIS · Logada como '+me;
+    if(infoEl)infoEl.textContent='Grupo QualiX · Logada como '+me;
     setupPresence(me);
     listenMsgs();
   }
@@ -3269,11 +3269,11 @@ async function scEnviarEmail(){
   const citNota=citCalc?`${citCalc.notaTotal.toFixed(1)} / ${SC_NOTA_MAX} — Classe ${citCalc.classificacao}`:'Não importado';
   const quedas=alertas.filter(a=>a.piora).length;const evolucoes=alertas.filter(a=>!a.piora).length;
   const alertasHtml=alertas.map(a=>`<div style="padding:9px 0;border-bottom:1px solid #f3f4f6;display:flex;gap:9px;"><span>${a.icon}</span><div><div style="font-weight:700;font-size:13px;">${a.title}</div><div style="font-size:12px;color:#6b7280;">${a.desc}</div></div></div>`).join('');
-  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QUALIS · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>`;
+  const htmlBody=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:28px 16px;"><tr><td align="center"><table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:18px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:24px 28px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:5px;">QualiX · Sistema de Qualidade</div><div style="font-size:20px;font-weight:800;color:#fff;">Relatório Scorecard Pós-Vendas</div><div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px;">${mes}</div></td></tr><tr><td style="padding:22px 28px 0;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td width="48%" style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#0d9488;margin-bottom:5px;">Peugeot</div><div style="font-size:20px;font-weight:800;color:#134e4a;">${peuNota}</div></td><td width="4%"></td><td width="48%" style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:11px;padding:14px;text-align:center;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;color:#7c3aed;margin-bottom:5px;">Citroën</div><div style="font-size:20px;font-weight:800;color:#4c1d95;">${citNota}</div></td></tr></table></td></tr><tr><td style="padding:20px 28px 0;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#6b7280;margin-bottom:10px;">🔔 ${alertas.length} Alerta(s)</div><table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:11px;"><tr><td width="48%" style="background:#fef2f2;border:1px solid #fecaca;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#dc2626;">${quedas}</div><div style="font-size:11px;color:#dc2626;font-weight:700;">⬇️ Queda(s)</div></td><td width="4%"></td><td width="48%" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:11px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#16a34a;">${evolucoes}</div><div style="font-size:11px;color:#16a34a;font-weight:700;">⬆️ Evolução(ões)</div></td></tr></table><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:11px;padding:14px;">${alertasHtml||'<div style="font-size:13px;color:#6b7280;">Nenhum alerta.</div>'}</div></td></tr>${msg?`<tr><td style="padding:16px 28px 0;"><div style="background:#fffbeb;border:1px solid #fde68a;border-radius:11px;padding:13px;"><div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#d97706;margin-bottom:4px;">Observação</div><div style="font-size:13px;color:#374151;">${msg}</div></div></td></tr>`:''}<tr><td style="padding:20px 28px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:14px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:13px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:7px;padding:6px 12px;"><span style="font-size:12px;font-weight:900;color:#fff;">QualiX</span></div></td></tr></table></td></tr></table></td></tr></table>`;
 
   // enviar email via Resend
   try{
-    const resp=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+resendKey},body:JSON.stringify({from:from,to:to,cc:cc||undefined,subject:"QUALIS - Relatorio Scorecard",html:htmlBody})});
+    const resp=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+resendKey},body:JSON.stringify({from:from,to:to,cc:cc||undefined,subject:"QualiX - Relatorio Scorecard",html:htmlBody})});
     const data=await resp.json();
     if(resp.ok){fb.textContent="Email enviado!";fb.style.color="#10b981";setTimeout(()=>{document.getElementById("scEmailModal").classList.add("hidden");fb.textContent="";},2500);}
     else{fb.textContent="Erro: "+(data.message||resp.status);fb.style.color="#ef4444";}
@@ -3334,8 +3334,8 @@ function saveUsers(users){
 })();
 const PW_DAYS=99999;let currentUser=null;
 function daysSince(d){return Math.floor((Date.now()-new Date(d+'T00:00:00'))/86400000);}
-function hashPw(pw){const key='QUALIS2026';let out='';for(let i=0;i<pw.length;i++)out+=String.fromCharCode(pw.charCodeAt(i)^key.charCodeAt(i%key.length));return btoa(out);}
-function unhashPw(h){try{const key='QUALIS2026';const raw=atob(h);let out='';for(let i=0;i<raw.length;i++)out+=String.fromCharCode(raw.charCodeAt(i)^key.charCodeAt(i%key.length));return out;}catch{return h;}}
+function hashPw(pw){const key='QUALIX2026';let out='';for(let i=0;i<pw.length;i++)out+=String.fromCharCode(pw.charCodeAt(i)^key.charCodeAt(i%key.length));return btoa(out);}
+function unhashPw(h){try{const key='QUALIX2026';const raw=atob(h);let out='';for(let i=0;i<raw.length;i++)out+=String.fromCharCode(raw.charCodeAt(i)^key.charCodeAt(i%key.length));return out;}catch{return h;}}
 function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function jsEsc(s){return String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 function setText(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
@@ -4679,7 +4679,7 @@ function runAssist(){
   else if(q.includes('risco'))ans=`Análise:\n• Vendas Peugeot ${fmt(nVP)} → ${fVP>0?'⚠️ Abaixo':'✅ OK'}\n• Vendas Citroën ${fmt(nVC)} → ${fVC>0?'⚠️ Abaixo':'✅ OK'}\n• Pós Peugeot ${fmt(nPP)} → ${fPP>0?'⚠️ Abaixo':'✅ OK'}\n• Pós Citroën ${fmt(nPC)} → ${fPC>0?'⚠️ Abaixo':'✅ OK'}`;
   else if(q.includes('critica')||q.includes('crítica')){const bl=[{n:'Vendas Peugeot',gap:mVP-nVP},{n:'Vendas Citroën',gap:mVC-nVC},{n:'Pós Peugeot',gap:mPP-nPP},{n:'Pós Citroën',gap:mPC-nPC}].sort((a,b)=>b.gap-a.gap)[0];ans=`Área mais crítica: ${bl.n}\nGap: ${fmt(bl.gap)}`;}
   else if(q.includes('prioridade'))ans=`Prioridades do dia:\n1. Maior gap → ação imediata\n2. Detratores: ${cfg['h-det']||0}\n3. Hot Alerts: ${cfg['h-hot']||0}\n4. Treinamentos: ${cfg['h-trein']||0}\n5. RACs: ${cfg['h-racs']||0}`;
-  else if(q.includes('diretoria')||q.includes('texto'))ans=`Resumo Executivo — QUALIS\n\n${cfg['h-pesq']||0} pesquisas · ${cfg['h-prom']||0} promotoras · ${cfg['h-det']||0} detratores\n\nVendas: Peugeot ${fmt(nVP)} (meta ${fmt(mVP)}) | Citroën ${fmt(nVC)} (meta ${fmt(mVC)})\nPós: Peugeot ${fmt(nPP)} (meta ${fmt(mPP)}) | Citroën ${fmt(nPC)} (meta ${fmt(mPC)})`;
+  else if(q.includes('diretoria')||q.includes('texto'))ans=`Resumo Executivo — QualiX\n\n${cfg['h-pesq']||0} pesquisas · ${cfg['h-prom']||0} promotoras · ${cfg['h-det']||0} detratores\n\nVendas: Peugeot ${fmt(nVP)} (meta ${fmt(mVP)}) | Citroën ${fmt(nVC)} (meta ${fmt(mVC)})\nPós: Peugeot ${fmt(nPP)} (meta ${fmt(mPP)}) | Citroën ${fmt(nPC)} (meta ${fmt(mPC)})`;
   else ans='Tente: "NPS Peugeot", "faltam promotores", "risco", "prioridades", "texto para diretoria"';
   setText('assistResp',ans);
 }
@@ -5087,7 +5087,7 @@ async function trEnviarTodos(){
 }
 function trCarregarEmailConfig(){['trResendKey','trEmailFrom','trEmailCc'].forEach(id=>{const v=localStorage.getItem('tr-'+id);const el=document.getElementById(id);if(v&&el)el.value=v;});}
 
-function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QUALIS</span></div></td></tr></table></td></tr></table></td></tr></table>`;
+function trBuildHtml(p){const statusLabel=p.total>=10?'CRÍTICO':p.total>=5?'ATENÇÃO':'PENDENTE';const statusColor=p.total>=10?'#ef4444':p.total>=5?'#f59e0b':'#00bfa5';const isSala=p.modalidade==='SALA';const schedBlock=isSala?`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">Agendamento (Sala)</div><div style="font-size:13px;"><b>Data:</b> ${p.dataStr}<br><b>Horário:</b> ${p.iniStr} às ${p.fimStr}</div></div>`:`<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:5px;font-size:13px;">⏰ Prazo (Remoto)</div><div style="font-size:13px;">Concluir até: <b>${p.prazoStr}</b></div></div>`;return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#0d1117;font-family:'Segoe UI',Arial,sans-serif;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#0d1117;padding:24px 14px;"><tr><td align="center"><table width="580" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fff;border-radius:16px;overflow:hidden;"><tr><td style="background:linear-gradient(135deg,#00bfa5,#0097a7);padding:20px 24px;"><div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:4px;">Portal de Treinamentos · Qualidade</div><div style="font-size:18px;font-weight:800;color:#fff;">Pendências identificadas</div></td></tr><tr><td style="padding:20px 24px 0;"><p style="margin:0 0 11px;font-size:14px;color:#374151;">Olá, <b>${p.nome}</b>! Identificamos treinamentos pendentes.</p><div style="display:inline-block;background:${statusColor};color:#fff;font-weight:700;font-size:11px;padding:4px 11px;border-radius:99px;margin-bottom:12px;">STATUS: ${statusLabel}</div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">Pendências</div><div style="font-size:13px;display:flex;gap:13px;flex-wrap:wrap;"><div>🚗 <b>Peugeot:</b> ${p.peu}</div><div>✨ <b>Citroën:</b> ${p.cit}</div><div>📊 <b>Total:</b> ${p.total}</div></div></div><div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#fff;"><div style="font-weight:700;margin-bottom:4px;font-size:13px;">🎯 ${p.modalidade}</div><div style="font-size:12px;color:#6b7280;">${p.motivo}</div></div>${schedBlock}<div style="border:1px solid #e5e7eb;border-radius:9px;padding:12px;margin-bottom:10px;background:#f9fafb;"><div style="font-weight:700;margin-bottom:6px;font-size:13px;">Acesso</div><div style="font-size:13px;margin-bottom:8px;"><b>ID:</b> ${p.id||'—'}</div><a href="${p.waLink}" style="display:inline-block;background:#22c55e;color:#fff;text-decoration:none;font-weight:700;padding:8px 13px;border-radius:8px;font-size:13px;">Falar com Qualidade (WhatsApp)</a></div></td></tr><tr><td style="padding:16px 24px;"><hr style="border:none;border-top:1px solid #e5e7eb;margin-bottom:13px;"><table width="100%" cellpadding="0" cellspacing="0"><tr><td><div style="font-size:12px;color:#6b7280;">Atenciosamente,<br><b style="color:#111827;">Time de Qualidade · Pigalle WS</b></div></td><td align="right"><div style="background:linear-gradient(135deg,#00bfa5,#0097a7);border-radius:6px;padding:5px 11px;"><span style="font-size:12px;font-weight:900;color:#fff;">QualiX</span></div></td></tr></table></td></tr></table></td></tr></table>`;
 }
 
 async function renderIAQualis(){
@@ -5171,7 +5171,7 @@ async function runIAQualis(){
   });
   const growTopMotivos = Object.entries(growMotivos).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>k+':'+v).join(', ')||'sem dados';
 
-  const sys=`Voce e a IA QUALIS da concessionaria Pigalle WS (Peugeot e Citroen).
+  const sys=`Voce e a IA QualiX da concessionaria Pigalle WS (Peugeot e Citroen).
 Dados ATUAIS e SEPARADOS do portal:
 
 POS-VENDAS:
@@ -5454,7 +5454,7 @@ function enviarAlertaWA(){
     d.abaixo?'*Situacao:* ABAIXO DA META - faltam '+d.faltam+' promotora(s)':'*Situacao:* META ATINGIDA',
   ];
   if(obs){linhas.push('');linhas.push('*Conversao:* '+obs);}
-  linhas.push('');linhas.push('-- QUALIS | Pigalle WS --');
+  linhas.push('');linhas.push('-- QualiX | Pigalle WS --');
   var msg=linhas.join('\n');
   document.getElementById('modalAlertaWA').style.display='none';
   // Copia mensagem e abre o grupo
@@ -5495,7 +5495,7 @@ function alertarDetrator(cliente, nota, dataConvite, marca){
   var dataStr = dataConvite || '?';
 
   var linhas = [
-    'ALERTA QUALIS - NOVO DETRATOR',
+    'ALERTA QualiX - NOVO DETRATOR',
     '',
     'Cliente: ' + (cliente || '?'),
     'Marca: ' + marca,
@@ -5521,7 +5521,7 @@ function alertarDetrator(cliente, nota, dataConvite, marca){
 }
 
 /* ════════════════════════════════════════════
-   GRÁFICOS DA IA QUALIS
+   GRÁFICOS DA IA QualiX
 ════════════════════════════════════════════ */
 let _chartNpsPos=null, _chartNpsVen=null, _chartTr=null;
 
@@ -5676,7 +5676,7 @@ function exportarRelatorio(){
   const hoje=new Date().toLocaleDateString('pt-BR');
   const mes=new Date().toLocaleString('pt-BR',{month:'long',year:'numeric'});
 
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Relatorio QUALIS</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Relatorio QualiX</title>
   <style>body{font-family:Arial,sans-serif;padding:30px;color:#111;}
   h1{color:#1a56db;border-bottom:2px solid #1a56db;padding-bottom:8px;}
   h2{color:#374151;margin-top:24px;}
@@ -5688,8 +5688,35 @@ function exportarRelatorio(){
   th{background:#1a56db;color:#fff;padding:8px 12px;text-align:left;font-size:12px;}
   td{padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:12px;}
   .verde{color:#057a55;font-weight:700;} .vermelho{color:#e02424;font-weight:700;}
-  @media print{body{padding:10px;}}</style></head><body>
-  <h1>QUALIS — Relatorio de Qualidade</h1>
+  @media print{body{padding:10px;}}
+    /* ══ QualiX Identity ══ */
+    :root {
+      --qx-primary: #f97316;
+      --qx-accent:  #dc2626;
+      --qx-grad:    linear-gradient(135deg, #f97316, #dc2626);
+      --qx-glow:    0 4px 20px rgba(249,115,22,.35);
+    }
+    .qx-logo-icon {
+      background: var(--qx-grad) !important;
+      box-shadow: var(--qx-glow) !important;
+    }
+    .btn.primary {
+      background: var(--qx-grad) !important;
+      box-shadow: var(--qx-glow);
+      transition: all .2s;
+    }
+    .btn.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(249,115,22,.5);
+    }
+    /* Scrollbar QualiX */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--qx-primary); border-radius: 99px; opacity: .5; }
+    /* Seleção de texto */
+    ::selection { background: rgba(249,115,22,.25); color: inherit; }
+</style></head><body>
+  <h1>QualiX — Relatorio de Qualidade</h1>
   <p><strong>Pigalle WS · Peugeot | Citroen</strong> &nbsp;|&nbsp; ${hoje} &nbsp;|&nbsp; Competencia: ${mes}</p>
   <h2>NPS do Periodo</h2>
   <div class="kpis">
@@ -5706,7 +5733,7 @@ function exportarRelatorio(){
   </tbody></table>
   <h2>Treinamentos</h2>
   <p>Pessoas com pendencia: <strong>${trState.resumo.length}</strong> &nbsp;|&nbsp; Em sala: <strong>${trState.resumo.filter(p=>p.modalidade==='SALA').length}</strong> &nbsp;|&nbsp; Remoto: <strong>${trState.resumo.filter(p=>p.modalidade==='REMOTO').length}</strong></p>
-  <p style="margin-top:30px;font-size:11px;color:#9ca3af;">Gerado pelo portal QUALIS · ${hoje}</p>
+  <p style="margin-top:30px;font-size:11px;color:#9ca3af;">Gerado pelo portal QualiX · ${hoje}</p>
   <scr'+'ipt>window.print();</scr'+'ipt>
 
 
@@ -7040,7 +7067,7 @@ function calcularInsights(){
   }
 }
 
-async function mdToHtml(text){
+function mdToHtml(text){
   if(!text) return '';
   return text
     // Títulos **texto**
@@ -7328,7 +7355,7 @@ function fecharModalDemanda(){
 async function extrairComIA(){
   var texto = document.getElementById('dem-texto').value.trim();
   if(!texto){ alert('Cole um texto antes.'); return; }
-  // Tenta pegar a key do Groq — mesma usada no Scorecard e na IA QUALIS
+  // Tenta pegar a key do Groq — mesma usada no Scorecard e na IA QualiX
   var apiKey = localStorage.getItem('sc-apikey') || localStorage.getItem('q-groq-key') || '';
   if(!apiKey){
     alert('Configure a API Key do Groq em Configurações → API Key Groq.');
@@ -8204,26 +8231,35 @@ function preencherSelectFuncionarios(){
 function abrirModalFuncionario(id){
   var m = document.getElementById('modalFuncionario');
   if(!m) return;
-  document.getElementById('func-id-edit').value = id||'';
-  document.getElementById('modal-func-titulo').textContent = id ? 'Editar Funcionário' : 'Novo Funcionário';
+  var elId = document.getElementById('func-id-edit');
+  if(elId) elId.value = id||'';
+  var elTit = document.getElementById('modal-func-titulo');
+  if(elTit) elTit.textContent = id ? 'Editar Funcionário' : 'Novo Funcionário';
+
+  function setVal(elId2, val){
+    var el = document.getElementById(elId2);
+    if(el) el.value = val||'';
+  }
+
   if(id){
     var f = _fardFuncionarios.find(function(x){ return x.id===id; });
     if(f){
-      document.getElementById('func-nome').value    = f.nome||'';
-      document.getElementById('func-funcao').value  = f.funcao||'';
-      document.getElementById('func-setor').value   = f.setor||'';
-      document.getElementById('func-empresa').value = f.empresa||'Peugeot';
-      document.getElementById('func-cpf').value     = f.cpf||'';
-      document.getElementById('func-admissao').value= f.admissao||'';
-      document.getElementById('func-email').value      = f.email||'';
-      document.getElementById('func-tel').value        = f.tel||'';
-      document.getElementById('func-nascimento').value = f.nascimento||'';
+      setVal('func-nome',       f.nome);
+      setVal('func-funcao',     f.funcao);
+      setVal('func-setor',      f.setor);
+      setVal('func-empresa',    f.empresa||'Peugeot');
+      setVal('func-cpf',        f.cpf);
+      setVal('func-admissao',   f.admissao);
+      setVal('func-email',      f.email);
+      setVal('func-tel',        f.tel);
+      setVal('func-nascimento', f.nascimento);
     }
   } else {
-    ['func-nome','func-funcao','func-setor','func-cpf','func-admissao','func-email','func-tel'].forEach(function(id2){
-      var el2 = document.getElementById(id2); if(el2) el2.value='';
+    ['func-nome','func-funcao','func-setor','func-cpf',
+     'func-admissao','func-email','func-tel','func-nascimento'].forEach(function(eid){
+      setVal(eid, '');
     });
-    document.getElementById('func-empresa').value = 'Peugeot';
+    setVal('func-empresa', 'Peugeot');
   }
   m.style.display = 'flex';
 }
@@ -8514,7 +8550,7 @@ function _renderPDFFardamento(f, ficha){
   // ── Rodapé ──
   sd(BORDA); doc.setLineWidth(0.4); doc.line(ML,H-12,W-MR,H-12);
   doc.setFont('helvetica','normal'); doc.setFontSize(7); st(MEDIO);
-  doc.text('PIGALLE WS  \u00b7  QUALIS  \u00b7  '+ficha.data, ML, H-7);
+  doc.text('PIGALLE WS  \u00b7  QualiX  \u00b7  '+ficha.data, ML, H-7);
   doc.text(marca.toUpperCase(), W-MR, H-7, {align:'right'});
 
   var y = MT;
@@ -8686,12 +8722,18 @@ var _importarFuncDados = []; // cache dos funcionários analisados
 
 function abrirModalImportarFuncionarios(){
   var m = document.getElementById('modalImportarFuncionarios');
-  if(m) m.style.display = 'flex';
-  document.getElementById('importar-func-texto').value = '';
-  document.getElementById('importar-func-status').textContent = '';
-  document.getElementById('importar-func-preview').style.display = 'none';
-  document.getElementById('btn-importar-salvar').style.display = 'none';
-  document.getElementById('btn-importar-analisar').style.display = 'inline-flex';
+  if(!m) return;
+  m.style.display = 'flex';
+  var elTexto   = document.getElementById('importar-func-texto');
+  var elStatus  = document.getElementById('importar-func-status');
+  var elPreview = document.getElementById('importar-func-preview');
+  var elSalvar  = document.getElementById('btn-importar-salvar');
+  var elAnalisar= document.getElementById('btn-importar-analisar');
+  if(elTexto)    elTexto.value = '';
+  if(elStatus)   elStatus.textContent = '';
+  if(elPreview)  elPreview.style.display = 'none';
+  if(elSalvar)   elSalvar.style.display = 'none';
+  if(elAnalisar) elAnalisar.style.display = 'inline-flex';
   _importarFuncDados = [];
 }
 
@@ -9074,4 +9116,395 @@ function adicionarAcesso(){
   var card = _criarCardAcesso('','','','','','');
   lista.appendChild(card);
   card.querySelector('.ac-sistema').focus();
-}>
+}
+
+
+
+async function salvarAcessos(){
+  var lista = document.getElementById('acessos-lista');
+  if(!lista || !_acessosFuncId) return;
+
+  var cards = lista.querySelectorAll('[data-acesso-id]');
+  var acessos = [];
+  cards.forEach(function(card){
+    var sistema = card.querySelector('.ac-sistema')?.value?.trim()||'';
+    var link    = card.querySelector('.ac-link')?.value?.trim()||'';
+    var login   = card.querySelector('.ac-login')?.value?.trim()||'';
+    var senha   = card.querySelector('.ac-senha')?.value||'';
+    var obs     = card.querySelector('.ac-obs')?.value?.trim()||'';
+    if(sistema || login) acessos.push({sistema:sistema, link:link, login:login, senha:senha, obs:obs});
+  });
+
+  if(window._fbSet){
+    var obj = {};
+    acessos.forEach(function(a, i){ obj['a'+i] = a; });
+    await window._fbSet('qualis_acessos/'+_acessosFuncId, obj).catch(function(){});
+  }
+
+  fecharModalAcessos();
+  setTimeout(function(){
+    alert('✅ Acessos salvos para ' + _acessosFuncNome + '!');
+  }, 100);
+}
+
+function fecharModalAcessos(){
+  var m = document.getElementById('modalAcessos');
+  if(m) m.style.display = 'none';
+  _acessosFuncId   = '';
+  _acessosFuncNome = '';
+}
+
+
+function salvarNovaUsuaria(){
+  var nome  = document.getElementById('newUserNome')?.value?.trim();
+  var email = document.getElementById('newUserEmail')?.value?.trim();
+  var perfil= document.getElementById('newUserPerfil')?.value||'admin';
+  if(!nome||!email){ alert('Preencha nome e e-mail.'); return; }
+  if(window._fbPush){
+    window._fbPush('qualis_usuarios', {nome:nome, email:email, perfil:perfil})
+      .then(function(){ 
+        alert('\u2705 Usuária adicionada!');
+        document.getElementById('divAddUser').style.display='none';
+        document.getElementById('btnAddUser').style.display='inline-flex';
+        renderUsuarias();
+      }).catch(function(){ alert('Erro ao salvar.'); });
+  }
+}
+
+
+function abrirNpsManual(tipo){
+  var m = document.getElementById('modalNpsManual');
+  if(!m) return;
+  var titulo = document.getElementById('modalNpsTitulo');
+  if(titulo) titulo.textContent = 'Adicionar NPS — ' + (tipo==='VEN'?'Vendas':'Pós-Vendas');
+  m.style.display = 'flex';
+}
+
+function fixarLayout(){
+  var app = document.getElementById('app');
+  if(app){
+    app.style.width = '100vw';
+    app.style.height = '100vh';
+    app.style.display = 'flex';
+    app.style.overflow = 'hidden';
+  }
+}
+
+function fixarEstrutura(){
+  // Criar pg-fardamento se não existir
+  if(!document.getElementById('pg-fardamento')){
+    var _pgFard = document.createElement('div');
+    _pgFard.className = 'page';
+    _pgFard.id = 'pg-fardamento';
+    _pgFard.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 style="font-size:24px;font-weight:900;letter-spacing:-.3px;">Fardamento</h1>
+          <p style="font-size:13px;color:var(--muted);margin-top:4px;">Gere fichas de entrega de fardamento e controle o histórico.</p>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+        <div class="card">
+          <div class="card-title">📋 Nova Ficha de Entrega</div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Marca</label>
+            <div style="display:flex;gap:8px;">
+              <button id="fard-btn-peu" onclick="fardSelecionarMarca('Peugeot')" style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">🚗 Peugeot</button>
+              <button id="fard-btn-cit" onclick="fardSelecionarMarca('Citroën')" style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">✨ Citroën</button>
+              <button id="fard-btn-amb" onclick="fardSelecionarMarca('Ambas')" style="flex:1;padding:9px;border:2px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;font-weight:600;cursor:pointer;color:var(--text);">🔗 Ambas</button>
+            </div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Funcionário</label>
+            <select id="fard-funcionario" onchange="fardSelecionarFuncionario()" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
+              <option value="">— Selecionar —</option>
+            </select>
+          </div>
+          <div id="fard-dados-func" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;font-size:12px;line-height:1.8;color:var(--muted);"></div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Motivo da Entrega</label>
+            <select id="fard-motivo" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;color:var(--text);box-sizing:border-box;">
+              <option value="1">1 — Admissão</option>
+              <option value="2">2 — Danificado / Ajuste de tamanho / Desgaste</option>
+              <option value="3">3 — Promoção ou Troca de Função</option>
+              <option value="4">4 — Reposição</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px;">
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Entregue por</label>
+            <input type="text" id="fard-entregue-por" placeholder="Nome de quem entrega" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+          </div>
+          <div style="margin-bottom:8px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);">Itens entregues</label>
+              <button onclick="fardAdicionarItem()" style="background:none;border:1.5px dashed var(--border);border-radius:7px;padding:4px 12px;font-size:12px;cursor:pointer;color:var(--muted);">+ Item</button>
+            </div>
+            <div id="fard-itens-lista" style="display:flex;flex-direction:column;gap:8px;"></div>
+          </div>
+          <button onclick="fardGerarFicha()" style="width:100%;margin-top:14px;background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">📄 Gerar Ficha PDF</button>
+        </div>
+        <div class="card">
+          <div class="card-title">📦 Histórico de Entregas</div>
+          <div id="fard-historico" style="font-size:13px;color:var(--muted);">Selecione um funcionário para ver o histórico.</div>
+        </div>
+      </div>
+    `;
+    var ca = document.getElementById('contentArea');
+    if(ca) ca.appendChild(_pgFard);
+  }
+
+  // Criar pg-demandas se não existir
+  if(!document.getElementById('pg-demandas')){
+    var _pgDem = document.createElement('div');
+    _pgDem.className = 'page';
+    _pgDem.id = 'pg-demandas';
+    _pgDem.innerHTML = '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;"><div><h1 style="font-size:24px;font-weight:900;">Demandas</h1><p style="font-size:13px;color:var(--muted);">Cole um e-mail ou texto — a IA extrai as tarefas automaticamente.</p></div><button class=\'btn primary\' onclick=\'abrirModalDemanda()\'>+ Nova demanda</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;"><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #f59e0b;"><span style="font-size:13px;font-weight:800;">📋 A Fazer</span></div><div id=\'col-afazer\' style="padding:12px;min-height:200px;"></div></div><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #3b82f6;"><span style="font-size:13px;font-weight:800;">⚡ Em Andamento</span></div><div id=\'col-andamento\' style="padding:12px;min-height:200px;"></div></div><div style="background:var(--surface2);border-radius:16px;overflow:hidden;"><div style="padding:14px 18px;border-bottom:3px solid #10b981;"><span style="font-size:13px;font-weight:800;">✅ Concluído</span></div><div id=\'col-concluido\' style="padding:12px;min-height:200px;"></div></div></div>';
+    var ca2 = document.getElementById('contentArea');
+    if(ca2) ca2.appendChild(_pgDem);
+  }
+
+  var ca = document.getElementById('contentArea');
+  if(!ca) return;
+  var pageIds = ['pg-inicio','pg-vendas','pg-posvendas','pg-scorecard-pos',
+                 'pg-grow','pg-treinamentos','pg-simulador','pg-inteligencia',
+                 'pg-executivo','pg-demandas','pg-fardamento','pg-sistemas','pg-config'];
+  pageIds.forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && el.parentElement !== ca) ca.appendChild(el);
+  });
+}
+
+window.addEventListener('DOMContentLoaded',function(){
+  var saved = localStorage.getItem('sc-apikey');
+  if(saved && document.getElementById('scApiKey')) document.getElementById('scApiKey').value = saved;
+  if(!localStorage.getItem('q-gmail-client-id')){
+    localStorage.setItem('q-gmail-client-id','300042761885-41u4i8gsp07s4ughbg62antp97ef38n0.apps.googleusercontent.com');
+  }
+  var stored = localStorage.getItem('q-user');
+  if(stored){
+    try{
+      var u = JSON.parse(stored);
+      var found = getUsers().find(function(x){ return x.email===u.email; });
+      if(found){ currentUser=found; startPortal(); return; }
+    }catch(e){}
+    localStorage.removeItem('q-user');
+  }
+  document.getElementById('loginScreen').style.display = 'flex';
+});
+</script>
+
+<!-- ══ MODAL ACESSOS DO FUNCIONÁRIO ══ -->
+<div id="modalAcessos" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(580px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);">🔑 Acessos</div>
+        <div id="acessos-func-nome" style="font-size:13px;color:var(--muted);margin-top:2px;"></div>
+      </div>
+      <button onclick="fecharModalAcessos()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div id="acessos-lista" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+      <button onclick="adicionarAcesso()" style="width:100%;padding:10px;background:none;border:2px dashed var(--border);border-radius:10px;font-size:13px;color:var(--muted);cursor:pointer;font-weight:600;">+ Adicionar acesso</button>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+        <button onclick="fecharModalAcessos()" class="btn ghost">Cancelar</button>
+        <button onclick="salvarAcessos()" class="btn primary">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ MODAL FUNCIONÁRIO ══ -->
+<div id="modalFuncionario" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(560px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:16px;font-weight:800;color:var(--text);" id="modal-func-titulo">Novo Funcionário</div>
+      <button onclick="fecharModalFuncionario()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <input type="hidden" id="func-id-edit">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="grid-column:1/-1;">
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Nome completo *</label>
+          <input type="text" id="func-nome" placeholder="Nome completo" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Função *</label>
+          <input type="text" id="func-funcao" placeholder="Ex: Consultor de Serviço" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Setor *</label>
+          <input type="text" id="func-setor" placeholder="Ex: Pós-Vendas" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Empresa *</label>
+          <select id="func-empresa" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+            <option value="Peugeot">Peugeot</option>
+            <option value="Citroën">Citroën</option>
+            <option value="Ambas">Ambas (Peugeot + Citroën)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">CPF</label>
+          <input type="text" id="func-cpf" placeholder="000.000.000-00" maxlength="14" oninput="mascaraCPF(this)" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de admissão</label>
+          <input type="date" id="func-admissao" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">E-mail</label>
+          <input type="email" id="func-email" placeholder="email@empresa.com" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Telefone</label>
+          <input type="text" id="func-tel" placeholder="(81) 99999-9999" maxlength="15" oninput="mascaraTel(this)" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px;">Data de nascimento</label>
+          <input type="date" id="func-nascimento" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+        <button onclick="fecharModalFuncionario()" class="btn ghost">Cancelar</button>
+        <button onclick="salvarFuncionario()" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL IMPORTAR FUNCIONÁRIOS ══ -->
+<div id="modalImportarFuncionarios" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(640px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);">📥 Importar Respostas do Formulário</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px;">Cole o conteúdo do CSV ou das respostas. A IA vai interpretar e cadastrar os funcionários automaticamente.</div>
+      </div>
+      <button onclick="fecharModalImportarFuncionarios()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;font-size:12px;color:#7c3aed;line-height:1.7;">
+        <strong>Como exportar do Google Forms:</strong><br>
+        Respostas → ícone do Google Sheets → Abrir planilha → Arquivo → Download → CSV.<br>
+        Ou cole diretamente o conteúdo copiado da planilha de respostas.
+      </div>
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Cole aqui o conteúdo do CSV ou das respostas</label>
+      <textarea id="importar-func-texto" rows="10" placeholder="Nome completo, CPF, E-mail, Telefone, Função, Empresa, Setor, Data de nascimento, Data de admissão..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:12px;resize:vertical;box-sizing:border-box;font-family:monospace;"></textarea>
+      <div id="importar-func-preview" style="display:none;margin-top:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Prévia — confirme antes de salvar</div>
+        <div id="importar-func-lista" style="display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;"></div>
+      </div>
+      <div id="importar-func-status" style="margin-top:12px;font-size:13px;color:var(--muted);min-height:20px;"></div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:18px;">
+        <button onclick="fecharModalImportarFuncionarios()" class="btn ghost">Cancelar</button>
+        <button id="btn-importar-analisar" onclick="analisarImportacaoFuncionarios()" class="btn primary">🤖 Analisar com IA</button>
+        <button id="btn-importar-salvar" onclick="salvarImportacaoFuncionarios()" class="btn primary" style="display:none;background:linear-gradient(135deg,#10b981,#059669);">✅ Salvar todos</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DATA RESPOSTA ══ -->
+<div id="modalDataResposta" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(400px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);" id="mdrTitulo">Registrar data da resposta</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px;" id="mdrCliente"></div>
+      </div>
+    </div>
+    <div style="padding:24px;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Quando o cliente respondeu a pesquisa? Isso define em qual mês o NPS é contabilizado.</div>
+      <div style="margin-bottom:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);">Data da resposta</div>
+      <input type="date" id="mdrData" style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:14px;outline:none;">
+      <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+        <button onclick="fecharModalDataResposta()" class="btn ghost">Cancelar</button>
+        <button onclick="salvarDataResposta()" class="btn primary">Confirmar e notificar grupo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL NOVA DEMANDA ══ -->
+<div id="modalDemanda" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(600px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:16px;font-weight:800;color:var(--text);">Nova Demanda</div>
+      <button onclick="fecharModalDemanda()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:24px;">
+      <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Cole o e-mail ou descreva a demanda</label>
+      <textarea id="dem-texto" rows="6" placeholder="Ex: Kamilly, preciso que você providencie..." style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);color:var(--text);font-size:13px;resize:vertical;box-sizing:border-box;font-family:inherit;margin-bottom:10px;"></textarea>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="extrairComIA()" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;">✨ Extrair tarefas com IA</button>
+        <span id="dem-ia-status" style="font-size:12px;color:var(--muted);"></span>
+      </div>
+      <div id="dem-tarefas-wrap" style="display:none;margin-top:20px;">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Tarefas extraídas</div>
+        <div id="dem-tarefas-lista" style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Solicitante</label>
+            <input type="text" id="dem-solicitante" placeholder="Ex: Fred Dubeux" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+          </div>
+          <div>
+            <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Prioridade</label>
+            <select id="dem-prioridade" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+              <option value="media">🟡 Média</option><option value="alta">🔴 Alta</option><option value="baixa">🟢 Baixa</option>
+            </select>
+          </div>
+        </div>
+        <div style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);border-radius:10px;padding:12px 14px;margin-bottom:14px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Prazo sugerido pela IA</div>
+          <div id="dem-prazo-ia" style="font-size:13px;color:#f97316;font-weight:600;"></div>
+        </div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Confirmar prazo</label>
+        <input type="date" id="dem-prazo" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;margin-bottom:18px;">
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button onclick="fecharModalDemanda()" class="btn ghost">Cancelar</button>
+          <button onclick="salvarDemanda()" class="btn primary">Criar demanda</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DETALHE TAREFA ══ -->
+<div id="modalTarefa" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
+  <div style="background:var(--surface);border-radius:20px;width:min(480px,95vw);box-shadow:0 20px 60px rgba(0,0,0,.3);">
+    <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div id="mtarefa-titulo" style="font-size:15px;font-weight:800;color:var(--text);flex:1;padding-right:12px;"></div>
+      <button onclick="fecharModalTarefa()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">×</button>
+    </div>
+    <div style="padding:20px 24px;">
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Responsável</label>
+        <select id="mtarefa-resp" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+          <option value="">— Selecionar —</option>
+          <option>Kamilly</option><option>Letícia</option><option>Laís</option><option>Liana</option>
+        </select>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Status</label>
+        <select id="mtarefa-status" style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;box-sizing:border-box;">
+          <option value="afazer">📋 A Fazer</option>
+          <option value="andamento">⚡ Em Andamento</option>
+          <option value="concluido">✅ Concluído</option>
+        </select>
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:6px;">Observação</label>
+        <textarea id="mtarefa-obs" rows="3" placeholder="Atualização, link, resultado..." style="width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--surface2);font-size:13px;resize:none;box-sizing:border-box;font-family:inherit;"></textarea>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:10px;">
+        <button onclick="excluirTarefa()" style="background:none;border:1px solid #ef4444;color:#ef4444;border-radius:10px;padding:9px 16px;font-size:13px;cursor:pointer;">🗑️ Excluir</button>
+        <button onclick="salvarTarefa()" class="btn primary">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
